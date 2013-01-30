@@ -9,8 +9,22 @@
 /* Begin PBXBuildFile section */
 		FBC2047E16B95B3700CB5FFB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047D16B95B3700CB5FFB /* Cocoa.framework */; };
 		FBC2048816B95B3800CB5FFB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FBC2048616B95B3800CB5FFB /* InfoPlist.strings */; };
-		FBC2048C16B95B3800CB5FFB /* PryvApiKit.m in Sources */ = {isa = PBXBuildFile; fileRef = FBC2048B16B95B3800CB5FFB /* PryvApiKit.m */; };
+		FBC2049816B95F1C00CB5FFB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
+		FBC204A416B9629200CB5FFB /* PryvApiKit.h in Sources */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; };
+		FBC204A516B9629700CB5FFB /* PryvApiKit.h in Sources */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FBC2049416B95F1B00CB5FFB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PryvApiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -22,7 +36,8 @@
 		FBC2048716B95B3800CB5FFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FBC2048916B95B3800CB5FFB /* PryvApiKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PryvApiKit-Prefix.pch"; sourceTree = "<group>"; };
 		FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PryvApiKit.h; sourceTree = "<group>"; };
-		FBC2048B16B95B3800CB5FFB /* PryvApiKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PryvApiKit.m; sourceTree = "<group>"; };
+		FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPryvApiKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBC2049716B95F1C00CB5FFB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +46,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBC2047E16B95B3700CB5FFB /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBC2049316B95F1B00CB5FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBC2049816B95F1C00CB5FFB /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */,
+				FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				FBC2047D16B95B3700CB5FFB /* Cocoa.framework */,
+				FBC2049716B95F1C00CB5FFB /* Foundation.framework */,
 				FBC2047F16B95B3700CB5FFB /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -77,7 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
-				FBC2048B16B95B3800CB5FFB /* PryvApiKit.m */,
 				FBC2048416B95B3800CB5FFB /* Supporting Files */,
 			);
 			path = PryvApiKit;
@@ -124,6 +148,23 @@
 			productReference = FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		FBC2049516B95F1B00CB5FFB /* libPryvApiKit.a */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBC204A016B95F1C00CB5FFB /* Build configuration list for PBXNativeTarget "libPryvApiKit.a" */;
+			buildPhases = (
+				FBC2049216B95F1B00CB5FFB /* Sources */,
+				FBC2049316B95F1B00CB5FFB /* Frameworks */,
+				FBC2049416B95F1B00CB5FFB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libPryvApiKit.a;
+			productName = PryvApiKit;
+			productReference = FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -146,6 +187,7 @@
 			projectRoot = "";
 			targets = (
 				FBC2047916B95B3700CB5FFB /* PryvApiKit.framework */,
+				FBC2049516B95F1B00CB5FFB /* libPryvApiKit.a */,
 			);
 		};
 /* End PBXProject section */
@@ -166,7 +208,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBC2048C16B95B3800CB5FFB /* PryvApiKit.m in Sources */,
+				FBC204A416B9629200CB5FFB /* PryvApiKit.h in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBC2049216B95F1B00CB5FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBC204A516B9629700CB5FFB /* PryvApiKit.h in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +303,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
 				INFOPLIST_FILE = "PryvApiKit/PryvApiKit-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = PryvApiKit;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -268,8 +319,42 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
 				INFOPLIST_FILE = "PryvApiKit/PryvApiKit-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = PryvApiKit;
 				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		FBC204A116B95F1C00CB5FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DSTROOT = /tmp/PryvApiKit.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = PryvApiKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FBC204A216B95F1C00CB5FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DSTROOT = /tmp/PryvApiKit.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = PryvApiKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -292,6 +377,16 @@
 				FBC2049116B95B3800CB5FFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBC204A016B95F1C00CB5FFB /* Build configuration list for PBXNativeTarget "libPryvApiKit.a" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBC204A116B95F1C00CB5FFB /* Debug */,
+				FBC204A216B95F1C00CB5FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
