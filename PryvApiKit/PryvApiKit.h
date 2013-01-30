@@ -6,3 +6,4 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+//#import <PryvApiKit/Foo.h>
