@@ -23,10 +23,10 @@
 #import <PryvApiKit/PPrYvCoreDataManager.h>
 
 // Networking
-#import <PryvApiKit/PrYvApiClient.h>
+#import <PryvApiKit/PPrYvApiClient.h>
 
 // OpenUDID
 #import <PryvApiKit/PPrYvOpenUDID.h>
 
 // Vendor
-#import <PryvApiKit/Vendor/AFNetworking/AFNetworking.h>
+#import <PryvApiKit/AFNetworking.h>
