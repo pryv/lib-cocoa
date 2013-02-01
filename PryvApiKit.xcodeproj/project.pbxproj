@@ -39,8 +39,6 @@
 		FB03E23816B9802900DAD162 /* PYDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E23616B9802800DAD162 /* PYDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB03E23916B9802900DAD162 /* PYDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E23716B9802800DAD162 /* PYDefines.m */; };
 		FB03E23A16B9802900DAD162 /* PYDefines.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E23716B9802800DAD162 /* PYDefines.m */; };
-		FB03E24C16B982CD00DAD162 /* ATPrYv.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = FB03E23B16B982CC00DAD162 /* ATPrYv.xcdatamodel */; };
-		FB03E24D16B982CD00DAD162 /* ATPrYv.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = FB03E23B16B982CC00DAD162 /* ATPrYv.xcdatamodel */; };
 		FB03E24E16B982CD00DAD162 /* PYUser.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E23C16B982CC00DAD162 /* PYUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB03E24F16B982CD00DAD162 /* PYUser.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E23D16B982CC00DAD162 /* PYUser.m */; };
 		FB03E25016B982CD00DAD162 /* PYUser.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E23D16B982CC00DAD162 /* PYUser.m */; };
@@ -141,7 +139,6 @@
 		FB03E21816B97FD400DAD162 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "Vendor/AFNetworking/AFNetworking/UIImageView+AFNetworking.m"; sourceTree = SOURCE_ROOT; };
 		FB03E23616B9802800DAD162 /* PYDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYDefines.h; sourceTree = "<group>"; };
 		FB03E23716B9802800DAD162 /* PYDefines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYDefines.m; sourceTree = "<group>"; };
-		FB03E23B16B982CC00DAD162 /* ATPrYv.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ATPrYv.xcdatamodel; sourceTree = "<group>"; };
 		FB03E23C16B982CC00DAD162 /* PYUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUser.h; sourceTree = "<group>"; };
 		FB03E23D16B982CC00DAD162 /* PYUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYUser.m; sourceTree = "<group>"; };
 		FB03E24016B982CC00DAD162 /* PYChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannel.h; sourceTree = "<group>"; };
@@ -159,7 +156,6 @@
 		FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PryvApiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBC2047D16B95B3700CB5FFB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FBC2048016B95B3700CB5FFB /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		FBC2048116B95B3700CB5FFB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		FBC2048216B95B3800CB5FFB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FBC2048516B95B3800CB5FFB /* PryvApiKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PryvApiKit-Info.plist"; sourceTree = "<group>"; };
 		FBC2048716B95B3800CB5FFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -259,7 +255,6 @@
 			isa = PBXGroup;
 			children = (
 				FBC2048016B95B3700CB5FFB /* AppKit.framework */,
-				FBC2048116B95B3700CB5FFB /* CoreData.framework */,
 				FBC2048216B95B3800CB5FFB /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
@@ -292,7 +287,6 @@
 		FBC2048416B95B3800CB5FFB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				FB03E23B16B982CC00DAD162 /* ATPrYv.xcdatamodel */,
 				FBC2048516B95B3800CB5FFB /* PryvApiKit-Info.plist */,
 				FBC2048616B95B3800CB5FFB /* InfoPlist.strings */,
 				FBC2048916B95B3800CB5FFB /* PryvApiKit-Prefix.pch */,
@@ -422,7 +416,6 @@
 				FB03E23316B97FD400DAD162 /* UIImageView+AFNetworking.m in Sources */,
 				FB03E27816B9850D00DAD162 /* AFJSONUtilities.m in Sources */,
 				FB03E23916B9802900DAD162 /* PYDefines.m in Sources */,
-				FB03E24C16B982CD00DAD162 /* ATPrYv.xcdatamodel in Sources */,
 				FB03E24F16B982CD00DAD162 /* PYUser.m in Sources */,
 				FB03E25516B982CD00DAD162 /* PYChannel.m in Sources */,
 				FB03E25B16B982CD00DAD162 /* PYEvent.m in Sources */,
@@ -448,7 +441,6 @@
 				FB03E23416B97FD400DAD162 /* UIImageView+AFNetworking.m in Sources */,
 				FB03E27916B9850D00DAD162 /* AFJSONUtilities.m in Sources */,
 				FB03E23A16B9802900DAD162 /* PYDefines.m in Sources */,
-				FB03E24D16B982CD00DAD162 /* ATPrYv.xcdatamodel in Sources */,
 				FB03E25016B982CD00DAD162 /* PYUser.m in Sources */,
 				FB03E25616B982CD00DAD162 /* PYChannel.m in Sources */,
 				FB03E25C16B982CD00DAD162 /* PYEvent.m in Sources */,
