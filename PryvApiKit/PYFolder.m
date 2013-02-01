@@ -4,10 +4,10 @@
 //
 
 
-#import "Folder.h"
+#import "PYFolder.h"
 
 
-@implementation Folder {
+@implementation PYFolder {
 }
 
 @synthesize id = _id;

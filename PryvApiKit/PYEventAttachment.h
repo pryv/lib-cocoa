@@ -7,9 +7,9 @@
 #import <Foundation/Foundation.h>
 
 
-@interface EventAttachment : NSObject
+@interface PYEventAttachment : NSObject
 
-@property (nonatomic, strong) NSData *fileData;
+@property (nonatomic, retain) NSData *fileData;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSString *mimeType;

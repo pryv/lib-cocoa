@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
 
 
-@interface Event : NSManagedObject
+@interface PYEvent : NSObject
 
 @property (nonatomic, retain) NSString *attachment;
 @property (nonatomic, retain) NSDate   *date;
@@ -20,7 +19,6 @@
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSNumber *uploaded;
 
-// transient array of EventAttachment 
 @property (nonatomic, retain) NSArray  *attachmentList;
 
 @end

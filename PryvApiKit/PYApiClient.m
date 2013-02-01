@@ -7,30 +7,29 @@
 //
 
 
-#import "PPrYvApiClient.h"
+#import "PYApiClient.h"
 #import "AFNetworking.h"
-#import "EventAttachment.h"
-#import "Folder.h"
-#import "Channel+Extras.h"
-#import "Event.h"
+#import "PYEventAttachment.h"
+#import "PYFolder.h"
+#import "PYChannel.h"
+#import "PYEvent.h"
 #import "PYDefines.h"
-#import "PPrYvCoreDataManager.h"
 
 
 # pragma mark - Folder JSON serialisation
 
-@interface Folder (JSON)
+@interface PYFolder (JSON)
 
-+ (Folder *)folderFromJSON:(id)json;
++ (PYFolder *)folderFromJSON:(id)json;
 
 @end
 
-@implementation Folder (JSON)
+@implementation PYFolder (JSON)
 
-+ (Folder *)folderFromJSON:(id)JSON
++ (PYFolder *)folderFromJSON:(id)JSON
 {
     NSDictionary *jsonDictionary = JSON;
-    Folder *folder = [[Folder alloc] init];
+    PYFolder *folder = [[PYFolder alloc] init];
     folder.id = [jsonDictionary objectForKey:@"id"];
     folder.name = [jsonDictionary objectForKey:@"name"];
     folder.parentId = [jsonDictionary objectForKey:@"parentId"];
@@ -43,21 +42,20 @@
 
 # pragma mark - Event JSON serialisation
 
-@interface Event (JSON)
+@interface PYEvent (JSON)
 
-+ (Event *)eventFromDictionary:(NSDictionary *)eventDictionary inScratchContext:(NSManagedObjectContext *)scratchManagedObjectContext;
++ (PYEvent *)eventFromDictionary:(NSDictionary *)eventDictionary;
 
 - (NSData *)dataWithJSONObject;
 
 @end
 
-@implementation Event (JSON)
+@implementation PYEvent (JSON)
 
-+ (Event *)eventFromDictionary:(NSDictionary *)eventDictionary inScratchContext:(NSManagedObjectContext *)scratchManagedObjectContext
++ (PYEvent *)eventFromDictionary:(NSDictionary *)eventDictionary
 {
-    Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event"
-                                                                 inManagedObjectContext:scratchManagedObjectContext];
-
+    PYEvent *event = [[PYEvent alloc] init];
+    
     double latitude = [[[[eventDictionary objectForKey:@"value"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     double longitude = [[[[eventDictionary objectForKey:@"value"] objectForKey:@"location"] objectForKey:@"long"] doubleValue];
     NSString *folderId = [eventDictionary objectForKey:@"folderId"];
@@ -115,7 +113,7 @@
 # pragma mark - PPrYvApiClient
 
 
-@interface PPrYvApiClient ()
+@interface PYApiClient ()
 
 // perform check before trying to connect to the PrYv API
 - (BOOL)isReady;
@@ -132,7 +130,7 @@
 
 @end
 
-@implementation PPrYvApiClient
+@implementation PYApiClient
 
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize userId = _userId;
@@ -141,9 +139,9 @@
 
 #pragma mark - Class methods
 
-+ (PPrYvApiClient *)sharedClient
++ (PYApiClient *)sharedClient
 {
-    static PPrYvApiClient *_manager = nil;
+    static PYApiClient *_manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _manager = [[self alloc] init];
@@ -292,10 +290,8 @@
         NSLog(@"successfully received channels");
 
         NSMutableArray *channelList = [[NSMutableArray alloc] init];
-        NSManagedObjectContext *context = [[PPrYvCoreDataManager sharedInstance] scratchManagedObjectContext];
-
         for (NSDictionary *channelDictionary in JSON) {
-            Channel *channelObject = [Channel channelWithDictionary:channelDictionary andContext:context];
+            PYChannel *channelObject = [PYChannel channelWithDictionary:channelDictionary];
             [channelList addObject:channelObject];
         }
 
@@ -321,7 +317,7 @@
 
 #pragma mark - PrYv API Event create (POST /{channel-id}/events/)
 
-- (void)sendEvent:(Event *)event withSuccessHandler:(void(^)(void))successHandler errorHandler:(void(^)(NSError *error))errorHandler;
+- (void)sendEvent:(PYEvent *)event withSuccessHandler:(void(^)(void))successHandler errorHandler:(void(^)(NSError *error))errorHandler;
 {
     if (![self isReady]) {
         NSLog(@"fail sending event: not initialized");
@@ -335,7 +331,7 @@
     BOOL containAttachment = NO;
     
     if (attachmentList != nil && [attachmentList count] > 0) {
-        for (EventAttachment *attachment in attachmentList) {
+        for (PYEventAttachment *attachment in attachmentList) {
             // simple data verification before sending
             NSData *fileData = attachment.fileData;
             NSString *fileName = attachment.fileName;
@@ -385,7 +381,7 @@
             // append the event part
             [formData appendPartWithFormData:[event dataWithJSONObject] name:@"event"];
 
-            for (EventAttachment *attachment in attachmentList) {
+            for (PYEventAttachment *attachment in attachmentList) {
                 // append the attachment(s) parts
                 [formData appendPartWithFileData:attachment.fileData
                                             name:attachment.name
@@ -486,12 +482,11 @@
         NSLog(@"successfully received events");
 
         if (successHandler) {
-            NSManagedObjectContext *scratchManagedContext = [[PPrYvCoreDataManager sharedInstance] scratchManagedObjectContext];
+//            NSManagedObjectContext *scratchManagedContext = [[PPrYvCoreDataManager sharedInstance] scratchManagedObjectContext];
             NSMutableArray *eventList = [NSMutableArray array];
             // TODO think how to destroy the scratchmanagedContext
             for (NSDictionary *eventDictionary in JSON) {
-                Event *event = [Event eventFromDictionary:eventDictionary
-                                                                         inScratchContext:scratchManagedContext];
+                PYEvent *event = [PYEvent eventFromDictionary:eventDictionary];
                 [eventList addObject:event];
             }
             successHandler(eventList);
@@ -535,7 +530,7 @@
 
         NSMutableArray *folderList = [[NSMutableArray alloc] init];
         for (NSDictionary *folderDictionary in JSON) {
-            Folder *folderObject = [Folder folderFromJSON:folderDictionary];
+            PYFolder *folderObject = [PYFolder folderFromJSON:folderDictionary];
             [folderList addObject:folderObject];
         }
 

@@ -25,9 +25,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class Event;
+@class PYEvent;
 
-@interface PPrYvApiClient : NSObject {
+@interface PYApiClient : NSObject {
 }
 
 @property (copy, nonatomic) NSString * userId;
@@ -45,7 +45,7 @@
  # method
  +[PPrYvApiClient startClientWithUserId:oAuthToken:channelId:successHandler:errorHandler]
  */
-+ (PPrYvApiClient *)sharedClient;
++ (PYApiClient *)sharedClient;
 
  // ---------------------------------------------------------------------------------------------------------------------
  // @name Initiation of protocol
@@ -100,7 +100,7 @@
  @see Event
  @see EventAttachment
 */
-- (void)sendEvent:(Event *)event
+- (void)sendEvent:(PYEvent *)event
 withSuccessHandler:(void(^)(void))successHandler
       errorHandler:(void(^)(NSError *error))errorHandler;
 
@@ -121,7 +121,7 @@ withSuccessHandler:(void(^)(void))successHandler
 
 
 // ---------------------------------------------------------------------------------------------------------------------
-// @name Folder operations
+// @name PYFolder operations
 // ---------------------------------------------------------------------------------------------------------------------
 
 
@@ -131,7 +131,7 @@ withSuccessHandler:(void(^)(void))successHandler
 
     GET /{channel-id}/folders/
 
- @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of Folder objects
+ @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYFolder objects
 
  */
 - (void)getFoldersWithSuccessHandler:(void (^)(NSArray *folderList))successHandler

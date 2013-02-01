@@ -9,24 +9,16 @@
 #import <PryvApiKit/PYDefines.h>
 
 // Model
-#import <PryvApiKit/User.h>
-#import <PryvApiKit/User+Extras.h>
-#import <PryvApiKit/Channel.h>
-#import <PryvApiKit/Channel+Extras.h>
-#import <PryvApiKit/Event.h>
-#import <PryvApiKit/Event+Extras.h>
+#import <PryvApiKit/PYUser.h>
+#import <PryvApiKit/PYChannel.h>
+#import <PryvApiKit/PYEvent.h>
 
-#import <PryvApiKit/Folder.h>
-#import <PryvApiKit/EventAttachment.h>
+#import <PryvApiKit/PYFolder.h>
+#import <PryvApiKit/PYEventAttachment.h>
 
-// Core Data
-#import <PryvApiKit/PPrYvCoreDataManager.h>
 
-// Networking
-#import <PryvApiKit/PPrYvApiClient.h>
-
-// OpenUDID
-#import <PryvApiKit/PPrYvOpenUDID.h>
+// Pryv Api Client
+#import <PryvApiKit/PYApiClient.h>
 
 // Vendor
 #import <PryvApiKit/AFNetworking.h>

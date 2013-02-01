@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Channel" representedClassName="Channel" syncable="YES">
+    <entity name="Channel" representedClassName="PYChannel" syncable="YES">
         <attribute name="channelId" attributeType="String" indexed="YES" spotlightIndexingEnabled="YES" syncable="YES"/>
         <attribute name="enforceNoEventsOverlap" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trashed" optional="YES" attributeType="Boolean" syncable="YES"/>
     </entity>
-    <entity name="Event" representedClassName="Event" syncable="YES">
+    <entity name="Event" representedClassName="PYEvent" syncable="YES">
         <attribute name="attachment" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="attachmentList" optional="YES" transient="YES" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
@@ -16,7 +16,7 @@
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uploaded" optional="YES" attributeType="Boolean" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES">
+    <entity name="User" representedClassName="PYUser" syncable="YES">
         <attribute name="folderId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="folderName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="locationDistanceInterval" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>

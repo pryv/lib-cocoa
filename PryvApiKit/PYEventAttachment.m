@@ -4,10 +4,10 @@
 //
 
 
-#import "EventAttachment.h"
+#import "PYEventAttachment.h"
 
 
-@implementation EventAttachment {
+@implementation PYEventAttachment {
 }
 
 @synthesize fileData = _fileData;
