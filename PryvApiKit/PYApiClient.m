@@ -35,7 +35,7 @@
     folder.parentId = [jsonDictionary objectForKey:@"parentId"];
     folder.hidden = [[jsonDictionary objectForKey:@"hidden"] boolValue];
     folder.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
-    return folder;
+    return [folder autorelease];
 }
 
 @end
@@ -68,7 +68,7 @@
     event.message = [[eventDictionary objectForKey:@"value"] objectForKey:@"message"];
     event.date = [NSDate dateWithTimeIntervalSince1970:time];
 
-    return event;
+    return [event autorelease];
 }
 
 - (NSData *)dataWithJSONObject
@@ -289,7 +289,7 @@
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         NSLog(@"successfully received channels");
 
-        NSMutableArray *channelList = [[NSMutableArray alloc] init];
+        NSMutableArray *channelList = [[[NSMutableArray alloc] init] autorelease];
         for (NSDictionary *channelDictionary in JSON) {
             PYChannel *channelObject = [PYChannel channelWithDictionary:channelDictionary];
             [channelList addObject:channelObject];
@@ -528,7 +528,7 @@
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         NSLog(@"successfully received folders");
 
-        NSMutableArray *folderList = [[NSMutableArray alloc] init];
+        NSMutableArray *folderList = [[[NSMutableArray alloc] init] autorelease];
         for (NSDictionary *folderDictionary in JSON) {
             PYFolder *folderObject = [PYFolder folderFromJSON:folderDictionary];
             [folderList addObject:folderObject];
