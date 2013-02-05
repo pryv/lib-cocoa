@@ -30,9 +30,9 @@
 @interface PYApiClient : NSObject {
 }
 
-@property (copy, nonatomic) NSString * userId;
-@property (copy, nonatomic) NSString * oAuthToken;
-@property (copy, nonatomic) NSString * channelId;
+@property (copy, nonatomic) NSString *userId;
+@property (copy, nonatomic) NSString *oAuthToken;
+@property (copy, nonatomic) NSString *channelId;
 @property (readonly, nonatomic) NSTimeInterval serverTimeInterval;
 
 
