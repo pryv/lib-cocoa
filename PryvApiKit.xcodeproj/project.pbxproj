@@ -151,8 +151,8 @@
 		FB03E24B16B982CD00DAD162 /* PYFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFolder.m; sourceTree = "<group>"; };
 		FB03E26816B9835500DAD162 /* PYApiClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYApiClient.h; sourceTree = "<group>"; };
 		FB03E26916B9835500DAD162 /* PYApiClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYApiClient.m; sourceTree = "<group>"; };
-		FB03E27516B9850D00DAD162 /* AFJSONUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFJSONUtilities.h; sourceTree = "<group>"; };
-		FB03E27616B9850D00DAD162 /* AFJSONUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFJSONUtilities.m; sourceTree = "<group>"; };
+		FB03E27516B9850D00DAD162 /* AFJSONUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFJSONUtilities.h; path = ../Vendor/AFNetworking/AFNetworking/AFJSONUtilities.h; sourceTree = "<group>"; };
+		FB03E27616B9850D00DAD162 /* AFJSONUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFJSONUtilities.m; path = ../Vendor/AFNetworking/AFNetworking/AFJSONUtilities.m; sourceTree = "<group>"; };
 		FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PryvApiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBC2047D16B95B3700CB5FFB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FBC2048016B95B3700CB5FFB /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
