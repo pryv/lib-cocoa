@@ -28,6 +28,11 @@
 @class PYEvent;
 
 @interface PYApiClient : NSObject {
+@private
+    NSString *_userId;
+    NSString *_oAuthToken;
+    NSString *_channelId;
+    NSTimeInterval _serverTimeInterval;
 }
 
 @property (copy, nonatomic) NSString *userId;

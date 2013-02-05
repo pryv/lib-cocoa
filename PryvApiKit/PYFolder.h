@@ -7,7 +7,14 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYFolder : NSObject
+@interface PYFolder : NSObject {
+@private
+    NSString *_id;
+    NSString *_name;
+    NSString *_parentId;
+    BOOL _hidden;
+    BOOL _trashed;
+}
 
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, copy) NSString *name;

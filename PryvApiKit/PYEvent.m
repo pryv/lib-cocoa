@@ -11,4 +11,13 @@
 
 @implementation PYEvent
 
+@synthesize attachment = _attachment;
+@synthesize date = _date;
+@synthesize folderId = _folderId;
+@synthesize latitude = _latitude;
+@synthesize longitude = _longitude;
+@synthesize message = _message;
+@synthesize uploaded = _uploaded;
+@synthesize attachmentList = _attachmentList;
+
 @end

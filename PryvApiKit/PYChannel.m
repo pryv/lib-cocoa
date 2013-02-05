@@ -9,15 +9,13 @@
 #import "PYChannel.h"
 
 
-@implementation PYChannel {
-@private
-    NSString *_channelId;
-    NSNumber *_enforceNoEventsOverlap;
-}
-
+@implementation PYChannel 
 
 @synthesize channelId = _channelId;
 @synthesize enforceNoEventsOverlap = _enforceNoEventsOverlap;
+@synthesize trashed = _trashed;
+@synthesize name = _name;
+
 
 + (id)channelWithDictionary:(NSDictionary *)dictionary
 {
@@ -28,6 +26,6 @@
     c.enforceNoEventsOverlap = [dictionary objectForKey:@"enforceNoEventsOverlap"];
     c.trashed = [NSNumber numberWithBool:[[dictionary objectForKey:@"trashed"] boolValue]];
     
-    return c;
+    return [c autorelease];
 }
 @end

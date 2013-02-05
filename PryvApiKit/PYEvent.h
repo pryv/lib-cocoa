@@ -9,7 +9,17 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYEvent : NSObject
+@interface PYEvent : NSObject {
+@private
+    NSString *_attachment;
+    NSDate   *_date;
+    NSString *_folderId;
+    NSNumber *_latitude;
+    NSNumber *_longitude;
+    NSString *_message;
+    NSNumber *_uploaded;
+    NSArray  *_attachmentList;
+}
 
 @property (nonatomic, retain) NSString *attachment;
 @property (nonatomic, retain) NSDate   *date;
