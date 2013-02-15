@@ -169,4 +169,11 @@ withSuccessHandler:(void(^)(void))successHandler
         successHandler:(void(^)(NSString *createdFolderId, NSString *newFolderName))successHandler
           errorHandler:(void(^)(NSError *error))errorHandler;
 
+- (void) apiRequest:(NSString *)path
+             method:(NSString *)method
+           postData:(NSDictionary *)data
+     successHandler:(void(^)(NSDictionary *jsonParsedData,  NSHTTPURLResponse *response))successHandler
+       errorHandler:(void(^)(NSError *error,  NSHTTPURLResponse *response))errorHandler;
+
+
 @end

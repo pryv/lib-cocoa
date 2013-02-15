@@ -512,13 +512,15 @@
 - (void)getFoldersWithSuccessHandler:(void (^)(NSArray *folderList))successHandler
                         errorHandler:(void (^)(NSError *error))errorHandler
 {
-    if (![self isReady]) {
-        NSLog(@"fail sending: not initialized");
-
-        if (errorHandler)
-            errorHandler([self createNotReadyError]);
-        return;
-    }
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@/folders", [self apiBaseUrl], self.channelId]
+              method:@"POST"
+            postData:@{@"name": folderName, @"id" : folderId}
+      successHandler:successHandler:^(NSDictionary *jsonData, NSHTTPURLResponse *response) {
+          if (successHandler) successHandler(folderName, folderId)
+              }
+        errorHandler:errorHandler
+     ]
+    
 
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/folders/", [self apiBaseUrl], self.channelId]];
 
@@ -563,46 +565,18 @@
         successHandler:(void (^)(NSString *folderId, NSString *folderName))successHandler
           errorHandler:(void (^)(NSError *error))errorHandler
 {
-    if (![self isReady]) {
-        NSLog(@"fail creating a folder: not initialized");
-
-        if (errorHandler)
-            errorHandler([self createNotReadyError]);
-        return;
-    }
-
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/folders", [self apiBaseUrl], self.channelId]];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setAllHTTPHeaderFields:@{@"Authorization" : self.oAuthToken, @"Content-Type" : @"application/json"}];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"name" : folderName, @"id" : folderId}
-                                                       options:0
-                                                         error:nil];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSLog(@"successfully created folderName: %@ folderId: %@", folderName, folderId);
 
-        if (successHandler)
-            successHandler(folderName, folderId);
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"failed to create folderName: %@ folderId: %@ reason: %@", folderName, folderId, JSON);
-
-        NSDictionary *userInfo = @{
-                @"connectionError": [self nonNil:error],
-                @"NSHTTPURLResponse" : [self nonNil:response],
-                @"folderName": folderName,
-                @"folderId": folderId,
-                @"serverError" : [self nonNil:JSON]
-        };
-        NSError *requestError = [NSError errorWithDomain:@"Error creating folder" code:210 userInfo:userInfo];
-
-        if (errorHandler)
-            errorHandler(requestError);
-
-    }];
-    [operation start];
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@/folders", [self apiBaseUrl], self.channelId]
+              method:@"POST"
+            postData:@{@"name": folderName, @"id" : folderId}
+      successHandler:successHandler:^(NSDictionary *jsonData, NSHTTPURLResponse *response) {
+          if (successHandler) successHandler(folderName, folderId)
+              }
+        errorHandler:errorHandler
+     ]
 }
+     
 
 #pragma mark - PrYv API Folder modify (PUT /{channel-id}/folders/{folder-id})
 
@@ -611,42 +585,67 @@
         successHandler:(void(^)(NSString *folderId, NSString *newFolderName))successHandler
           errorHandler:(void(^)(NSError *error))errorHandler;
 {
-    if (![self isReady]) {
-        NSLog(@"fail renaming a folder: not initialized");
+    
 
-        if (errorHandler)
-            errorHandler([self createNotReadyError]);
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@/folders/%@", [self apiBaseUrl], self.channelId, folderId]
+              method:@"PUT"
+            postData:@{@"name": newFolderName}
+       successHandler:^(NSDictionary *jsonData, NSHTTPURLResponse *response) {
+           if (successHandler) successHandler(folderId, newFolderName)
+       }
+        errorHandler:errorHandler
+      ]
+    
+}
+
+// TODO make a static method of this that takes the "Domain, User & Auth headers"
+- (void) apiRequest:(NSString *)path
+             method:(NSString *)method
+           postData:(NSDictionary *)data
+     successHandler:(void(^)(NSDictionary *jsonParsedData,  NSHTTPURLResponse *response))successHandler
+       errorHandler:(void(^)(NSError *error))errorHandler;
+{
+    
+    if (![self isReady]) {
+        NSLog(@"Not initialized");
+        if (errorHandler) errorHandler([self createNotReadyError]);
         return;
     }
+    
+    
+    if ([method isEqualToString:@"GET"] && data != nil) { // todo check if DELETE an have post data
+        [NSException raise:NSInvalidArgumentException format:@"postData mut be nil for GET method"];
 
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/folders/%@", [self apiBaseUrl], self.channelId, folderId]];
+    }
+    
+    NSURL *url = [NSURL URLWithString:path];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setAllHTTPHeaderFields:@{@"Authorization" : self.oAuthToken, @"Content-Type" : @"application/json"}];
-    request.HTTPMethod = @"PUT";
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:@{@"name" : newFolderName} options:0 error:nil];
+    request.HTTPMethod = method;
+    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postData options:0 error:nil];
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSLog(@"successfully renamed folderId: %@ with folderName: %@", folderId, newFolderName);
-
-        // custom way to store the information about the folder that the folder is available for future uploads
-        if (successHandler)
-            successHandler(folderId, newFolderName);
-
+    
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+                                                                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
+    {
+        // TODO parse JSON data
+        NSDictionary *jsonParsedData = nil;
+       if (successHandler) successHandler(jsonParsedData, response);
+        
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"failed to rename folderId:%@ with folderName:%@ reason:%@", folderId, newFolderName, JSON);
-
-        NSDictionary *userInfo = @{
-                @"connectionError": [self nonNil:error],
-                @"NSHTTPURLResponse" : [self nonNil:response],
-                @"folderName": newFolderName,
-                @"folderId": folderId,
-                @"serverError" : [self nonNil:JSON]
-        };
-        NSError *requestError = [NSError errorWithDomain:@"Error renaming folder" code:220 userInfo:userInfo];
-
+        
+        NSDictionary *requestInfo = @{
+                                   @"connectionError": [self nonNil:error],
+                                   @"NSHTTPURLResponse" : [self nonNil:response],
+                                   @"postData": data,
+                                   @"serverError" : [self nonNil:JSON]
+                                   };
+        NSError *requestError = [NSError errorWithDomain:@"Error with request" code:220 requestInfo:requestInfo];
+        
         if (errorHandler)
             errorHandler(requestError);
     }];
+    
     [operation start];
 }
 
