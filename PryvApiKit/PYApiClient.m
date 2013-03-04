@@ -270,7 +270,7 @@
 
 #pragma mark - PrYv API Channel (GET /channnels)
 
-- (void)getChannelsWithSuccessHandler:(void (^)(NSArray *channelList))successHandler
+- (void)getChannelsWithSuccessHandler:(void (^)(NSArray *channelList))successHandler 
                          errorHandler:(void (^)(NSError *error))errorHandler
 {
     if (![self isReady]) {
