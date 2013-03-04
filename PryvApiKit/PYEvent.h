@@ -19,7 +19,7 @@
     NSNumber *_longitude;
     NSString *_message;
     NSNumber *_uploaded;
-    NSArray  *_attachmentList;
+    NSArray  *_attachmentList; 
     NSString *_duration;
     NSString *_eventId;
     PryvLocation  *_value;
