@@ -19,5 +19,8 @@
 @synthesize message = _message;
 @synthesize uploaded = _uploaded;
 @synthesize attachmentList = _attachmentList;
+@synthesize value = _value;
+@synthesize duration = _duration;
+@synthesize eventId = _eventId;
 
 @end

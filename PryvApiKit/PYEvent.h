@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PryvLocation.h"
 
 
 @interface PYEvent : NSObject {
@@ -19,6 +20,11 @@
     NSString *_message;
     NSNumber *_uploaded;
     NSArray  *_attachmentList;
+    NSString *_duration;
+    NSString *_eventId;
+    PryvLocation  *_value;
+    NSString *_description;
+
 }
 
 @property (nonatomic, retain) NSString *attachment;
@@ -30,5 +36,9 @@
 @property (nonatomic, retain) NSNumber *uploaded;
 
 @property (nonatomic, retain) NSArray  *attachmentList;
+@property (nonatomic, retain) PryvLocation  *value;
+@property (nonatomic, retain) NSString  *duration;
+@property (nonatomic, retain) NSString  *eventId;
+@property (nonatomic, retain) NSString  *description;
 
 @end
