@@ -7,15 +7,16 @@
 //
 
 #import "PryvJSONUtils.h"
+#import "JSON.h"
 
 @implementation PryvJSONUtils{
     
 }
--(NSArray*)parseEvents:(NSString *)jsonString{
-    SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
+-(NSArray*)parseEvents:(NSString *)jsonString :(SBJsonParser *)jsonParser{
+   // SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
     NSError *error = nil;
     NSArray *jsonObjects = [jsonParser objectWithString:jsonString error:&error];
-    [jsonParser release], jsonParser = nil;
+    //[jsonParser release], jsonParser = nil;
     
     NSMutableArrary *events = [NSMutableArray array];
     
