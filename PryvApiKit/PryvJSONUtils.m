@@ -27,6 +27,7 @@
          event.eventId=[dict objectForKey:@"eventId"];
          event.folderId=[dict objectForKey:@"folderId"];
          event.duration=[dict objectForKey:@"duration"];//handling of attachments todo
+        
          [events addObject:event];
         event.
     }
