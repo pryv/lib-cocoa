@@ -9,5 +9,18 @@
 #import <Foundation/Foundation.h>
 
 @interface PryvLocation : NSObject
+{
+    NSNumber *_longitude;
+    
+    NSNumber *_latitude;
+}
+
+
+@property(nonatomic,retain) NSNumber *longitude;
+
+@property(nonatomic,retain) NSNumber *latitude;
+
 
 @end
+
+

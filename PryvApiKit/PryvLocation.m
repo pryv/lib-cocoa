@@ -9,9 +9,10 @@
 #import "PryvLocation.h"
 
 @implementation PryvLocation{
-    double longitude;
-    double latitude;
+   
 }
+@synthesize longitude=_longitude;
+@synthesize latitude=_latitude;
 
 
 

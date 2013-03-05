@@ -13,6 +13,8 @@
 		4C9FC2C016E50E6E00C157BD /* PryvAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FC2BE16E50E6E00C157BD /* PryvAttachment.m */; };
 		4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FC2C116E50FDF00C157BD /* PryvLocation.h */; };
 		4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FC2C216E50FDF00C157BD /* PryvLocation.m */; };
+		4CA22ABF16E62A0B00EC30FB /* PryvType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA22ABD16E62A0B00EC30FB /* PryvType.h */; };
+		4CA22AC016E62A0B00EC30FB /* PryvType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA22ABE16E62A0B00EC30FB /* PryvType.m */; };
 		4CA28D9F16E5D72200D14F17 /* libsbjson-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA28D9516E5D70900D14F17 /* libsbjson-ios.a */; };
 		4E582DD016C25378003B59DB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E582DCF16C25378003B59DB /* UIKit.framework */; };
 		4E582DD116C25378003B59DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
@@ -181,6 +183,8 @@
 		4C9FC2BE16E50E6E00C157BD /* PryvAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvAttachment.m; sourceTree = "<group>"; };
 		4C9FC2C116E50FDF00C157BD /* PryvLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PryvLocation.h; path = PryvApiKit/PryvLocation.h; sourceTree = "<group>"; };
 		4C9FC2C216E50FDF00C157BD /* PryvLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PryvLocation.m; path = PryvApiKit/PryvLocation.m; sourceTree = "<group>"; };
+		4CA22ABD16E62A0B00EC30FB /* PryvType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvType.h; sourceTree = "<group>"; };
+		4CA22ABE16E62A0B00EC30FB /* PryvType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvType.m; sourceTree = "<group>"; };
 		4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SBJson.xcodeproj; path = "json-framework-master/SBJson.xcodeproj"; sourceTree = "<group>"; };
 		4E582DCE16C25378003B59DB /* iOs Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOs Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E582DCF16C25378003B59DB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -431,6 +435,8 @@
 				4C97402C16E48EE700416C53 /* PryvJSONUtils.m */,
 				4C9FC2BD16E50E6E00C157BD /* PryvAttachment.h */,
 				4C9FC2BE16E50E6E00C157BD /* PryvAttachment.m */,
+				4CA22ABD16E62A0B00EC30FB /* PryvType.h */,
+				4CA22ABE16E62A0B00EC30FB /* PryvType.m */,
 			);
 			path = PryvApiKit;
 			sourceTree = "<group>";
@@ -474,6 +480,7 @@
 				FB03E27716B9850D00DAD162 /* AFJSONUtilities.h in Headers */,
 				4C9FC2BF16E50E6E00C157BD /* PryvAttachment.h in Headers */,
 				4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */,
+				4CA22ABF16E62A0B00EC30FB /* PryvType.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,6 +665,7 @@
 				4C97402E16E48EE700416C53 /* PryvJSONUtils.m in Sources */,
 				4C9FC2C016E50E6E00C157BD /* PryvAttachment.m in Sources */,
 				4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */,
+				4CA22AC016E62A0B00EC30FB /* PryvType.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
