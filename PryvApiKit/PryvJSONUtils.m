@@ -7,16 +7,16 @@
 //
 
 #import "PryvJSONUtils.h"
-#import "JSON.h"
+
 
 @implementation PryvJSONUtils{
     
 }
--(NSArray*)parseEvents:(NSString *)jsonString :(SBJsonParser *)jsonParser{
-   // SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
+-(NSArray*)parseEvents:(NSString *)jsonString{
+    SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
     NSError *error = nil;
     NSArray *jsonObjects = [jsonParser objectWithString:jsonString error:&error];
-    //[jsonParser release], jsonParser = nil;
+    [jsonParser release], jsonParser = nil;
     
     NSMutableArrary *events = [NSMutableArray array];
     
@@ -33,6 +33,26 @@
         event.
     }
 }
+
+-(NSArray*)parseEventsWithParser:(NSString *)jsonString :(SBJsonParser *)jsonParser{
+    NSError *error = nil;
+    NSArray *jsonObjects = [jsonParser objectWithString:jsonString error:&error];
+    NSMutableArrary *events = [NSMutableArray array];
+    
+    for (NSDictionary *dict in jsonObjects)
+    {
+        PryvEvent *event = [[[PryvEvent alloc] init] autorelease];
+        
+        event.description=[dict objectForKey:@"description"];
+        event.eventId=[dict objectForKey:@"eventId"];
+        event.folderId=[dict objectForKey:@"folderId"];
+        event.duration=[dict objectForKey:@"duration"];//handling of attachments todo
+        
+        [events addObject:event];
+        event.
+    }
+}
+
 
 
 @end

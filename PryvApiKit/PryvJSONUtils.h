@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JSON.h"
 
 @interface PryvJSONUtils : NSObject{
     
 }
 -(NSArray*)parseEvents:(NSString*)jsonString;
+
+-(NSArray*)parseEventsWithParser:(NSString*)jsonString :(SBJsonParser *)jsonParser;
 @end
