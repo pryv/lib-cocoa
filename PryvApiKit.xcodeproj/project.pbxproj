@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C3443C716E5D28E00B3CFFE /* libsbjson-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3443BD16E5D25B00B3CFFE /* libsbjson-ios.a */; };
 		4C97402D16E48EE700416C53 /* PryvJSONUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C97402B16E48EE700416C53 /* PryvJSONUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C97402E16E48EE700416C53 /* PryvJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97402C16E48EE700416C53 /* PryvJSONUtils.m */; };
 		4C9FC2BF16E50E6E00C157BD /* PryvAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FC2BD16E50E6E00C157BD /* PryvAttachment.h */; };
 		4C9FC2C016E50E6E00C157BD /* PryvAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FC2BE16E50E6E00C157BD /* PryvAttachment.m */; };
 		4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FC2C116E50FDF00C157BD /* PryvLocation.h */; };
 		4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FC2C216E50FDF00C157BD /* PryvLocation.m */; };
+		4CA28D9F16E5D72200D14F17 /* libsbjson-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA28D9516E5D70900D14F17 /* libsbjson-ios.a */; };
 		4E582DD016C25378003B59DB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E582DCF16C25378003B59DB /* UIKit.framework */; };
 		4E582DD116C25378003B59DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
 		4E582DD316C25378003B59DB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E582DD216C25378003B59DB /* CoreGraphics.framework */; };
@@ -106,37 +106,37 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4C3443B816E5D25B00B3CFFE /* PBXContainerItemProxy */ = {
+		4CA28D9016E5D70900D14F17 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */;
+			containerPortal = 4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BC12323D1391D5CC00131607;
 			remoteInfo = SBJson;
 		};
-		4C3443BA16E5D25B00B3CFFE /* PBXContainerItemProxy */ = {
+		4CA28D9216E5D70900D14F17 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */;
+			containerPortal = 4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BC1232521391D5CC00131607;
 			remoteInfo = SBJsonTests;
 		};
-		4C3443BC16E5D25B00B3CFFE /* PBXContainerItemProxy */ = {
+		4CA28D9416E5D70900D14F17 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */;
+			containerPortal = 4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BCC2626913920FC7003D9994;
 			remoteInfo = "sbjson-ios";
 		};
-		4C3443BE16E5D25B00B3CFFE /* PBXContainerItemProxy */ = {
+		4CA28D9616E5D70900D14F17 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */;
+			containerPortal = 4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BCC2627313920FC7003D9994;
 			remoteInfo = "sbjson-iosTests";
 		};
-		4C3443C116E5D27E00B3CFFE /* PBXContainerItemProxy */ = {
+		4CA28D9916E5D71E00D14F17 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */;
+			containerPortal = 4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = BCC2626813920FC7003D9994;
 			remoteInfo = "sbjson-ios";
@@ -175,13 +175,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SBJson.xcodeproj; path = "../../Downloads/sdk-objectivec-apple-master/json-framework-master/SBJson.xcodeproj"; sourceTree = "<group>"; };
 		4C97402B16E48EE700416C53 /* PryvJSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvJSONUtils.h; sourceTree = "<group>"; };
 		4C97402C16E48EE700416C53 /* PryvJSONUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvJSONUtils.m; sourceTree = "<group>"; };
 		4C9FC2BD16E50E6E00C157BD /* PryvAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvAttachment.h; sourceTree = "<group>"; };
 		4C9FC2BE16E50E6E00C157BD /* PryvAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvAttachment.m; sourceTree = "<group>"; };
 		4C9FC2C116E50FDF00C157BD /* PryvLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PryvLocation.h; path = PryvApiKit/PryvLocation.h; sourceTree = "<group>"; };
 		4C9FC2C216E50FDF00C157BD /* PryvLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PryvLocation.m; path = PryvApiKit/PryvLocation.m; sourceTree = "<group>"; };
+		4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SBJson.xcodeproj; path = "json-framework-master/SBJson.xcodeproj"; sourceTree = "<group>"; };
 		4E582DCE16C25378003B59DB /* iOs Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOs Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E582DCF16C25378003B59DB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		4E582DD216C25378003B59DB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -251,7 +251,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C3443C716E5D28E00B3CFFE /* libsbjson-ios.a in Frameworks */,
+				4CA28D9F16E5D72200D14F17 /* libsbjson-ios.a in Frameworks */,
 				4E582DD016C25378003B59DB /* UIKit.framework in Frameworks */,
 				4E582DD116C25378003B59DB /* Foundation.framework in Frameworks */,
 				4E582DD316C25378003B59DB /* CoreGraphics.framework in Frameworks */,
@@ -277,22 +277,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4C3443B216E5D25B00B3CFFE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4C3443B916E5D25B00B3CFFE /* SBJson.framework */,
-				4C3443BB16E5D25B00B3CFFE /* SBJsonTests.octest */,
-				4C3443BD16E5D25B00B3CFFE /* libsbjson-ios.a */,
-				4C3443BF16E5D25B00B3CFFE /* sbjson-iosTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4C97402F16E4991400416C53 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = JSON;
+			sourceTree = "<group>";
+		};
+		4CA28D8A16E5D70900D14F17 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CA28D9116E5D70900D14F17 /* SBJson.framework */,
+				4CA28D9316E5D70900D14F17 /* SBJsonTests.octest */,
+				4CA28D9516E5D70900D14F17 /* libsbjson-ios.a */,
+				4CA28D9716E5D70900D14F17 /* sbjson-iosTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4E582DD416C25378003B59DB /* iOs Example */ = {
@@ -363,7 +363,7 @@
 		FBC2047016B95B3700CB5FFB = {
 			isa = PBXGroup;
 			children = (
-				4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */,
+				4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */,
 				4C9FC2C116E50FDF00C157BD /* PryvLocation.h */,
 				4C9FC2C216E50FDF00C157BD /* PryvLocation.m */,
 				FBC2048316B95B3800CB5FFB /* PryvApiKit */,
@@ -491,7 +491,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4C3443C216E5D27E00B3CFFE /* PBXTargetDependency */,
+				4CA28D9A16E5D71E00D14F17 /* PBXTargetDependency */,
 			);
 			name = "iOs Example";
 			productName = "iOs Example";
@@ -554,8 +554,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 4C3443B216E5D25B00B3CFFE /* Products */;
-					ProjectRef = 4C3443B116E5D25B00B3CFFE /* SBJson.xcodeproj */;
+					ProductGroup = 4CA28D8A16E5D70900D14F17 /* Products */;
+					ProjectRef = 4CA28D8916E5D70900D14F17 /* SBJson.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -568,32 +568,32 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4C3443B916E5D25B00B3CFFE /* SBJson.framework */ = {
+		4CA28D9116E5D70900D14F17 /* SBJson.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SBJson.framework;
-			remoteRef = 4C3443B816E5D25B00B3CFFE /* PBXContainerItemProxy */;
+			remoteRef = 4CA28D9016E5D70900D14F17 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4C3443BB16E5D25B00B3CFFE /* SBJsonTests.octest */ = {
+		4CA28D9316E5D70900D14F17 /* SBJsonTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = SBJsonTests.octest;
-			remoteRef = 4C3443BA16E5D25B00B3CFFE /* PBXContainerItemProxy */;
+			remoteRef = 4CA28D9216E5D70900D14F17 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4C3443BD16E5D25B00B3CFFE /* libsbjson-ios.a */ = {
+		4CA28D9516E5D70900D14F17 /* libsbjson-ios.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libsbjson-ios.a";
-			remoteRef = 4C3443BC16E5D25B00B3CFFE /* PBXContainerItemProxy */;
+			remoteRef = 4CA28D9416E5D70900D14F17 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4C3443BF16E5D25B00B3CFFE /* sbjson-iosTests.octest */ = {
+		4CA28D9716E5D70900D14F17 /* sbjson-iosTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "sbjson-iosTests.octest";
-			remoteRef = 4C3443BE16E5D25B00B3CFFE /* PBXContainerItemProxy */;
+			remoteRef = 4CA28D9616E5D70900D14F17 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -689,10 +689,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4C3443C216E5D27E00B3CFFE /* PBXTargetDependency */ = {
+		4CA28D9A16E5D71E00D14F17 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "sbjson-ios";
-			targetProxy = 4C3443C116E5D27E00B3CFFE /* PBXContainerItemProxy */;
+			targetProxy = 4CA28D9916E5D71E00D14F17 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
