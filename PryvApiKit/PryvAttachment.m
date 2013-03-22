@@ -8,13 +8,6 @@
 
 #import "PryvAttachment.h"
 
-@implementation PryvAttachment{
-    
-}
-
-@synthesize type=_type;
-@synthesize size=_size;
-@synthesize filename=_filename;
-
+@implementation PryvAttachment
 
 @end

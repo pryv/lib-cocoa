@@ -9,14 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYChannel : NSObject {
-@private
-    NSString *_channelId;
-    NSNumber *_enforceNoEventsOverlap;
-    NSNumber *_trashed;
-    NSString *_name;
-}
-
+@interface PYChannel : NSObject
 
 @property (nonatomic, retain) NSString *channelId;
 @property (nonatomic, retain) NSNumber *enforceNoEventsOverlap;

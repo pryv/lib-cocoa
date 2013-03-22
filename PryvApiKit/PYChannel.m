@@ -9,13 +9,7 @@
 #import "PYChannel.h"
 
 
-@implementation PYChannel 
-
-@synthesize channelId = _channelId;
-@synthesize enforceNoEventsOverlap = _enforceNoEventsOverlap;
-@synthesize trashed = _trashed;
-@synthesize name = _name;
-
+@implementation PYChannel
 
 + (id)channelWithDictionary:(NSDictionary *)dictionary
 {

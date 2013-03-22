@@ -10,7 +10,4 @@
 
 @implementation PryvType
 
-@synthesize clazz=_class;
-@synthesize format=_format;
-
 @end

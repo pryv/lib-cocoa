@@ -7,6 +7,10 @@
 //
 
 #import "PYEViewController.h"
+#import "PryvApiKit.h"
+//#import "PYChannelClient.h"
+//#import "PYApiClient.h"
+//#import <libPryvApiKit.a>
 
 @interface PYEViewController ()
 
@@ -19,11 +23,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    [[PYApiConnectionClient sharedClient] startClientWithUserId:@"perkikiki"
+                                                         oAuthToken:kPYUserTempToken
+                                                          channelId:kPrYvApplicationChannelId
+                                                     successHandler:^(NSTimeInterval serverTime)
+     {
+         NSLog(@"success");
+     }errorHandler:^(NSError *error) {
+        NSLog(@"");
+    }];
+    
+    [[PYFolderClient folderClient] getFoldersWithRequestType:PYRequestTypeAsync
+                                                filterParams:@"state=default&includeHidden=true"
+                                              successHandler:^(NSArray *folderList)
+     {
+         NSLog(@"folder list %@",folderList);
+     }errorHandler:^(NSError *error) {
+         NSLog(@"error %@",error);
+     }];
+
+    NSLog(@"sdfsd");
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
+    [PYApiConnectionClient sharedClient];
+
 }
 
 

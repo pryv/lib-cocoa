@@ -7,13 +7,8 @@
 #import "PYEventAttachment.h"
 
 
-@implementation PYEventAttachment {
-}
+@implementation PYEventAttachment
 
-@synthesize fileData = _fileData;
-@synthesize name = _name;
-@synthesize fileName = _fileName;
-@synthesize mimeType = _mimeType;
 
 - (id)initWithFileData:(NSData *)fileData
                   name:(NSString *)name

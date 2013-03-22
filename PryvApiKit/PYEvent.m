@@ -11,16 +11,4 @@
 
 @implementation PYEvent
 
-@synthesize attachment = _attachment;
-@synthesize date = _date;
-@synthesize folderId = _folderId;
-
-@synthesize message = _message;
-@synthesize uploaded = _uploaded;
-@synthesize attachmentList = _attachmentList;
-@synthesize location = _location;
-@synthesize duration = _duration;
-@synthesize eventId = _eventId;
-@synthesize modified=_modified;
-
 @end

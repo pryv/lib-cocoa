@@ -8,10 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PryvType : NSObject{
-    NSString *_class;
-    NSString *_format;
-}
+@interface PryvType : NSObject
 
 @property(nonatomic,retain) NSString *clazz;
 @property(nonatomic,retain) NSString *format;

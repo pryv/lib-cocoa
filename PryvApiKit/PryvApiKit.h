@@ -6,7 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <PryvApiKit/PYDefines.h>
+#import <PryvApiKit/PYConstants.h>
+#import <PryvApiKit/PYError.h>
+#import <PryvApiKit/PyErrorUtility.h>
 
 // Model
 #import <PryvApiKit/PYUser.h>
@@ -18,7 +20,11 @@
 
 
 // Pryv Api Client
-#import <PryvApiKit/PYApiClient.h>
+#import <PryvApiKit/PYApiConnectionClient.h>
+#import <PryvApiKit/PYClient.h>
+#import <PryvApiKit/PYChannelClient.h>
+#import <PryvApiKit/PYEventClient.h>
+#import <PryvApiKit/PYFolderClient.h>
 
 // Vendor
 #import <PryvApiKit/AFNetworking.h>

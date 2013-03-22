@@ -8,11 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PryvAttachment : NSObject{
-    NSString *_filename;
-    NSNumber *_size;
-    NSString *_type;
-}
+@interface PryvAttachment : NSObject
 
 @property(nonatomic,retain)NSString *filename;
 @property(nonatomic,retain)NSString *type;

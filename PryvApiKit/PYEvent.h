@@ -10,22 +10,7 @@
 #import "PryvLocation.h"
 
 
-@interface PYEvent : NSObject {
-@private
-    NSString *_attachment;
-    NSDate   *_date;
-    NSString *_folderId;
-    NSString *_message;
-    NSNumber *_uploaded;
-    NSMutableArray  *_attachmentList;
-    NSString *_duration;
-    NSString *_eventId;
-    PryvLocation  *_location;
-    NSString *_description;
-    NSString *_modified;;
-   
-
-}
+@interface PYEvent : NSObject
 
 @property (nonatomic, retain) NSString *attachment;
 @property (nonatomic, retain) NSDate   *date;

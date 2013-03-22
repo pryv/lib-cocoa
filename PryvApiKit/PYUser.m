@@ -10,9 +10,4 @@
 
 @implementation PYUser 
 
-@synthesize userId = _userId;
-@synthesize folderId = _folderId;
-@synthesize folderName = _folderName;
-@synthesize userToken = _userToken;
-
 @end

@@ -16,12 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PYUser : NSObject {
-    NSString *_userId;
-    NSString *_userToken;
-    NSString *_folderId;
-    NSString *_folderName;
-}
+@interface PYUser : NSObject 
 
 @property (nonatomic, retain) NSString *userId;
 @property (nonatomic, retain) NSString *userToken;
