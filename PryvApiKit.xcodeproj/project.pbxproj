@@ -32,6 +32,10 @@
 		3D6FCEC616F7D21B0003D970 /* PYEventClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6FCEB516F7C8C00003D970 /* PYEventClient.h */; };
 		3D6FCEC716F7D22E0003D970 /* PYFolderClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6FCEB016F7C8A70003D970 /* PYFolderClient.h */; };
 		3D6FCEC816F7D2A90003D970 /* libPryvApiKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */; };
+		3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */; };
+		3DD608EF1702545400905533 /* AccessClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608ED1702545400905533 /* AccessClient.h */; };
+		3DD608F01702545400905533 /* AccessClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD608EE1702545400905533 /* AccessClient.m */; };
+		3DD608F11702545400905533 /* AccessClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD608EE1702545400905533 /* AccessClient.m */; };
 		4C97402D16E48EE700416C53 /* PryvJSONUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C97402B16E48EE700416C53 /* PryvJSONUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C97402E16E48EE700416C53 /* PryvJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97402C16E48EE700416C53 /* PryvJSONUtils.m */; };
 		4C9FC2BF16E50E6E00C157BD /* PryvAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FC2BD16E50E6E00C157BD /* PryvAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -228,6 +232,9 @@
 		3D6FCEBC16F7CB460003D970 /* PYFolder+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYFolder+JSON.m"; sourceTree = "<group>"; };
 		3D6FCEC016F7CB8F0003D970 /* PYEvent+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+JSON.h"; sourceTree = "<group>"; };
 		3D6FCEC116F7CB8F0003D970 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
+		3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = "<group>"; };
+		3DD608ED1702545400905533 /* AccessClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessClient.h; sourceTree = "<group>"; };
+		3DD608EE1702545400905533 /* AccessClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessClient.m; sourceTree = "<group>"; };
 		4C97402B16E48EE700416C53 /* PryvJSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvJSONUtils.h; sourceTree = "<group>"; };
 		4C97402C16E48EE700416C53 /* PryvJSONUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvJSONUtils.m; sourceTree = "<group>"; };
 		4C9FC2BD16E50E6E00C157BD /* PryvAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvAttachment.h; sourceTree = "<group>"; };
@@ -388,6 +395,8 @@
 			isa = PBXGroup;
 			children = (
 				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
+				3DD608ED1702545400905533 /* AccessClient.h */,
+				3DD608EE1702545400905533 /* AccessClient.m */,
 				FB03E26816B9835500DAD162 /* PYApiConnectionClient.h */,
 				FB03E26916B9835500DAD162 /* PYApiConnectionClient.m */,
 				8AB2361D16FA895800B28F06 /* PYClient.h */,
@@ -535,6 +544,7 @@
 		FBC2048316B95B3800CB5FFB /* PryvApiKit */ = {
 			isa = PBXGroup;
 			children = (
+				3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */,
 				3D6D3BBF16F8BD3C0072F480 /* Error */,
 				3D6D3BB916F8BB9D0072F480 /* Constants */,
 				3D6FCEA616F7C2FF0003D970 /* Model */,
@@ -596,6 +606,8 @@
 				3D6FCEB716F7C8C00003D970 /* PYEventClient.h in Headers */,
 				3D6D3BBC16F8BBDE0072F480 /* PYConstants.h in Headers */,
 				FAD9DC741700D25F00A34AB3 /* PYChannel+JSON.h in Headers */,
+				3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */,
+				3DD608EF1702545400905533 /* AccessClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -790,6 +802,7 @@
 				8AB2362016FA895800B28F06 /* PYClient.m in Sources */,
 				8A6D9E7716FB79A1008F2B2C /* PyErrorUtility.m in Sources */,
 				FAD9DC751700D25F00A34AB3 /* PYChannel+JSON.m in Sources */,
+				3DD608F01702545400905533 /* AccessClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,6 +836,7 @@
 				8AB2362116FA895800B28F06 /* PYClient.m in Sources */,
 				8A6D9E7816FB79A1008F2B2C /* PyErrorUtility.m in Sources */,
 				FAD9DC761700D25F00A34AB3 /* PYChannel+JSON.m in Sources */,
+				3DD608F11702545400905533 /* AccessClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
