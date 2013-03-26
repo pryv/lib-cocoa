@@ -11,15 +11,16 @@
 
 @implementation PYChannel
 
-+ (id)channelWithDictionary:(NSDictionary *)dictionary
+- (NSString *)description
 {
-    
-    PYChannel *c = [[PYChannel alloc] init];
-    c.channelId = [dictionary objectForKey:@"id"];
-    c.name = [dictionary objectForKey:@"name"];
-    c.enforceNoEventsOverlap = [dictionary objectForKey:@"enforceNoEventsOverlap"];
-    c.trashed = [NSNumber numberWithBool:[[dictionary objectForKey:@"trashed"] boolValue]];
-    
-    return [c autorelease];
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@", self.id=%@", self.channelId];
+    [description appendFormat:@", self.name=%@", self.name];
+    [description appendFormat:@", self.clientData=%@", self.clientData];
+    [description appendFormat:@", self.enforceNoEventsOverlap=%s", self.enforceNoEventsOverlap];
+    [description appendFormat:@", self.trashed=%d", self.trashed];
+    [description appendString:@">"];
+    return description;
 }
+
 @end

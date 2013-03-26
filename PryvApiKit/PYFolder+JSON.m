@@ -15,7 +15,7 @@
     NSDictionary *jsonDictionary = JSON;
     PYFolder *folder = [[PYFolder alloc] init];
     folder.folderId = [jsonDictionary objectForKey:@"id"];
-    folder.channelID = [jsonDictionary objectForKey:@"channelId"];
+    folder.channelId = [jsonDictionary objectForKey:@"channelId"];
     folder.name = [jsonDictionary objectForKey:@"name"];
     folder.parentId = [jsonDictionary objectForKey:@"parentId"];
     folder.hidden = [[jsonDictionary objectForKey:@"hidden"] boolValue];

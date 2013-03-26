@@ -10,7 +10,7 @@
 @interface PYFolder : NSObject
 
 @property (nonatomic, copy) NSString *folderId;
-@property (nonatomic, copy) NSString *channelID;
+@property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
 @property (nonatomic, assign, getter = isHidden) BOOL hidden;
