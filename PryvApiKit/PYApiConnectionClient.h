@@ -34,6 +34,7 @@ poll response.pollurl ﻿until you get the an ACCEPTED / REFUSED or ERROR status
  */
 
 #import <Foundation/Foundation.h>
+#import "CWLSynthesizeSingleton.h"
 #import "AFNetworking.h"
 
 @class PYEvent;
@@ -42,6 +43,8 @@ poll response.pollurl ﻿until you get the an ACCEPTED / REFUSED or ERROR status
 @class PYFolderClient;
 
 @interface PYApiConnectionClient : NSObject
+
+CWL_DECLARE_SINGLETON_FOR_CLASS(PYApiConnectionClient)
 
 @property (copy, nonatomic) NSString *userId;
 @property (copy, nonatomic) NSString *oAuthToken;
@@ -71,7 +74,7 @@ poll response.pollurl ﻿until you get the an ACCEPTED / REFUSED or ERROR status
  # method
  +[PPrYvApiClient startClientWithUserId:oAuthToken:channelId:successHandler:errorHandler]
  */
-+ (PYApiConnectionClient *)sharedClient;
+//+ (PYApiConnectionClient *)sharedClient;
 
  // ---------------------------------------------------------------------------------------------------------------------
  // @name Initiation of protocol

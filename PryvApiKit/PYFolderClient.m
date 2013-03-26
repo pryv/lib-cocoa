@@ -13,15 +13,15 @@
 
 
 @implementation PYFolderClient
-{
-}
 
-+ (instancetype)folderClient
-{
-    PYFolderClient *folderClient = [[PYFolderClient alloc] init];
-    return folderClient;
-    
-}
+CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(PYFolderClient)
+
+//+ (instancetype)folderClient
+//{
+//    PYFolderClient *folderClient = [[PYFolderClient alloc] init];
+//    return folderClient;
+//    
+//}
 
 -(id)init
 {
@@ -39,7 +39,7 @@
                    successHandler:(void (^)(NSArray *folderList))successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler;
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", [PYApiConnectionClient sharedClient].channelId];
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", [PYApiConnectionClient sharedPYApiConnectionClient].channelId];
     if (filter) {
         [pathString appendFormat:@"?%@",filter];
     }
@@ -72,6 +72,24 @@
         successHandler:(void (^)(NSString *createdFolderId, NSString *createdFolderName))successHandler
           errorHandler:(void (^)(NSError *error))errorHandler;
 {
+    
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", [PYApiConnectionClient sharedPYApiConnectionClient].channelId];
+    NSDictionary *postData = @{@"name" : folderName,
+                               @"id" : folderId
+                               };
+
+    [[self class] apiRequest:[pathString copy]
+                 requestType:reqType
+                      method:PYRequestMethodPOST
+                    postData:postData
+                     success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                         NSLog(@"JSON %@",JSON);
+                     } failure:^(NSError *error) {
+                         if (errorHandler) {
+                             errorHandler (error);
+                         }
+                     }];
+
     
 //    [self apiRequest:[NSString stringWithFormat:@"%@/%@/folders", [self apiBaseUrl], self.channelId]
 //              method:@"POST"

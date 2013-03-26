@@ -8,14 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+#import "CWLSynthesizeSingleton.h"
 
 @interface PYFolderClient : PYClient
+
+CWL_DECLARE_SINGLETON_FOR_CLASS(PYFolderClient)
 
 // ---------------------------------------------------------------------------------------------------------------------
 // @name PYFolder operations
 // ---------------------------------------------------------------------------------------------------------------------
 
-+ (instancetype)folderClient;
+//+ (instancetype)folderClient;
 /**
  @discussion
  Get list of all folders

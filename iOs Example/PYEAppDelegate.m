@@ -10,10 +10,6 @@
 
 @implementation PYEAppDelegate
 
-- (void)dealloc
-{
-
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

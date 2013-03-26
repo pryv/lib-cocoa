@@ -57,9 +57,9 @@
             success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))successHandler
             failure:(void (^)(NSError *error))failureHandler;
 {
-    if (![[PYApiConnectionClient sharedClient] isReady])
+    if (![[PYApiConnectionClient sharedPYApiConnectionClient] isReady])
     {
-        NSError *notReadyError = [[PYApiConnectionClient sharedClient] createNotReadyError];
+        NSError *notReadyError = [[PYApiConnectionClient sharedPYApiConnectionClient] createNotReadyError];
         [NSException raise:notReadyError.domain format:@"Error code %d",notReadyError.code];
         return;
     }
@@ -72,9 +72,10 @@
         
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[PYApiConnectionClient sharedClient] apiBaseUrl], path]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[PYApiConnectionClient sharedPYApiConnectionClient] apiBaseUrl], path]];
+    NSLog(@"url path is %@",[url absoluteString]);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];    
-    [request setValue:[PYApiConnectionClient sharedClient].oAuthToken forHTTPHeaderField:@"Authorization"];
+    [request setValue:[PYApiConnectionClient sharedPYApiConnectionClient].oAuthToken forHTTPHeaderField:@"Authorization"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 
     NSString *httpMethod = [self getMethodName:method];

@@ -7,8 +7,11 @@
 //
 #import <Foundation/Foundation.h>
 #import "PYApiConnectionClient.h"
+#import "CWLSynthesizeSingleton.h"
 
 @interface PYChannelClient : PYApiConnectionClient
+
+CWL_DECLARE_SINGLETON_FOR_CLASS(PYChannelClient);
 
 //+ (PYChannelClient *)sharedClient;
 

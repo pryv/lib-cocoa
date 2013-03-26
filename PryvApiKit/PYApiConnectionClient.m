@@ -23,6 +23,7 @@
 
 @implementation PYApiConnectionClient
 
+CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(PYApiConnectionClient)
 
 #pragma mark - Class methods
 
@@ -33,16 +34,6 @@
         
     }
     return self;
-}
-
-+ (PYApiConnectionClient *)sharedClient
-{
-    static dispatch_once_t once;
-    static PYApiConnectionClient *sharedInstance;
-    dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
 }
 
 

@@ -12,6 +12,7 @@
 
 @implementation PYChannelClient
 
+CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(PYChannelClient)
 
 -(id)init
 {
