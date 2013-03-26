@@ -11,11 +11,10 @@
 
 @interface PYChannel : NSObject
 
-@property (nonatomic, retain) NSString *channelId;
-@property (nonatomic, retain) NSNumber *enforceNoEventsOverlap;
-@property (nonatomic, retain) NSNumber *trashed;
-@property (nonatomic, retain) NSString *name;
-
-+ (id)channelWithDictionary:(NSDictionary *)dictionary;
+@property (nonatomic, copy) NSString *channelId;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSDictionary *clientData;
+@property (nonatomic, assign, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
+@property (nonatomic, assign, getter = isTrashed) BOOL trashed;
 
 @end

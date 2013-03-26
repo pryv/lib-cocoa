@@ -8,9 +8,6 @@
 
 #import "PYEViewController.h"
 #import "PryvApiKit.h"
-//#import "PYChannelClient.h"
-//#import "PYApiClient.h"
-//#import <libPryvApiKit.a>
 
 @interface PYEViewController ()
 
@@ -32,17 +29,41 @@
      }errorHandler:^(NSError *error) {
         NSLog(@"");
     }];
-    
-    [[PYFolderClient folderClient] getFoldersWithRequestType:PYRequestTypeAsync
-                                                filterParams:@"state=default&includeHidden=true"
-                                              successHandler:^(NSArray *folderList)
-     {
-         NSLog(@"folder list %@",folderList);
-     }errorHandler:^(NSError *error) {
-         NSLog(@"error %@",error);
-     }];
 
-    NSLog(@"sdfsd");
+    NSString *channelId = @"position";
+    
+    NSMutableDictionary *channelData = [[NSMutableDictionary alloc] init];
+    [channelData setObject:@"Position2" forKey:@"name"];
+
+    NSMutableDictionary *clientData = [[NSMutableDictionary alloc] init];
+    [clientData setObject:@"value" forKey:@"key"];
+    [channelData setObject:clientData forKey:@"clientData"];
+        
+    [[PYChannelClient channelClient] editChannelWithRequestType:PYRequestTypeSync channelId:channelId data:channelData successHandler:^(){
+        NSLog(@"edit success");
+    } errorHandler:^(NSError *error){
+        NSLog(@"edit error %@", error);
+    }];
+    
+//    [[PYFolderClient folderClient] getFoldersWithRequestType:PYRequestTypeAsync
+//                                                filterParams:@"state=default&includeHidden=true"
+//                                              successHandler:^(NSArray *folderList)
+//     {
+//         NSLog(@"folder list %@",folderList);
+//     }errorHandler:^(NSError *error) {
+//         NSLog(@"error %@",error);
+//     }];
+//    
+    
+    [[PYChannelClient channelClient] getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList)
+    {
+        NSLog(@"channel list %@", channelList);
+    } errorHandler:^(NSError *error) {
+        NSLog(@"error %@", error);
+    }];
+    
+
+    NSLog(@"end of viewDidLoad");
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
