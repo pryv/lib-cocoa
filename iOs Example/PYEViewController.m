@@ -20,33 +20,52 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[PYApiConnectionClient sharedClient] startClientWithUserId:@"perkikiki"
-                                                         oAuthToken:kPYUserTempToken
-                                                          channelId:kPrYvApplicationChannelId
-                                                     successHandler:^(NSTimeInterval serverTime)
-     {
-         NSLog(@"success");
-     }errorHandler:^(NSError *error) {
-        NSLog(@"");
-    }];
-
-    NSString *channelId = @"position";
     
-    NSMutableDictionary *channelData = [[NSMutableDictionary alloc] init];
-    [channelData setObject:@"Position2" forKey:@"name"];
-
-    NSMutableDictionary *clientData = [[NSMutableDictionary alloc] init];
-    [clientData setObject:@"value" forKey:@"key"];
-    [channelData setObject:clientData forKey:@"clientData"];
+    
+    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
+    [access getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
         
-    [[PYChannelClient channelClient] editChannelWithRequestType:PYRequestTypeSync channelId:channelId data:channelData successHandler:^(){
-        NSLog(@"edit success");
-    } errorHandler:^(NSError *error){
-        NSLog(@"edit error %@", error);
+        for (PYChannel *channel in channelList) {
+            [channel getFoldersWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *folderList) {
+                
+            } errorHandler:^(NSError *error) {
+                
+            }];
+
+        }
+        
+        
+    } errorHandler:^(NSError *error) {
+        
     }];
     
-//    [[PYFolderClient folderClient] getFoldersWithRequestType:PYRequestTypeAsync
-//                                                filterParams:@"state=default&includeHidden=true"
+    
+//    [[PYApiConnectionClient sharedPYApiConnectionClient] startClientWithUserId:@"perkikiki"
+//                                                         oAuthToken:kPYUserTempToken
+//                                                     successHandler:^(NSTimeInterval serverTime)
+//     {
+//         NSLog(@"success");
+//     }errorHandler:^(NSError *error) {
+//        NSLog(@"");
+//    }];
+//
+//    NSString *channelId = @"position";
+//    
+//    NSMutableDictionary *channelData = [[NSMutableDictionary alloc] init];
+//    [channelData setObject:@"Position2" forKey:@"name"];
+//
+//    NSMutableDictionary *clientData = [[NSMutableDictionary alloc] init];
+//    [clientData setObject:@"value" forKey:@"key"];
+//    [channelData setObject:clientData forKey:@"clientData"];
+//        
+//    [[PYChannelClient sharedPYChannelClient] editChannelWithRequestType:PYRequestTypeSync channelId:channelId data:channelData successHandler:^(){
+//        NSLog(@"edit success");
+//    } errorHandler:^(NSError *error){
+//        NSLog(@"edit error %@", error);
+//    }];
+//    
+//    [[PYFolderClient sharedPYFolderClient] getFoldersWithRequestType:PYRequestTypeAsync
+//                                                filterParams:nil
 //                                              successHandler:^(NSArray *folderList)
 //     {
 //         NSLog(@"folder list %@",folderList);
@@ -54,21 +73,20 @@
 //         NSLog(@"error %@",error);
 //     }];
 //    
-    
-    [[PYChannelClient channelClient] getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList)
-    {
-        NSLog(@"channel list %@", channelList);
-    } errorHandler:^(NSError *error) {
-        NSLog(@"error %@", error);
-    }];
-    
-
-    NSLog(@"end of viewDidLoad");
+//    
+//    [[PYChannelClient sharedPYChannelClient] getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList)
+//    {
+//        NSLog(@"channel list %@", channelList);
+//    } errorHandler:^(NSError *error) {
+//        NSLog(@"error %@", error);
+//    }];
+//    
+//
+//    NSLog(@"end of viewDidLoad");
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
-    [PYApiConnectionClient sharedClient];
 
 }
 

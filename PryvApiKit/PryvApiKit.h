@@ -17,17 +17,15 @@
 #import <PryvApiKit/PYUser.h>
 #import <PryvApiKit/PYChannel.h>
 #import <PryvApiKit/PYEvent.h>
-
+#import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYFolder.h>
 #import <PryvApiKit/PYEventAttachment.h>
 
 
 // Pryv Api Client
-#import <PryvApiKit/PYApiConnectionClient.h>
+//#import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYClient.h>
-#import <PryvApiKit/PYChannelClient.h>
 #import <PryvApiKit/PYEventClient.h>
-#import <PryvApiKit/PYFolderClient.h>
 
 // Vendor
 #import <PryvApiKit/AFNetworking.h>

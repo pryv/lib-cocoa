@@ -40,21 +40,21 @@
 /*
  POST /admin/login
  */
-- (void)getSessionWithRequestType:(PYRequestType)reqType
-                         username:(NSString *)username
-                         password:(NSString *)password
-                    applicationId:(NSString *)appLicationId
-                   successHandler:(void (^)(NSArray *folderList))successHandler
-                     errorHandler:(void (^)(NSError *error))errorHandler;
-
-
-- (void)accessesStufWithRequestType:(PYRequestType)reqType
-                     successHandler:(void (^)(NSArray *folderList))successHandler
-                       errorHandler:(void (^)(NSError *error))errorHandler;
-
-- (void)accessesStufPostWithRequestType:(PYRequestType)reqType
-                         successHandler:(void (^)(NSArray *folderList))successHandler
-                           errorHandler:(void (^)(NSError *error))errorHandler;
+//- (void)getSessionWithRequestType:(PYRequestType)reqType
+//                         username:(NSString *)username
+//                         password:(NSString *)password
+//                    applicationId:(NSString *)appLicationId
+//                   successHandler:(void (^)(NSArray *folderList))successHandler
+//                     errorHandler:(void (^)(NSError *error))errorHandler;
+//
+//
+//- (void)accessesStufWithRequestType:(PYRequestType)reqType
+//                     successHandler:(void (^)(NSArray *folderList))successHandler
+//                       errorHandler:(void (^)(NSError *error))errorHandler;
+//
+//- (void)accessesStufPostWithRequestType:(PYRequestType)reqType
+//                         successHandler:(void (^)(NSArray *folderList))successHandler
+//                           errorHandler:(void (^)(NSError *error))errorHandler;
 
 
 @end

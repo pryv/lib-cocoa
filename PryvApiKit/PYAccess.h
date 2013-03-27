@@ -1,23 +1,20 @@
 //
-//  PYChannelClient.h
+//  PYAccess.h
 //  PryvApiKit
 //
-//  Created by Nenad Jelic on 3/18/13.
+//  Created by Nenad Jelic on 3/27/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
+
 #import <Foundation/Foundation.h>
-#import "PYApiConnectionClient.h"
 #import "PYClient.h"
-#import "PYChannel.h"
 
 
-@interface PYChannelClient : PYClient
+@interface PYAccess : NSObject
 
-+ (PYChannelClient *)channelClient;
+@property (nonatomic, copy) NSString *userID;
+@property (nonatomic, copy) NSString *accessToken;
 
-// ---------------------------------------------------------------------------------------------------------------------
-// @name Channel operations
-// ---------------------------------------------------------------------------------------------------------------------
 
 /**
  @discussion
@@ -59,7 +56,7 @@
  PUT /channels/{channel-id}
  
  @param channelId : id of the channel to be modified. Required.
- @param data : NSDictionary with new values for the channel's fields. All fields are optional, and only modified values must be included. 
+ @param data : NSDictionary with new values for the channel's fields. All fields are optional, and only modified values must be included.
  @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and no arguments.
  */
 
@@ -68,6 +65,5 @@
                               data:(NSDictionary *)data
                     successHandler:(void (^)())successHandler
                       errorHandler:(void (^)(NSError *error))errorHandler;
-
 
 @end

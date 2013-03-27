@@ -1,33 +1,15 @@
 //
-//  PYChannelClient.m
+//  PYAccess.m
 //  PryvApiKit
 //
-//  Created by Nenad Jelic on 3/18/13.
+//  Created by Nenad Jelic on 3/27/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYChannelClient.h"
-#import "AFNetworking.h"
+#import "PYAccess.h"
 #import "PYChannel+JSON.h"
 
-@implementation PYChannelClient
-
-CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(PYChannelClient)
-
--(id)init
-{
-    self = [super init];
-    if(self){
-        
-    }
-    return self;
-}
-
-+(instancetype) channelClient
-{
-    PYChannelClient *channelClient = [[PYChannelClient alloc] init];
-    return channelClient;
-}
+@implementation PYAccess
 
 #pragma mark - PrYv API Channel get all (GET /channnels)
 
@@ -37,20 +19,28 @@ CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(PYChannelClient)
     if(filter){
         [pathString appendFormat:@"?%@", filter];
     }
-    [[self class] apiRequest:[pathString copy] requestType:reqType method:PYRequestMethodGET postData:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSMutableArray *channelList = [[NSMutableArray alloc] init];
-        for(NSDictionary *channelDictionary in JSON){
-            PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
-            [channelList addObject:channelObject];
-        }
-        if(successHandler){
-            successHandler(channelList);
-        }
-    } failure:^(NSError *error){
-        if(errorHandler){
-            errorHandler(error);
-        }
-    }];
+        
+    [PYClient apiRequest:[pathString copy]
+                   access:self
+              requestType:reqType
+                   method:PYRequestMethodGET
+                 postData:nil
+                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     NSMutableArray *channelList = [[NSMutableArray alloc] init];
+                     for(NSDictionary *channelDictionary in JSON){
+                         PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
+                         channelObject.access = self;
+                         [channelList addObject:channelObject];
+                     }
+                     if(successHandler){
+                         successHandler(channelList);
+                     }
+                 } failure:^(NSError *error){
+                     if(errorHandler){
+                         errorHandler(error);
+                     }
+                 }
+      ];
 }
 
 //#pragma mark - PrYv API Channel create (POST /channnels)
@@ -85,15 +75,20 @@ CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(PYChannelClient)
                       errorHandler:(void (^)(NSError *error))errorHandler
 {
     NSString *pathString = [NSString stringWithFormat:@"/channels/%@", channelId];
-    [[self class] apiRequest:[pathString copy] requestType:reqType method:PYRequestMethodPUT postData:data success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if(successHandler){
-            successHandler();
-        }
-    } failure:^(NSError *error){
-        if(errorHandler){
-            errorHandler(error);
-        }
-    }];
+    [PYClient apiRequest:[pathString copy]
+              access:self
+         requestType:reqType
+              method:PYRequestMethodPUT
+            postData:data
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 if(successHandler){
+                     successHandler();
+                 }
+             } failure:^(NSError *error){
+                 if(errorHandler){
+                     errorHandler(error);
+                 }
+             }];
 }
 
 @end

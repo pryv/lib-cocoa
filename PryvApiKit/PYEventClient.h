@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PYApiConnectionClient.h"
 
-@interface PYEventClient : PYApiConnectionClient
+@interface PYEventClient : NSObject
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 // @name Event operations
@@ -32,9 +32,9 @@
  @see Event
  @see EventAttachment
  */
-- (void)sendEvent:(PYEvent *)event
-withSuccessHandler:(void(^)(void))successHandler
-     errorHandler:(void(^)(NSError *error))errorHandler;
+//- (void)sendEvent:(PYEvent *)event
+//withSuccessHandler:(void(^)(void))successHandler
+//     errorHandler:(void(^)(NSError *error))errorHandler;
 
 
 /**

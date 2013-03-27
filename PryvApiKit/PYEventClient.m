@@ -21,8 +21,8 @@
 
 #pragma mark - PrYv API Event create (POST /{channel-id}/events/)
 
-- (void)sendEvent:(PYEvent *)event withSuccessHandler:(void(^)(void))successHandler errorHandler:(void(^)(NSError *error))errorHandler;
-{
+//- (void)sendEvent:(PYEvent *)event withSuccessHandler:(void(^)(void))successHandler errorHandler:(void(^)(NSError *error))errorHandler;
+//{
 //    if (![self isReady]) {
 //        NSLog(@"fail sending event: not initialized");
 //        
@@ -145,7 +145,7 @@
 //        }];
 //        [operation start];
 //    }
-}
+//}
 
 #pragma mark - PrYv API Event get/list (GET /{channel-id}/events/)
 

@@ -6,9 +6,6 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-
-// Superclass for Pryv API classes (PYChannelClient, PYEventClient, PYFolderClient etc.)
-
 typedef enum {
     PYRequestTypeAsync = 1,
     PYRequestTypeSync
@@ -21,18 +18,38 @@ typedef enum {
 	PYRequestMethodDELETE
 } PYRequestMethod;
 
+typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON);
+typedef void(^PYClientFailureBlock)(NSError *error);
 
-
+@class PYAccess;
 #import <Foundation/Foundation.h>
+#import "CWLSynthesizeSingleton.h"
 
 @interface PYClient : NSObject
 
+//@property (nonatomic, copy) NSString *username;
+//@property (nonatomic, copy) NSString *accessToken;
+//@property (readonly, nonatomic) NSTimeInterval serverTimeInterval;
+
++ (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
+
 + (void) apiRequest:(NSString *)path
+             access:(PYAccess *)access
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
-            success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))successHandler
-            failure:(void (^)(NSError *error))failureHandler;
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler;
+
+/**
+ @discussion
+ this method simply connect to the PrYv API to retrive the server time in the returned header
+ This method will be called when you start the manager
+ 
+ GET /
+ 
+ */
++ (void)synchronizeTimeWithAccess:(PYAccess *)access successHandler:(void(^)(NSTimeInterval serverTime))successHandler errorHandler:(void(^)(NSError *error))errorHandler;
 
 
 @end
