@@ -11,6 +11,16 @@
 
 @implementation PYAccess
 
+@synthesize userID = _userID;
+@synthesize accessToken = _accessToken;
+
+- (void)dealloc
+{
+    [_userID release];
+    [_accessToken release];
+    [super dealloc];
+}
+
 #pragma mark - PrYv API Channel get all (GET /channnels)
 
 - (void)getChannelsWithRequestType:(PYRequestType)reqType filterParams:(NSString *)filter successHandler:(void (^)(NSArray *))successHandler errorHandler:(void (^)(NSError *))errorHandler
@@ -20,7 +30,7 @@
         [pathString appendFormat:@"?%@", filter];
     }
         
-    [PYClient apiRequest:[pathString copy]
+    [PYClient apiRequest:pathString
                    access:self
               requestType:reqType
                    method:PYRequestMethodGET
@@ -75,7 +85,7 @@
                       errorHandler:(void (^)(NSError *error))errorHandler
 {
     NSString *pathString = [NSString stringWithFormat:@"/channels/%@", channelId];
-    [PYClient apiRequest:[pathString copy]
+    [PYClient apiRequest:pathString
               access:self
          requestType:reqType
               method:PYRequestMethodPUT
@@ -89,6 +99,30 @@
                      errorHandler(error);
                  }
              }];
+}
+
+- (void)deleteChannelWithRequestType:(PYRequestType)reqType
+                           channelId:(NSString *)channelId
+                      successHandler:(void (^)())successHandler
+                        errorHandler:(void (^)(NSError *error))errorHandler
+{
+    NSString *pathString = [NSString stringWithFormat:@"/channels/%@", channelId];
+
+    [PYClient apiRequest:pathString
+                  access:self
+             requestType:reqType
+                  method:PYRequestMethodDELETE
+                postData:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     if(successHandler){
+                         successHandler();
+                     }
+                 } failure:^(NSError *error){
+                     if(errorHandler){
+                         errorHandler(error);
+                     }
+                 }];
+
 }
 
 @end

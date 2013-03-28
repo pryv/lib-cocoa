@@ -175,6 +175,7 @@
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 {
+    NSDictionary *postDataa = postData;
     if (![[self class] isReadyForAccess:access])
     {
         NSError *notReadyError = [self createNotReadyErrorForAccess:access];
@@ -183,7 +184,7 @@
     }
     
     
-    if ( (method == PYRequestMethodGET  && postData != nil) || (method == PYRequestMethodDELETE && postData != nil) )
+    if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )
     {
         [NSException raise:NSInvalidArgumentException format:@"postData must be nil for GET method or DELETE method"];
         return;
@@ -199,8 +200,8 @@
     NSString *httpMethod = [[self class] getMethodName:method];
     request.HTTPMethod = httpMethod;
     
-    if (postData) {
-        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postData options:NSJSONReadingMutableContainers error:nil];
+    if (postDataa) {
+        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
     }
     
     switch (reqType) {

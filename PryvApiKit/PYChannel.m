@@ -12,6 +12,23 @@
 
 @implementation PYChannel
 
+@synthesize access = _access;
+@synthesize channelId = _channelId;
+@synthesize name = _name;
+@synthesize timeCount = _timeCount;
+@synthesize clientData = _clientData;
+@synthesize enforceNoEventsOverlap = _enforceNoEventsOverlap;
+@synthesize trashed = _trashed;
+
+- (void)dealloc
+{
+    [_access release];
+    [_channelId release];
+    [_name release];
+    [_clientData release];
+    [super dealloc];
+}
+
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
@@ -59,40 +76,56 @@
 
 #pragma mark - PrYv API Folder create (POST /{channel-id}/folders/)
 
-- (void)createFolderId:(NSString *)folderId
-       withRequestType:(PYRequestType)reqType
-              withName:(NSString *)folderName
-        successHandler:(void (^)(NSString *createdFolderId, NSString *createdFolderName))successHandler
-          errorHandler:(void (^)(NSError *error))errorHandler;
+- (void)createFolderWithId:(NSString *)folderId
+                      name:(NSString *)folderName
+                  parentId:(NSString *)parentId
+                  isHidden:(BOOL)hidden
+                 isTrashed:(BOOL)trashed
+          customClientData:(NSDictionary *)clientData
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)(NSString *createdFolderId))successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler;
 {
     
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", self.channelId];
-    NSDictionary *postData = @{@"name" : folderName,
-                               @"id" : folderId
-                               };
+    
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setObject:folderId forKey:@"id"];
+    [postData setObject:folderName forKey:@"name"];
+    [postData setObject:self.channelId forKey:@"channelId"];
+        
+    if (parentId) {
+        [postData setObject:parentId forKey:@"parentId"];
+    }
+    
+    if (clientData) {
+        [postData setObject:clientData forKey:@"clientData"];
+    }
+    
+    if (hidden) {
+        [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
+    }
+    
+    if (trashed) {
+        [postData setObject:[NSNumber numberWithBool:trashed] forKey:@"trashed"];
+    }
     
     [PYClient apiRequest:[pathString copy]
                   access:self.access
                  requestType:reqType
                       method:PYRequestMethodPOST
-                    postData:postData
+                    postData:[postData autorelease]
                      success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                         NSLog(@"JSON %@",JSON);
+                         NSString *createdFolderId = [JSON objectForKey:@"id"];
+                         if (successHandler) {
+                             successHandler(createdFolderId);
+                         }
                      } failure:^(NSError *error) {
                          if (errorHandler) {
                              errorHandler (error);
                          }
                      }];
     
-    
-    //    [self apiRequest:[NSString stringWithFormat:@"%@/%@/folders", [self apiBaseUrl], self.channelId]
-    //              method:@"POST"
-    //            postData:@{@"name": folderName, @"id" : folderId}
-    //      successHandler:successHandler:^(NSDictionary *jsonData, NSHTTPURLResponse *response) {
-    //          if (successHandler) successHandler(folderName, folderId)
-    //              }
-    //        errorHandler:errorHandler
-    //     ]
 }
 
 

@@ -8,11 +8,30 @@
 
 
 @interface PYFolder : NSObject
+{
+    NSString *_folderId;
+    NSString *_channelId;
+    NSString *_name;
+    NSString *_parentId;
+    NSDictionary *_clientData;
+    NSTimeInterval _timeCount;
+    NSArray *_children;
+    BOOL _hidden;
+    BOOL _trashed;
+
+
+}
 
 @property (nonatomic, copy) NSString *folderId;
-@property (nonatomic, copy) NSString *channelId;
+@property (nonatomic, copy, readonly) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
+@property (nonatomic, copy) NSDictionary *clientData;
+@property (nonatomic) NSTimeInterval timeCount;
+
+//@children -> array of PYFolder objects
+@property (nonatomic, retain) NSArray *children;
+
 @property (nonatomic, assign, getter = isHidden) BOOL hidden;
 @property (nonatomic, assign, getter = isTrashed) BOOL trashed;
 

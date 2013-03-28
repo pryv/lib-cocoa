@@ -14,10 +14,15 @@
 {
     NSDictionary *jsonDictionary = json;
     PYChannel *channel = [[PYChannel alloc] init];
-    channel.channelId = [jsonDictionary objectForKey:@"id"];
+    
+    //because it's readonly property in this case is used KVC to set property
+    [channel setValue:[jsonDictionary objectForKey:@"id"] forKey:@"channelId"];
+    
+//    channel.channelId = [jsonDictionary objectForKey:@"id"];
     channel.name = [jsonDictionary objectForKey:@"name"];
     channel.enforceNoEventsOverlap = [[jsonDictionary objectForKey:@"enforceNoEventsOverlap"] boolValue];
     channel.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
+    channel.timeCount = [[jsonDictionary objectForKey:@"timeCount"] doubleValue];
     channel.clientData = [jsonDictionary objectForKey:@"clientData"];
     return [channel autorelease];
 }

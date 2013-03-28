@@ -6,17 +6,30 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
+@class PYFolder;
+
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
 @interface PYChannel : NSObject
+{
+    PYAccess *_access;
+    NSString *_channelId;
+    NSString *_name;
+    NSTimeInterval _timeCount;
+    NSDictionary *_clientData;
+    BOOL _enforceNoEventsOverlap;
+    BOOL _trashed;
+
+}
 
 @property (nonatomic, retain) PYAccess *access;
-@property (nonatomic, copy) NSString *channelId;
+@property (nonatomic, copy, readonly) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic)       NSTimeInterval timeCount;
 @property (nonatomic, copy) NSDictionary *clientData;
-@property (nonatomic, assign, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
-@property (nonatomic, assign, getter = isTrashed) BOOL trashed;
+@property (nonatomic, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
+@property (nonatomic, getter = isTrashed) BOOL trashed;
 
 /**
  @discussion
@@ -38,14 +51,17 @@
  @discussion
  Create a new folder in the current channel Id
  folders have one unique Id AND one unique name. Both must be unique
- 
  POST /{channel-id}/folders/
  
  */
-- (void)createFolderId:(NSString *)folderId
+- (void)createFolderWithId:(NSString *)folderId
+                      name:(NSString *)folderName
+                  parentId:(NSString *)parentId
+                  isHidden:(BOOL)hidden
+                 isTrashed:(BOOL)trashed
+          customClientData:(NSDictionary *)clientData
        withRequestType:(PYRequestType)reqType
-              withName:(NSString *)folderName
-        successHandler:(void (^)(NSString *createdFolderId, NSString *createdFolderName))successHandler
+        successHandler:(void (^)(NSString *createdFolderId))successHandler
           errorHandler:(void (^)(NSError *error))errorHandler;
 
 

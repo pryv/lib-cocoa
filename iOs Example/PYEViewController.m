@@ -27,7 +27,11 @@
         
         for (PYChannel *channel in channelList) {
             [channel getFoldersWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *folderList) {
-                
+                [channel createFolderWithId:@"sdfsdfsdfsdfsdf" name:@"Konstantin" parentId:@"38c749a01e3720c43306b73369c3565b21cdf30c" isHidden:NO isTrashed:NO customClientData:nil withRequestType:PYRequestTypeSync successHandler:^(NSString *createdFolderId) {
+                    
+                } errorHandler:^(NSError *error) {
+                    
+                }];
             } errorHandler:^(NSError *error) {
                 
             }];
