@@ -195,7 +195,10 @@
     NSLog(@"url path is %@",[url absoluteString]);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];    
     [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    if (method == PYRequestMethodPOST || method == PYRequestMethodPUT) {
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    }
 
     NSString *httpMethod = [[self class] getMethodName:method];
     request.HTTPMethod = httpMethod;
@@ -242,11 +245,9 @@
             BOOL isUnacceptableStatusCode = [[self class] isUnacceptableStatusCode:httpURLResponse.statusCode];
             if ( isUnacceptableStatusCode && failureHandler ) {
                 
-                NSString *errorStr = [NSString stringWithFormat:@"Unxpected status code, got %d",httpURLResponse.statusCode];
-                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:errorStr forKey:NSLocalizedDescriptionKey];
-                NSError *errorToReturn = [NSError errorWithDomain:PryvSDKDomain code:-1011 userInfo:userInfo];
-
+                NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse];
                 failureHandler (errorToReturn);
+
             }else if (successHandler) {
                 successHandler (request, httpURLResponse, JSON);
             }

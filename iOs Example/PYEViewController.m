@@ -26,12 +26,19 @@
     [access getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
         
         for (PYChannel *channel in channelList) {
-            [channel getFoldersWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *folderList) {
-                [channel createFolderWithId:@"sdfsdfsdfsdfsdf" name:@"Konstantin" parentId:@"38c749a01e3720c43306b73369c3565b21cdf30c" isHidden:NO isTrashed:NO customClientData:nil withRequestType:PYRequestTypeSync successHandler:^(NSString *createdFolderId) {
-                    
+            [channel getFoldersWithRequestType:PYRequestTypeAsync
+                                  filterParams:@"includeHidden=true&state=all"
+                                successHandler:^(NSArray *folderList) {
+                
+                            [channel trashOrDeleteFolderWithId:@"38c749a01e3720c43306b73369c3565b21cdf30c"
+                                                  filterParams:@"mergeEventsWithParent=false"
+                                               withRequestType:PYRequestTypeSync
+                             successHandler:^{
+                    NSLog(@"successfuly deleted");
                 } errorHandler:^(NSError *error) {
                     
                 }];
+                
             } errorHandler:^(NSError *error) {
                 
             }];

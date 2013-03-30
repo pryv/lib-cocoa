@@ -80,11 +80,10 @@
                       name:(NSString *)folderName
                   parentId:(NSString *)parentId
                   isHidden:(BOOL)hidden
-                 isTrashed:(BOOL)trashed
           customClientData:(NSDictionary *)clientData
            withRequestType:(PYRequestType)reqType
             successHandler:(void (^)(NSString *createdFolderId))successHandler
-              errorHandler:(void (^)(NSError *error))errorHandler;
+              errorHandler:(void (^)(NSError *error))errorHandler
 {
     
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", self.channelId];
@@ -102,14 +101,9 @@
         [postData setObject:clientData forKey:@"clientData"];
     }
     
-    if (hidden) {
-        [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
-    }
+    [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
     
-    if (trashed) {
-        [postData setObject:[NSNumber numberWithBool:trashed] forKey:@"trashed"];
-    }
-    
+        
     [PYClient apiRequest:[pathString copy]
                   access:self.access
                  requestType:reqType
@@ -131,23 +125,79 @@
 
 #pragma mark - PrYv API Folder modify (PUT /{channel-id}/folders/{folder-id})
 
-- (void)renameFolderId:(NSString *)folderId
-       withRequestType:(PYRequestType)reqType
-     withNewFolderName:(NSString *)folderName
-        successHandler:(void(^)(NSString *createdFolderId, NSString *newFolderName))successHandler
-          errorHandler:(void(^)(NSError *error))errorHandler;
+- (void)modifyFolderWithId:(NSString *)folderId
+                      name:(NSString *)newfolderName
+                  parentId:(NSString *)newparentId
+                  isHidden:(BOOL)hidden
+          customClientData:(NSDictionary *)clientData
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler
 {
     
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders/%@", self.channelId, folderId];
     
-    //    [self apiRequest:[NSString stringWithFormat:@"%@/%@/folders/%@", [self apiBaseUrl], self.channelId, folderId]
-    //              method:@"PUT"
-    //            postData:@{@"name": newFolderName}
-    //      successHandler:^(NSDictionary *jsonData, NSHTTPURLResponse *response) {
-    //          if (successHandler) successHandler(folderId, newFolderName)
-    //              }
-    //        errorHandler:errorHandler
-    //     ]
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
     
+    if (newfolderName) {
+        [postData setObject:newfolderName forKey:@"name"];
+    }
+        
+    if (newparentId) {
+        [postData setObject:newparentId forKey:@"parentId"];
+    }
+    
+    if (clientData) {
+        [postData setObject:clientData forKey:@"clientData"];
+    }
+    
+    [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
+        
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodPUT
+                postData:[postData autorelease]
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     if (successHandler) {
+                         successHandler();
+                     }
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
+}
+
+#pragma mark - PrYv API Folder delet (DELETE /{channel-id}/folders/{folder-id})
+
+- (void)trashOrDeleteFolderWithId:(NSString *)folderId
+                     filterParams:(NSString *)filter
+                  withRequestType:(PYRequestType)reqType
+                   successHandler:(void (^)())successHandler
+                     errorHandler:(void (^)(NSError *error))errorHandler
+{
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders/%@", self.channelId, folderId];
+    if (filter) {
+        [pathString appendFormat:@"?%@",filter];
+    }
+
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodDELETE
+                postData:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     if (successHandler) {
+                         successHandler();
+                     }
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
 }
 
 

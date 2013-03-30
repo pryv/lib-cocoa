@@ -58,7 +58,6 @@
                       name:(NSString *)folderName
                   parentId:(NSString *)parentId
                   isHidden:(BOOL)hidden
-                 isTrashed:(BOOL)trashed
           customClientData:(NSDictionary *)clientData
        withRequestType:(PYRequestType)reqType
         successHandler:(void (^)(NSString *createdFolderId))successHandler
@@ -67,16 +66,38 @@
 
 /**
  @discussion
- Rename an existing folder Id in the current channel Id with a new name
+ Modify an existing folder Id
  
  PUT /{channel-id}/folders/{id}
  
  */
-- (void)renameFolderId:(NSString *)folderId
-       withRequestType:(PYRequestType)reqType
-     withNewFolderName:(NSString *)folderName
-        successHandler:(void(^)(NSString *createdFolderId, NSString *newFolderName))successHandler
-          errorHandler:(void(^)(NSError *error))errorHandler;
+- (void)modifyFolderWithId:(NSString *)folderId
+                      name:(NSString *)newfolderName
+                  parentId:(NSString *)newparentId
+                  isHidden:(BOOL)hidden
+          customClientData:(NSDictionary *)clientData
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ @discussion
+ Trashes or deletes the specified folder, depending on its current state:
+ If the folder is not already in the trash, it will be moved to the trash
+ If the folder is already in the trash, it will be irreversibly deleted with its possible descendants
+ If events exist that refer to the deleted item(s), you must indicate how to handle them with the parameter mergeEventsWithParent
+ 
+ @param filterParams:
+        mergeEventsWithParent (true or false): Required if actually deleting the item and if it (or any of its descendants) has linked events, ignored otherwise. If true, the linked events will be assigned to the parent of the deleted item; if false, the linked events will be deleted
+ 
+ DELETE /{channel-id}/folders/{folder-id}
+ */
+
+- (void)trashOrDeleteFolderWithId:(NSString *)folderId
+                     filterParams:(NSString *)filter
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler;
 
 
 @end
