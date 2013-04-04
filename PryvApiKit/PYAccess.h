@@ -33,7 +33,7 @@
  */
 
 - (void)getChannelsWithRequestType:(PYRequestType)reqType
-                      filterParams:(NSString *)filter
+                      filterParams:(NSDictionary *)filter
                     successHandler:(void (^)(NSArray *channelList))successHandler
                       errorHandler:(void (^)(NSError *error))errorHandler;
 

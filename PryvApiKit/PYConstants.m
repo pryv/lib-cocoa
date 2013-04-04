@@ -12,7 +12,7 @@
 
 NSString *const kPYAPIScheme = @"https";
 NSString *const kPYAPIHost = @".rec.la";
-NSString *const kPYUserTempToken = @"VPdNj4Sq75";
+NSString *const kPYUserTempToken = @"Ve69mGqqX5";
 
 NSString *const kPrYvApplicationChannelId = @"position";
 NSString *const kPrYvApplicationChannelName = @"Position";

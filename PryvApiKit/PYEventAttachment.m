@@ -9,6 +9,12 @@
 
 @implementation PYEventAttachment
 
+@synthesize fileData = _fileData;
+@synthesize name = _name;
+@synthesize fileName = _fileName;
+@synthesize size = _size;
+@synthesize mimeType = _mimeType;
+
 
 - (id)initWithFileData:(NSData *)fileData
                   name:(NSString *)name
@@ -22,6 +28,16 @@
         _mimeType = mimeType;
     }
     return self;
+}
+
++ (PYEventAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
+{
+    PYEventAttachment *attachment = [[PYEventAttachment alloc] init];
+    attachment.fileName = [JSON objectForKey:@"fileName"];
+    attachment.mimeType = [JSON objectForKey:@"type"];
+    attachment.size = [JSON objectForKey:@"size"];
+    
+    return [attachment autorelease];
 }
 
 @end

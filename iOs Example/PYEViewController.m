@@ -8,6 +8,8 @@
 
 #import "PYEViewController.h"
 #import "PryvApiKit.h"
+#import "PYEventNote.h"
+#import "PYEventType.h"
 
 @interface PYEViewController ()
 
@@ -20,28 +22,42 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
+        
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     [access getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
         
         for (PYChannel *channel in channelList) {
-            [channel getFoldersWithRequestType:PYRequestTypeAsync
-                                  filterParams:@"includeHidden=true&state=all"
-                                successHandler:^(NSArray *folderList) {
-                
-                            [channel trashOrDeleteFolderWithId:@"38c749a01e3720c43306b73369c3565b21cdf30c"
-                                                  filterParams:@"mergeEventsWithParent=false"
-                                               withRequestType:PYRequestTypeSync
-                             successHandler:^{
-                    NSLog(@"successfuly deleted");
-                } errorHandler:^(NSError *error) {
-                    
-                }];
+            
+//            [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
+//                
+//            } errorHandler:^(NSError *error) {
+//                
+//            }];
+            
+            PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
+            NSString *noteTextValue = @"gfdgasdhjfasNenad";
+            PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
+                                                             noteValue:noteTextValue
+                                                              folderId:nil
+                                                                  tags:nil
+                                                           description:@"nenad description"
+                                                            clientData:nil];
+            
+            [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
                 
             } errorHandler:^(NSError *error) {
                 
             }];
+            
+
+//            [channel getFoldersWithRequestType:PYRequestTypeAsync
+//                                  filterParams:@{@"includeHidden": @"true", @"state" : @"all"}
+//                                successHandler:^(NSArray *folderList) {
+//                
+//                
+//            } errorHandler:^(NSError *error) {
+//                
+//            }];
 
         }
         

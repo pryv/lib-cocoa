@@ -23,13 +23,23 @@
 
 #pragma mark - PrYv API Channel get all (GET /channnels)
 
-- (void)getChannelsWithRequestType:(PYRequestType)reqType filterParams:(NSString *)filter successHandler:(void (^)(NSArray *))successHandler errorHandler:(void (^)(NSError *))errorHandler
+- (void)getChannelsWithRequestType:(PYRequestType)reqType
+                      filterParams:(NSDictionary *)filter
+                    successHandler:(void (^)(NSArray *))successHandler
+                      errorHandler:(void (^)(NSError *))errorHandler
 {
     NSMutableString *pathString = [NSMutableString stringWithString:@"/channels"];
-    if(filter){
-        [pathString appendFormat:@"?%@", filter];
-    }
+    if (filter) {
         
+        [pathString appendString:@"?"];
+        for (NSString *key in [filter allKeys])
+        {
+            [pathString appendFormat:@"%@=%@&",key,[filter valueForKey:key]];
+        }
+        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+        
+    }
+    
     [PYClient apiRequest:pathString
                    access:self
               requestType:reqType

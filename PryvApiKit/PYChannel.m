@@ -8,6 +8,8 @@
 
 #import "PYChannel.h"
 #import "PYFolder+JSON.h"
+#import "PYEvent.h"
+#import "PYEventNote.h"
 
 
 @implementation PYChannel
@@ -41,16 +43,89 @@
     return description;
 }
 
+#pragma mark - Events manipulation
+
+//GET /{channel-id}/events
+
+- (void)getAllEventsWithRequestType:(PYRequestType)reqType
+                     successHandler:(void (^) (NSArray *eventList))successHandler
+                       errorHandler:(void (^)(NSError *error))errorHandler
+{
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events", self.channelId];
+    
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodGET
+                postData:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     
+                     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+                     for (NSDictionary *eventDic in JSON) {
+                         [eventsArray addObject:[PYEvent eventFromDictionary:eventDic]];
+                     }
+                     if (successHandler) {
+                         successHandler([eventsArray autorelease]);
+                     }
+                                          
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
+}
+
+//POST /{channel-id}/events
+- (void)createEvent:(PYEvent *)event
+        requestType:(PYRequestType)reqType
+     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
+       errorHandler:(void (^)(NSError *error))errorHandler
+{
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events", self.channelId];
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodPOST
+                postData:[event dictionary]
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     
+//                     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+//                     for (NSDictionary *eventDic in JSON) {
+//                         [eventsArray addObject:[PYEvent eventFromDictionary:eventDic]];
+//                     }
+//                     if (successHandler) {
+//                         successHandler([eventsArray autorelease]);
+//                     }
+                     
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
+}
+
+
+
+
 #pragma mark - PrYv API Folder get all (GET /{channel-id}/folders/)
 
 - (void)getFoldersWithRequestType:(PYRequestType)reqType
-                     filterParams:(NSString *)filter
+                     filterParams:(NSDictionary *)filter
                    successHandler:(void (^)(NSArray *folderList))successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler;
 {
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", self.channelId];
     if (filter) {
-        [pathString appendFormat:@"?%@",filter];
+        
+        [pathString appendString:@"?"];
+        for (NSString *key in [filter allKeys])
+        {
+            [pathString appendFormat:@"%@=%@&",key,[filter valueForKey:key]];
+        }
+        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+        
     }
     [PYClient apiRequest:[pathString copy]
                   access:self.access
@@ -64,7 +139,7 @@
                              [folderList addObject:folderObject];
                          }
                          if (successHandler) {
-                             successHandler(folderList);
+                             successHandler([folderList autorelease]);
                          }
                      } failure:^(NSError *error) {
                          if (errorHandler) {
@@ -173,14 +248,21 @@
 #pragma mark - PrYv API Folder delet (DELETE /{channel-id}/folders/{folder-id})
 
 - (void)trashOrDeleteFolderWithId:(NSString *)folderId
-                     filterParams:(NSString *)filter
+                     filterParams:(NSDictionary *)filter
                   withRequestType:(PYRequestType)reqType
                    successHandler:(void (^)())successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler
 {
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders/%@", self.channelId, folderId];
     if (filter) {
-        [pathString appendFormat:@"?%@",filter];
+        
+        [pathString appendString:@"?"];
+        for (NSString *key in [filter allKeys])
+        {
+            [pathString appendFormat:@"%@=%@&",key,[filter valueForKey:key]];
+        }
+        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+        
     }
 
     [PYClient apiRequest:[pathString copy]

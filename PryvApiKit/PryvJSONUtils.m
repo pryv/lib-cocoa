@@ -9,7 +9,7 @@
 #import "PryvJSONUtils.h"
 #import "PryvLocation.h"
 #import "PryvAttachment.h"
-#import "PryvType.h"
+#import "PYEventType.h"
 
 
 
@@ -33,7 +33,7 @@
         event.duration=(NSString*)[dict objectForKey:@"duration"];//handling of attachments todo
         
         NSDictionary *type= [dict objectForKey:@"type"];
-        PryvType *pryvType=[[PryvType alloc] init];
+        PYEventType *pryvType=[[PYEventType alloc] init];
         pryvType.format=(NSString*)[dict objectForKey:@"format"];
         pryvType.clazz=(NSString*)[dict objectForKey:@"class"];
         
@@ -87,7 +87,7 @@
         event.duration=(NSString*)[dict objectForKey:@"duration"];//handling of attachments todo
         
         NSDictionary *type= [dict objectForKey:@"type"];
-        PryvType *pryvType=[[PryvType alloc] init];
+        PYEventType *pryvType=[[PYEventType alloc] init];
         pryvType.format=(NSString*)[dict objectForKey:@"format"];
         pryvType.clazz=(NSString*)[dict objectForKey:@"class"];
         
