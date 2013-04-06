@@ -12,6 +12,7 @@
 #import "PYEventValueLocation.h"
 #import "PYEventValueWebclip.h"
 #import "PYEventNote.h"
+#import "PYEventNote+JSON.h"
 #import "PYEventPosition.h"
 
 @implementation PYEvent
@@ -22,20 +23,58 @@
 @synthesize type = _type;
 @synthesize folderId = _folderId;
 @synthesize tags = _tags;
-@synthesize description = _description;
+@synthesize eventDescription = _eventDescription;
 @synthesize attachments = _attachments;
 @synthesize clientData = _clientData;
 @synthesize trashed = _trashed;
 @synthesize modified = _modified;
 
 - (NSDictionary *)dictionary {
-    return @{@"time" : [NSNumber numberWithFloat:self.time],
-             @"type" : @{@"class": self.type.eventClassName, @"format" : self.type.eventFormatName},
-//             @"folderId" : self.folderId,
-//             @"tags" : self.tags,
-//             @"description" : self.description,
-//             @"clientData" : self.clientData,
-             };
+    
+    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    if (_type) {
+        [dic setObject:@{@"class": self.type.eventClassName, @"format" : self.type.eventFormatName} forKey:@"type"];
+    }
+    
+    if (_folderId && _folderId.length > 0) {
+        [dic setObject:_folderId forKey:@"folderId"];
+    }
+    
+    if (_tags && _tags.count > 0) {
+        [dic setObject:_tags forKey:@"tags"];
+    }
+    
+    if (_eventDescription && _eventDescription.length > 0) {
+        [dic setObject:_eventDescription forKey:@"description"];
+    }
+    
+    if (_clientData && _clientData.count > 0) {
+        [dic setObject:_clientData forKey:@"clientData"];
+    }
+    
+    return [dic autorelease];
+    
+}
+
+- (NSString *)description
+{
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@", self.eventId=%@", self.eventId];
+    [description appendFormat:@", self.channelId=%@", self.channelId];
+    [description appendFormat:@", self.time=%f", self.time];
+    [description appendFormat:@", self.duration=%f", self.duration];
+    [description appendFormat:@", self.type=%@", self.type];
+    [description appendFormat:@", self.folderId=%@", self.folderId];
+    [description appendFormat:@", self.tags=%@", self.tags];
+    [description appendFormat:@", self.description=%@", self.eventDescription];
+    [description appendFormat:@", self.attachments=%@", self.attachments];
+    [description appendFormat:@", self.clientData=%@", self.clientData];
+    [description appendFormat:@", self.trashed=%d", self.trashed];
+    [description appendFormat:@", self.modified=%@", self.modified];
+    [description appendString:@">"];
+    
+    return description;
 }
 
 - (void)dealloc
@@ -45,7 +84,7 @@
     [_type release];
     [_folderId release];
     [_tags release];
-    [_description release];
+    [_eventDescription release];
     [_attachments release];
     [_clientData release];
     [_modified release];
@@ -56,87 +95,35 @@
 {
     self = [super init];
     if (self) {
-        self.time = [NSDate timeIntervalSinceReferenceDate];
         self.trashed = NO;
     }
     
     return self;
 }
 
-+ (void)setPropertiesForEvent:(PYEvent *)event withJSON:(NSDictionary *)JSON
-{
-    event.eventId = [JSON objectForKey:@"id"];
-    event.channelId = [JSON objectForKey:@"channelId"];
-    event.time = [[JSON objectForKey:@"time"] doubleValue];
-    event.duration = [[JSON objectForKey:@"duration"] doubleValue];
-    event.type = [PYEventType eventTypeFromDictionary:[JSON objectForKey:@"type"]];
-    event.folderId = [JSON objectForKey:@"folderId"];
-    event.tags = [JSON objectForKey:@"tags"];
-    event.description = [JSON objectForKey:@"description"];
-    
-    NSDictionary *attachments = [JSON objectForKey:@"attachments"];
-    NSMutableDictionary *attachmentsDic = [[NSMutableDictionary alloc] init];
-    [attachments enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
-        [attachmentsDic setObject:[PYEventAttachment attachmentFromDictionary:obj]
-                           forKey:key];
-    }];
-    
-    event.attachments = attachmentsDic;
-    [attachmentsDic release];
-    
-    event.clientData = [JSON objectForKey:@"clientData"];
-    event.trashed = [[JSON objectForKey:@"trashed"] boolValue];
-    event.modified = [NSDate dateWithTimeIntervalSince1970:[[JSON objectForKey:@"modified"] doubleValue]];
-    
-
-}
-
 //Factory method
-+ (id)eventFromDictionary:(NSDictionary *)JSON
++ (id)getEventFromDictionary:(NSDictionary *)JSON;
 {    
-    PYEventType *eventType = [PYEventType  eventTypeFromDictionary:[JSON objectForKey:@"type"]];
-    if ([eventType.eventClassName caseInsensitiveCompare:@"note"] == NSOrderedSame) {
-        PYEventNote *noteEvent = [[PYEventNote alloc] init];
-        [self setPropertiesForEvent:noteEvent withJSON:JSON];
-        
-        if ([JSON objectForKey:@"value"]) {
-            [noteEvent initWithType:eventType andNoteValue:[JSON objectForKey:@"value"]];
-        }
-        return [noteEvent autorelease];
-        
-    }else if ([eventType.eventClassName caseInsensitiveCompare:@"position"] == NSOrderedSame) {
-        PYEventPosition *positionEvent = [[PYEventPosition alloc] init];
-        [self setPropertiesForEvent:positionEvent withJSON:JSON];
-        
-        return [positionEvent autorelease];
-    }else{
-        PYEvent *generalEvent = [[PYEvent alloc] init];
-        [self setPropertiesForEvent:generalEvent withJSON:JSON];
-        
-        return [generalEvent autorelease];
-    }
-
+    PYEventType *eventType = [PYEventType eventTypeFromDictionary:[JSON objectForKey:@"type"]];
     
-    return nil;
+    switch (eventType.eventClass) {
+        case PYEventClassNote:{
+            PYEventNote *noteEvent = [PYEventNote noteEventFromDictionary:JSON];
+            return [noteEvent autorelease];
+        }
+            break;
+        case PYEventClassPosition:{
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    return [NSNull null];
     
 }
-
-//+ (id)eventValueFromType:(PYEventType *)eventType andDictionary:(NSDictionary *)JSON
-//{
-//    if ([eventType.eventFormat caseInsensitiveCompare:@"wgs84"] == NSOrderedSame) {
-//        
-//        NSDictionary *locationDic = [[JSON allValues] objectAtIndex:0];
-//        
-//        return [PYEventValueLocation locatinFromDictionary:locationDic];
-//    }
-//    
-//    if ([eventType.eventFormat caseInsensitiveCompare:@"webclip"] == NSOrderedSame) {
-//        return [PYEventValueWebclip webclipFromDictionary:JSON];
-//    }
-//    
-//    return nil;
-//
-//}
 
 
 @end

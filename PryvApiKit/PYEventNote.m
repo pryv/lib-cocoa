@@ -38,7 +38,7 @@
         self.type = eventType;
         self.folderId = folderId;
         self.tags = tags;
-        self.description = description;
+        self.eventDescription = description;
         self.clientData = clientData;
         
         switch (eventType.eventFormat) {
@@ -63,16 +63,29 @@
 
 - (NSDictionary *)dictionary {
     
-    NSMutableDictionary *dic = [[super dictionary] mutableCopy];
-    if (_htmlValue) {
+    NSMutableDictionary *dic = (NSMutableDictionary *)[super dictionary];
+    if (_htmlValue && _htmlValue.length > 0) {
         [dic setObject:_htmlValue forKey:@"value"];
     }
-    if (_txtValue) {
+    if (_txtValue && _txtValue > 0) {
         [dic setObject:_txtValue forKey:@"value"];
     }
     
     return dic;
 }
+
+- (NSString *)description
+{
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    
+    [description appendFormat:@", self.htmlValue=%@", self.htmlValue];
+    [description appendFormat:@", self.txtValue=%@", self.txtValue];
+    [description appendFormat:@", self.webclipValue=%@", self.webclipValue];
+    [description appendString:@">"];
+    
+    return description;
+}
+
 
 
 @end

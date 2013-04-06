@@ -27,6 +27,7 @@ typedef enum {
     PYEventFormat _eventFormat;
     NSString *_eventClassName;
     NSString *_eventFormatName;
+    
 }
 
 @property (nonatomic) PYEventClass eventClass;

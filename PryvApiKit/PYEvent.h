@@ -22,7 +22,7 @@
     
     NSString *_folderId;
     NSArray *_tags;
-    NSString  *_description;
+    NSString  *_eventDescription;
     NSDictionary *_attachments;
     NSDictionary *_clientData;
     BOOL _trashed;
@@ -42,7 +42,7 @@
  */
 @property (nonatomic, retain) NSString *folderId;
 @property (nonatomic, retain) NSArray *tags;
-@property (nonatomic, retain) NSString  *description;
+@property (nonatomic, retain) NSString  *eventDescription;
 
 //dictionary of PYEventAttachment objects
 @property (nonatomic, retain) NSDictionary *attachments;
@@ -50,7 +50,7 @@
 @property (nonatomic) BOOL trashed;
 @property (nonatomic, retain) NSDate *modified;
 
-+ (id)eventFromDictionary:(NSDictionary *)JSON;
++ (id)getEventFromDictionary:(NSDictionary *)JSON;
 - (NSDictionary *)dictionary;
 
 @end

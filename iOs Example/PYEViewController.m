@@ -28,26 +28,32 @@
         
         for (PYChannel *channel in channelList) {
             
-//            [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
-//                
-//            } errorHandler:^(NSError *error) {
-//                
-//            }];
             
-            PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-            NSString *noteTextValue = @"gfdgasdhjfasNenad";
-            PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
-                                                             noteValue:noteTextValue
-                                                              folderId:nil
-                                                                  tags:nil
-                                                           description:@"nenad description"
-                                                            clientData:nil];
+            if ([channel.channelId isEqualToString:@"position"]) {
+                
+//                [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
+//                    
+//                } errorHandler:^(NSError *error) {
+                
+//                }];
+                
+                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
+                NSString *noteTextValue = @"gfdgasdhjfasNesha";
+                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
+                                                                 noteValue:noteTextValue
+                                                                  folderId:nil
+                                                                      tags:nil
+                                                               description:@"tags nenad description"
+                                                                clientData:@{@"someKey": @"someValue", @"someKey1" : @"someValue1"}];
+                
+                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    
+                } errorHandler:^(NSError *error) {
+                    
+                }];
+
+            }
             
-            [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                
-            } errorHandler:^(NSError *error) {
-                
-            }];
             
 
 //            [channel getFoldersWithRequestType:PYRequestTypeAsync

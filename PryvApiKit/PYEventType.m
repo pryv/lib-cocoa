@@ -9,6 +9,11 @@
 
 #import "PYEventType.h"
 
+@interface PYEventType ()
+
+@end
+
+
 @implementation PYEventType
 
 @synthesize eventClass = _eventClass;
@@ -18,8 +23,70 @@
 
 - (void)dealloc
 {
+    [_eventClassName release];
+    [_eventFormatName release];
     [super dealloc];
 }
+
+#pragma mark - Mapping dictionaries
+
++ (NSDictionary *)classMappingDictionary
+{
+    return @{@"note" : [NSNumber numberWithInt:PYEventClassNote],
+             @"position" :[NSNumber numberWithInt:PYEventClassPosition]
+             };
+}
+
++ (NSDictionary *)formatsMappingDictionary
+{
+    return @{@"html": [NSNumber numberWithInt:PYEventFormatHTML],
+             @"txt": [NSNumber numberWithInt:PYEventFormatTxt],
+             @"webclip": [NSNumber numberWithInt:PYEventFormatWebClip],
+             @"wgs84": [NSNumber numberWithInt:PYEventFormatLocation]
+             };
+}
+
+#pragma mark - Utility methods
+
+- (NSString *)getClassNameForClass:(PYEventClass)class
+{
+    NSString __block *keyToReturn;
+    [[[self class] classMappingDictionary] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *obj, BOOL *stop) {
+        if ([obj intValue] == class) {
+            keyToReturn = key;
+            *stop = YES;
+        }
+    }];
+    
+    return keyToReturn;
+}
+
++ (PYEventClass)getClassForClassName:(NSString *)className
+{
+    
+    return (PYEventClass)[[[self classMappingDictionary] objectForKey:className] intValue];
+}
+
+- (NSString *)getFormatNameForFormat:(PYEventFormat)format
+{
+    NSString __block *keyToReturn;
+    [[[self class] formatsMappingDictionary] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *obj, BOOL *stop) {
+        if ([obj intValue] == format) {
+            keyToReturn = key;
+            *stop = YES;
+        }
+    }];
+    
+    return keyToReturn;
+
+}
+
++ (PYEventFormat)getFormatForFormatName:(NSString *)formatName
+{
+    return (PYEventFormat)[[[self formatsMappingDictionary] objectForKey:formatName] intValue];
+}
+
+#pragma mark - Designated initializer
 
 - (id)initWithClass:(PYEventClass)theEventClass andFormat:(PYEventFormat)theEventFormat
 {
@@ -29,46 +96,25 @@
         self.eventClass = theEventClass;
         self.eventFormat = theEventFormat;
         
-        switch (theEventClass) {
-            case PYEventClassNote:
-                _eventClassName = @"note";
-                break;
-            case PYEventClassPosition:
-                _eventClassName = @"position";
-                break;
-                
-            default:
-                break;
-        }
+        _eventClassName = [self getClassNameForClass:theEventClass];
+        _eventFormatName = [self getFormatNameForFormat:theEventFormat];
         
-        switch (theEventFormat) {
-            case PYEventFormatHTML:
-                _eventFormatName = @"html";
-                break;
-            case PYEventFormatTxt:
-                _eventFormatName = @"txt";
-                break;
-            case PYEventFormatWebClip:
-                _eventFormatName = @"webclip";
-                break;
-            case PYEventFormatLocation:
-                _eventFormatName = @"wgs84";
-                break;
-                
-            default:
-                break;
-        }
-
     }
     
     return self;
 }
+
+#pragma mark - get objects from JSON response
 
 + (PYEventType *)eventTypeFromDictionary:(NSDictionary *)JSON
 {
     PYEventType *pet = [[PYEventType alloc] init];
     pet.eventClassName = [JSON objectForKey:@"class"];
     pet.eventFormatName = [JSON objectForKey:@"format"];
+    
+    pet.eventClass = [self getClassForClassName:pet.eventClassName];
+    pet.eventFormat = [self getFormatForFormatName:pet.eventFormatName];
+    
     return [pet autorelease];
 }
 @end

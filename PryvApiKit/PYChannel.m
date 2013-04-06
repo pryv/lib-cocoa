@@ -62,7 +62,7 @@
                      
                      NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                      for (NSDictionary *eventDic in JSON) {
-                         [eventsArray addObject:[PYEvent eventFromDictionary:eventDic]];
+                         [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
                      }
                      if (successHandler) {
                          successHandler([eventsArray autorelease]);
