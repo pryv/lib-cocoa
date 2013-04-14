@@ -61,6 +61,28 @@
     
 }
 
+//- (id)initWithModifiedType:(PYEventType *)eventType
+//                 noteValue:(id)noteValue
+//                  folderId:(NSString *)folderId
+//                      tags:(NSArray *)tags
+//               description:(NSString *)description
+//                clientData:(NSDictionary *)clientData
+//{
+//    self = [self initWithType:eventType
+//                    noteValue:noteValue
+//                     folderId:folderId
+//                         tags:tags
+//                  description:description
+//                   clientData:clientData];
+//    
+//    if (self) {
+//        
+//    }
+//    
+//    return self;
+//    
+//}
+
 - (NSDictionary *)dictionary {
     
     NSMutableDictionary *dic = (NSMutableDictionary *)[super dictionary];

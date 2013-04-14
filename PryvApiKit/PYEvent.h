@@ -8,6 +8,7 @@
 
 @class PryvLocation;
 @class PYEventType;
+@class PYAttachment;
 
 #import <Foundation/Foundation.h>
 
@@ -23,7 +24,7 @@
     NSString *_folderId;
     NSArray *_tags;
     NSString  *_eventDescription;
-    NSDictionary *_attachments;
+    NSMutableArray *_attachments;
     NSDictionary *_clientData;
     BOOL _trashed;
     NSDate *_modified;
@@ -38,17 +39,18 @@
 @property (nonatomic) NSTimeInterval duration;
 @property (nonatomic, retain) PYEventType *type;
 
-/*(any type): Optional. The value associated with the event, if any. Depending on the type, this may be a mathematical value (e.g. mass, money, length, position, etc.), a link to a page, location coordinates, etc
- */
 @property (nonatomic, retain) NSString *folderId;
 @property (nonatomic, retain) NSArray *tags;
 @property (nonatomic, retain) NSString  *eventDescription;
 
-//dictionary of PYEventAttachment objects
-@property (nonatomic, retain) NSDictionary *attachments;
+//array of PYEventAttachment objects
+@property (nonatomic, retain) NSMutableArray *attachments;
 @property (nonatomic, retain) NSDictionary *clientData;
 @property (nonatomic) BOOL trashed;
 @property (nonatomic, retain) NSDate *modified;
+
+- (void)addAttachment:(PYAttachment *)attachment;
+- (void)removeAttachment:(PYAttachment *)attachmentToRemove;
 
 + (id)getEventFromDictionary:(NSDictionary *)JSON;
 - (NSDictionary *)dictionary;

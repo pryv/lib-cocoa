@@ -32,7 +32,16 @@
 + (NSError *)getErrorFromJSONResponse:(id)JSONerror error:(NSError *)error withResponse: (NSHTTPURLResponse *)response;
 {
     if (!JSONerror) {
-        return error;
+        if (error) {
+            return error;
+        }
+        
+        NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];        
+        [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
+        [userInfo setObject:[NSString stringWithFormat:@"Http error: API returns with status code %d",response.statusCode] forKey:NSLocalizedDescriptionKey];
+
+        return [[[NSError alloc] initWithDomain:PryvSDKDomain code:response.statusCode userInfo:[userInfo autorelease]] autorelease];
+        
     }
     
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
@@ -55,7 +64,7 @@
     }
     
     
-    return [[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:userInfo];
+    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:[userInfo autorelease]] autorelease];
 }
 
 @end

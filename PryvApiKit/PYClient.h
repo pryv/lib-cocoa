@@ -22,6 +22,7 @@ typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *re
 typedef void(^PYClientFailureBlock)(NSError *error);
 
 @class PYAccess;
+#import <MobileCoreServices/MobileCoreServices.h>
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
@@ -33,11 +34,14 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
++ (NSString *)fileMIMEType:(NSString*)file;
+
 + (void) apiRequest:(NSString *)path
              access:(PYAccess *)access
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 

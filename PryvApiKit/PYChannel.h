@@ -45,16 +45,40 @@
        errorHandler:(void (^)(NSError *error))errorHandler;
 
 //POST /{channel-id}/events/start
-- (void)startPeriodEventInFolderId:(NSString *)folderId;
+- (void)startPeriodEvent:(PYEvent *)event
+             requestType:(PYRequestType)reqType
+          successHandler:(void (^)(NSString *startedEventId))successHandler
+            errorHandler:(void (^)(NSError *error))errorHandler;
 
 //POST /{channel-id}/events/stop
-- (void)stopPeriodEventWithId:(NSString *)eventId onDate:(NSDate *)specificTime;
+/*Stops a previously running period event
+ @param eventId The id of the event to stop
+ @param specifiedTime The stop time. Default: now.
+ */
+- (void)stopPeriodEventWithId:(NSString *)eventId
+                       onDate:(NSDate *)specificTime
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^)(NSString *stoppedEventId))successHandler
+                 errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 //GET /{channel-id}/events/running
-- (NSArray *)getRunningPeriodEvents;
+/*An array of events containing the running period events.*/
+- (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
+                               successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
+                                 errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 //PUT /{channel-id}/events/{event-id}
-//- (void)
+/*Modifies the event's attributes
+ All event fields are optional, and only modified properties must be included, for other properties put nil
+ @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set) 
+ */
+- (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
+                              forEventId:(NSString *)eventId
+                             requestType:(PYRequestType)reqType
+                          successHandler:(void (^)(NSString *stoppedId))successHandler
+                            errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**
  @discussion

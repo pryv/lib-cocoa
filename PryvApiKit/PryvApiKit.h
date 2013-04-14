@@ -19,7 +19,7 @@
 #import <PryvApiKit/PYEvent.h>
 #import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYFolder.h>
-#import <PryvApiKit/PYEventAttachment.h>
+#import <PryvApiKit/PYAttachment.h>
 
 
 // Pryv Api Client

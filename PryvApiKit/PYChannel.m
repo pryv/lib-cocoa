@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
+
 #import "PYChannel.h"
 #import "PYFolder+JSON.h"
 #import "PYEvent.h"
@@ -58,6 +59,7 @@
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
+             attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      
                      NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
@@ -82,22 +84,25 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
+    
+
+
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events", self.channelId];
     [PYClient apiRequest:[pathString copy]
                   access:self.access
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[event dictionary]
+             attachments:event.attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      
-//                     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
-//                     for (NSDictionary *eventDic in JSON) {
-//                         [eventsArray addObject:[PYEvent eventFromDictionary:eventDic]];
-//                     }
-//                     if (successHandler) {
-//                         successHandler([eventsArray autorelease]);
-//                     }
+                     NSString *createdEventId = [JSON objectForKey:@"id"];
+                     NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                      
+                     if (successHandler) {
+                         successHandler(createdEventId, stoppedId);
+                     }
+                                          
                  } failure:^(NSError *error) {
                      if (errorHandler) {
                          errorHandler (error);
@@ -107,6 +112,137 @@
 }
 
 
+//POST /{channel-id}/events/start
+- (void)startPeriodEvent:(PYEvent *)event
+             requestType:(PYRequestType)reqType
+          successHandler:(void (^)(NSString *startedEventId))successHandler
+            errorHandler:(void (^)(NSError *error))errorHandler
+{
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/start", self.channelId];
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodPOST
+                postData:[event dictionary]
+             attachments:event.attachments
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     
+                     NSString *startedEventId = [JSON objectForKey:@"id"];
+                     
+                     if (successHandler) {
+                         successHandler(startedEventId);
+                     }
+                     
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
+}
+
+//POST /{channel-id}/events/stop
+- (void)stopPeriodEventWithId:(NSString *)eventId
+                       onDate:(NSDate *)specificTime
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^)(NSString *stoppedEventId))successHandler
+                 errorHandler:(void (^)(NSError *error))errorHandler
+{
+    
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    
+    [postData setObject:eventId forKey:@"id"];
+    if (specificTime) {
+        NSTimeInterval timeInterval = [specificTime timeIntervalSince1970];
+        [postData setObject:[NSNumber numberWithDouble:timeInterval] forKey:@"time"];
+
+    }
+    
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/stop", self.channelId];
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodPOST
+                postData:[postData autorelease]
+             attachments:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     
+                     NSString *stoppedEventId = [JSON objectForKey:@"id"];
+                     
+                     if (successHandler) {
+                         successHandler(stoppedEventId);
+                     }
+                     
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
+}
+
+//GET /{channel-id}/events/running
+- (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
+                                    successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
+                                      errorHandler:(void (^)(NSError *error))errorHandler
+
+{
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/running", self.channelId];
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodGET
+                postData:nil
+             attachments:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     
+                     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+                     for (NSDictionary *eventDic in JSON) {
+                         [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
+                     }
+                     if (successHandler) {
+                         successHandler([eventsArray autorelease]);
+                     }
+
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }
+     ];
+
+}
+
+//PUT /{channel-id}/events/{event-id}
+- (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
+                              forEventId:(NSString *)eventId
+                             requestType:(PYRequestType)reqType
+                          successHandler:(void (^)(NSString *stoppedId))successHandler
+                            errorHandler:(void (^)(NSError *error))errorHandler
+{
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/%@", self.channelId, eventId];
+    NSLog(@"[eventObject dictionary] is %@",[eventObject dictionary]);
+    [PYClient apiRequest:[pathString copy]
+                  access:self.access
+             requestType:reqType
+                  method:PYRequestMethodPUT
+                postData:[eventObject dictionary]
+             attachments:eventObject.attachments
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     
+                     NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
+                     
+                     if (successHandler) {
+                         successHandler(stoppedId);
+                     }
+                     
+                 } failure:^(NSError *error) {
+                     if (errorHandler) {
+                         errorHandler (error);
+                     }
+                 }];
+
+}
 
 
 #pragma mark - PrYv API Folder get all (GET /{channel-id}/folders/)
@@ -129,10 +265,11 @@
     }
     [PYClient apiRequest:[pathString copy]
                   access:self.access
-                 requestType:reqType
-                      method:PYRequestMethodGET
-                    postData:nil
-                     success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             requestType:reqType
+                  method:PYRequestMethodGET
+                postData:nil
+             attachments:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                          NSMutableArray *folderList = [[NSMutableArray alloc] init];
                          for (NSDictionary *folderDictionary in JSON) {
                              PYFolder *folderObject = [PYFolder folderFromJSON:folderDictionary];
@@ -181,10 +318,11 @@
         
     [PYClient apiRequest:[pathString copy]
                   access:self.access
-                 requestType:reqType
-                      method:PYRequestMethodPOST
-                    postData:[postData autorelease]
-                     success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             requestType:reqType
+                  method:PYRequestMethodPOST
+                postData:[postData autorelease]
+             attachments:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                          NSString *createdFolderId = [JSON objectForKey:@"id"];
                          if (successHandler) {
                              successHandler(createdFolderId);
@@ -233,6 +371,7 @@
              requestType:reqType
                   method:PYRequestMethodPUT
                 postData:[postData autorelease]
+             attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      if (successHandler) {
                          successHandler();
@@ -270,6 +409,7 @@
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil
+             attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      if (successHandler) {
                          successHandler();

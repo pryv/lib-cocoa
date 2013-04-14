@@ -24,7 +24,7 @@
     [super viewDidLoad];
         
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-    [access getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
+    [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
         
         for (PYChannel *channel in channelList) {
             
@@ -34,23 +34,64 @@
 //                [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
 //                    
 //                } errorHandler:^(NSError *error) {
-                
+//                
 //                }];
                 
                 PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-                NSString *noteTextValue = @"gfdgasdhjfasNesha";
+                NSString *noteTextValue = @"new data with attachment";
                 PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
                                                                  noteValue:noteTextValue
                                                                   folderId:nil
                                                                       tags:nil
-                                                               description:@"tags nenad description"
-                                                                clientData:@{@"someKey": @"someValue", @"someKey1" : @"someValue1"}];
+                                                               description:nil
+                                                                clientData:nil];
                 
-                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                
+                NSString *imgName = @"image003";
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+
+                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
+                                                                      name:imgName
+                                                                  fileName:@"image003.jpg"];
+                [noteEvent addAttachment:att];
+                
+                [channel createEvent:noteEvent requestType:PYRequestTypeAsync successHandler:^(NSString *newEventId, NSString *stoppedId) {
                     
                 } errorHandler:^(NSError *error) {
                     
                 }];
+
+                
+                
+//                [channel setModifiedEventAttributesObject:noteEvent
+//                                               forEventId:@"VPRioMho45"
+//                                              requestType:PYRequestTypeSync
+//                                           successHandler:^(NSString *stoppedId) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
+//                
+//                [channel startPeriodEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *createdFolderId) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
+
+                
+//                [channel getRunningPeriodEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *arrayOfEvents) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
+                
+//                [channel stopPeriodEventWithId:@"VV6i4_7t4Jdd" onDate:nil requestType:PYRequestTypeSync successHandler:^(NSString *stoppedEventId) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
+                
 
             }
             

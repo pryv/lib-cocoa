@@ -44,7 +44,8 @@
                    access:self
               requestType:reqType
                    method:PYRequestMethodGET
-                 postData:nil
+                postData:nil
+             attachments:nil
                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSMutableArray *channelList = [[NSMutableArray alloc] init];
                      for(NSDictionary *channelDictionary in JSON){
@@ -100,6 +101,7 @@
          requestType:reqType
               method:PYRequestMethodPUT
             postData:data
+             attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  if(successHandler){
                      successHandler();
@@ -123,6 +125,7 @@
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil
+             attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      if(successHandler){
                          successHandler();

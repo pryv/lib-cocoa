@@ -4,10 +4,10 @@
 //
 
 
-#import "PYEventAttachment.h"
+#import "PYAttachment.h"
 
 
-@implementation PYEventAttachment
+@implementation PYAttachment
 
 @synthesize fileData = _fileData;
 @synthesize name = _name;
@@ -19,20 +19,18 @@
 - (id)initWithFileData:(NSData *)fileData
                   name:(NSString *)name
               fileName:(NSString *)fileName
-              mimeType:(NSString *)mimeType
 {
     if (self = [super init]) {
         _fileData = fileData;
         _name = name;
         _fileName = fileName;
-        _mimeType = mimeType;
     }
     return self;
 }
 
-+ (PYEventAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
++ (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
 {
-    PYEventAttachment *attachment = [[PYEventAttachment alloc] init];
+    PYAttachment *attachment = [[PYAttachment alloc] init];
     attachment.fileName = [JSON objectForKey:@"fileName"];
     attachment.mimeType = [JSON objectForKey:@"type"];
     attachment.size = [JSON objectForKey:@"size"];

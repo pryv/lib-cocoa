@@ -12,6 +12,7 @@
 #import "PyErrorUtility.h"
 #import "AFNetworking.h"
 #import "PYAccess.h"
+#import "PYAttachment.h"
 
 
 @implementation PYClient
@@ -167,14 +168,30 @@
 
 }
 
++ (NSString *)fileMIMEType:(NSString*)file
+{
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)[file pathExtension], NULL);
+    CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
+    CFRelease(UTI);
+    
+    if (!MIMEType) {
+        return @"application/octet-stream";
+    }
+    
+    return [(NSString *)MIMEType autorelease];
+}
+
+
 + (void) apiRequest:(NSString *)path
              access:(PYAccess *)access
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 {
+    
     NSDictionary *postDataa = postData;
     if (![[self class] isReadyForAccess:access])
     {
@@ -191,74 +208,134 @@
         
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self class] apiBaseUrlForAccess:access], path]];
-    NSLog(@"url path is %@",[url absoluteString]);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];    
-    [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
-    
-    if (method == PYRequestMethodPOST || method == PYRequestMethodPUT) {
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    }
 
-    NSString *httpMethod = [[self class] getMethodName:method];
-    request.HTTPMethod = httpMethod;
     
-    if (postDataa) {
-        request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
-    }
-    
-    switch (reqType) {
-        case PYRequestTypeAsync:{
-            AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
-                                                                                                success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
-             {
-                 if (successHandler) {
-                     successHandler(request, response, JSON);
-                 }
-                 
-             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                 
-                 if (failureHandler) {
-                     NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
-                     failureHandler(errorToReturn);
-                 }
-                 
-             }];
+    if (attachments) {
+//        NSData *bodyData = [NSJSONSerialization dataWithJSONObject:[event dictionary] options:0 error:nil];
+//        
+//        
+//        NSURL *url = [NSURL URLWithString:@"https://perkikiki.rec.la"];
+//        NSString *path = [NSString stringWithFormat:@"/%@/events?auth=Ve69mGqqX5", self.channelId];
+//        
+//        NSString *imgName = @"image003";
+//        NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+//        NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+        
+        NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [[self class] apiBaseUrlForAccess:access]]];
+        NSData *data = [NSJSONSerialization dataWithJSONObject:postDataa options:0 error:nil];
+        
+        AFHTTPClient *client= [AFHTTPClient clientWithBaseURL:baseURL];
+        NSMutableURLRequest *request = [client multipartFormRequestWithMethod:@"POST"
+                                                                         path:path
+                                                                   parameters:nil
+                                                    constructingBodyWithBlock:^(id<AFMultipartFormData> formData)
+                                        {
+                                            [formData appendPartWithFormData:data name:@"event"];
+                                            
+                                            for (PYAttachment *attachment in attachments) {
+                                                [formData appendPartWithFileData:attachment.fileData
+                                                                            name:attachment.name
+                                                                        fileName:attachment.fileName
+                                                                        mimeType:[self fileMIMEType:attachment.fileName]];
+                                            }
+                                            
+                                            
+                                        }];
+                                                        
+                    
+                    
+                                                        
+        
+        [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
+        
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"response object %@",responseObject);
             
-            [operation start];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"error failure %@",error);
+        }];
+        [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+            NSLog(@"Sent %lld of %lld bytes", totalBytesWritten, totalBytesExpectedToWrite);
+        }];
+        
+        [client enqueueHTTPRequestOperation:operation];
 
+    }else{
+        
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self class] apiBaseUrlForAccess:access], path]];
+        NSLog(@"url path is %@",[url absoluteString]);
+
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
+        
+        if (method == PYRequestMethodPOST || method == PYRequestMethodPUT) {
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         }
-            break;
-        case PYRequestTypeSync:{
-            NSHTTPURLResponse *httpURLResponse = nil;
-            NSURLResponse *urlResponse = nil;
-            
-            NSData *responseData = nil;
-            responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: NULL];
-            
-            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
-            
-            if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
-                httpURLResponse = (NSHTTPURLResponse *)urlResponse;
-            }
-
-            BOOL isUnacceptableStatusCode = [[self class] isUnacceptableStatusCode:httpURLResponse.statusCode];
-            if ( isUnacceptableStatusCode && failureHandler ) {
+        
+        NSString *httpMethod = [[self class] getMethodName:method];
+        request.HTTPMethod = httpMethod;
+        
+        if (postDataa) {
+            request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
+        }
+        
+        switch (reqType) {
+            case PYRequestTypeAsync:{
+                AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+                                                                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
+                                                     {
+                                                         if (successHandler) {
+                                                             successHandler(request, response, JSON);
+                                                         }
+                                                         
+                                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                                         
+                                                         if (failureHandler) {
+                                                             NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
+                                                             failureHandler(errorToReturn);
+                                                         }
+                                                         
+                                                     }];
                 
-                NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse];
-                failureHandler (errorToReturn);
-
-            }else if (successHandler) {
-                successHandler (request, httpURLResponse, JSON);
+                [operation start];
+                
             }
-            
-            
+                break;
+            case PYRequestTypeSync:{
+                NSHTTPURLResponse *httpURLResponse = nil;
+                NSURLResponse *urlResponse = nil;
+                
+                NSData *responseData = nil;
+                responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: NULL];
+                
+                id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
+                
+                if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+                    httpURLResponse = (NSHTTPURLResponse *)urlResponse;
+                }
+                
+                BOOL isUnacceptableStatusCode = [[self class] isUnacceptableStatusCode:httpURLResponse.statusCode];
+                if ( isUnacceptableStatusCode && failureHandler ) {
+                    
+                    NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse];
+                    failureHandler (errorToReturn);
+                    
+                }else if (successHandler) {
+                    successHandler (request, httpURLResponse, JSON);
+                }
+                
+                
+            }
+                break;
+                
+            default:
+                break;
         }
-            break;
-            
-        default:
-            break;
+
     }
+    
+    
 
 }
 

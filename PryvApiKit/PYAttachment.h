@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYEventAttachment : NSObject
+@interface PYAttachment : NSObject
 {
     NSData *_fileData;
     NSString *_name;
@@ -26,9 +26,8 @@
 
 -(id)initWithFileData:(NSData *)fileData
                  name:(NSString *)name
-             fileName:(NSString *)fileName
-             mimeType:(NSString *)mimeType;
+             fileName:(NSString *)fileName;
 
-+ (PYEventAttachment *)attachmentFromDictionary:(NSDictionary *)JSON;
++ (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON;
 
 @end

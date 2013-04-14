@@ -8,7 +8,7 @@
 
 #import "PYEvent.h"
 #import "PYEventType.h"
-#import "PYEventAttachment.h"
+#import "PYAttachment.h"
 #import "PYEventValueLocation.h"
 #import "PYEventValueWebclip.h"
 #import "PYEventNote.h"
@@ -57,6 +57,15 @@
     
 }
 
+- (NSArray *)attachments
+{
+    if (!_attachments) {
+        _attachments = [[NSMutableArray alloc] init];
+    }
+    
+    return _attachments;
+}
+
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
@@ -95,10 +104,20 @@
 {
     self = [super init];
     if (self) {
-        self.trashed = NO;
+//        self.trashed = NO;
     }
     
     return self;
+}
+
+- (void)addAttachment:(PYAttachment *)attachment
+{
+    [self.attachments addObject:attachment];
+}
+
+- (void)removeAttachment:(PYAttachment *)attachmentToRemove
+{
+    [self.attachments removeObject:attachmentToRemove];
 }
 
 //Factory method
