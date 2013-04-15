@@ -38,28 +38,28 @@
 //                }];
                 
                 PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-                NSString *noteTextValue = @"new data with attachment";
+                NSString *noteTextValue = @"event fin";
                 PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
                                                                  noteValue:noteTextValue
                                                                   folderId:nil
                                                                       tags:nil
                                                                description:nil
                                                                 clientData:nil];
-                
-                
-                NSString *imgName = @"image003";
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
-                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
-
-                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
-                                                                      name:imgName
-                                                                  fileName:@"image003.jpg"];
-                [noteEvent addAttachment:att];
-                
+//
+//                
+//                NSString *imgName = @"image003";
+//                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+//                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+//
+//                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
+//                                                                      name:imgName
+//                                                                  fileName:@"image003.jpg"];
+//                [noteEvent addAttachment:att];
+//                
                 [channel createEvent:noteEvent requestType:PYRequestTypeAsync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                    
+                    NSLog(@"success %@", newEventId);
                 } errorHandler:^(NSError *error) {
-                    
+                    NSLog(@"error %@",error);
                 }];
 
                 

@@ -13,6 +13,7 @@
 #import "AFNetworking.h"
 #import "PYAccess.h"
 #import "PYAttachment.h"
+#import "PYAsyncService.h"
 
 
 @implementation PYClient
@@ -210,7 +211,7 @@
     
 
     
-    if (attachments) {
+    if (attachments && attachments.count) {
 //        NSData *bodyData = [NSJSONSerialization dataWithJSONObject:[event dictionary] options:0 error:nil];
 //        
 //        
@@ -275,6 +276,7 @@
         
         NSString *httpMethod = [[self class] getMethodName:method];
         request.HTTPMethod = httpMethod;
+        request.timeoutInterval = 60.0f;
         
         if (postDataa) {
             request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
@@ -282,23 +284,35 @@
         
         switch (reqType) {
             case PYRequestTypeAsync:{
-                AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
-                                                                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
-                                                     {
-                                                         if (successHandler) {
-                                                             successHandler(request, response, JSON);
-                                                         }
-                                                         
-                                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                                                         
-                                                         if (failureHandler) {
-                                                             NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
-                                                             failureHandler(errorToReturn);
-                                                         }
-                                                         
-                                                     }];
                 
-                [operation start];
+                [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                    if (successHandler) {
+                        successHandler(request,response,JSON);
+                    }
+                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                    if (failureHandler) {
+                        NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
+                        failureHandler(errorToReturn);
+                    }
+                }];
+                
+//                AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+//                                                                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
+//                                                     {
+//                                                         if (successHandler) {
+//                                                             successHandler(request, response, JSON);
+//                                                         }
+//                                                         
+//                                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+//                                                         
+//                                                         if (failureHandler) {
+//                                                             NSError *errorToReturn = [PyErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
+//                                                             failureHandler(errorToReturn);
+//                                                         }
+//                                                         
+//                                                     }];
+//                
+//                [operation start];
                 
             }
                 break;
@@ -335,8 +349,8 @@
 
     }
     
-    
-
 }
+
+
 
 @end

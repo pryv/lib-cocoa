@@ -26,7 +26,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
-@interface PYClient : NSObject
+@interface PYClient : NSObject 
 
 //@property (nonatomic, copy) NSString *username;
 //@property (nonatomic, copy) NSString *accessToken;
