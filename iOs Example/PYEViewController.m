@@ -38,7 +38,7 @@
 //                }];
                 
                 PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-                NSString *noteTextValue = @"event fin";
+                NSString *noteTextValue = @"events att test";
                 PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
                                                                  noteValue:noteTextValue
                                                                   folderId:nil
@@ -47,16 +47,16 @@
                                                                 clientData:nil];
 //
 //                
-//                NSString *imgName = @"image003";
-//                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
-//                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+                NSString *imgName = @"image003";
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+
+                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
+                                                                      name:imgName
+                                                                  fileName:@"image003.jpg"];
+                [noteEvent addAttachment:att];
 //
-//                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
-//                                                                      name:imgName
-//                                                                  fileName:@"image003.jpg"];
-//                [noteEvent addAttachment:att];
-//                
-                [channel createEvent:noteEvent requestType:PYRequestTypeAsync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
                     NSLog(@"success %@", newEventId);
                 } errorHandler:^(NSError *error) {
                     NSLog(@"error %@",error);
