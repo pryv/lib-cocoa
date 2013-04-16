@@ -29,15 +29,22 @@
     event.tags = [JSON objectForKey:@"tags"];
     event.eventDescription = [JSON objectForKey:@"description"];
     
-    NSArray *attachments = [JSON objectForKey:@"attachments"];
+    NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
     
-    NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachments.count];
-    for (NSDictionary *attachmentDic in attachments) {
-        [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:attachmentDic]];
+    if (attachmentsDic) {
+        NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
+        
+        [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
+            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
+        }];
+//        for (NSDictionary *attachmentDic in attachments) {
+//            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:attachmentDic]];
+//        }
+        
+        event.attachments = attachmentObjects;
+        [attachmentObjects release];
+
     }
-    
-    event.attachments = attachmentObjects;
-    [attachmentObjects release];
     
     event.clientData = [JSON objectForKey:@"clientData"];
     event.trashed = [[JSON objectForKey:@"trashed"] boolValue];

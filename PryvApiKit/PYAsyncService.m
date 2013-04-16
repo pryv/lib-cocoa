@@ -7,6 +7,7 @@
 //
 
 #import "PYAsyncService.h"
+#import "PyErrorUtility.h"
 
 @interface PYAsyncService ()
 
@@ -131,20 +132,6 @@
     self.response = (NSHTTPURLResponse *)response;
     
     
-    BOOL isUnacceptableStatusCode = [self isUnacceptableStatusCode:self.response.statusCode];
-    if (isUnacceptableStatusCode)
-	{
-        [self stop];
-        if (self.onFailure){
-            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-            [userInfo setValue:[NSString stringWithFormat:@"Got unexpected status code %d", self.response.statusCode]
-                        forKey:NSLocalizedDescriptionKey];
-            NSError *error = [[[NSError alloc] initWithDomain:@"Pryv Domain" code:NSURLErrorBadServerResponse userInfo:userInfo] autorelease];
-
-            
-            self.onFailure(self.request, self.response, error, nil);
-        }
-	}
 
     
 }
@@ -191,6 +178,20 @@
     _running = NO;
 
     id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
+    
+    BOOL isUnacceptableStatusCode = [self isUnacceptableStatusCode:self.response.statusCode];
+    if (isUnacceptableStatusCode)
+	{
+        if (self.onFailure){
+            self.onFailure(self.request, self.response, nil, JSON);
+        }
+        // release the connection, and the data object
+        [connection release];
+        [_responseData release];
+
+        return;
+	}
+
     
     if (self.onSuccess)
     {

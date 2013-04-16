@@ -31,36 +31,46 @@
             
             if ([channel.channelId isEqualToString:@"position"]) {
                 
-//                [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
-//                    
-//                } errorHandler:^(NSError *error) {
-//                
-//                }];
-                
-                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-                NSString *noteTextValue = @"events att test";
-                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
-                                                                 noteValue:noteTextValue
-                                                                  folderId:nil
-                                                                      tags:nil
-                                                               description:nil
-                                                                clientData:nil];
-//
-//                
-                NSString *imgName = @"image003";
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
-                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
-
-                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
-                                                                      name:imgName
-                                                                  fileName:@"image003.jpg"];
-                [noteEvent addAttachment:att];
-//
-                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                    NSLog(@"success %@", newEventId);
+                [channel getAllEventsWithRequestType:PYRequestTypeAsync successHandler:^(NSArray *eventList) {
+                    
+                    
                 } errorHandler:^(NSError *error) {
-                    NSLog(@"error %@",error);
+                    NSLog(@"get all events error is %@",error);
                 }];
+                
+//                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
+//                NSString *noteTextValue = @"events 2 attachments";
+//                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
+//                                                                 noteValue:noteTextValue
+//                                                                  folderId:nil
+//                                                                      tags:nil
+//                                                               description:nil
+//                                                                clientData:nil];
+//                NSString *imgName = @"image003";
+//                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+//                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+//
+//                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
+//                                                                      name:imgName
+//                                                                  fileName:@"image003.jpg"];
+//                [noteEvent addAttachment:att];
+//                
+//                
+//                NSString *pdfName = @"Pryv_ecosystem";
+//                NSString *pdfPath = [[NSBundle mainBundle] pathForResource:pdfName ofType:@"pdf"];
+//                NSData *pdfData = [NSData dataWithContentsOfFile:pdfPath];
+//
+//                PYAttachment *att1 = [[PYAttachment alloc] initWithFileData:pdfData
+//                                                                      name:pdfName
+//                                                                  fileName:@"Pryv_ecosystem.pdf"];
+//                [noteEvent addAttachment:att1];
+//
+//
+//                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+//                    NSLog(@"success %@", newEventId);
+//                } errorHandler:^(NSError *error) {
+//                    NSLog(@"error %@",error);
+//                }];
 
                 
                 
@@ -89,22 +99,24 @@
 //                [channel stopPeriodEventWithId:@"VV6i4_7t4Jdd" onDate:nil requestType:PYRequestTypeSync successHandler:^(NSString *stoppedEventId) {
 //                    
 //                } errorHandler:^(NSError *error) {
-//                    
+//
 //                }];
+                
+//                [channel getFoldersWithRequestType:PYRequestTypeAsync
+//                                      filterParams:@{@"includeHidden": @"true", @"state" : @"all"}
+//                                    successHandler:^(NSArray *folderList) {
+//                                        
+//                                        NSLog(@"folder list %@",folderList);
+//                                    } errorHandler:^(NSError *error) {
+//                                        NSLog(@"error is %@",error);
+//                                    }];
+
                 
 
             }
             
             
 
-//            [channel getFoldersWithRequestType:PYRequestTypeAsync
-//                                  filterParams:@{@"includeHidden": @"true", @"state" : @"all"}
-//                                successHandler:^(NSArray *folderList) {
-//                
-//                
-//            } errorHandler:^(NSError *error) {
-//                
-//            }];
 
         }
         

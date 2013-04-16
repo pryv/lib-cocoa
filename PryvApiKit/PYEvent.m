@@ -7,6 +7,7 @@
 //
 
 #import "PYEvent.h"
+#import "PYEvent+JSON.h"
 #import "PYEventType.h"
 #import "PYAttachment.h"
 #import "PYEventValueLocation.h"
@@ -132,15 +133,21 @@
         }
             break;
         case PYEventClassPosition:{
-            
+            PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON];
+            return [generalEvent autorelease];
+
         }
             break;
-            
-        default:
-            break;
+//
+//        default:{
+//        }
+//            break;
     }
     
-    return [NSNull null];
+    PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON];
+    return [generalEvent autorelease];
+
+//    return [NSNull null];
     
 }
 
