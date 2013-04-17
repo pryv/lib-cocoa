@@ -62,8 +62,6 @@
 		3DD608EF1702545400905533 /* AccessClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608ED1702545400905533 /* AccessClient.h */; };
 		3DD608F01702545400905533 /* AccessClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD608EE1702545400905533 /* AccessClient.m */; };
 		3DD608F11702545400905533 /* AccessClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD608EE1702545400905533 /* AccessClient.m */; };
-		4C97402D16E48EE700416C53 /* PryvJSONUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C97402B16E48EE700416C53 /* PryvJSONUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C97402E16E48EE700416C53 /* PryvJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97402C16E48EE700416C53 /* PryvJSONUtils.m */; };
 		4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FC2C116E50FDF00C157BD /* PryvLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FC2C216E50FDF00C157BD /* PryvLocation.m */; };
 		4CA22ABF16E62A0B00EC30FB /* PYEventType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA22ABD16E62A0B00EC30FB /* PYEventType.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -647,7 +645,6 @@
 				3D6FCEBD16F7CB460003D970 /* PYFolder+JSON.h in Headers */,
 				4CA22ABF16E62A0B00EC30FB /* PYEventType.h in Headers */,
 				4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */,
-				4C97402D16E48EE700416C53 /* PryvJSONUtils.h in Headers */,
 				FBC204AB16B9674500CB5FFB /* PryvApiKit.h in Headers */,
 				FB03E21916B97FD400DAD162 /* AFHTTPClient.h in Headers */,
 				FB03E21C16B97FD400DAD162 /* AFHTTPRequestOperation.h in Headers */,
@@ -861,7 +858,6 @@
 				FB03E25B16B982CD00DAD162 /* PYEvent.m in Sources */,
 				FB03E26116B982CD00DAD162 /* PYAttachment.m in Sources */,
 				FB03E26416B982CD00DAD162 /* PYFolder.m in Sources */,
-				4C97402E16E48EE700416C53 /* PryvJSONUtils.m in Sources */,
 				4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */,
 				4CA22AC016E62A0B00EC30FB /* PYEventType.m in Sources */,
 				3D6FCEB816F7C8C00003D970 /* PYEventClient.m in Sources */,

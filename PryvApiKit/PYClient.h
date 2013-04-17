@@ -22,7 +22,12 @@ typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *re
 typedef void(^PYClientFailureBlock)(NSError *error);
 
 @class PYAccess;
+#if TARGET_OS_MAX
+#import <CoreServices/CoreServices.h>
+#elif TARGET_OS_IPHONE
 #import <MobileCoreServices/MobileCoreServices.h>
+#endif
+
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
