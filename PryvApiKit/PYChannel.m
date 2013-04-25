@@ -84,9 +84,6 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    
-
-
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events", self.channelId];
     [PYClient apiRequest:[pathString copy]
                   access:self.access

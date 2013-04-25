@@ -58,7 +58,9 @@ typedef void(^PYClientFailureBlock)(NSError *error);
  GET /
  
  */
-+ (void)synchronizeTimeWithAccess:(PYAccess *)access successHandler:(void(^)(NSTimeInterval serverTime))successHandler errorHandler:(void(^)(NSError *error))errorHandler;
++ (void)synchronizeTimeWithAccess:(PYAccess *)access
+                   successHandler:(void(^)(NSTimeInterval serverTime))successHandler
+                     errorHandler:(void(^)(NSError *error))errorHandler;
 
 
 @end

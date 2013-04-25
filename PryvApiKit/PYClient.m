@@ -10,7 +10,6 @@
 #import "PYConstants.h"
 #import "PYError.h"
 #import "PyErrorUtility.h"
-#import "AFNetworking.h"
 #import "PYAccess.h"
 #import "PYAttachment.h"
 #import "PYAsyncService.h"
@@ -37,7 +36,9 @@
  */
 #pragma mark - PrYv API authorize and get server time (GET /)
 
-+ (void)synchronizeTimeWithAccess:(PYAccess *)access successHandler:(void(^)(NSTimeInterval serverTime))successHandler errorHandler:(void(^)(NSError *error))errorHandler
++ (void)synchronizeTimeWithAccess:(PYAccess *)access
+                   successHandler:(void(^)(NSTimeInterval serverTime))successHandler
+                     errorHandler:(void(^)(NSError *error))errorHandler
 {
     if (![[self class] isReadyForAccess:access]) {
         NSLog(@"fail synchronize: not initialized");
@@ -47,39 +48,29 @@
         return;
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/", [[self class] apiBaseUrlForAccess:access]]];
-    
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:url];
-    [client setDefaultHeader:@"Authorization" value:access.accessToken];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request addValue:access.accessToken forHTTPHeaderField:@"Authorization"];
-    
-    AFHTTPRequestOperation *operation = [client HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString *path = [NSString stringWithFormat:@"/"];    
+    [self apiRequest:path
+              access:access
+         requestType:PYRequestTypeAsync
+              method:PYRequestMethodGET
+            postData:nil
+         attachments:nil
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 NSTimeInterval serverTime = [[[response allHeaderFields] objectForKey:@"Server-Time"] doubleValue];
+                 
+                 NSLog(@"successfully authorized and synchronized with server time: %f ", serverTime);
+                 //        _serverTimeInterval = [[NSDate date] timeIntervalSince1970] - serverTime;
+                 
+                 if (successHandler)
+                     successHandler(serverTime);
+
         
-        NSTimeInterval serverTime = [[[operation.response allHeaderFields] objectForKey:@"Server-Time"] doubleValue];
-        
-        NSLog(@"successfully authorized and synchronized with server time: %f ", serverTime);
-//        _serverTimeInterval = [[NSDate date] timeIntervalSince1970] - serverTime;
-        
-        if (successHandler)
-            successHandler(serverTime);
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        NSLog(@"could not synchronize");
-        NSDictionary *userInfo = @{
-                                   @"connectionError": [[self class] nonNil:error],
-                                   @"NSHTTPURLResponse" : [[self class] nonNil:operation.response],
-                                   @"serverError" : [[self class] nonNil:operation.responseString]
-                                   };
-        NSError *requestError = [NSError errorWithDomain:@"connection failed" code:100 userInfo:userInfo];
-        
+    } failure:^(NSError *error) {        
         if (errorHandler)
-            errorHandler(requestError);
+            errorHandler(error);
+
         
-    }];
-    [operation start];
+    }];    
 }
 
 + (id)nonNil:(id)object

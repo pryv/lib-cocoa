@@ -22,6 +22,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
         
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
@@ -38,39 +39,39 @@
                     NSLog(@"get all events error is %@",error);
                 }];
                 
-//                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-//                NSString *noteTextValue = @"events 2 attachments";
-//                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
-//                                                                 noteValue:noteTextValue
-//                                                                  folderId:nil
-//                                                                      tags:nil
-//                                                               description:nil
-//                                                                clientData:nil];
-//                NSString *imgName = @"image003";
-//                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
-//                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
-//
-//                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
-//                                                                      name:imgName
-//                                                                  fileName:@"image003.jpg"];
-//                [noteEvent addAttachment:att];
-//                
-//                
-//                NSString *pdfName = @"Pryv_ecosystem";
-//                NSString *pdfPath = [[NSBundle mainBundle] pathForResource:pdfName ofType:@"pdf"];
-//                NSData *pdfData = [NSData dataWithContentsOfFile:pdfPath];
-//
-//                PYAttachment *att1 = [[PYAttachment alloc] initWithFileData:pdfData
-//                                                                      name:pdfName
-//                                                                  fileName:@"Pryv_ecosystem.pdf"];
-//                [noteEvent addAttachment:att1];
-//
-//
-//                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-//                    NSLog(@"success %@", newEventId);
-//                } errorHandler:^(NSError *error) {
-//                    NSLog(@"error %@",error);
-//                }];
+                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
+                NSString *noteTextValue = @"new123";
+                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
+                                                                 noteValue:noteTextValue
+                                                                  folderId:nil
+                                                                      tags:nil
+                                                               description:nil
+                                                                clientData:nil];
+                NSString *imgName = @"image003";
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+
+                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
+                                                                      name:imgName
+                                                                  fileName:@"image003.jpg"];
+                [noteEvent addAttachment:att];
+                
+                
+                NSString *pdfName = @"Pryv_ecosystem";
+                NSString *pdfPath = [[NSBundle mainBundle] pathForResource:pdfName ofType:@"pdf"];
+                NSData *pdfData = [NSData dataWithContentsOfFile:pdfPath];
+
+                PYAttachment *att1 = [[PYAttachment alloc] initWithFileData:pdfData
+                                                                      name:pdfName
+                                                                  fileName:@"Pryv_ecosystem.pdf"];
+                [noteEvent addAttachment:att1];
+
+
+                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    NSLog(@"success %@", newEventId);
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"error %@",error);
+                }];
 
                 
                 

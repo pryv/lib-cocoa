@@ -1,7 +1,4 @@
 
-[submodule "Vendor/AFNetworking"]
-	path = Vendor/AFNetworking
-	url = https://github.com/dkonst/AFNetworking.git
 [submodule "json-framework-master"]
 	path = json-framework-master
 	url = https://github.com/stig/json-framework/
