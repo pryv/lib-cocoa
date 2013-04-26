@@ -20,12 +20,11 @@
 #import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYFolder.h>
 #import <PryvApiKit/PYAttachment.h>
-
+#import <PryvApiKit/PYEventNote.h>
+#import <PryvApiKit/PYEventType.h>
 
 // Pryv Api Client
 //#import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYClient.h>
 #import <PryvApiKit/PYEventClient.h>
 
-// Vendor
-#import <PryvApiKit/AFNetworking.h>

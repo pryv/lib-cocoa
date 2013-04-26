@@ -276,11 +276,14 @@
         }
             break;
         case PYRequestTypeSync:{
+            
+            NSError *error = nil;
             NSHTTPURLResponse *httpURLResponse = nil;
             NSURLResponse *urlResponse = nil;
             
             NSData *responseData = nil;
-            responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: NULL];
+            responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: &error];
+            NSLog(@"error is %@",error);
             
             id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
             

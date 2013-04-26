@@ -1,4 +1,4 @@
 
-[submodule "json-framework-master"]
-	path = json-framework-master
-	url = https://github.com/stig/json-framework/
+[submodule "JSONMacOSX"]
+	path = JSONMacOSX
+	url = https://github.com/johnezang/JSONKit.git

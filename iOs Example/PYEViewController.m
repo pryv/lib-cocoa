@@ -8,8 +8,6 @@
 
 #import "PYEViewController.h"
 #import "PryvApiKit.h"
-#import "PYEventNote.h"
-#import "PYEventType.h"
 
 @interface PYEViewController ()
 
