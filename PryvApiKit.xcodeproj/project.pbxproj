@@ -18,13 +18,6 @@
 		3D61E1CC1729D69300BE1E80 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D61E1C81729D69300BE1E80 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D61E1CD1729D69300BE1E80 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D61E1C91729D69300BE1E80 /* JSONKit.m */; };
 		3D61E1CE1729D69300BE1E80 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D61E1CA1729D69300BE1E80 /* README.md */; };
-		3D61E1D41729D87000BE1E80 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047D16B95B3700CB5FFB /* Cocoa.framework */; };
-		3D61E1DB1729D87000BE1E80 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D61E1D91729D87000BE1E80 /* InfoPlist.strings */; };
-		3D61E1DD1729D87000BE1E80 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D61E1DC1729D87000BE1E80 /* main.m */; };
-		3D61E1E11729D87000BE1E80 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3D61E1DF1729D87000BE1E80 /* Credits.rtf */; };
-		3D61E1E41729D87000BE1E80 /* PryvAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D61E1E31729D87000BE1E80 /* PryvAppDelegate.m */; };
-		3D61E1E71729D87000BE1E80 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D61E1E51729D87000BE1E80 /* MainMenu.xib */; };
-		3D61E1ED1729D91C00BE1E80 /* PryvApiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */; };
 		3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412417106EA10050B251 /* PYEvent+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
@@ -68,6 +61,13 @@
 		3DAB59261717616200F2009D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD28EBA17135EA900602603 /* UIKit.framework */; };
 		3DAB59271717617F00F2009D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
 		3DAB592A171761F600F2009D /* libPryvApiKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */; };
+		3DAF21CA172B28E900B62416 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047D16B95B3700CB5FFB /* Cocoa.framework */; };
+		3DAF21D0172B28E900B62416 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DAF21CE172B28E900B62416 /* InfoPlist.strings */; };
+		3DAF21D2172B28E900B62416 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAF21D1172B28E900B62416 /* main.m */; };
+		3DAF21D6172B28E900B62416 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3DAF21D4172B28E900B62416 /* Credits.rtf */; };
+		3DAF21D9172B28E900B62416 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAF21D8172B28E900B62416 /* AppDelegate.m */; };
+		3DAF21DC172B28E900B62416 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAF21DA172B28E900B62416 /* MainMenu.xib */; };
+		3DAF21E2172B298D00B62416 /* PryvApiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */; };
 		3DD28EBD1713611100602603 /* Pryv_ecosystem.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */; };
 		3DD28EBE1713611100602603 /* Pryv_ecosystem.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */; };
 		3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -128,13 +128,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3D61E1EE1729D95000BE1E80 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FBC2047116B95B3700CB5FFB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FBC2047916B95B3700CB5FFB;
-			remoteInfo = PryvApiKit.framework;
-		};
 		3DAB5928171761E100F2009D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FBC2047116B95B3700CB5FFB /* Project object */;
@@ -177,16 +170,7 @@
 		3D61E1C81729D69300BE1E80 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		3D61E1C91729D69300BE1E80 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		3D61E1CA1729D69300BE1E80 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		3D61E1D31729D87000BE1E80 /* OSX example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OSX example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D61E1D51729D87000BE1E80 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		3D61E1D81729D87000BE1E80 /* OSX example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OSX example-Info.plist"; sourceTree = "<group>"; };
-		3D61E1DA1729D87000BE1E80 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		3D61E1DC1729D87000BE1E80 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3D61E1DE1729D87000BE1E80 /* OSX example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OSX example-Prefix.pch"; sourceTree = "<group>"; };
-		3D61E1E01729D87000BE1E80 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		3D61E1E21729D87000BE1E80 /* PryvAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PryvAppDelegate.h; sourceTree = "<group>"; };
-		3D61E1E31729D87000BE1E80 /* PryvAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PryvAppDelegate.m; sourceTree = "<group>"; };
-		3D61E1E61729D87000BE1E80 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D67412417106EA10050B251 /* PYEvent+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+JSON.h"; sourceTree = "<group>"; };
 		3D67412517106EA10050B251 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
 		3D67412C17106EB90050B251 /* PYEventNote+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEventNote+JSON.h"; sourceTree = "<group>"; };
@@ -211,6 +195,15 @@
 		3D744798170E1D7100D78015 /* PYEventTwitterValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventTwitterValue.m; sourceTree = "<group>"; };
 		3DAB591E17174BCD00F2009D /* image003.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image003.jpg; sourceTree = "<group>"; };
 		3DAB592417175EB900F2009D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		3DAF21C9172B28E900B62416 /* OS X example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OS X example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DAF21CD172B28E900B62416 /* OS X example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OS X example-Info.plist"; sourceTree = "<group>"; };
+		3DAF21CF172B28E900B62416 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3DAF21D1172B28E900B62416 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3DAF21D3172B28E900B62416 /* OS X example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OS X example-Prefix.pch"; sourceTree = "<group>"; };
+		3DAF21D5172B28E900B62416 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		3DAF21D7172B28E900B62416 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3DAF21D8172B28E900B62416 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3DAF21DB172B28E900B62416 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3DD28EB517135E8A00602603 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreImage.framework; sourceTree = DEVELOPER_DIR; };
 		3DD28EBA17135EA900602603 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Pryv_ecosystem.pdf; sourceTree = "<group>"; };
@@ -267,12 +260,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3D61E1D01729D87000BE1E80 /* Frameworks */ = {
+		3DAF21C6172B28E900B62416 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D61E1ED1729D91C00BE1E80 /* PryvApiKit.framework in Frameworks */,
-				3D61E1D41729D87000BE1E80 /* Cocoa.framework in Frameworks */,
+				3DAF21E2172B298D00B62416 /* PryvApiKit.framework in Frameworks */,
+				3DAF21CA172B28E900B62416 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,29 +331,6 @@
 				3D61E1CA1729D69300BE1E80 /* README.md */,
 			);
 			path = JSONMacOSX;
-			sourceTree = "<group>";
-		};
-		3D61E1D61729D87000BE1E80 /* OSX example */ = {
-			isa = PBXGroup;
-			children = (
-				3D61E1E21729D87000BE1E80 /* PryvAppDelegate.h */,
-				3D61E1E31729D87000BE1E80 /* PryvAppDelegate.m */,
-				3D61E1E51729D87000BE1E80 /* MainMenu.xib */,
-				3D61E1D71729D87000BE1E80 /* Supporting Files */,
-			);
-			path = "OSX example";
-			sourceTree = "<group>";
-		};
-		3D61E1D71729D87000BE1E80 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3D61E1D81729D87000BE1E80 /* OSX example-Info.plist */,
-				3D61E1D91729D87000BE1E80 /* InfoPlist.strings */,
-				3D61E1DC1729D87000BE1E80 /* main.m */,
-				3D61E1DE1729D87000BE1E80 /* OSX example-Prefix.pch */,
-				3D61E1DF1729D87000BE1E80 /* Credits.rtf */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		3D6A502E170A175600025A20 /* PYEvent */ = {
@@ -441,6 +411,29 @@
 			name = Clients;
 			sourceTree = "<group>";
 		};
+		3DAF21CB172B28E900B62416 /* OS X example */ = {
+			isa = PBXGroup;
+			children = (
+				3DAF21D7172B28E900B62416 /* AppDelegate.h */,
+				3DAF21D8172B28E900B62416 /* AppDelegate.m */,
+				3DAF21DA172B28E900B62416 /* MainMenu.xib */,
+				3DAF21CC172B28E900B62416 /* Supporting Files */,
+			);
+			path = "OS X example";
+			sourceTree = "<group>";
+		};
+		3DAF21CC172B28E900B62416 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3DAF21CD172B28E900B62416 /* OS X example-Info.plist */,
+				3DAF21CE172B28E900B62416 /* InfoPlist.strings */,
+				3DAF21D1172B28E900B62416 /* main.m */,
+				3DAF21D3172B28E900B62416 /* OS X example-Prefix.pch */,
+				3DAF21D4172B28E900B62416 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4E582DD416C25378003B59DB /* iOs Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,7 +470,7 @@
 				3D61E1C51729D67F00BE1E80 /* Externals */,
 				FBC2048316B95B3800CB5FFB /* PryvApiKit */,
 				4E582DD416C25378003B59DB /* iOs Example */,
-				3D61E1D61729D87000BE1E80 /* OSX example */,
+				3DAF21CB172B28E900B62416 /* OS X example */,
 				FBC2047C16B95B3700CB5FFB /* Frameworks */,
 				FBC2047B16B95B3700CB5FFB /* Products */,
 			);
@@ -491,7 +484,7 @@
 				FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */,
 				FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */,
 				4E582DCE16C25378003B59DB /* iOs Example.app */,
-				3D61E1D31729D87000BE1E80 /* OSX example.app */,
+				3DAF21C9172B28E900B62416 /* OS X example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -588,22 +581,21 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		3D61E1D21729D87000BE1E80 /* OSX example */ = {
+		3DAF21C8172B28E900B62416 /* OS X example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3D61E1E81729D87000BE1E80 /* Build configuration list for PBXNativeTarget "OSX example" */;
+			buildConfigurationList = 3DAF21DD172B28E900B62416 /* Build configuration list for PBXNativeTarget "OS X example" */;
 			buildPhases = (
-				3D61E1CF1729D87000BE1E80 /* Sources */,
-				3D61E1D01729D87000BE1E80 /* Frameworks */,
-				3D61E1D11729D87000BE1E80 /* Resources */,
+				3DAF21C5172B28E900B62416 /* Sources */,
+				3DAF21C6172B28E900B62416 /* Frameworks */,
+				3DAF21C7172B28E900B62416 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				3D61E1EF1729D95000BE1E80 /* PBXTargetDependency */,
 			);
-			name = "OSX example";
-			productName = "OSX example";
-			productReference = 3D61E1D31729D87000BE1E80 /* OSX example.app */;
+			name = "OS X example";
+			productName = "OS X example";
+			productReference = 3DAF21C9172B28E900B62416 /* OS X example.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4E582DCD16C25378003B59DB /* iOs Example */ = {
@@ -683,19 +675,19 @@
 				FBC2047916B95B3700CB5FFB /* PryvApiKit.framework */,
 				FBC2049516B95F1B00CB5FFB /* libPryvApiKit.a */,
 				4E582DCD16C25378003B59DB /* iOs Example */,
-				3D61E1D21729D87000BE1E80 /* OSX example */,
+				3DAF21C8172B28E900B62416 /* OS X example */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3D61E1D11729D87000BE1E80 /* Resources */ = {
+		3DAF21C7172B28E900B62416 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D61E1DB1729D87000BE1E80 /* InfoPlist.strings in Resources */,
-				3D61E1E11729D87000BE1E80 /* Credits.rtf in Resources */,
-				3D61E1E71729D87000BE1E80 /* MainMenu.xib in Resources */,
+				3DAF21D0172B28E900B62416 /* InfoPlist.strings in Resources */,
+				3DAF21D6172B28E900B62416 /* Credits.rtf in Resources */,
+				3DAF21DC172B28E900B62416 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,12 +721,12 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3D61E1CF1729D87000BE1E80 /* Sources */ = {
+		3DAF21C5172B28E900B62416 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D61E1DD1729D87000BE1E80 /* main.m in Sources */,
-				3D61E1E41729D87000BE1E80 /* PryvAppDelegate.m in Sources */,
+				3DAF21D2172B28E900B62416 /* main.m in Sources */,
+				3DAF21D9172B28E900B62416 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,11 +806,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3D61E1EF1729D95000BE1E80 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FBC2047916B95B3700CB5FFB /* PryvApiKit.framework */;
-			targetProxy = 3D61E1EE1729D95000BE1E80 /* PBXContainerItemProxy */;
-		};
 		3DAB5929171761E100F2009D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FBC2049516B95F1B00CB5FFB /* libPryvApiKit.a */;
@@ -827,26 +814,26 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3D61E1D91729D87000BE1E80 /* InfoPlist.strings */ = {
+		3DAF21CE172B28E900B62416 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3D61E1DA1729D87000BE1E80 /* en */,
+				3DAF21CF172B28E900B62416 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		3D61E1DF1729D87000BE1E80 /* Credits.rtf */ = {
+		3DAF21D4172B28E900B62416 /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3D61E1E01729D87000BE1E80 /* en */,
+				3DAF21D5172B28E900B62416 /* en */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
-		3D61E1E51729D87000BE1E80 /* MainMenu.xib */ = {
+		3DAF21DA172B28E900B62416 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3D61E1E61729D87000BE1E80 /* en */,
+				3DAF21DB172B28E900B62416 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -886,25 +873,25 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		3D61E1E91729D87000BE1E80 /* Debug */ = {
+		3DAF21DE172B28E900B62416 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "OSX example/OSX example-Prefix.pch";
-				INFOPLIST_FILE = "OSX example/OSX example-Info.plist";
+				GCC_PREFIX_HEADER = "OS X example/OS X example-Prefix.pch";
+				INFOPLIST_FILE = "OS X example/OS X example-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
-		3D61E1EA1729D87000BE1E80 /* Release */ = {
+		3DAF21DF172B28E900B62416 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "OSX example/OSX example-Prefix.pch";
-				INFOPLIST_FILE = "OSX example/OSX example-Info.plist";
+				GCC_PREFIX_HEADER = "OS X example/OS X example-Prefix.pch";
+				INFOPLIST_FILE = "OS X example/OS X example-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1103,11 +1090,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3D61E1E81729D87000BE1E80 /* Build configuration list for PBXNativeTarget "OSX example" */ = {
+		3DAF21DD172B28E900B62416 /* Build configuration list for PBXNativeTarget "OS X example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3D61E1E91729D87000BE1E80 /* Debug */,
-				3D61E1EA1729D87000BE1E80 /* Release */,
+				3DAF21DE172B28E900B62416 /* Debug */,
+				3DAF21DF172B28E900B62416 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
