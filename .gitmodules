@@ -1,4 +1,4 @@
 
-[submodule "JSONMacOSX"]
-	path = JSONMacOSX
+[submodule "JSONKit"]
+	path = JSONKit
 	url = https://github.com/johnezang/JSONKit.git

@@ -9,6 +9,9 @@
 #import <PryvApiKit/PryvApiKit.h>
 
 @interface PYEventPosition : PYEvent
+{
+    PYEventValueLocation *_positionValue;
+}
 
 @property (nonatomic, retain) PYEventValueLocation *positionValue;
 

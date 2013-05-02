@@ -10,4 +10,6 @@
 
 @implementation PYEventPosition
 
+@synthesize positionValue = _positionValue;
+
 @end
