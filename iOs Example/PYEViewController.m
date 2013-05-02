@@ -38,7 +38,7 @@
                 }];
                 
                 PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-                NSString *noteTextValue = @"new123";
+                NSString *noteTextValue = @"newww432";
                 PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
                                                                  noteValue:noteTextValue
                                                                   folderId:nil

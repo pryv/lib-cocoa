@@ -24,7 +24,6 @@
 #import <PryvApiKit/PYEventType.h>
 
 // Pryv Api Client
-//#import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYClient.h>
 #import <PryvApiKit/PYEventClient.h>
 

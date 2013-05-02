@@ -8,6 +8,7 @@
 
 #import "PYAsyncService.h"
 #import "PyErrorUtility.h"
+#import "JSONUtility.h"
 
 @interface PYAsyncService ()
 
@@ -177,7 +178,8 @@
     NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
     _running = NO;
 
-    id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
+//    id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
+    id JSON = [JSONUtility getJSONObjectFromData:self.responseData];
     
     BOOL isUnacceptableStatusCode = [self isUnacceptableStatusCode:self.response.statusCode];
     if (isUnacceptableStatusCode)

@@ -6,6 +6,12 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+//compile time check for OS
+#if TARGET_OS_IPHONE
+#import <MobileCoreServices/MobileCoreServices.h>
+#endif
+
+
 #import "PYClient.h"
 #import "PYConstants.h"
 #import "PYError.h"
@@ -13,6 +19,7 @@
 #import "PYAccess.h"
 #import "PYAttachment.h"
 #import "PYAsyncService.h"
+#import "JSONUtility.h"
 
 
 @implementation PYClient
@@ -208,7 +215,8 @@
     
     if (attachments && attachments.count) {
         
-        NSData *data = [NSJSONSerialization dataWithJSONObject:postDataa options:0 error:nil];
+//        NSData *data = [NSJSONSerialization dataWithJSONObject:postDataa options:0 error:nil];
+        NSData *data = [JSONUtility getDataFromJSONObject:postDataa];
 
         NSMutableData *bodyData = [[NSMutableData alloc] init];
         NSString *boundaryIdentifier = [NSString stringWithFormat:@"--%@--", [[NSProcessInfo processInfo] globallyUniqueString]];
@@ -253,7 +261,8 @@
         request.timeoutInterval = 60.0f;
         
         if (postDataa) {
-            request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
+//            request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
+            request.HTTPBody = [JSONUtility getDataFromJSONObject:postDataa];
         }
         
 
@@ -285,7 +294,8 @@
             responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: &error];
             NSLog(@"error is %@",error);
             
-            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
+//            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
+            id JSON = [JSONUtility getJSONObjectFromData:responseData];
             
             if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
                 httpURLResponse = (NSHTTPURLResponse *)urlResponse;

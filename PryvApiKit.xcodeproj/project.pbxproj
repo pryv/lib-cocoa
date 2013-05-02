@@ -14,6 +14,12 @@
 		3D1F6A0F170B7D8900DF893C /* PYEventPosition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1F6A0D170B7D8900DF893C /* PYEventPosition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D1F6A10170B7D8900DF893C /* PYEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */; };
 		3D1F6A11170B7D8900DF893C /* PYEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */; };
+		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
+		3D2397B9173308B500A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
+		3D2397BA17330C0100A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
+		3D2397BD1733109A00A72637 /* JSONUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D2397BB1733109900A72637 /* JSONUtility.h */; };
+		3D2397BE1733109A00A72637 /* JSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* JSONUtility.m */; };
+		3D2397BF1733109A00A72637 /* JSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* JSONUtility.m */; };
 		3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412417106EA10050B251 /* PYEvent+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
@@ -62,9 +68,7 @@
 		3D75F4D51733058900380629 /* AccessClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DD608ED1702545400905533 /* AccessClient.h */; };
 		3DAB591F17174BCD00F2009D /* image003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DAB591E17174BCD00F2009D /* image003.jpg */; };
 		3DAB592017174BCD00F2009D /* image003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DAB591E17174BCD00F2009D /* image003.jpg */; };
-		3DAB592517175EB900F2009D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
 		3DAB59261717616200F2009D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD28EBA17135EA900602603 /* UIKit.framework */; };
-		3DAB59271717617F00F2009D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
 		3DAB592A171761F600F2009D /* libPryvApiKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */; };
 		3DAF21CA172B28E900B62416 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047D16B95B3700CB5FFB /* Cocoa.framework */; };
 		3DAF21D0172B28E900B62416 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DAF21CE172B28E900B62416 /* InfoPlist.strings */; };
@@ -170,6 +174,8 @@
 		3D1F6A09170B7A6200DF893C /* PYEventNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventNote.m; sourceTree = "<group>"; };
 		3D1F6A0D170B7D8900DF893C /* PYEventPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventPosition.h; sourceTree = "<group>"; };
 		3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventPosition.m; sourceTree = "<group>"; };
+		3D2397BB1733109900A72637 /* JSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONUtility.h; sourceTree = "<group>"; };
+		3D2397BC1733109A00A72637 /* JSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONUtility.m; sourceTree = "<group>"; };
 		3D61E1D51729D87000BE1E80 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3D67412417106EA10050B251 /* PYEvent+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+JSON.h"; sourceTree = "<group>"; };
 		3D67412517106EA10050B251 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
@@ -208,7 +214,6 @@
 		3DAF21D7172B28E900B62416 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3DAF21D8172B28E900B62416 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3DAF21DB172B28E900B62416 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		3DD28EB517135E8A00602603 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreImage.framework; sourceTree = DEVELOPER_DIR; };
 		3DD28EBA17135EA900602603 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Pryv_ecosystem.pdf; sourceTree = "<group>"; };
 		3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = "<group>"; };
@@ -276,9 +281,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DAB592A171761F600F2009D /* libPryvApiKit.a in Frameworks */,
-				3DAB59271717617F00F2009D /* MobileCoreServices.framework in Frameworks */,
 				3DAB59261717616200F2009D /* UIKit.framework in Frameworks */,
 				4E582DD116C25378003B59DB /* Foundation.framework in Frameworks */,
+				3D2397B9173308B500A72637 /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +292,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBC2047E16B95B3700CB5FFB /* Cocoa.framework in Frameworks */,
+				3D2397B81733086400A72637 /* AppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,9 +300,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DAB592517175EB900F2009D /* MobileCoreServices.framework in Frameworks */,
 				3D1F6A07170B6A6400DF893C /* CoreLocation.framework in Frameworks */,
 				FBC2049816B95F1C00CB5FFB /* Foundation.framework in Frameworks */,
+				3D2397BA17330C0100A72637 /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,6 +394,8 @@
 				3D6FCEB616F7C8C00003D970 /* PYEventClient.m */,
 				3DD608ED1702545400905533 /* AccessClient.h */,
 				3DD608EE1702545400905533 /* AccessClient.m */,
+				3D2397BB1733109900A72637 /* JSONUtility.h */,
+				3D2397BC1733109A00A72637 /* JSONUtility.m */,
 			);
 			name = Clients;
 			sourceTree = "<group>";
@@ -483,7 +491,6 @@
 		FBC2047C16B95B3700CB5FFB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3DD28EB517135E8A00602603 /* CoreImage.framework */,
 				3DD28EBA17135EA900602603 /* UIKit.framework */,
 				3DAB592417175EB900F2009D /* MobileCoreServices.framework */,
 				3D1F6A06170B6A6400DF893C /* CoreLocation.framework */,
@@ -566,6 +573,7 @@
 				3D6D3BBC16F8BBDE0072F480 /* PYConstants.h in Headers */,
 				3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */,
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
+				3D2397BD1733109A00A72637 /* JSONUtility.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,6 +767,7 @@
 				3D67412F17106EB90050B251 /* PYEventNote+JSON.m in Sources */,
 				3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */,
 				3D75F4CF173304F200380629 /* JSONKit.m in Sources */,
+				3D2397BE1733109A00A72637 /* JSONUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -788,6 +797,7 @@
 				3D67412817106EA10050B251 /* PYEvent+JSON.m in Sources */,
 				3D67413017106EB90050B251 /* PYEventNote+JSON.m in Sources */,
 				3D6BE317171C75EB0023A39C /* PYAsyncService.m in Sources */,
+				3D2397BF1733109A00A72637 /* JSONUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
