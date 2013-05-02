@@ -15,8 +15,6 @@
 		3D1F6A10170B7D8900DF893C /* PYEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */; };
 		3D1F6A11170B7D8900DF893C /* PYEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */; };
 		3D61E1CB1729D69300BE1E80 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D61E1C71729D69300BE1E80 /* CHANGELOG.md */; };
-		3D61E1CC1729D69300BE1E80 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D61E1C81729D69300BE1E80 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D61E1CD1729D69300BE1E80 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D61E1C91729D69300BE1E80 /* JSONKit.m */; };
 		3D61E1CE1729D69300BE1E80 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D61E1CA1729D69300BE1E80 /* README.md */; };
 		3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412417106EA10050B251 /* PYEvent+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -167,8 +165,6 @@
 		3D1F6A0D170B7D8900DF893C /* PYEventPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventPosition.h; sourceTree = "<group>"; };
 		3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventPosition.m; sourceTree = "<group>"; };
 		3D61E1C71729D69300BE1E80 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
-		3D61E1C81729D69300BE1E80 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		3D61E1C91729D69300BE1E80 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		3D61E1CA1729D69300BE1E80 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		3D61E1D51729D87000BE1E80 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3D67412417106EA10050B251 /* PYEvent+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+JSON.h"; sourceTree = "<group>"; };
@@ -326,8 +322,6 @@
 			isa = PBXGroup;
 			children = (
 				3D61E1C71729D69300BE1E80 /* CHANGELOG.md */,
-				3D61E1C81729D69300BE1E80 /* JSONKit.h */,
-				3D61E1C91729D69300BE1E80 /* JSONKit.m */,
 				3D61E1CA1729D69300BE1E80 /* README.md */,
 			);
 			path = JSONMacOSX;
@@ -558,7 +552,6 @@
 				3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */,
 				3D67412E17106EB90050B251 /* PYEventNote+JSON.h in Headers */,
 				3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */,
-				3D61E1CC1729D69300BE1E80 /* JSONKit.h in Headers */,
 				FAD9DC741700D25F00A34AB3 /* PYChannel+JSON.h in Headers */,
 				3D6C755F1703812B000B9195 /* PYAccess.h in Headers */,
 				8A6D9E7616FB79A1008F2B2C /* PyErrorUtility.h in Headers */,
@@ -769,7 +762,6 @@
 				3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */,
 				3D67412F17106EB90050B251 /* PYEventNote+JSON.m in Sources */,
 				3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */,
-				3D61E1CD1729D69300BE1E80 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1097,6 +1089,7 @@
 				3DAF21DF172B28E900B62416 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4E582E0816C2537A003B59DB /* Build configuration list for PBXNativeTarget "iOs Example" */ = {
 			isa = XCConfigurationList;
