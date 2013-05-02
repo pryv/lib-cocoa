@@ -14,7 +14,6 @@
 #import <PryvApiKit/PyErrorUtility.h>
 
 // Model
-#import <PryvApiKit/PYUser.h>
 #import <PryvApiKit/PYChannel.h>
 #import <PryvApiKit/PYEvent.h>
 #import <PryvApiKit/PYAccess.h>
