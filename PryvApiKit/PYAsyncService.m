@@ -175,7 +175,7 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
+//    NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
     _running = NO;
 
 //    id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];

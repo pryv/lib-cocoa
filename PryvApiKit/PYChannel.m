@@ -218,7 +218,7 @@
                             errorHandler:(void (^)(NSError *error))errorHandler
 {
     NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/%@", self.channelId, eventId];
-    NSLog(@"[eventObject dictionary] is %@",[eventObject dictionary]);
+//    NSLog(@"[eventObject dictionary] is %@",[eventObject dictionary]);
     [PYClient apiRequest:[pathString copy]
                   access:self.access
              requestType:reqType

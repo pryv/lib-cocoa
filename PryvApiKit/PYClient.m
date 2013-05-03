@@ -48,7 +48,7 @@
                      errorHandler:(void(^)(NSError *error))errorHandler
 {
     if (![[self class] isReadyForAccess:access]) {
-        NSLog(@"fail synchronize: not initialized");
+//        NSLog(@"fail synchronize: not initialized");
         
         if (errorHandler)
             errorHandler([[self class] createNotReadyErrorForAccess:access]);
@@ -65,7 +65,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSTimeInterval serverTime = [[[response allHeaderFields] objectForKey:@"Server-Time"] doubleValue];
                  
-                 NSLog(@"successfully authorized and synchronized with server time: %f ", serverTime);
+//                 NSLog(@"successfully authorized and synchronized with server time: %f ", serverTime);
                  //        _serverTimeInterval = [[NSDate date] timeIntervalSince1970] - serverTime;
                  
                  if (successHandler)
@@ -195,7 +195,7 @@
     [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self class] apiBaseUrlForAccess:access], path]];
     [request setURL:url];
-    NSLog(@"url path is %@",[url absoluteString]);
+//    NSLog(@"url path is %@",[url absoluteString]);
 
     NSDictionary *postDataa = postData;
     
@@ -292,7 +292,7 @@
             
             NSData *responseData = nil;
             responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: &error];
-            NSLog(@"error is %@",error);
+//            NSLog(@"error is %@",error);
             
 //            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
             id JSON = [JSONUtility getJSONObjectFromData:responseData];
