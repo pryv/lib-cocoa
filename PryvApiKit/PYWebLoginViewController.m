@@ -13,20 +13,10 @@
 
 @interface PYWebLoginViewController () <UIWebViewDelegate>
 
-@property (nonatomic, assign) UIWebView *webView;
-@property (nonatomic, assign) UIActivityIndicatorView *loadingActivityIndicatorView;
-@property (nonatomic, assign) UIBarButtonItem *refreshBarButtonItem;
-
-
-@property (nonatomic, assign) NSUInteger iteration;
-
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *token;
-
-@property (nonatomic, retain) NSTimer *pollTimer;
-
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, retain) NSString *appID;
+
+@property (nonatomic, retain) NSTimer *pollTimer;
 
 @end
 
@@ -34,6 +24,15 @@
 @implementation PYWebLoginViewController
 
 UIBarButtonItem *loadingActivityIndicator;
+UIWebView *webView;
+UIActivityIndicatorView *loadingActivityIndicatorView;
+UIBarButtonItem *refreshBarButtonItem;
+
+
+NSUInteger iteration;
+
+NSString *username;
+NSString *token;
 
 
 + (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
@@ -58,26 +57,28 @@ UIBarButtonItem *loadingActivityIndicator;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(close:)];
     
-    self.refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
-    self.navigationItem.rightBarButtonItem = self.refreshBarButtonItem;
+    refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
+    self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
     
     // -- loading Indicator --//
-    self.loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    loadingActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:self.loadingActivityIndicatorView];
+    loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    loadingActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];
     
     [self startLoading];
     
     // -- webview -- //
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
-    self.webView = [[UIWebView alloc] initWithFrame:applicationFrame];
-    [self.webView setDelegate:self];
-    [self.webView setBackgroundColor:[UIColor grayColor]];
-    [self.webView loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
+    webView = [[UIWebView alloc] initWithFrame:applicationFrame];
+    [webView setDelegate:self];
+    [webView setBackgroundColor:[UIColor grayColor]];
+    [webView loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
     
-    self.view = self.webView;
+    self.view = webView;
     
     // -- show on delegate's UIController -- //
     [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
+    
+    [navigationController release];
     
     return self;
 }
@@ -88,8 +89,13 @@ UIBarButtonItem *loadingActivityIndicator;
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    [self.webView release];
-    [self.loadingActivityIndicatorView release];
+    
+    self.pollTimer = nil;
+    
+    [webView release];
+    [refreshBarButtonItem release];
+    [loadingActivityIndicator release];
+    [loadingActivityIndicatorView release];
     [super dealloc];
 }
 
@@ -160,16 +166,16 @@ UIBarButtonItem *loadingActivityIndicator;
 
 - (void)startLoading
 {
-    self.refreshBarButtonItem.enabled = NO;
-    [self.loadingActivityIndicatorView startAnimating];
+    refreshBarButtonItem.enabled = NO;
+    [loadingActivityIndicatorView startAnimating];
     self.navigationItem.rightBarButtonItem = loadingActivityIndicator;
 }
 
 - (void)stopLoading
 {
-    self.refreshBarButtonItem.enabled = YES;
-    [self.loadingActivityIndicatorView stopAnimating];
-    self.navigationItem.rightBarButtonItem = self.refreshBarButtonItem;
+    refreshBarButtonItem.enabled = YES;
+    [loadingActivityIndicatorView stopAnimating];
+    self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
 }
 
 
@@ -271,7 +277,7 @@ BOOL requestedLoginView = false;
             NSString *loginPageUrlString = jsonDictionary[@"url"];
             NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
             assert(loginPageURL);
-            [self.webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+            [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
         }
         
         NSString *pollUrlString = jsonDictionary[@"poll"];
@@ -343,7 +349,7 @@ BOOL requestedLoginView = false;
 }
 
 - (void)viewDidUnload {
-    [self setWebView:nil];
+
     [super viewDidUnload];
 }
 @end
