@@ -14,11 +14,14 @@
 {
     NSString *_userID;
     NSString *_accessToken;
+    NSString *_apiScheme;
+    NSString *_apiDomain;
 }
 
 @property (nonatomic, copy) NSString *userID;
 @property (nonatomic, copy) NSString *accessToken;
-
+@property (nonatomic, copy) NSString *apiScheme;
+@property (nonatomic, copy) NSString *apiDomain;
 
 /**
  @discussion
