@@ -184,8 +184,6 @@
 		3D67412D17106EB90050B251 /* PYEventNote+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEventNote+JSON.m"; sourceTree = "<group>"; };
 		3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYWebLoginViewController.h; sourceTree = "<group>"; };
 		3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYWebLoginViewController.m; sourceTree = "<group>"; };
-		3D67FF9F173410B5008D437F /* PYWebLoginViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PYWebLoginViewController~iphone.xib"; sourceTree = "<group>"; };
-		3D67FFA117341188008D437F /* PYWebLoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PYWebLoginViewController~ipad.xib"; sourceTree = "<group>"; };
 		3D6A5039170A359500025A20 /* PYEventValueLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventValueLocation.h; sourceTree = "<group>"; };
 		3D6A503A170A359500025A20 /* PYEventValueLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventValueLocation.m; sourceTree = "<group>"; };
 		3D6A503E170A36F500025A20 /* PYEventValueWebclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventValueWebclip.h; sourceTree = "<group>"; };
@@ -330,8 +328,6 @@
 			children = (
 				3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */,
 				3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */,
-				3D67FF9F173410B5008D437F /* PYWebLoginViewController~iphone.xib */,
-				3D67FFA117341188008D437F /* PYWebLoginViewController~ipad.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
