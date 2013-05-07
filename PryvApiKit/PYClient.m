@@ -28,7 +28,7 @@
 static NSString *myDefaultDomain;
 
 + (NSString *)defaultDomain {
-    if (myDefaultDomain == nil) myDefaultDomain = kPYAPIHost;
+    if (myDefaultDomain == nil) myDefaultDomain = kPYAPIDomain;
     return myDefaultDomain;
 }
 
@@ -37,7 +37,7 @@ static NSString *myDefaultDomain;
 }
 
 + (void)setDefaultDomainStaging {
-    [PYClient setDefaultDomain:kPYAPIHostStaging];
+    [PYClient setDefaultDomain:kPYAPIDomainStaging];
 }
 
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
@@ -107,7 +107,6 @@ static NSString *myDefaultDomain;
 
 + (NSString *)apiBaseUrl
 {
-//    return @"https://reg.rec.la";
     return [NSString stringWithFormat:@"%@://reg%@", kPYAPIScheme, [self defaultDomain]];
 }
 

@@ -13,7 +13,8 @@
 
 @protocol PYWebLoginDelegate
 - (UIViewController*) pyWebLoginGetController;
-
+- (void) pyWebLoginSuccess:(PYAccess*)pyAccess;
+- (void) pyWebLoginAborded:(NSString*)reason;
 @end
 
 
@@ -21,11 +22,10 @@
     
 }
 
+
 @property (nonatomic, assign) id  delegate;
 
-- (id)initWithSomething;
-
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSString *)jsonFormatedPermissions delegate:(id ) delegate;
++ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate;
 
 @end
 

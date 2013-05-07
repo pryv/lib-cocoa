@@ -8,42 +8,47 @@
 
 
 #import "PYClient.h"
+#import "PYConstants.h"
 #import "PYWebLoginViewController.h"
 
 @interface PYWebLoginViewController () <UIWebViewDelegate>
 
-@property ( nonatomic, assign) UIWebView *webView;
+@property (nonatomic, assign) UIWebView *webView;
 @property (nonatomic, assign) UIActivityIndicatorView *loadingActivityIndicatorView;
 @property (nonatomic, assign) UIBarButtonItem *refreshBarButtonItem;
-@property ( nonatomic, retain) NSTimer *pollTimer;
+
 
 @property (nonatomic, assign) NSUInteger iteration;
 
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *token;
 
-@property (nonatomic, retain) NSString *jsonPermission;
+@property (nonatomic, retain) NSTimer *pollTimer;
+
+@property (nonatomic, retain) NSArray *permissions;
+@property (nonatomic, retain) NSString *appID;
 
 @end
 
 
 @implementation PYWebLoginViewController
 
-@synthesize webView = _webView;
-
-
 UIBarButtonItem *loadingActivityIndicator;
 
 
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSString *)jsonFormatedPermissions delegate:(id ) delegate {
-    PYWebLoginViewController *login = [[PYWebLoginViewController alloc] openOn:delegate];
++ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
+    PYWebLoginViewController *login = [PYWebLoginViewController alloc];
+    login.permissions = permissions;
+    login.appID = appID;
+    login.delegate = delegate;
+    [login openOn];
+    
     return login;
 }
 
 
-- (PYWebLoginViewController* )openOn:(id ) delegate
+- (PYWebLoginViewController* )openOn
 {
-    self.delegate = delegate;
     [self init];
     
     
@@ -67,15 +72,12 @@ UIBarButtonItem *loadingActivityIndicator;
     self.webView = [[UIWebView alloc] initWithFrame:applicationFrame];
     [self.webView setDelegate:self];
     [self.webView setBackgroundColor:[UIColor grayColor]];
-    NSString *urlAddress = @"http://www.google.com";
-    NSURL *url = [NSURL URLWithString:urlAddress];
-    NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:requestObj];
+    [self.webView loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
     
     self.view = self.webView;
     
+    // -- show on delegate's UIController -- //
     [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
-
 
     return self;
 }
@@ -83,11 +85,11 @@ UIBarButtonItem *loadingActivityIndicator;
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationDidBecomeActiveNotification
-                                                  object:nil];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self.webView release];
+    [self.loadingActivityIndicatorView release];
     [super dealloc];
 }
 
@@ -119,24 +121,6 @@ UIBarButtonItem *loadingActivityIndicator;
 
 #pragma mark - init
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (id)initWithSomething
-{
-    self = [super initWithNibName:nil bundle:nil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-
-}
 
 - (void)viewDidLoad
 {
@@ -176,9 +160,6 @@ UIBarButtonItem *loadingActivityIndicator;
     [self requestLoginView];
 }
 
-
-
-
 #pragma mark - Private
 
 - (void)startLoading
@@ -205,27 +186,17 @@ UIBarButtonItem *loadingActivityIndicator;
 {
     // TODO extract the url to a more meaningful place
     NSString *preferredLanguageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
-    
-    NSString *applicationChannelId = @"position";
-    NSString *channelName = @"Position";
-
+ 
     NSDictionary *postData = @{
                              // TODO extract the app id some where to constants
-                             @"requestingAppId": @"pryv-mobile-position-ios",
+                             @"requestingAppId": self.appID,
                              @"returnURL": @"false",
                              @"languageCode" : preferredLanguageCode,
-                             @"requestedPermissions": @[
-                                     // channel for position events
-                                     @{
-                                         @"channelId" : applicationChannelId,
-                                         @"defaultName" : channelName,
-                                         @"level" : @"shared"
-                                         }
-                                     ]
-                             };
+                             @"requestedPermissions": self.permissions
+                                 };
 
     
-    NSString *fullPathString = [NSString stringWithFormat:@"%@/access", [PYClient apiBaseUrl]];
+    NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
 
     [PYClient apiRequest:fullPathString
                   access:nil
@@ -385,7 +356,8 @@ UIBarButtonItem *loadingActivityIndicator;
 
 -  (void)successfulLoginWithUsername:(NSString *)username token:(NSString *)token
 {
-    
+    [self.delegate pyWebLoginSuccess:[PYClient createAccessWithUsername:username andAccessToken:token]];
+    [self close:nil];
 }
 
 

@@ -177,10 +177,11 @@
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
     
-    NSString *jsonPermissions = @"[{\"channelId\": \"*\", \"level\": \"manage\"}]";
+    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
     
+    [PYClient setDefaultDomainStaging];
     [PYWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"
-                                     andPermissions:jsonPermissions
+                                     andPermissions:permissions
                                            delegate:self];
 
 }
@@ -190,6 +191,16 @@
 - (UIViewController *) pyWebLoginGetController {
     return self;
 }
+
+- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
+}
+
+- (void) pyWebLoginAborded:(NSString*)reason {
+    NSLog(@"Signin Aborded: %@",reason);
+}
+
+#pragma mark -- 
 
 - (void)didReceiveMemoryWarning
 {
