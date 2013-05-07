@@ -89,6 +89,11 @@
         return object;
 }
 
++ (NSString *)apiBaseUrl
+{
+//    return @"https://reg.rec.la";
+    return [NSString stringWithFormat:@"%@://reg%@", kPYAPIScheme, kPYAPIHost];
+}
 
 + (NSString *)apiBaseUrlForAccess:(PYAccess *)access
 {
@@ -192,20 +197,40 @@
 {
     
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-    [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self class] apiBaseUrlForAccess:access], path]];
-    [request setURL:url];
-//    NSLog(@"url path is %@",[url absoluteString]);
-
-    NSDictionary *postDataa = postData;
     
-    if (![[self class] isReadyForAccess:access])
-    {
-        NSError *notReadyError = [self createNotReadyErrorForAccess:access];
-        [NSException raise:notReadyError.domain format:@"Error code %d",notReadyError.code];
+    NSURL *url;
+
+    if (access) {
+        if (![[self class] isReadyForAccess:access])
+        {
+            NSError *notReadyError = [self createNotReadyErrorForAccess:access];
+            [NSException raise:notReadyError.domain format:@"Error code %d",notReadyError.code];
+            return;
+        }
+        
+        [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
+
+    }
+    
+    if (!path) {
+        [NSException raise:@"There is no path string" format:@"Path can't be nil"];
         return;
     }
     
+    if (access) {
+        //If there is path and access
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self class] apiBaseUrlForAccess:access], path]];
+    }else{
+        //If we have path and don't have access we will consider that 'path' as full URL string
+        url = [NSURL URLWithString:path];
+
+    }
+    
+    [request setURL:url];
+    NSLog(@"url path is %@",[url absoluteString]);
+
+    NSDictionary *postDataa = postData;
+        
     if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )
     {
         [NSException raise:NSInvalidArgumentException format:@"postData must be nil for GET method or DELETE method"];

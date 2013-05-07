@@ -8,6 +8,7 @@
 
 #import "PYEViewController.h"
 #import "PryvApiKit.h"
+#import "PYWebLoginViewController.h"
 
 @interface PYEViewController ()
 
@@ -172,6 +173,8 @@
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
+    PYWebLoginViewController *loginVC = [[PYWebLoginViewController alloc] initWithNibName:nil bundle:nil];
+    [self presentViewController:loginVC animated:YES completion:NULL];
 
 }
 

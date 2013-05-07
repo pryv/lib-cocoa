@@ -27,6 +27,7 @@
 		3D67412E17106EB90050B251 /* PYEventNote+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412C17106EB90050B251 /* PYEventNote+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412F17106EB90050B251 /* PYEventNote+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412D17106EB90050B251 /* PYEventNote+JSON.m */; };
 		3D67413017106EB90050B251 /* PYEventNote+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412D17106EB90050B251 /* PYEventNote+JSON.m */; };
+		3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
 		3D6A502D170A02CD00025A20 /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA22ABE16E62A0B00EC30FB /* PYEventType.m */; };
 		3D6A503B170A359500025A20 /* PYEventValueLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6A5039170A359500025A20 /* PYEventValueLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D6A503C170A359500025A20 /* PYEventValueLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503A170A359500025A20 /* PYEventValueLocation.m */; };
@@ -181,6 +182,10 @@
 		3D67412517106EA10050B251 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
 		3D67412C17106EB90050B251 /* PYEventNote+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEventNote+JSON.h"; sourceTree = "<group>"; };
 		3D67412D17106EB90050B251 /* PYEventNote+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEventNote+JSON.m"; sourceTree = "<group>"; };
+		3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYWebLoginViewController.h; sourceTree = "<group>"; };
+		3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYWebLoginViewController.m; sourceTree = "<group>"; };
+		3D67FF9F173410B5008D437F /* PYWebLoginViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PYWebLoginViewController~iphone.xib"; sourceTree = "<group>"; };
+		3D67FFA117341188008D437F /* PYWebLoginViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PYWebLoginViewController~ipad.xib"; sourceTree = "<group>"; };
 		3D6A5039170A359500025A20 /* PYEventValueLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventValueLocation.h; sourceTree = "<group>"; };
 		3D6A503A170A359500025A20 /* PYEventValueLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventValueLocation.m; sourceTree = "<group>"; };
 		3D6A503E170A36F500025A20 /* PYEventValueWebclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventValueWebclip.h; sourceTree = "<group>"; };
@@ -219,8 +224,6 @@
 		3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = "<group>"; };
 		3DD608ED1702545400905533 /* AccessClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessClient.h; sourceTree = "<group>"; };
 		3DD608EE1702545400905533 /* AccessClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessClient.m; sourceTree = "<group>"; };
-		4C97402B16E48EE700416C53 /* PryvJSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvJSONUtils.h; sourceTree = "<group>"; };
-		4C97402C16E48EE700416C53 /* PryvJSONUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvJSONUtils.m; sourceTree = "<group>"; };
 		4C9FC2C116E50FDF00C157BD /* PryvLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PryvLocation.h; path = PryvApiKit/PryvLocation.h; sourceTree = "<group>"; };
 		4C9FC2C216E50FDF00C157BD /* PryvLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PryvLocation.m; path = PryvApiKit/PryvLocation.m; sourceTree = "<group>"; };
 		4CA22ABD16E62A0B00EC30FB /* PYEventType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventType.h; sourceTree = "<group>"; };
@@ -320,6 +323,17 @@
 				3D744798170E1D7100D78015 /* PYEventTwitterValue.m */,
 			);
 			name = PYEventValueObjects;
+			sourceTree = "<group>";
+		};
+		3D67FF9C17340E57008D437F /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */,
+				3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */,
+				3D67FF9F173410B5008D437F /* PYWebLoginViewController~iphone.xib */,
+				3D67FFA117341188008D437F /* PYWebLoginViewController~ipad.xib */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		3D6A502E170A175600025A20 /* PYEvent */ = {
@@ -515,6 +529,7 @@
 		FBC2048316B95B3800CB5FFB /* PryvApiKit */ = {
 			isa = PBXGroup;
 			children = (
+				3D67FF9C17340E57008D437F /* Login */,
 				3D75F4C8173304CF00380629 /* Submodule */,
 				3DAB591E17174BCD00F2009D /* image003.jpg */,
 				3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */,
@@ -522,8 +537,6 @@
 				3D6D3BBF16F8BD3C0072F480 /* Error */,
 				3D6D3BB916F8BB9D0072F480 /* Constants */,
 				3D6FCEA616F7C2FF0003D970 /* Model */,
-				4C97402B16E48EE700416C53 /* PryvJSONUtils.h */,
-				4C97402C16E48EE700416C53 /* PryvJSONUtils.m */,
 				3D6FCEAF16F7C3B60003D970 /* Clients */,
 				FBC2048416B95B3800CB5FFB /* Supporting Files */,
 			);
@@ -798,6 +811,7 @@
 				3D67413017106EB90050B251 /* PYEventNote+JSON.m in Sources */,
 				3D6BE317171C75EB0023A39C /* PYAsyncService.m in Sources */,
 				3D2397BF1733109A00A72637 /* JSONUtility.m in Sources */,
+				3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
