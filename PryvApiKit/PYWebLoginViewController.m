@@ -6,20 +6,23 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYWebLoginViewController.h"
+
 #import "PYClient.h"
+#import "PYWebLoginViewController.h"
 
 @interface PYWebLoginViewController () <UIWebViewDelegate>
 
-@property (strong, nonatomic) UIWebView *webView;
+@property ( nonatomic, assign) UIWebView *webView;
+@property (nonatomic, assign) UIActivityIndicatorView *loadingActivityIndicatorView;
+@property (nonatomic, assign) UIBarButtonItem *refreshBarButtonItem;
+@property ( nonatomic, retain) NSTimer *pollTimer;
 
-@property (strong, nonatomic) NSTimer *pollTimer;
+@property (nonatomic, assign) NSUInteger iteration;
 
-@property (assign, nonatomic) NSUInteger iteration;
+@property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) NSString *token;
 
-@property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) NSString *token;
-
+@property (nonatomic, retain) NSString *jsonPermission;
 
 @end
 
@@ -28,17 +31,55 @@
 
 @synthesize webView = _webView;
 
-- (void)loadView
-{
-    [super loadView];
-    UIWebView *tmpWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-    self.webView = tmpWebView;
-    [tmpWebView release];
-    [self.view addSubview:_webView];
-    
-    self.webView.delegate = self;
 
+UIBarButtonItem *loadingActivityIndicator;
+
+
++ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSString *)jsonFormatedPermissions delegate:(id ) delegate {
+    PYWebLoginViewController *login = [[PYWebLoginViewController alloc] openOn:delegate];
+    return login;
 }
+
+
+- (PYWebLoginViewController* )openOn:(id ) delegate
+{
+    self.delegate = delegate;
+    [self init];
+    
+    
+    NSLog(@"PYWebLoginViewControlleriOs:Open on");
+    
+    // -- navigation bar -- //
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(close:)];
+    
+    self.refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
+    self.navigationItem.rightBarButtonItem = self.refreshBarButtonItem;
+    
+    // -- loading Indicator --//
+    self.loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    loadingActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:self.loadingActivityIndicatorView];
+    
+    [self startLoading];
+    
+    // -- webview -- //
+    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
+    self.webView = [[UIWebView alloc] initWithFrame:applicationFrame];
+    [self.webView setDelegate:self];
+    [self.webView setBackgroundColor:[UIColor grayColor]];
+    NSString *urlAddress = @"http://www.google.com";
+    NSURL *url = [NSURL URLWithString:urlAddress];
+    NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:requestObj];
+    
+    self.view = self.webView;
+    
+    [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
+
+
+    return self;
+}
+
 
 - (void)dealloc
 {
@@ -59,21 +100,24 @@
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
-{    
+{
+    [self startLoading];
     NSLog(@"webViewDidStartLoad ");
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    [self stopLoading];
     NSLog(@"webViewDidFinishLoad");
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    // TODO create an alert to notify a user of an error
+    [self stopLoading];
     NSLog(@"didFailLoadWithError %@", [error localizedDescription]);    
 }
 
+#pragma mark - init
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -86,7 +130,7 @@
 
 - (id)initWithSomething
 {
-    self = [super initWithNibName:@"PYWebLoginViewController" bundle:nil];
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
         // Custom initialization
     }
@@ -116,8 +160,42 @@
     [self.pollTimer invalidate];
 }
 
+#pragma mark - Target Actions
+
+- (IBAction)close:(id)sender
+{
+    [self.pollTimer invalidate];
+    // TODO
+    [self dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+}
+
+- (IBAction)reload:(id)sender
+{
+    [self requestLoginView];
+}
+
+
+
 
 #pragma mark - Private
+
+- (void)startLoading
+{
+    self.refreshBarButtonItem.enabled = NO;
+    [self.loadingActivityIndicatorView startAnimating];
+    self.navigationItem.rightBarButtonItem = loadingActivityIndicator;
+}
+
+- (void)stopLoading
+{
+    self.refreshBarButtonItem.enabled = YES;
+    [self.loadingActivityIndicatorView stopAnimating];
+    self.navigationItem.rightBarButtonItem = self.refreshBarButtonItem;
+}
+
+
 
 // POST request to /access to obtain a login page URL and load the contents of the URL
 //      (which is a login form) to a child webView

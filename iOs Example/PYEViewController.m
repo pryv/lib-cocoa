@@ -10,13 +10,15 @@
 #import "PryvApiKit.h"
 #import "PYWebLoginViewController.h"
 
-@interface PYEViewController ()
+@interface PYEViewController () <PYWebLoginDelegate>
 
 @end
 
-@implementation PYEViewController
+@implementation PYEViewController 
 
 @synthesize signinButton;
+
+
 
 - (void)viewDidLoad
 {
@@ -174,12 +176,20 @@
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
-    PYWebLoginViewController *loginVC = [[PYWebLoginViewController alloc] initWithNibName:nil bundle:nil];
-    [self presentViewController:loginVC animated:YES completion:NULL];
+    
+    NSString *jsonPermissions = @"[{\"channelId\": \"*\", \"level\": \"manage\"}]";
+    
+    [PYWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"
+                                     andPermissions:jsonPermissions
+                                           delegate:self];
 
 }
 
+#pragma mark --PYWebLoginDelegate
 
+- (UIViewController *) pyWebLoginGetController {
+    return self;
+}
 
 - (void)didReceiveMemoryWarning
 {
