@@ -12,6 +12,7 @@
 
 FOUNDATION_EXPORT NSString *const kPYAPIScheme;
 FOUNDATION_EXPORT NSString *const kPYAPIHost;
+FOUNDATION_EXPORT NSString *const kPYAPIHostStaging;
 FOUNDATION_EXPORT NSString *const kPYUserTempToken;
 
 FOUNDATION_EXPORT NSString *const kPrYvApplicationChannelId;

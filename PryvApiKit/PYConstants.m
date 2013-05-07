@@ -11,7 +11,8 @@
 #pragma mark - API
 
 NSString *const kPYAPIScheme = @"https";
-NSString *const kPYAPIHost = @".rec.la";
+NSString *const kPYAPIHost = @".pryv.io";
+NSString *const kPYAPIHostStaging = @".rec.la";
 NSString *const kPYUserTempToken = @"Ve69mGqqX5";
 
 NSString *const kPrYvApplicationChannelId = @"position";

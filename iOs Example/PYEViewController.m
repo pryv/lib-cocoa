@@ -22,6 +22,7 @@
 {
     [super viewDidLoad];
     
+    [PYClient setDefaultDomainStaging];
         
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
