@@ -203,7 +203,7 @@ BOOL requestedLoginView = false;
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
     
     [PYClient apiRequest:fullPathString
-                  access:nil
+                 headers:nil
              requestType:PYRequestTypeAsync
                   method:PYRequestMethodPOST
                 postData:postData
@@ -241,7 +241,7 @@ BOOL requestedLoginView = false;
                                                       target:[NSBlockOperation blockOperationWithBlock:
                                                               ^{
                                                                   [PYClient apiRequest:pollURLString
-                                                                                access:nil
+                                                                                headers:nil
                                                                            requestType:PYRequestTypeAsync
                                                                                 method:PYRequestMethodGET
                                                                               postData:nil

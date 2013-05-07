@@ -13,6 +13,8 @@
 
 @synthesize userID = _userID;
 @synthesize accessToken = _accessToken;
+@synthesize apiDomain = _apiDomain;
+@synthesize apiScheme = _apiScheme;
 
 - (void)dealloc
 {
@@ -21,6 +23,28 @@
     [super dealloc];
 }
 
+- (NSString *)apiBaseUrl;
+{
+    return [NSString stringWithFormat:@"%@://%@%@", self.apiScheme, self.userID, self.apiDomain];
+}
+
+
+
+- (void) apiRequest:(NSString *)path
+        requestType:(PYRequestType)reqType
+             method:(PYRequestMethod)method
+           postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler {
+    
+    if (path == nil) path = @"";
+    NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
+    NSDictionary* headers = @{@"Authorization": self.accessToken};
+    [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
+}
+
+
 #pragma mark - PrYv API Channel get all (GET /channnels)
 
 - (void)getChannelsWithRequestType:(PYRequestType)reqType
@@ -28,7 +52,7 @@
                     successHandler:(void (^)(NSArray *))successHandler
                       errorHandler:(void (^)(NSError *))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithString:@"/channels"];
+    NSMutableString *pathString = [NSMutableString stringWithString:@"channels"];
     if (filter) {
         
         [pathString appendString:@"?"];
@@ -40,28 +64,29 @@
         
     }
     
-    [PYClient apiRequest:pathString
-                   access:self
-              requestType:reqType
-                   method:PYRequestMethodGET
-                postData:nil
-             attachments:nil
-                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     NSMutableArray *channelList = [[NSMutableArray alloc] init];
-                     for(NSDictionary *channelDictionary in JSON){
-                         PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
-                         channelObject.access = self;
-                         [channelList addObject:channelObject];
-                     }
-                     if(successHandler){
-                         successHandler(channelList);
-                     }
-                 } failure:^(NSError *error){
-                     if(errorHandler){
-                         errorHandler(error);
-                     }
+    
+    
+    [self apiRequest:pathString
+         requestType:reqType
+              method:PYRequestMethodGET
+            postData:nil
+         attachments:nil
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 NSMutableArray *channelList = [[NSMutableArray alloc] init];
+                 for(NSDictionary *channelDictionary in JSON){
+                     PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
+                     channelObject.access = self;
+                     [channelList addObject:channelObject];
                  }
-      ];
+                 if(successHandler){
+                     successHandler(channelList);
+                 }
+             } failure:^(NSError *error){
+                 if(errorHandler){
+                     errorHandler(error);
+                 }
+             }
+     ];
 }
 
 //#pragma mark - PrYv API Channel create (POST /channnels)
@@ -95,13 +120,12 @@
                     successHandler:(void (^)())successHandler
                       errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSString *pathString = [NSString stringWithFormat:@"/channels/%@", channelId];
-    [PYClient apiRequest:pathString
-              access:self
+    NSString *pathString = [NSString stringWithFormat:@"channels/%@", channelId];
+    [self apiRequest:pathString
          requestType:reqType
               method:PYRequestMethodPUT
             postData:data
-             attachments:nil
+         attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  if(successHandler){
                      successHandler();
@@ -118,10 +142,9 @@
                       successHandler:(void (^)())successHandler
                         errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSString *pathString = [NSString stringWithFormat:@"/channels/%@", channelId];
-
-    [PYClient apiRequest:pathString
-                  access:self
+    NSString *pathString = [NSString stringWithFormat:@"channels/%@", channelId];
+    
+    [self apiRequest:pathString
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil
@@ -135,7 +158,7 @@
                          errorHandler(error);
                      }
                  }];
-
+    
 }
 
 @end

@@ -32,6 +32,16 @@
 @property (nonatomic, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
 @property (nonatomic, getter = isTrashed) BOOL trashed;
 
+
+- (void) apiRequest:(NSString *)path
+        requestType:(PYRequestType)reqType
+             method:(PYRequestMethod)method
+           postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler;
+
+
 //GET /{channel-id}/events
 - (void)getAllEventsWithRequestType:(PYRequestType)reqType
                           successHandler:(void (^) (NSArray *eventList))successHandler

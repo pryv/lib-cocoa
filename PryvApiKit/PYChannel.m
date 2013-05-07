@@ -44,6 +44,21 @@
     return description;
 }
 
+
+- (void) apiRequest:(NSString *)path
+        requestType:(PYRequestType)reqType
+             method:(PYRequestMethod)method
+           postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler {
+    
+    if (path == nil) path = @"";
+    NSString* newPath = [NSString stringWithFormat:@"%@/%@", self.channelId, path];
+    [self.access apiRequest:newPath requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
+}
+
+
 #pragma mark - Events manipulation
 
 //GET /{channel-id}/events
@@ -52,16 +67,13 @@
                      successHandler:(void (^) (NSArray *eventList))successHandler
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events", self.channelId];
-    
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+   
+    [self apiRequest:@"events"
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     
                      NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                      for (NSDictionary *eventDic in JSON) {
                          [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
@@ -84,9 +96,7 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events", self.channelId];
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:@"events"
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[event dictionary]
@@ -115,9 +125,7 @@
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/start", self.channelId];
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:@"events/start"
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[event dictionary]
@@ -155,9 +163,7 @@
 
     }
     
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/stop", self.channelId];
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:@"events/stop"
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[postData autorelease]
@@ -184,9 +190,7 @@
                                       errorHandler:(void (^)(NSError *error))errorHandler
 
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/running", self.channelId];
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:@"events/running"
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -217,10 +221,8 @@
                           successHandler:(void (^)(NSString *stoppedId))successHandler
                             errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/events/%@", self.channelId, eventId];
-//    NSLog(@"[eventObject dictionary] is %@",[eventObject dictionary]);
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+
+    [self apiRequest:[NSString stringWithFormat:@"events/%@",eventId]
              requestType:reqType
                   method:PYRequestMethodPUT
                 postData:[eventObject dictionary]
@@ -249,7 +251,7 @@
                    successHandler:(void (^)(NSArray *folderList))successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler;
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", self.channelId];
+    NSMutableString *pathString = [NSMutableString stringWithString:@"folders"];
     if (filter) {
         
         [pathString appendString:@"?"];
@@ -260,8 +262,7 @@
         [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
         
     }
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:[pathString copy]
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -295,8 +296,6 @@
               errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders", self.channelId];
-    
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
     [postData setObject:folderId forKey:@"id"];
     [postData setObject:folderName forKey:@"name"];
@@ -313,8 +312,7 @@
     [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
     
         
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:@"folders"
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[postData autorelease]
@@ -345,7 +343,7 @@
               errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders/%@", self.channelId, folderId];
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"folders/%@",  folderId];
     
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
     
@@ -363,8 +361,7 @@
     
     [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
         
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:[pathString copy]
              requestType:reqType
                   method:PYRequestMethodPUT
                 postData:[postData autorelease]
@@ -389,7 +386,7 @@
                    successHandler:(void (^)())successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"/%@/folders/%@", self.channelId, folderId];
+    NSMutableString *pathString = [NSMutableString stringWithFormat:@"folders/%@", folderId];
     if (filter) {
         
         [pathString appendString:@"?"];
@@ -401,8 +398,7 @@
         
     }
 
-    [PYClient apiRequest:[pathString copy]
-                  access:self.access
+    [self apiRequest:[pathString copy]
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil

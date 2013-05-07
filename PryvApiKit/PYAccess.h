@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
-
 @interface PYAccess : NSObject
 {
     NSString *_userID;
@@ -22,6 +21,18 @@
 @property (nonatomic, copy) NSString *accessToken;
 @property (nonatomic, copy) NSString *apiScheme;
 @property (nonatomic, copy) NSString *apiDomain;
+
+
+- (NSString *)apiBaseUrl;
+
+
+- (void) apiRequest:(NSString *)path
+        requestType:(PYRequestType)reqType
+             method:(PYRequestMethod)method
+           postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler;
 
 /**
  @discussion

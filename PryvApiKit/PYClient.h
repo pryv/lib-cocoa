@@ -41,16 +41,13 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 + (void)setDefaultDomain:(NSString*) domain;
 + (void)setDefaultDomainStaging;
 
-+ (NSString *)apiBaseUrl;
-
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
-
-
 
 + (NSString *)fileMIMEType:(NSString*)file;
 
-+ (void) apiRequest:(NSString *)path
-             access:(PYAccess *)access
+
++ (void) apiRequest:(NSString *)fullURL
+            headers:(NSDictionary*)headers
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
