@@ -78,7 +78,7 @@ UIBarButtonItem *loadingActivityIndicator;
     
     // -- show on delegate's UIController -- //
     [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
-
+    
     return self;
 }
 
@@ -97,26 +97,23 @@ UIBarButtonItem *loadingActivityIndicator;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    NSLog(@"shouldStartLoadWithRequest ");
     return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [self startLoading];
-    NSLog(@"webViewDidStartLoad ");
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self stopLoading];
-    NSLog(@"webViewDidFinishLoad");
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [self stopLoading];
-    NSLog(@"didFailLoadWithError %@", [error localizedDescription]);    
+    NSLog(@"didFailLoadWithError %@", [error localizedDescription]);
 }
 
 #pragma mark - init
@@ -129,7 +126,7 @@ UIBarButtonItem *loadingActivityIndicator;
                                              selector:@selector(requestLoginView)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
-
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -149,7 +146,6 @@ UIBarButtonItem *loadingActivityIndicator;
 - (IBAction)close:(id)sender
 {
     [self.pollTimer invalidate];
-    // TODO
     [self dismissViewControllerAnimated:YES completion:^{
         //
     }];
@@ -182,22 +178,24 @@ UIBarButtonItem *loadingActivityIndicator;
 //      (which is a login form) to a child webView
 //      activate a timer loop
 
+BOOL requestedLoginView = false;
 - (void)requestLoginView
 {
+    requestedLoginView = true;
     // TODO extract the url to a more meaningful place
     NSString *preferredLanguageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
- 
+    
     NSDictionary *postData = @{
-                             // TODO extract the app id some where to constants
-                             @"requestingAppId": self.appID,
-                             @"returnURL": @"false",
-                             @"languageCode" : preferredLanguageCode,
-                             @"requestedPermissions": self.permissions
-                                 };
-
+                               // TODO extract the app id some where to constants
+                               @"requestingAppId": self.appID,
+                               @"returnURL": @"false",
+                               @"languageCode" : preferredLanguageCode,
+                               @"requestedPermissions": self.permissions
+                               };
+    
     
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
-
+    
     [PYClient apiRequest:fullPathString
                   access:nil
              requestType:PYRequestTypeAsync
@@ -205,39 +203,10 @@ UIBarButtonItem *loadingActivityIndicator;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     
-                     [self handleSuccess:JSON];
-                     
+                     [self handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
-                     
                      [self handleFailure:error];
                  }];
-
-}
-
-- (void)handleSuccess:(id)JSON
-{
-    assert(JSON);
-    NSLog(@"Request Successful, response '%@'", JSON);
-    
-    assert([JSON isKindOfClass:[NSDictionary class]]);
-    NSDictionary *jsonDictionary = (NSDictionary *)JSON;
-    
-    assert([JSON objectForKey:@"url"]);
-    NSString *loginPageUrlString = jsonDictionary[@"url"];
-    
-    NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
-    assert(loginPageURL);
-    
-    NSString *pollUrlString = jsonDictionary[@"poll"];
-    assert(pollUrlString);
-        
-    NSTimeInterval pollTimeInterval = [jsonDictionary[@"poll_rate_ms"] doubleValue] /1000;
-    
-    [self.webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
-
-    [self pollURL:pollUrlString withTimeInterval:pollTimeInterval];
-    
     
 }
 
@@ -272,21 +241,19 @@ UIBarButtonItem *loadingActivityIndicator;
                                                                               postData:nil
                                                                            attachments:nil
                                                                                success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                   
                                                                                    [self handlePollSuccess:JSON];
-                                                                                   
-                                                                               } failure:^(NSError *error) {
-                                                                                   NSLog(@"error is %@",error);
+                                                                              } failure:^(NSError *error) {
+                                                                                   [self handleFailure:error];
                                                                                }];
-
+                                                                  
                                                               }]
                                                     selector:@selector(main) // send message main to NSBLockOperation
                                                     userInfo:nil
                                                      repeats:NO
                       ];
-
-
-
+    
+    
+    
 }
 
 - (void)handlePollSuccess:(id)JSON
@@ -297,10 +264,19 @@ UIBarButtonItem *loadingActivityIndicator;
     NSString *statusString = jsonDictionary[@"status"];
     
     if ([@"NEED_SIGNIN" isEqualToString:statusString]) {
+        if (requestedLoginView) {
+            requestedLoginView = false;
+            // -- open url only once !! -- //
+            assert([JSON objectForKey:@"url"]);
+            NSString *loginPageUrlString = jsonDictionary[@"url"];
+            NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
+            assert(loginPageURL);
+            [self.webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+        }
         
         NSString *pollUrlString = jsonDictionary[@"poll"];
         assert(pollUrlString);
-                
+        
         NSString *pollTimeIntervalString = jsonDictionary[@"poll_rate_ms"];
         assert(pollTimeIntervalString);
         
@@ -342,8 +318,7 @@ UIBarButtonItem *loadingActivityIndicator;
             
         } else {
             
-            NSLog(@"poll request unknown status: %@", statusString);
-            
+            NSLog(@"poll request unknown status: %@", statusString); 
             NSString *message = NSLocalizedString(@"Unknown Error",);
             if ([jsonDictionary objectForKey:@"message"]) {
                 message = [jsonDictionary objectForKey:@"message"];
@@ -351,7 +326,7 @@ UIBarButtonItem *loadingActivityIndicator;
             
         }
     }
-
+    
 }
 
 -  (void)successfulLoginWithUsername:(NSString *)username token:(NSString *)token
@@ -359,7 +334,6 @@ UIBarButtonItem *loadingActivityIndicator;
     [self.delegate pyWebLoginSuccess:[PYClient createAccessWithUsername:username andAccessToken:token]];
     [self close:nil];
 }
-
 
 
 - (void)didReceiveMemoryWarning
