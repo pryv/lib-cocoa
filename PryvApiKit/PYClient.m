@@ -42,10 +42,7 @@ static NSString *myDefaultDomain;
 
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 {
-    PYAccess *access = [[PYAccess alloc] init];
-    access.userID = username;
-    access.accessToken = token;
-    
+    PYAccess *access = [[PYAccess alloc] initWithUsername:username andAccessToken:token];
     return [access autorelease];
 }
 
@@ -59,43 +56,6 @@ static NSString *myDefaultDomain;
  */
 #pragma mark - PrYv API authorize and get server time (GET /)
 
-+ (void)synchronizeTimeWithAccess:(PYAccess *)access
-                   successHandler:(void(^)(NSTimeInterval serverTime))successHandler
-                     errorHandler:(void(^)(NSError *error))errorHandler
-{
-    if (![[self class] isReadyForAccess:access]) {
-//        NSLog(@"fail synchronize: not initialized");
-        
-        if (errorHandler)
-            errorHandler([[self class] createNotReadyErrorForAccess:access]);
-        return;
-    }
-    
-    NSString *path = [NSString stringWithFormat:@"/"];    
-    [self apiRequest:path
-              access:access
-         requestType:PYRequestTypeAsync
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSTimeInterval serverTime = [[[response allHeaderFields] objectForKey:@"Server-Time"] doubleValue];
-                 
-//                 NSLog(@"successfully authorized and synchronized with server time: %f ", serverTime);
-                 //        _serverTimeInterval = [[NSDate date] timeIntervalSince1970] - serverTime;
-                 
-                 if (successHandler)
-                     successHandler(serverTime);
-
-        
-    } failure:^(NSError *error) {        
-        if (errorHandler)
-            errorHandler(error);
-
-        
-    }];    
-}
-
 + (id)nonNil:(id)object
 {
     if (!object) {
@@ -105,31 +65,6 @@ static NSString *myDefaultDomain;
         return object;
 }
 
-+ (NSString *)apiBaseUrl
-{
-    return [NSString stringWithFormat:@"%@://reg%@", kPYAPIScheme, [self defaultDomain]];
-}
-
-+ (NSString *)apiBaseUrlForAccess:(PYAccess *)access
-{
-    return [NSString stringWithFormat:@"%@://%@%@", kPYAPIScheme, access.userID, [self defaultDomain]];
-}
-
-+ (BOOL)isReadyForAccess:(PYAccess *)access
-{
-    // The manager must contain a user, token and a application channel
-    if (access.userID == nil || access.userID.length == 0) {
-        return NO;
-    }
-    if (access.accessToken == nil || access.accessToken.length == 0) {
-        return NO;
-    }
-//    if (self.channelId == nil || self.channelId.length == 0) {
-//        return NO;
-//    }
-    
-    return YES;
-}
 
 + (NSError *)createNotReadyErrorForAccess:(PYAccess *)access
 {
@@ -200,9 +135,23 @@ static NSString *myDefaultDomain;
     return [(NSString *)MIMEType autorelease];
 }
 
++ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params
+{
+    if (path == nil) path = @"";
+    NSMutableString *pathString = [NSMutableString stringWithString:path];
+    if (params) {
+        [pathString appendString:@"?"];
+        for (NSString *key in [params allKeys])
+        {
+            [pathString appendFormat:@"%@=%@&",key,[params valueForKey:key]];
+        }
+        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+    }
+    return [pathString copy];
+}
 
-+ (void) apiRequest:(NSString *)path
-             access:(PYAccess *)access
++ (void) apiRequest:(NSString *)fullURL
+            headers:(NSDictionary *)headers
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
@@ -215,35 +164,29 @@ static NSString *myDefaultDomain;
     
     NSURL *url;
 
-    if (access) {
-        if (![[self class] isReadyForAccess:access])
-        {
-            NSError *notReadyError = [self createNotReadyErrorForAccess:access];
-            [NSException raise:notReadyError.domain format:@"Error code %d",notReadyError.code];
-            return;
-        }
-        
-        [request setValue:access.accessToken forHTTPHeaderField:@"Authorization"];
-
-    }
     
-    if (!path) {
+    // -- headers
+    if (headers != nil) {
+        NSEnumerator *e = [(NSDictionary*)headers keyEnumerator];
+        NSString *k, *v;
+        while ((k = [e nextObject]) != nil)
+        {
+            v = [(NSDictionary*)headers objectForKey: k];
+            [request setValue:v forHTTPHeaderField:k];
+        }
+    }
+
+    if (!fullURL) {
         [NSException raise:@"There is no path string" format:@"Path can't be nil"];
         return;
     }
     
-    if (access) {
-        //If there is path and access
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self class] apiBaseUrlForAccess:access], path]];
-    }else{
-        //If we have path and don't have access we will consider that 'path' as full URL string
-        url = [NSURL URLWithString:path];
-
-    }
+    url = [NSURL URLWithString:fullURL];
+    
     
     [request setURL:url];
     NSLog(@"url path is %@",[url absoluteString]);
-
+    
     NSDictionary *postDataa = postData;
         
     if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )

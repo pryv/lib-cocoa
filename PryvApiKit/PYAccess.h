@@ -9,16 +9,36 @@
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
-
 @interface PYAccess : NSObject
 {
     NSString *_userID;
     NSString *_accessToken;
+    NSString *_apiScheme;
+    NSString *_apiDomain;
+    NSTimeInterval _serverTimeInterval;
+    NSTimeInterval _lastTimeServerContact;
 }
 
 @property (nonatomic, copy) NSString *userID;
 @property (nonatomic, copy) NSString *accessToken;
+@property (nonatomic, copy) NSString *apiScheme;
+@property (nonatomic, copy) NSString *apiDomain;
+@property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
+@property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 
+
+- (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
+
+- (NSString *)apiBaseUrl;
+
+
+- (void) apiRequest:(NSString *)path
+        requestType:(PYRequestType)reqType
+             method:(PYRequestMethod)method
+           postData:(NSDictionary *)postData
+        attachments:(NSArray *)attachments
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler;
 
 /**
  @discussion
@@ -91,5 +111,16 @@
                       errorHandler:(void (^)(NSError *error))errorHandler;
 
 
+
+/**
+ @discussion
+ this method simply connect to the PrYv API to retrive the server time in the returned header
+ This method will be called when you start the manager
+ 
+ GET /
+ 
+ */
+- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
+                     errorHandler:(void(^)(NSError *error))errorHandler;
 
 @end

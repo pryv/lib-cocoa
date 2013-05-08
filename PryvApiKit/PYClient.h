@@ -41,16 +41,15 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 + (void)setDefaultDomain:(NSString*) domain;
 + (void)setDefaultDomainStaging;
 
-+ (NSString *)apiBaseUrl;
-
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
-
-
 
 + (NSString *)fileMIMEType:(NSString*)file;
 
-+ (void) apiRequest:(NSString *)path
-             access:(PYAccess *)access
++ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params;
+
+
++ (void) apiRequest:(NSString *)fullURL
+            headers:(NSDictionary*)headers
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
@@ -58,17 +57,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
-/**
- @discussion
- this method simply connect to the PrYv API to retrive the server time in the returned header
- This method will be called when you start the manager
- 
- GET /
- 
- */
-+ (void)synchronizeTimeWithAccess:(PYAccess *)access
-                   successHandler:(void(^)(NSTimeInterval serverTime))successHandler
-                     errorHandler:(void(^)(NSError *error))errorHandler;
+
 
 
 @end
