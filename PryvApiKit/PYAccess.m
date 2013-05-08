@@ -17,12 +17,23 @@
 @synthesize accessToken = _accessToken;
 @synthesize apiDomain = _apiDomain;
 @synthesize apiScheme = _apiScheme;
+@synthesize serverTimeInterval = _serverTimeInterval;
 
+- (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
+    self = [super init];
+    if (self) {
+        _userID = username;
+        _accessToken = token;
+        _apiDomain = [PYClient defaultDomain];
+        _apiScheme = kPYAPIScheme;
+    }
+    return self;
+}
 
 - (void)dealloc
 {
-    [_userID release];
-    [_accessToken release];
+    _userID = nil;
+    _accessToken = nil;
     [super dealloc];
 }
 
@@ -43,7 +54,27 @@
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
     NSDictionary* headers = @{@"Authorization": self.accessToken};
 
-    [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
+    [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
+                     if (serverTime == nil) {
+                          NSLog(@"Error cannot find Server-Time in headers");
+         
+                         NSError *errorToReturn =
+                         [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:@{@"message":@"Error cannot find Server-Time in headers"}] autorelease];
+                         failureHandler(errorToReturn);
+
+                     } else {
+                         _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
+                         _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
+                         
+                         if (successHandler) {
+                             successHandler(request,response,JSON);
+                         }
+                     }
+                    
+                 }
+                 failure:failureHandler];
 }
 
 #pragma mark - PrYv API Channel get all (GET /channnels)
@@ -147,5 +178,33 @@
                  }];
     
 }
+
+#pragma mark - PrYv API authorize and get server time (GET /)
+
+/**
+ * probably useless as now all requests synchronize
+ */
+- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
+                             errorHandler:(void(^)(NSError *error))errorHandler{
+    
+    [self apiRequest:@"/"
+         requestType:PYRequestTypeAsync
+              method:PYRequestMethodGET
+            postData:nil
+         attachments:nil
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 NSLog(@"successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
+           if (successHandler)
+                     successHandler(_serverTimeInterval);
+     
+             } failure:^(NSError *error) {
+                 if (errorHandler)
+                     errorHandler(error);
+                 
+                 
+             }];
+}
+
+
 
 @end

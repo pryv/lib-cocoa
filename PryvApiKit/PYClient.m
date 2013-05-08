@@ -42,11 +42,7 @@ static NSString *myDefaultDomain;
 
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 {
-    PYAccess *access = [[PYAccess alloc] init];
-    access.userID = username;
-    access.accessToken = token;
-    access.apiDomain = [[self class] defaultDomain];
-    access.apiScheme = kPYAPIScheme;
+    PYAccess *access = [[PYAccess alloc] initWithUsername:username andAccessToken:token];
     return [access autorelease];
 }
 

@@ -193,7 +193,8 @@
 }
 
 - (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
-     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
+    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
+    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }
 
 - (void) pyWebLoginAborded:(NSString*)reason {
