@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PYClient.h"
+#import "PryvClient.h"
 
-@interface PYAccess : NSObject
+@interface PryvAccess : NSObject
 {
     NSString *_userID;
     NSString *_accessToken;

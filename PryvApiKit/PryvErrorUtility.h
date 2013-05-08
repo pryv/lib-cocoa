@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PyErrorUtility : NSObject
+@interface PryvErrorUtility : NSObject
 
 + (NSError *)getErrorFromJSONResponse:(id)JSONerror error:(NSError *)error withResponse: (NSHTTPURLResponse *)response;
 

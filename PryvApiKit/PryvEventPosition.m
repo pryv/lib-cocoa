@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventPosition.h"
+#import "PryvEventPosition.h"
 
-@implementation PYEventPosition
+@implementation PryvEventPosition
 
 @synthesize positionValue = _positionValue;
 

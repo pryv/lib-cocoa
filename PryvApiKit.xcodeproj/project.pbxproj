@@ -8,67 +8,65 @@
 
 /* Begin PBXBuildFile section */
 		3D1F6A07170B6A6400DF893C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1F6A06170B6A6400DF893C /* CoreLocation.framework */; };
-		3D1F6A0A170B7A6200DF893C /* PYEventNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1F6A08170B7A6200DF893C /* PYEventNote.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D1F6A0B170B7A6200DF893C /* PYEventNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A09170B7A6200DF893C /* PYEventNote.m */; };
-		3D1F6A0C170B7A6200DF893C /* PYEventNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A09170B7A6200DF893C /* PYEventNote.m */; };
-		3D1F6A0F170B7D8900DF893C /* PYEventPosition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1F6A0D170B7D8900DF893C /* PYEventPosition.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D1F6A10170B7D8900DF893C /* PYEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */; };
-		3D1F6A11170B7D8900DF893C /* PYEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */; };
+		3D1F6A0A170B7A6200DF893C /* PryvEventNote.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1F6A08170B7A6200DF893C /* PryvEventNote.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D1F6A0B170B7A6200DF893C /* PryvEventNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A09170B7A6200DF893C /* PryvEventNote.m */; };
+		3D1F6A0C170B7A6200DF893C /* PryvEventNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A09170B7A6200DF893C /* PryvEventNote.m */; };
+		3D1F6A0F170B7D8900DF893C /* PryvEventPosition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1F6A0D170B7D8900DF893C /* PryvEventPosition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D1F6A10170B7D8900DF893C /* PryvEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PryvEventPosition.m */; };
+		3D1F6A11170B7D8900DF893C /* PryvEventPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F6A0E170B7D8900DF893C /* PryvEventPosition.m */; };
 		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
 		3D2397B9173308B500A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
 		3D2397BA17330C0100A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
-		3D2397BD1733109A00A72637 /* JSONUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D2397BB1733109900A72637 /* JSONUtility.h */; };
-		3D2397BE1733109A00A72637 /* JSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* JSONUtility.m */; };
-		3D2397BF1733109A00A72637 /* JSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* JSONUtility.m */; };
+		3D2397BD1733109A00A72637 /* PryvJSONUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D2397BB1733109900A72637 /* PryvJSONUtility.h */; };
+		3D2397BE1733109A00A72637 /* PryvJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PryvJSONUtility.m */; };
+		3D2397BF1733109A00A72637 /* PryvJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PryvJSONUtility.m */; };
 		3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412417106EA10050B251 /* PYEvent+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
-		3D67412817106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
-		3D67412E17106EB90050B251 /* PYEventNote+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412C17106EB90050B251 /* PYEventNote+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D67412F17106EB90050B251 /* PYEventNote+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412D17106EB90050B251 /* PYEventNote+JSON.m */; };
-		3D67413017106EB90050B251 /* PYEventNote+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412D17106EB90050B251 /* PYEventNote+JSON.m */; };
-		3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
-		3D6A502D170A02CD00025A20 /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA22ABE16E62A0B00EC30FB /* PYEventType.m */; };
-		3D6A503B170A359500025A20 /* PYEventValueLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6A5039170A359500025A20 /* PYEventValueLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6A503C170A359500025A20 /* PYEventValueLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503A170A359500025A20 /* PYEventValueLocation.m */; };
-		3D6A503D170A359500025A20 /* PYEventValueLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503A170A359500025A20 /* PYEventValueLocation.m */; };
-		3D6A5040170A36F500025A20 /* PYEventValueWebclip.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6A503E170A36F500025A20 /* PYEventValueWebclip.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6A5041170A36F500025A20 /* PYEventValueWebclip.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503F170A36F500025A20 /* PYEventValueWebclip.m */; };
-		3D6A5042170A36F500025A20 /* PYEventValueWebclip.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503F170A36F500025A20 /* PYEventValueWebclip.m */; };
-		3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6BE313171C75EB0023A39C /* PYAsyncService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
-		3D6BE317171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
-		3D6C755F1703812B000B9195 /* PYAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6C755D1703812B000B9195 /* PYAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6C75601703812B000B9195 /* PYAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755E1703812B000B9195 /* PYAccess.m */; };
-		3D6C75611703812B000B9195 /* PYAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755E1703812B000B9195 /* PYAccess.m */; };
-		3D6C7562170398F0000B9195 /* PYAccess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6C755D1703812B000B9195 /* PYAccess.h */; };
-		3D6D3BBC16F8BBDE0072F480 /* PYConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6D3BBA16F8BBDE0072F480 /* PYConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6D3BBD16F8BBDE0072F480 /* PYConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BBB16F8BBDE0072F480 /* PYConstants.m */; };
-		3D6D3BBE16F8BBDE0072F480 /* PYConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BBB16F8BBDE0072F480 /* PYConstants.m */; };
-		3D6D3BC216F8BD5C0072F480 /* PYError.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6D3BC016F8BD5C0072F480 /* PYError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6D3BC316F8BD5C0072F480 /* PYError.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BC116F8BD5C0072F480 /* PYError.m */; };
-		3D6D3BC416F8BD5C0072F480 /* PYError.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BC116F8BD5C0072F480 /* PYError.m */; };
-		3D6FCEB716F7C8C00003D970 /* PYEventClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6FCEB516F7C8C00003D970 /* PYEventClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6FCEB816F7C8C00003D970 /* PYEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEB616F7C8C00003D970 /* PYEventClient.m */; };
-		3D6FCEB916F7C8C00003D970 /* PYEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEB616F7C8C00003D970 /* PYEventClient.m */; };
-		3D6FCEBD16F7CB460003D970 /* PYFolder+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6FCEBB16F7CB460003D970 /* PYFolder+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D6FCEBE16F7CB460003D970 /* PYFolder+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEBC16F7CB460003D970 /* PYFolder+JSON.m */; };
-		3D6FCEBF16F7CB460003D970 /* PYFolder+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEBC16F7CB460003D970 /* PYFolder+JSON.m */; };
-		3D6FCEC616F7D21B0003D970 /* PYEventClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6FCEB516F7C8C00003D970 /* PYEventClient.h */; };
-		3D744799170E1D7100D78015 /* PYEventTwitterValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D744797170E1D7100D78015 /* PYEventTwitterValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D74479A170E1D7100D78015 /* PYEventTwitterValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D744798170E1D7100D78015 /* PYEventTwitterValue.m */; };
-		3D74479B170E1D7100D78015 /* PYEventTwitterValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D744798170E1D7100D78015 /* PYEventTwitterValue.m */; };
+		3D67412617106EA10050B251 /* PryvEvent+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412417106EA10050B251 /* PryvEvent+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D67412717106EA10050B251 /* PryvEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PryvEvent+JSON.m */; };
+		3D67412817106EA10050B251 /* PryvEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PryvEvent+JSON.m */; };
+		3D67412E17106EB90050B251 /* PryvEventNote+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412C17106EB90050B251 /* PryvEventNote+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D67412F17106EB90050B251 /* PryvEventNote+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412D17106EB90050B251 /* PryvEventNote+JSON.m */; };
+		3D67413017106EB90050B251 /* PryvEventNote+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412D17106EB90050B251 /* PryvEventNote+JSON.m */; };
+		3D67FFA0173410B5008D437F /* PryvWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PryvWebLoginViewController.m */; };
+		3D6A502D170A02CD00025A20 /* PryvEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA22ABE16E62A0B00EC30FB /* PryvEventType.m */; };
+		3D6A503B170A359500025A20 /* PryvEventValueLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6A5039170A359500025A20 /* PryvEventValueLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6A503C170A359500025A20 /* PryvEventValueLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503A170A359500025A20 /* PryvEventValueLocation.m */; };
+		3D6A503D170A359500025A20 /* PryvEventValueLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503A170A359500025A20 /* PryvEventValueLocation.m */; };
+		3D6A5040170A36F500025A20 /* PryvEventValueWebclip.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6A503E170A36F500025A20 /* PryvEventValueWebclip.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6A5041170A36F500025A20 /* PryvEventValueWebclip.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503F170A36F500025A20 /* PryvEventValueWebclip.m */; };
+		3D6A5042170A36F500025A20 /* PryvEventValueWebclip.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A503F170A36F500025A20 /* PryvEventValueWebclip.m */; };
+		3D6BE315171C75EB0023A39C /* PryvAsyncService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6BE313171C75EB0023A39C /* PryvAsyncService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6BE316171C75EB0023A39C /* PryvAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PryvAsyncService.m */; };
+		3D6BE317171C75EB0023A39C /* PryvAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PryvAsyncService.m */; };
+		3D6C755F1703812B000B9195 /* PryvAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6C755D1703812B000B9195 /* PryvAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6C75601703812B000B9195 /* PryvAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755E1703812B000B9195 /* PryvAccess.m */; };
+		3D6C75611703812B000B9195 /* PryvAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755E1703812B000B9195 /* PryvAccess.m */; };
+		3D6C7562170398F0000B9195 /* PryvAccess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6C755D1703812B000B9195 /* PryvAccess.h */; };
+		3D6D3BBC16F8BBDE0072F480 /* PryvConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6D3BBA16F8BBDE0072F480 /* PryvConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6D3BBD16F8BBDE0072F480 /* PryvConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BBB16F8BBDE0072F480 /* PryvConstants.m */; };
+		3D6D3BBE16F8BBDE0072F480 /* PryvConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BBB16F8BBDE0072F480 /* PryvConstants.m */; };
+		3D6D3BC216F8BD5C0072F480 /* PryvError.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6D3BC016F8BD5C0072F480 /* PryvError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6D3BC316F8BD5C0072F480 /* PryvError.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BC116F8BD5C0072F480 /* PryvError.m */; };
+		3D6D3BC416F8BD5C0072F480 /* PryvError.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6D3BC116F8BD5C0072F480 /* PryvError.m */; };
+		3D6FCEB716F7C8C00003D970 /* PryvEventClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6FCEB516F7C8C00003D970 /* PryvEventClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6FCEB816F7C8C00003D970 /* PryvEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEB616F7C8C00003D970 /* PryvEventClient.m */; };
+		3D6FCEB916F7C8C00003D970 /* PryvEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEB616F7C8C00003D970 /* PryvEventClient.m */; };
+		3D6FCEBD16F7CB460003D970 /* PryvFolder+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6FCEBB16F7CB460003D970 /* PryvFolder+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D6FCEBE16F7CB460003D970 /* PryvFolder+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEBC16F7CB460003D970 /* PryvFolder+JSON.m */; };
+		3D6FCEBF16F7CB460003D970 /* PryvFolder+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FCEBC16F7CB460003D970 /* PryvFolder+JSON.m */; };
+		3D6FCEC616F7D21B0003D970 /* PryvEventClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6FCEB516F7C8C00003D970 /* PryvEventClient.h */; };
+		3D744799170E1D7100D78015 /* PryvEventTwitterValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D744797170E1D7100D78015 /* PryvEventTwitterValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D74479A170E1D7100D78015 /* PryvEventTwitterValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D744798170E1D7100D78015 /* PryvEventTwitterValue.m */; };
+		3D74479B170E1D7100D78015 /* PryvEventTwitterValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D744798170E1D7100D78015 /* PryvEventTwitterValue.m */; };
 		3D75F4CD173304F200380629 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D75F4C9173304F200380629 /* CHANGELOG.md */; };
 		3D75F4CE173304F200380629 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D75F4CA173304F200380629 /* JSONKit.h */; };
 		3D75F4CF173304F200380629 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D75F4CB173304F200380629 /* JSONKit.m */; };
 		3D75F4D0173304F200380629 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3D75F4CC173304F200380629 /* README.md */; };
-		3D75F4D11733054600380629 /* PYEventType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CA22ABD16E62A0B00EC30FB /* PYEventType.h */; };
-		3D75F4D21733055500380629 /* PYEventNote.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D1F6A08170B7A6200DF893C /* PYEventNote.h */; };
+		3D75F4D11733054600380629 /* PryvEventType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CA22ABD16E62A0B00EC30FB /* PryvEventType.h */; };
+		3D75F4D21733055500380629 /* PryvEventNote.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D1F6A08170B7A6200DF893C /* PryvEventNote.h */; };
 		3D75F4D31733056A00380629 /* CWLSynthesizeSingleton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */; };
-		3D75F4D41733057700380629 /* PYError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6D3BC016F8BD5C0072F480 /* PYError.h */; };
+		3D75F4D41733057700380629 /* PryvError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6D3BC016F8BD5C0072F480 /* PryvError.h */; };
 		3D75F4D51733058900380629 /* AccessClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DD608ED1702545400905533 /* AccessClient.h */; };
-		3DAB591F17174BCD00F2009D /* image003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DAB591E17174BCD00F2009D /* image003.jpg */; };
-		3DAB592017174BCD00F2009D /* image003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DAB591E17174BCD00F2009D /* image003.jpg */; };
 		3DAB59261717616200F2009D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD28EBA17135EA900602603 /* UIKit.framework */; };
 		3DAB592A171761F600F2009D /* libPryvApiKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */; };
 		3DAF21CA172B28E900B62416 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047D16B95B3700CB5FFB /* Cocoa.framework */; };
@@ -78,16 +76,14 @@
 		3DAF21D9172B28E900B62416 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAF21D8172B28E900B62416 /* AppDelegate.m */; };
 		3DAF21DC172B28E900B62416 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAF21DA172B28E900B62416 /* MainMenu.xib */; };
 		3DAF21E2172B298D00B62416 /* PryvApiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */; };
-		3DD28EBD1713611100602603 /* Pryv_ecosystem.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */; };
-		3DD28EBE1713611100602603 /* Pryv_ecosystem.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */; };
 		3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DD608EF1702545400905533 /* AccessClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608ED1702545400905533 /* AccessClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DD608F01702545400905533 /* AccessClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD608EE1702545400905533 /* AccessClient.m */; };
 		3DD608F11702545400905533 /* AccessClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD608EE1702545400905533 /* AccessClient.m */; };
 		4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9FC2C116E50FDF00C157BD /* PryvLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9FC2C216E50FDF00C157BD /* PryvLocation.m */; };
-		4CA22ABF16E62A0B00EC30FB /* PYEventType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA22ABD16E62A0B00EC30FB /* PYEventType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA22AC016E62A0B00EC30FB /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA22ABE16E62A0B00EC30FB /* PYEventType.m */; };
+		4CA22ABF16E62A0B00EC30FB /* PryvEventType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA22ABD16E62A0B00EC30FB /* PryvEventType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA22AC016E62A0B00EC30FB /* PryvEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA22ABE16E62A0B00EC30FB /* PryvEventType.m */; };
 		4E582DD116C25378003B59DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
 		4E582DD916C25378003B59DB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DD716C25378003B59DB /* InfoPlist.strings */; };
 		4E582DDB16C25378003B59DB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E582DDA16C25378003B59DB /* main.m */; };
@@ -98,34 +94,34 @@
 		4E582DE816C25379003B59DB /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DE616C25379003B59DB /* MainStoryboard_iPhone.storyboard */; };
 		4E582DEB16C25379003B59DB /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DE916C25379003B59DB /* MainStoryboard_iPad.storyboard */; };
 		4E582DEE16C25379003B59DB /* PYEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E582DED16C25379003B59DB /* PYEViewController.m */; };
-		8A6D9E7216FB5895008F2B2C /* PYClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8AB2361D16FA895800B28F06 /* PYClient.h */; };
-		8A6D9E7616FB79A1008F2B2C /* PyErrorUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PyErrorUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8A6D9E7716FB79A1008F2B2C /* PyErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PyErrorUtility.m */; };
-		8A6D9E7816FB79A1008F2B2C /* PyErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PyErrorUtility.m */; };
-		8A92AE7616FB8E09005AE251 /* PyErrorUtility.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PyErrorUtility.h */; };
-		8AB2361C16FA6C6900B28F06 /* PYConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6D3BBA16F8BBDE0072F480 /* PYConstants.h */; };
-		8AB2361F16FA895800B28F06 /* PYClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8AB2361D16FA895800B28F06 /* PYClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8AB2362016FA895800B28F06 /* PYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PYClient.m */; };
-		8AB2362116FA895800B28F06 /* PYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PYClient.m */; };
-		FAD9DC741700D25F00A34AB3 /* PYChannel+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = FAD9DC721700D25F00A34AB3 /* PYChannel+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FAD9DC751700D25F00A34AB3 /* PYChannel+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD9DC731700D25F00A34AB3 /* PYChannel+JSON.m */; };
-		FAD9DC761700D25F00A34AB3 /* PYChannel+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD9DC731700D25F00A34AB3 /* PYChannel+JSON.m */; };
-		FB03E25416B982CD00DAD162 /* PYChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24016B982CC00DAD162 /* PYChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB03E25516B982CD00DAD162 /* PYChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24116B982CC00DAD162 /* PYChannel.m */; };
-		FB03E25616B982CD00DAD162 /* PYChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24116B982CC00DAD162 /* PYChannel.m */; };
-		FB03E25A16B982CD00DAD162 /* PYEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24416B982CC00DAD162 /* PYEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB03E25B16B982CD00DAD162 /* PYEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24516B982CC00DAD162 /* PYEvent.m */; };
-		FB03E25C16B982CD00DAD162 /* PYEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24516B982CC00DAD162 /* PYEvent.m */; };
-		FB03E26016B982CD00DAD162 /* PYAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24816B982CC00DAD162 /* PYAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB03E26116B982CD00DAD162 /* PYAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24916B982CC00DAD162 /* PYAttachment.m */; };
-		FB03E26216B982CD00DAD162 /* PYAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24916B982CC00DAD162 /* PYAttachment.m */; };
-		FB03E26316B982CD00DAD162 /* PYFolder.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24A16B982CC00DAD162 /* PYFolder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB03E26416B982CD00DAD162 /* PYFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24B16B982CD00DAD162 /* PYFolder.m */; };
-		FB03E26516B982CD00DAD162 /* PYFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24B16B982CD00DAD162 /* PYFolder.m */; };
-		FB03E28016B98BFC00DAD162 /* PYChannel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24016B982CC00DAD162 /* PYChannel.h */; };
-		FB03E28216B98BFC00DAD162 /* PYEvent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24416B982CC00DAD162 /* PYEvent.h */; };
-		FB03E28416B98BFC00DAD162 /* PYAttachment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24816B982CC00DAD162 /* PYAttachment.h */; };
-		FB03E28516B98BFC00DAD162 /* PYFolder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24A16B982CC00DAD162 /* PYFolder.h */; };
+		8A6D9E7216FB5895008F2B2C /* PryvClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8AB2361D16FA895800B28F06 /* PryvClient.h */; };
+		8A6D9E7616FB79A1008F2B2C /* PryvErrorUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PryvErrorUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A6D9E7716FB79A1008F2B2C /* PryvErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PryvErrorUtility.m */; };
+		8A6D9E7816FB79A1008F2B2C /* PryvErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PryvErrorUtility.m */; };
+		8A92AE7616FB8E09005AE251 /* PryvErrorUtility.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PryvErrorUtility.h */; };
+		8AB2361C16FA6C6900B28F06 /* PryvConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6D3BBA16F8BBDE0072F480 /* PryvConstants.h */; };
+		8AB2361F16FA895800B28F06 /* PryvClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8AB2361D16FA895800B28F06 /* PryvClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8AB2362016FA895800B28F06 /* PryvClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PryvClient.m */; };
+		8AB2362116FA895800B28F06 /* PryvClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PryvClient.m */; };
+		FAD9DC741700D25F00A34AB3 /* PryvChannel+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = FAD9DC721700D25F00A34AB3 /* PryvChannel+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAD9DC751700D25F00A34AB3 /* PryvChannel+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD9DC731700D25F00A34AB3 /* PryvChannel+JSON.m */; };
+		FAD9DC761700D25F00A34AB3 /* PryvChannel+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD9DC731700D25F00A34AB3 /* PryvChannel+JSON.m */; };
+		FB03E25416B982CD00DAD162 /* PryvChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24016B982CC00DAD162 /* PryvChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB03E25516B982CD00DAD162 /* PryvChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24116B982CC00DAD162 /* PryvChannel.m */; };
+		FB03E25616B982CD00DAD162 /* PryvChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24116B982CC00DAD162 /* PryvChannel.m */; };
+		FB03E25A16B982CD00DAD162 /* PryvEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24416B982CC00DAD162 /* PryvEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB03E25B16B982CD00DAD162 /* PryvEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24516B982CC00DAD162 /* PryvEvent.m */; };
+		FB03E25C16B982CD00DAD162 /* PryvEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24516B982CC00DAD162 /* PryvEvent.m */; };
+		FB03E26016B982CD00DAD162 /* PryvAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24816B982CC00DAD162 /* PryvAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB03E26116B982CD00DAD162 /* PryvAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24916B982CC00DAD162 /* PryvAttachment.m */; };
+		FB03E26216B982CD00DAD162 /* PryvAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24916B982CC00DAD162 /* PryvAttachment.m */; };
+		FB03E26316B982CD00DAD162 /* PryvFolder.h in Headers */ = {isa = PBXBuildFile; fileRef = FB03E24A16B982CC00DAD162 /* PryvFolder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB03E26416B982CD00DAD162 /* PryvFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24B16B982CD00DAD162 /* PryvFolder.m */; };
+		FB03E26516B982CD00DAD162 /* PryvFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03E24B16B982CD00DAD162 /* PryvFolder.m */; };
+		FB03E28016B98BFC00DAD162 /* PryvChannel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24016B982CC00DAD162 /* PryvChannel.h */; };
+		FB03E28216B98BFC00DAD162 /* PryvEvent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24416B982CC00DAD162 /* PryvEvent.h */; };
+		FB03E28416B98BFC00DAD162 /* PryvAttachment.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24816B982CC00DAD162 /* PryvAttachment.h */; };
+		FB03E28516B98BFC00DAD162 /* PryvFolder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB03E24A16B982CC00DAD162 /* PryvFolder.h */; };
 		FBC2047E16B95B3700CB5FFB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2047D16B95B3700CB5FFB /* Cocoa.framework */; };
 		FBC2048816B95B3800CB5FFB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FBC2048616B95B3800CB5FFB /* InfoPlist.strings */; };
 		FBC2049816B95F1C00CB5FFB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
@@ -150,20 +146,20 @@
 			dstSubfolderSpec = 16;
 			files = (
 				3D75F4D51733058900380629 /* AccessClient.h in CopyFiles */,
-				3D75F4D41733057700380629 /* PYError.h in CopyFiles */,
+				3D75F4D41733057700380629 /* PryvError.h in CopyFiles */,
 				3D75F4D31733056A00380629 /* CWLSynthesizeSingleton.h in CopyFiles */,
-				3D75F4D21733055500380629 /* PYEventNote.h in CopyFiles */,
-				3D75F4D11733054600380629 /* PYEventType.h in CopyFiles */,
-				3D6C7562170398F0000B9195 /* PYAccess.h in CopyFiles */,
-				8A92AE7616FB8E09005AE251 /* PyErrorUtility.h in CopyFiles */,
-				8A6D9E7216FB5895008F2B2C /* PYClient.h in CopyFiles */,
-				8AB2361C16FA6C6900B28F06 /* PYConstants.h in CopyFiles */,
-				3D6FCEC616F7D21B0003D970 /* PYEventClient.h in CopyFiles */,
+				3D75F4D21733055500380629 /* PryvEventNote.h in CopyFiles */,
+				3D75F4D11733054600380629 /* PryvEventType.h in CopyFiles */,
+				3D6C7562170398F0000B9195 /* PryvAccess.h in CopyFiles */,
+				8A92AE7616FB8E09005AE251 /* PryvErrorUtility.h in CopyFiles */,
+				8A6D9E7216FB5895008F2B2C /* PryvClient.h in CopyFiles */,
+				8AB2361C16FA6C6900B28F06 /* PryvConstants.h in CopyFiles */,
+				3D6FCEC616F7D21B0003D970 /* PryvEventClient.h in CopyFiles */,
 				FBC204AC16B9682200CB5FFB /* PryvApiKit.h in CopyFiles */,
-				FB03E28016B98BFC00DAD162 /* PYChannel.h in CopyFiles */,
-				FB03E28216B98BFC00DAD162 /* PYEvent.h in CopyFiles */,
-				FB03E28416B98BFC00DAD162 /* PYAttachment.h in CopyFiles */,
-				FB03E28516B98BFC00DAD162 /* PYFolder.h in CopyFiles */,
+				FB03E28016B98BFC00DAD162 /* PryvChannel.h in CopyFiles */,
+				FB03E28216B98BFC00DAD162 /* PryvEvent.h in CopyFiles */,
+				FB03E28416B98BFC00DAD162 /* PryvAttachment.h in CopyFiles */,
+				FB03E28516B98BFC00DAD162 /* PryvFolder.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,42 +167,41 @@
 
 /* Begin PBXFileReference section */
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
-		3D1F6A08170B7A6200DF893C /* PYEventNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventNote.h; sourceTree = "<group>"; };
-		3D1F6A09170B7A6200DF893C /* PYEventNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventNote.m; sourceTree = "<group>"; };
-		3D1F6A0D170B7D8900DF893C /* PYEventPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventPosition.h; sourceTree = "<group>"; };
-		3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventPosition.m; sourceTree = "<group>"; };
-		3D2397BB1733109900A72637 /* JSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONUtility.h; sourceTree = "<group>"; };
-		3D2397BC1733109A00A72637 /* JSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONUtility.m; sourceTree = "<group>"; };
+		3D1F6A08170B7A6200DF893C /* PryvEventNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventNote.h; sourceTree = "<group>"; };
+		3D1F6A09170B7A6200DF893C /* PryvEventNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventNote.m; sourceTree = "<group>"; };
+		3D1F6A0D170B7D8900DF893C /* PryvEventPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventPosition.h; sourceTree = "<group>"; };
+		3D1F6A0E170B7D8900DF893C /* PryvEventPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventPosition.m; sourceTree = "<group>"; };
+		3D2397BB1733109900A72637 /* PryvJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvJSONUtility.h; sourceTree = "<group>"; };
+		3D2397BC1733109A00A72637 /* PryvJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvJSONUtility.m; sourceTree = "<group>"; };
 		3D61E1D51729D87000BE1E80 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		3D67412417106EA10050B251 /* PYEvent+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+JSON.h"; sourceTree = "<group>"; };
-		3D67412517106EA10050B251 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
-		3D67412C17106EB90050B251 /* PYEventNote+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEventNote+JSON.h"; sourceTree = "<group>"; };
-		3D67412D17106EB90050B251 /* PYEventNote+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEventNote+JSON.m"; sourceTree = "<group>"; };
-		3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYWebLoginViewController.h; sourceTree = "<group>"; };
-		3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYWebLoginViewController.m; sourceTree = "<group>"; };
-		3D6A5039170A359500025A20 /* PYEventValueLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventValueLocation.h; sourceTree = "<group>"; };
-		3D6A503A170A359500025A20 /* PYEventValueLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventValueLocation.m; sourceTree = "<group>"; };
-		3D6A503E170A36F500025A20 /* PYEventValueWebclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventValueWebclip.h; sourceTree = "<group>"; };
-		3D6A503F170A36F500025A20 /* PYEventValueWebclip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventValueWebclip.m; sourceTree = "<group>"; };
-		3D6BE313171C75EB0023A39C /* PYAsyncService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAsyncService.h; sourceTree = "<group>"; };
-		3D6BE314171C75EB0023A39C /* PYAsyncService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAsyncService.m; sourceTree = "<group>"; };
-		3D6C755D1703812B000B9195 /* PYAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAccess.h; sourceTree = "<group>"; };
-		3D6C755E1703812B000B9195 /* PYAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAccess.m; sourceTree = "<group>"; };
-		3D6D3BBA16F8BBDE0072F480 /* PYConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYConstants.h; sourceTree = "<group>"; };
-		3D6D3BBB16F8BBDE0072F480 /* PYConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYConstants.m; sourceTree = "<group>"; };
-		3D6D3BC016F8BD5C0072F480 /* PYError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYError.h; sourceTree = "<group>"; };
-		3D6D3BC116F8BD5C0072F480 /* PYError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYError.m; sourceTree = "<group>"; };
-		3D6FCEB516F7C8C00003D970 /* PYEventClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventClient.h; sourceTree = "<group>"; };
-		3D6FCEB616F7C8C00003D970 /* PYEventClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventClient.m; sourceTree = "<group>"; };
-		3D6FCEBB16F7CB460003D970 /* PYFolder+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYFolder+JSON.h"; sourceTree = "<group>"; };
-		3D6FCEBC16F7CB460003D970 /* PYFolder+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYFolder+JSON.m"; sourceTree = "<group>"; };
-		3D744797170E1D7100D78015 /* PYEventTwitterValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventTwitterValue.h; sourceTree = "<group>"; };
-		3D744798170E1D7100D78015 /* PYEventTwitterValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventTwitterValue.m; sourceTree = "<group>"; };
+		3D67412417106EA10050B251 /* PryvEvent+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PryvEvent+JSON.h"; sourceTree = "<group>"; };
+		3D67412517106EA10050B251 /* PryvEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PryvEvent+JSON.m"; sourceTree = "<group>"; };
+		3D67412C17106EB90050B251 /* PryvEventNote+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PryvEventNote+JSON.h"; sourceTree = "<group>"; };
+		3D67412D17106EB90050B251 /* PryvEventNote+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PryvEventNote+JSON.m"; sourceTree = "<group>"; };
+		3D67FF9D173410B5008D437F /* PryvWebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvWebLoginViewController.h; sourceTree = "<group>"; };
+		3D67FF9E173410B5008D437F /* PryvWebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvWebLoginViewController.m; sourceTree = "<group>"; };
+		3D6A5039170A359500025A20 /* PryvEventValueLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventValueLocation.h; sourceTree = "<group>"; };
+		3D6A503A170A359500025A20 /* PryvEventValueLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventValueLocation.m; sourceTree = "<group>"; };
+		3D6A503E170A36F500025A20 /* PryvEventValueWebclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventValueWebclip.h; sourceTree = "<group>"; };
+		3D6A503F170A36F500025A20 /* PryvEventValueWebclip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventValueWebclip.m; sourceTree = "<group>"; };
+		3D6BE313171C75EB0023A39C /* PryvAsyncService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvAsyncService.h; sourceTree = "<group>"; };
+		3D6BE314171C75EB0023A39C /* PryvAsyncService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvAsyncService.m; sourceTree = "<group>"; };
+		3D6C755D1703812B000B9195 /* PryvAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvAccess.h; sourceTree = "<group>"; };
+		3D6C755E1703812B000B9195 /* PryvAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvAccess.m; sourceTree = "<group>"; };
+		3D6D3BBA16F8BBDE0072F480 /* PryvConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvConstants.h; sourceTree = "<group>"; };
+		3D6D3BBB16F8BBDE0072F480 /* PryvConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvConstants.m; sourceTree = "<group>"; };
+		3D6D3BC016F8BD5C0072F480 /* PryvError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvError.h; sourceTree = "<group>"; };
+		3D6D3BC116F8BD5C0072F480 /* PryvError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvError.m; sourceTree = "<group>"; };
+		3D6FCEB516F7C8C00003D970 /* PryvEventClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventClient.h; sourceTree = "<group>"; };
+		3D6FCEB616F7C8C00003D970 /* PryvEventClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventClient.m; sourceTree = "<group>"; };
+		3D6FCEBB16F7CB460003D970 /* PryvFolder+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PryvFolder+JSON.h"; sourceTree = "<group>"; };
+		3D6FCEBC16F7CB460003D970 /* PryvFolder+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PryvFolder+JSON.m"; sourceTree = "<group>"; };
+		3D744797170E1D7100D78015 /* PryvEventTwitterValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventTwitterValue.h; sourceTree = "<group>"; };
+		3D744798170E1D7100D78015 /* PryvEventTwitterValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventTwitterValue.m; sourceTree = "<group>"; };
 		3D75F4C9173304F200380629 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3D75F4CA173304F200380629 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		3D75F4CB173304F200380629 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		3D75F4CC173304F200380629 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		3DAB591E17174BCD00F2009D /* image003.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image003.jpg; sourceTree = "<group>"; };
 		3DAB592417175EB900F2009D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		3DAF21C9172B28E900B62416 /* OS X example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OS X example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DAF21CD172B28E900B62416 /* OS X example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OS X example-Info.plist"; sourceTree = "<group>"; };
@@ -218,14 +213,13 @@
 		3DAF21D8172B28E900B62416 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3DAF21DB172B28E900B62416 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3DD28EBA17135EA900602603 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Pryv_ecosystem.pdf; sourceTree = "<group>"; };
 		3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = "<group>"; };
 		3DD608ED1702545400905533 /* AccessClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccessClient.h; sourceTree = "<group>"; };
 		3DD608EE1702545400905533 /* AccessClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccessClient.m; sourceTree = "<group>"; };
 		4C9FC2C116E50FDF00C157BD /* PryvLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PryvLocation.h; path = PryvApiKit/PryvLocation.h; sourceTree = "<group>"; };
 		4C9FC2C216E50FDF00C157BD /* PryvLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PryvLocation.m; path = PryvApiKit/PryvLocation.m; sourceTree = "<group>"; };
-		4CA22ABD16E62A0B00EC30FB /* PYEventType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventType.h; sourceTree = "<group>"; };
-		4CA22ABE16E62A0B00EC30FB /* PYEventType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventType.m; sourceTree = "<group>"; };
+		4CA22ABD16E62A0B00EC30FB /* PryvEventType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEventType.h; sourceTree = "<group>"; };
+		4CA22ABE16E62A0B00EC30FB /* PryvEventType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEventType.m; sourceTree = "<group>"; };
 		4E582DCE16C25378003B59DB /* iOs Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOs Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E582DD616C25378003B59DB /* iOs Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iOs Example-Info.plist"; sourceTree = "<group>"; };
 		4E582DD816C25378003B59DB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -241,20 +235,20 @@
 		4E582DEC16C25379003B59DB /* PYEViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYEViewController.h; sourceTree = "<group>"; };
 		4E582DED16C25379003B59DB /* PYEViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYEViewController.m; sourceTree = "<group>"; };
 		4E582DF516C25379003B59DB /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		8A6D9E7416FB79A1008F2B2C /* PyErrorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PyErrorUtility.h; sourceTree = "<group>"; };
-		8A6D9E7516FB79A1008F2B2C /* PyErrorUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PyErrorUtility.m; sourceTree = "<group>"; };
-		8AB2361D16FA895800B28F06 /* PYClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYClient.h; sourceTree = "<group>"; };
-		8AB2361E16FA895800B28F06 /* PYClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYClient.m; sourceTree = "<group>"; };
-		FAD9DC721700D25F00A34AB3 /* PYChannel+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYChannel+JSON.h"; sourceTree = "<group>"; };
-		FAD9DC731700D25F00A34AB3 /* PYChannel+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYChannel+JSON.m"; sourceTree = "<group>"; };
-		FB03E24016B982CC00DAD162 /* PYChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannel.h; sourceTree = "<group>"; };
-		FB03E24116B982CC00DAD162 /* PYChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannel.m; sourceTree = "<group>"; };
-		FB03E24416B982CC00DAD162 /* PYEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEvent.h; sourceTree = "<group>"; };
-		FB03E24516B982CC00DAD162 /* PYEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEvent.m; sourceTree = "<group>"; };
-		FB03E24816B982CC00DAD162 /* PYAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAttachment.h; sourceTree = "<group>"; };
-		FB03E24916B982CC00DAD162 /* PYAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAttachment.m; sourceTree = "<group>"; };
-		FB03E24A16B982CC00DAD162 /* PYFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFolder.h; sourceTree = "<group>"; };
-		FB03E24B16B982CD00DAD162 /* PYFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFolder.m; sourceTree = "<group>"; };
+		8A6D9E7416FB79A1008F2B2C /* PryvErrorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvErrorUtility.h; sourceTree = "<group>"; };
+		8A6D9E7516FB79A1008F2B2C /* PryvErrorUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvErrorUtility.m; sourceTree = "<group>"; };
+		8AB2361D16FA895800B28F06 /* PryvClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvClient.h; sourceTree = "<group>"; };
+		8AB2361E16FA895800B28F06 /* PryvClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvClient.m; sourceTree = "<group>"; };
+		FAD9DC721700D25F00A34AB3 /* PryvChannel+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PryvChannel+JSON.h"; sourceTree = "<group>"; };
+		FAD9DC731700D25F00A34AB3 /* PryvChannel+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PryvChannel+JSON.m"; sourceTree = "<group>"; };
+		FB03E24016B982CC00DAD162 /* PryvChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvChannel.h; sourceTree = "<group>"; };
+		FB03E24116B982CC00DAD162 /* PryvChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvChannel.m; sourceTree = "<group>"; };
+		FB03E24416B982CC00DAD162 /* PryvEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvEvent.h; sourceTree = "<group>"; };
+		FB03E24516B982CC00DAD162 /* PryvEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvEvent.m; sourceTree = "<group>"; };
+		FB03E24816B982CC00DAD162 /* PryvAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvAttachment.h; sourceTree = "<group>"; };
+		FB03E24916B982CC00DAD162 /* PryvAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvAttachment.m; sourceTree = "<group>"; };
+		FB03E24A16B982CC00DAD162 /* PryvFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvFolder.h; sourceTree = "<group>"; };
+		FB03E24B16B982CD00DAD162 /* PryvFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvFolder.m; sourceTree = "<group>"; };
 		FBC2047A16B95B3700CB5FFB /* PryvApiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PryvApiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBC2047D16B95B3700CB5FFB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FBC2048016B95B3700CB5FFB /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -313,12 +307,12 @@
 		3D1F6A02170B607B00DF893C /* PYEventValueObjects */ = {
 			isa = PBXGroup;
 			children = (
-				3D6A5039170A359500025A20 /* PYEventValueLocation.h */,
-				3D6A503A170A359500025A20 /* PYEventValueLocation.m */,
-				3D6A503E170A36F500025A20 /* PYEventValueWebclip.h */,
-				3D6A503F170A36F500025A20 /* PYEventValueWebclip.m */,
-				3D744797170E1D7100D78015 /* PYEventTwitterValue.h */,
-				3D744798170E1D7100D78015 /* PYEventTwitterValue.m */,
+				3D6A5039170A359500025A20 /* PryvEventValueLocation.h */,
+				3D6A503A170A359500025A20 /* PryvEventValueLocation.m */,
+				3D6A503E170A36F500025A20 /* PryvEventValueWebclip.h */,
+				3D6A503F170A36F500025A20 /* PryvEventValueWebclip.m */,
+				3D744797170E1D7100D78015 /* PryvEventTwitterValue.h */,
+				3D744798170E1D7100D78015 /* PryvEventTwitterValue.m */,
 			);
 			name = PYEventValueObjects;
 			sourceTree = "<group>";
@@ -326,8 +320,8 @@
 		3D67FF9C17340E57008D437F /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */,
-				3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */,
+				3D67FF9D173410B5008D437F /* PryvWebLoginViewController.h */,
+				3D67FF9E173410B5008D437F /* PryvWebLoginViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -335,20 +329,20 @@
 		3D6A502E170A175600025A20 /* PYEvent */ = {
 			isa = PBXGroup;
 			children = (
-				4CA22ABD16E62A0B00EC30FB /* PYEventType.h */,
-				4CA22ABE16E62A0B00EC30FB /* PYEventType.m */,
-				FB03E24816B982CC00DAD162 /* PYAttachment.h */,
-				FB03E24916B982CC00DAD162 /* PYAttachment.m */,
-				FB03E24416B982CC00DAD162 /* PYEvent.h */,
-				FB03E24516B982CC00DAD162 /* PYEvent.m */,
-				3D67412417106EA10050B251 /* PYEvent+JSON.h */,
-				3D67412517106EA10050B251 /* PYEvent+JSON.m */,
-				3D1F6A08170B7A6200DF893C /* PYEventNote.h */,
-				3D1F6A09170B7A6200DF893C /* PYEventNote.m */,
-				3D67412C17106EB90050B251 /* PYEventNote+JSON.h */,
-				3D67412D17106EB90050B251 /* PYEventNote+JSON.m */,
-				3D1F6A0D170B7D8900DF893C /* PYEventPosition.h */,
-				3D1F6A0E170B7D8900DF893C /* PYEventPosition.m */,
+				4CA22ABD16E62A0B00EC30FB /* PryvEventType.h */,
+				4CA22ABE16E62A0B00EC30FB /* PryvEventType.m */,
+				FB03E24816B982CC00DAD162 /* PryvAttachment.h */,
+				FB03E24916B982CC00DAD162 /* PryvAttachment.m */,
+				FB03E24416B982CC00DAD162 /* PryvEvent.h */,
+				FB03E24516B982CC00DAD162 /* PryvEvent.m */,
+				3D67412417106EA10050B251 /* PryvEvent+JSON.h */,
+				3D67412517106EA10050B251 /* PryvEvent+JSON.m */,
+				3D1F6A08170B7A6200DF893C /* PryvEventNote.h */,
+				3D1F6A09170B7A6200DF893C /* PryvEventNote.m */,
+				3D67412C17106EB90050B251 /* PryvEventNote+JSON.h */,
+				3D67412D17106EB90050B251 /* PryvEventNote+JSON.m */,
+				3D1F6A0D170B7D8900DF893C /* PryvEventPosition.h */,
+				3D1F6A0E170B7D8900DF893C /* PryvEventPosition.m */,
 			);
 			name = PYEvent;
 			sourceTree = "<group>";
@@ -356,8 +350,8 @@
 		3D6D3BB916F8BB9D0072F480 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				3D6D3BBA16F8BBDE0072F480 /* PYConstants.h */,
-				3D6D3BBB16F8BBDE0072F480 /* PYConstants.m */,
+				3D6D3BBA16F8BBDE0072F480 /* PryvConstants.h */,
+				3D6D3BBB16F8BBDE0072F480 /* PryvConstants.m */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -365,10 +359,10 @@
 		3D6D3BBF16F8BD3C0072F480 /* Error */ = {
 			isa = PBXGroup;
 			children = (
-				3D6D3BC016F8BD5C0072F480 /* PYError.h */,
-				3D6D3BC116F8BD5C0072F480 /* PYError.m */,
-				8A6D9E7416FB79A1008F2B2C /* PyErrorUtility.h */,
-				8A6D9E7516FB79A1008F2B2C /* PyErrorUtility.m */,
+				3D6D3BC016F8BD5C0072F480 /* PryvError.h */,
+				3D6D3BC116F8BD5C0072F480 /* PryvError.m */,
+				8A6D9E7416FB79A1008F2B2C /* PryvErrorUtility.h */,
+				8A6D9E7516FB79A1008F2B2C /* PryvErrorUtility.m */,
 			);
 			name = Error;
 			sourceTree = "<group>";
@@ -378,16 +372,16 @@
 			children = (
 				3D1F6A02170B607B00DF893C /* PYEventValueObjects */,
 				3D6A502E170A175600025A20 /* PYEvent */,
-				3D6C755D1703812B000B9195 /* PYAccess.h */,
-				3D6C755E1703812B000B9195 /* PYAccess.m */,
-				FB03E24016B982CC00DAD162 /* PYChannel.h */,
-				FB03E24116B982CC00DAD162 /* PYChannel.m */,
-				FAD9DC721700D25F00A34AB3 /* PYChannel+JSON.h */,
-				FAD9DC731700D25F00A34AB3 /* PYChannel+JSON.m */,
-				FB03E24A16B982CC00DAD162 /* PYFolder.h */,
-				FB03E24B16B982CD00DAD162 /* PYFolder.m */,
-				3D6FCEBB16F7CB460003D970 /* PYFolder+JSON.h */,
-				3D6FCEBC16F7CB460003D970 /* PYFolder+JSON.m */,
+				3D6C755D1703812B000B9195 /* PryvAccess.h */,
+				3D6C755E1703812B000B9195 /* PryvAccess.m */,
+				FB03E24016B982CC00DAD162 /* PryvChannel.h */,
+				FB03E24116B982CC00DAD162 /* PryvChannel.m */,
+				FAD9DC721700D25F00A34AB3 /* PryvChannel+JSON.h */,
+				FAD9DC731700D25F00A34AB3 /* PryvChannel+JSON.m */,
+				FB03E24A16B982CC00DAD162 /* PryvFolder.h */,
+				FB03E24B16B982CD00DAD162 /* PryvFolder.m */,
+				3D6FCEBB16F7CB460003D970 /* PryvFolder+JSON.h */,
+				3D6FCEBC16F7CB460003D970 /* PryvFolder+JSON.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -396,16 +390,16 @@
 			isa = PBXGroup;
 			children = (
 				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
-				3D6BE313171C75EB0023A39C /* PYAsyncService.h */,
-				3D6BE314171C75EB0023A39C /* PYAsyncService.m */,
-				8AB2361D16FA895800B28F06 /* PYClient.h */,
-				8AB2361E16FA895800B28F06 /* PYClient.m */,
-				3D6FCEB516F7C8C00003D970 /* PYEventClient.h */,
-				3D6FCEB616F7C8C00003D970 /* PYEventClient.m */,
+				3D6BE313171C75EB0023A39C /* PryvAsyncService.h */,
+				3D6BE314171C75EB0023A39C /* PryvAsyncService.m */,
+				8AB2361D16FA895800B28F06 /* PryvClient.h */,
+				8AB2361E16FA895800B28F06 /* PryvClient.m */,
+				3D6FCEB516F7C8C00003D970 /* PryvEventClient.h */,
+				3D6FCEB616F7C8C00003D970 /* PryvEventClient.m */,
 				3DD608ED1702545400905533 /* AccessClient.h */,
 				3DD608EE1702545400905533 /* AccessClient.m */,
-				3D2397BB1733109900A72637 /* JSONUtility.h */,
-				3D2397BC1733109A00A72637 /* JSONUtility.m */,
+				3D2397BB1733109900A72637 /* PryvJSONUtility.h */,
+				3D2397BC1733109A00A72637 /* PryvJSONUtility.m */,
 			);
 			name = Clients;
 			sourceTree = "<group>";
@@ -527,8 +521,6 @@
 			children = (
 				3D67FF9C17340E57008D437F /* Login */,
 				3D75F4C8173304CF00380629 /* Submodule */,
-				3DAB591E17174BCD00F2009D /* image003.jpg */,
-				3DD28EBC1713611100602603 /* Pryv_ecosystem.pdf */,
 				3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */,
 				3D6D3BBF16F8BD3C0072F480 /* Error */,
 				3D6D3BB916F8BB9D0072F480 /* Constants */,
@@ -558,31 +550,31 @@
 			files = (
 				3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */,
 				3DD608EF1702545400905533 /* AccessClient.h in Headers */,
-				3D6A503B170A359500025A20 /* PYEventValueLocation.h in Headers */,
-				3D6A5040170A36F500025A20 /* PYEventValueWebclip.h in Headers */,
-				3D1F6A0A170B7A6200DF893C /* PYEventNote.h in Headers */,
-				3D1F6A0F170B7D8900DF893C /* PYEventPosition.h in Headers */,
-				3D744799170E1D7100D78015 /* PYEventTwitterValue.h in Headers */,
-				3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */,
-				3D67412E17106EB90050B251 /* PYEventNote+JSON.h in Headers */,
-				3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */,
-				FAD9DC741700D25F00A34AB3 /* PYChannel+JSON.h in Headers */,
-				3D6C755F1703812B000B9195 /* PYAccess.h in Headers */,
-				8A6D9E7616FB79A1008F2B2C /* PyErrorUtility.h in Headers */,
-				8AB2361F16FA895800B28F06 /* PYClient.h in Headers */,
-				3D6D3BC216F8BD5C0072F480 /* PYError.h in Headers */,
-				3D6FCEBD16F7CB460003D970 /* PYFolder+JSON.h in Headers */,
-				4CA22ABF16E62A0B00EC30FB /* PYEventType.h in Headers */,
+				3D6A503B170A359500025A20 /* PryvEventValueLocation.h in Headers */,
+				3D6A5040170A36F500025A20 /* PryvEventValueWebclip.h in Headers */,
+				3D1F6A0A170B7A6200DF893C /* PryvEventNote.h in Headers */,
+				3D1F6A0F170B7D8900DF893C /* PryvEventPosition.h in Headers */,
+				3D744799170E1D7100D78015 /* PryvEventTwitterValue.h in Headers */,
+				3D67412617106EA10050B251 /* PryvEvent+JSON.h in Headers */,
+				3D67412E17106EB90050B251 /* PryvEventNote+JSON.h in Headers */,
+				3D6BE315171C75EB0023A39C /* PryvAsyncService.h in Headers */,
+				FAD9DC741700D25F00A34AB3 /* PryvChannel+JSON.h in Headers */,
+				3D6C755F1703812B000B9195 /* PryvAccess.h in Headers */,
+				8A6D9E7616FB79A1008F2B2C /* PryvErrorUtility.h in Headers */,
+				8AB2361F16FA895800B28F06 /* PryvClient.h in Headers */,
+				3D6D3BC216F8BD5C0072F480 /* PryvError.h in Headers */,
+				3D6FCEBD16F7CB460003D970 /* PryvFolder+JSON.h in Headers */,
+				4CA22ABF16E62A0B00EC30FB /* PryvEventType.h in Headers */,
 				4C9FC2C316E50FDF00C157BD /* PryvLocation.h in Headers */,
-				FB03E25416B982CD00DAD162 /* PYChannel.h in Headers */,
-				FB03E25A16B982CD00DAD162 /* PYEvent.h in Headers */,
-				FB03E26016B982CD00DAD162 /* PYAttachment.h in Headers */,
-				FB03E26316B982CD00DAD162 /* PYFolder.h in Headers */,
-				3D6FCEB716F7C8C00003D970 /* PYEventClient.h in Headers */,
-				3D6D3BBC16F8BBDE0072F480 /* PYConstants.h in Headers */,
+				FB03E25416B982CD00DAD162 /* PryvChannel.h in Headers */,
+				FB03E25A16B982CD00DAD162 /* PryvEvent.h in Headers */,
+				FB03E26016B982CD00DAD162 /* PryvAttachment.h in Headers */,
+				FB03E26316B982CD00DAD162 /* PryvFolder.h in Headers */,
+				3D6FCEB716F7C8C00003D970 /* PryvEventClient.h in Headers */,
+				3D6D3BBC16F8BBDE0072F480 /* PryvConstants.h in Headers */,
 				3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */,
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
-				3D2397BD1733109A00A72637 /* JSONUtility.h in Headers */,
+				3D2397BD1733109A00A72637 /* PryvJSONUtility.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,8 +701,6 @@
 				4E582DE516C25379003B59DB /* Default-568h@2x.png in Resources */,
 				4E582DE816C25379003B59DB /* MainStoryboard_iPhone.storyboard in Resources */,
 				4E582DEB16C25379003B59DB /* MainStoryboard_iPad.storyboard in Resources */,
-				3DD28EBE1713611100602603 /* Pryv_ecosystem.pdf in Resources */,
-				3DAB592017174BCD00F2009D /* image003.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -719,8 +709,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBC2048816B95B3800CB5FFB /* InfoPlist.strings in Resources */,
-				3DD28EBD1713611100602603 /* Pryv_ecosystem.pdf in Resources */,
-				3DAB591F17174BCD00F2009D /* image003.jpg in Resources */,
 				3D75F4CD173304F200380629 /* CHANGELOG.md in Resources */,
 				3D75F4D0173304F200380629 /* README.md in Resources */,
 			);
@@ -752,31 +740,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB03E25516B982CD00DAD162 /* PYChannel.m in Sources */,
-				FB03E25B16B982CD00DAD162 /* PYEvent.m in Sources */,
-				FB03E26116B982CD00DAD162 /* PYAttachment.m in Sources */,
-				FB03E26416B982CD00DAD162 /* PYFolder.m in Sources */,
+				FB03E25516B982CD00DAD162 /* PryvChannel.m in Sources */,
+				FB03E25B16B982CD00DAD162 /* PryvEvent.m in Sources */,
+				FB03E26116B982CD00DAD162 /* PryvAttachment.m in Sources */,
+				FB03E26416B982CD00DAD162 /* PryvFolder.m in Sources */,
 				4C9FC2C416E50FDF00C157BD /* PryvLocation.m in Sources */,
-				4CA22AC016E62A0B00EC30FB /* PYEventType.m in Sources */,
-				3D6FCEB816F7C8C00003D970 /* PYEventClient.m in Sources */,
-				3D6FCEBE16F7CB460003D970 /* PYFolder+JSON.m in Sources */,
-				3D6D3BBD16F8BBDE0072F480 /* PYConstants.m in Sources */,
-				3D6D3BC316F8BD5C0072F480 /* PYError.m in Sources */,
-				8AB2362016FA895800B28F06 /* PYClient.m in Sources */,
-				8A6D9E7716FB79A1008F2B2C /* PyErrorUtility.m in Sources */,
-				FAD9DC751700D25F00A34AB3 /* PYChannel+JSON.m in Sources */,
+				4CA22AC016E62A0B00EC30FB /* PryvEventType.m in Sources */,
+				3D6FCEB816F7C8C00003D970 /* PryvEventClient.m in Sources */,
+				3D6FCEBE16F7CB460003D970 /* PryvFolder+JSON.m in Sources */,
+				3D6D3BBD16F8BBDE0072F480 /* PryvConstants.m in Sources */,
+				3D6D3BC316F8BD5C0072F480 /* PryvError.m in Sources */,
+				8AB2362016FA895800B28F06 /* PryvClient.m in Sources */,
+				8A6D9E7716FB79A1008F2B2C /* PryvErrorUtility.m in Sources */,
+				FAD9DC751700D25F00A34AB3 /* PryvChannel+JSON.m in Sources */,
 				3DD608F01702545400905533 /* AccessClient.m in Sources */,
-				3D6C75601703812B000B9195 /* PYAccess.m in Sources */,
-				3D6A503C170A359500025A20 /* PYEventValueLocation.m in Sources */,
-				3D6A5041170A36F500025A20 /* PYEventValueWebclip.m in Sources */,
-				3D1F6A0B170B7A6200DF893C /* PYEventNote.m in Sources */,
-				3D1F6A10170B7D8900DF893C /* PYEventPosition.m in Sources */,
-				3D74479A170E1D7100D78015 /* PYEventTwitterValue.m in Sources */,
-				3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */,
-				3D67412F17106EB90050B251 /* PYEventNote+JSON.m in Sources */,
-				3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */,
+				3D6C75601703812B000B9195 /* PryvAccess.m in Sources */,
+				3D6A503C170A359500025A20 /* PryvEventValueLocation.m in Sources */,
+				3D6A5041170A36F500025A20 /* PryvEventValueWebclip.m in Sources */,
+				3D1F6A0B170B7A6200DF893C /* PryvEventNote.m in Sources */,
+				3D1F6A10170B7D8900DF893C /* PryvEventPosition.m in Sources */,
+				3D74479A170E1D7100D78015 /* PryvEventTwitterValue.m in Sources */,
+				3D67412717106EA10050B251 /* PryvEvent+JSON.m in Sources */,
+				3D67412F17106EB90050B251 /* PryvEventNote+JSON.m in Sources */,
+				3D6BE316171C75EB0023A39C /* PryvAsyncService.m in Sources */,
 				3D75F4CF173304F200380629 /* JSONKit.m in Sources */,
-				3D2397BE1733109A00A72637 /* JSONUtility.m in Sources */,
+				3D2397BE1733109A00A72637 /* PryvJSONUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,30 +772,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB03E25616B982CD00DAD162 /* PYChannel.m in Sources */,
-				FB03E25C16B982CD00DAD162 /* PYEvent.m in Sources */,
-				FB03E26216B982CD00DAD162 /* PYAttachment.m in Sources */,
-				FB03E26516B982CD00DAD162 /* PYFolder.m in Sources */,
-				3D6FCEB916F7C8C00003D970 /* PYEventClient.m in Sources */,
-				3D6FCEBF16F7CB460003D970 /* PYFolder+JSON.m in Sources */,
-				3D6D3BBE16F8BBDE0072F480 /* PYConstants.m in Sources */,
-				3D6D3BC416F8BD5C0072F480 /* PYError.m in Sources */,
-				8AB2362116FA895800B28F06 /* PYClient.m in Sources */,
-				8A6D9E7816FB79A1008F2B2C /* PyErrorUtility.m in Sources */,
-				FAD9DC761700D25F00A34AB3 /* PYChannel+JSON.m in Sources */,
+				FB03E25616B982CD00DAD162 /* PryvChannel.m in Sources */,
+				FB03E25C16B982CD00DAD162 /* PryvEvent.m in Sources */,
+				FB03E26216B982CD00DAD162 /* PryvAttachment.m in Sources */,
+				FB03E26516B982CD00DAD162 /* PryvFolder.m in Sources */,
+				3D6FCEB916F7C8C00003D970 /* PryvEventClient.m in Sources */,
+				3D6FCEBF16F7CB460003D970 /* PryvFolder+JSON.m in Sources */,
+				3D6D3BBE16F8BBDE0072F480 /* PryvConstants.m in Sources */,
+				3D6D3BC416F8BD5C0072F480 /* PryvError.m in Sources */,
+				8AB2362116FA895800B28F06 /* PryvClient.m in Sources */,
+				8A6D9E7816FB79A1008F2B2C /* PryvErrorUtility.m in Sources */,
+				FAD9DC761700D25F00A34AB3 /* PryvChannel+JSON.m in Sources */,
 				3DD608F11702545400905533 /* AccessClient.m in Sources */,
-				3D6C75611703812B000B9195 /* PYAccess.m in Sources */,
-				3D6A502D170A02CD00025A20 /* PYEventType.m in Sources */,
-				3D6A503D170A359500025A20 /* PYEventValueLocation.m in Sources */,
-				3D6A5042170A36F500025A20 /* PYEventValueWebclip.m in Sources */,
-				3D1F6A0C170B7A6200DF893C /* PYEventNote.m in Sources */,
-				3D1F6A11170B7D8900DF893C /* PYEventPosition.m in Sources */,
-				3D74479B170E1D7100D78015 /* PYEventTwitterValue.m in Sources */,
-				3D67412817106EA10050B251 /* PYEvent+JSON.m in Sources */,
-				3D67413017106EB90050B251 /* PYEventNote+JSON.m in Sources */,
-				3D6BE317171C75EB0023A39C /* PYAsyncService.m in Sources */,
-				3D2397BF1733109A00A72637 /* JSONUtility.m in Sources */,
-				3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */,
+				3D6C75611703812B000B9195 /* PryvAccess.m in Sources */,
+				3D6A502D170A02CD00025A20 /* PryvEventType.m in Sources */,
+				3D6A503D170A359500025A20 /* PryvEventValueLocation.m in Sources */,
+				3D6A5042170A36F500025A20 /* PryvEventValueWebclip.m in Sources */,
+				3D1F6A0C170B7A6200DF893C /* PryvEventNote.m in Sources */,
+				3D1F6A11170B7D8900DF893C /* PryvEventPosition.m in Sources */,
+				3D74479B170E1D7100D78015 /* PryvEventTwitterValue.m in Sources */,
+				3D67412817106EA10050B251 /* PryvEvent+JSON.m in Sources */,
+				3D67413017106EB90050B251 /* PryvEventNote+JSON.m in Sources */,
+				3D6BE317171C75EB0023A39C /* PryvAsyncService.m in Sources */,
+				3D2397BF1733109A00A72637 /* PryvJSONUtility.m in Sources */,
+				3D67FFA0173410B5008D437F /* PryvWebLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

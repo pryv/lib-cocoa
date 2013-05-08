@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventValueLocation.h"
+#import "PryvEventValueLocation.h"
 
-@implementation PYEventValueLocation
+@implementation PryvEventValueLocation
 
 @synthesize latitude = _latitude;
 @synthesize longitude = _longitude;
@@ -18,9 +18,9 @@
 @synthesize speed = _speed;
 @synthesize bearing = _bearing;
 
-+ (PYEventValueLocation *)locatinFromDictionary:(NSDictionary *)JSON
++ (PryvEventValueLocation *)locatinFromDictionary:(NSDictionary *)JSON
 {
-    PYEventValueLocation *location = [[PYEventValueLocation alloc] init];
+    PryvEventValueLocation *location = [[PryvEventValueLocation alloc] init];
     location.latitude = [[JSON objectForKey:@"latitude"] floatValue];
     location.longitude = [[JSON objectForKey:@"longitude"] floatValue];
     location.altitude = [[JSON objectForKey:@"altitude"] floatValue];

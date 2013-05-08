@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventNote.h"
+#import "PryvEventNote.h"
 
-@interface PYEventNote (JSON)
+@interface PryvEventNote (JSON)
 
 + (id)noteEventFromDictionary:(NSDictionary *)JSON;
 

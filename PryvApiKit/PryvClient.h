@@ -21,7 +21,7 @@ typedef enum {
 typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON);
 typedef void(^PYClientFailureBlock)(NSError *error);
 
-@class PYAccess;
+@class PryvAccess;
 
 //#if TARGET_OS_MAC
 //#import <CoreServices/CoreServices.h>
@@ -30,7 +30,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
-@interface PYClient : NSObject 
+@interface PryvClient : NSObject 
 
 //@property (nonatomic, copy) NSString *username;
 //@property (nonatomic, copy) NSString *accessToken;
@@ -41,9 +41,11 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 + (void)setDefaultDomain:(NSString*) domain;
 + (void)setDefaultDomainStaging;
 
-+ (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
++ (PryvAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 + (NSString *)fileMIMEType:(NSString*)file;
+
++ (BOOL)isUnacceptableStatusCode:(NSUInteger)statusCode;
 
 + (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params;
 

@@ -20,7 +20,7 @@ FOUNDATION_EXPORT NSString *const PryvErrorJSONResponseId;
 FOUNDATION_EXPORT NSString *const PryvErrorHTTPStatusCodeKey;
 
 
-typedef enum PYErrorCode {
+typedef enum PryvErrorCode {
 
     PYErrorUserNotSet = 0,
     
@@ -30,5 +30,5 @@ typedef enum PYErrorCode {
     
     PYErrorUnknown,
     
-} PYErrorCode;
+} PryvErrorCode;
 

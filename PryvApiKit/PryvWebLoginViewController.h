@@ -7,25 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PYAccess.h"
+#import "PryvAccess.h"
 
-@class PYWebLoginViewController;
+@class PryvWebLoginViewController;
 
 @protocol PYWebLoginDelegate
 - (UIViewController*) pyWebLoginGetController;
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess;
+- (void) pyWebLoginSuccess:(PryvAccess*)pyAccess;
 - (void) pyWebLoginAborded:(NSString*)reason;
 @end
 
 
-@interface PYWebLoginViewController : UIViewController {
+@interface PryvWebLoginViewController : UIViewController {
     
 }
 
 
 @property (nonatomic, assign) id  delegate;
 
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate;
++ (PryvWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate;
 
 @end
 

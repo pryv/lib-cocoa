@@ -6,8 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYError.h"
-
+#import "PryvError.h"
 
 NSString *const PryvSDKDomain = @"com.pryv.sdk";
 NSString *const PryvErrorJSONResponseId = @"com.pryv.sdk:JSONResponseId";

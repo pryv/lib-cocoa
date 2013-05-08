@@ -7,14 +7,14 @@
 //
 
 
-#import "PYEventType.h"
+#import "PryvEventType.h"
 
-@interface PYEventType ()
+@interface PryvEventType ()
 
 @end
 
 
-@implementation PYEventType
+@implementation PryvEventType
 
 @synthesize eventClass = _eventClass;
 @synthesize eventFormat = _eventFormat;
@@ -106,9 +106,9 @@
 
 #pragma mark - get objects from JSON response
 
-+ (PYEventType *)eventTypeFromDictionary:(NSDictionary *)JSON
++ (PryvEventType *)eventTypeFromDictionary:(NSDictionary *)JSON
 {
-    PYEventType *pet = [[PYEventType alloc] init];
+    PryvEventType *pet = [[PryvEventType alloc] init];
     pet.eventClassName = [JSON objectForKey:@"class"];
     pet.eventFormatName = [JSON objectForKey:@"format"];
     

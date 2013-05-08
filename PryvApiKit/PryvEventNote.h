@@ -7,21 +7,21 @@
 //
 
 
-@class PYEventValueWebclip;
+@class PryvEventValueWebclip;
 #import <PryvApiKit/PryvApiKit.h>
 
-@interface PYEventNote : PYEvent
+@interface PryvEventNote : PryvEvent
 {
     NSString *_htmlValue;
     NSString *_txtValue;
-    PYEventValueWebclip *_webclipValue;
+    PryvEventValueWebclip *_webclipValue;
 }
 
 @property (nonatomic, retain) NSString *htmlValue;
 @property (nonatomic, retain) NSString *txtValue;
-@property (nonatomic, retain) PYEventValueWebclip *webclipValue;
+@property (nonatomic, retain) PryvEventValueWebclip *webclipValue;
 
-- (id)initWithType:(PYEventType *)eventType
+- (id)initWithType:(PryvEventType *)eventType
          noteValue:(id)noteValue
           folderId:(NSString *)folderId
               tags:(NSArray *)tags

@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "JSONUtility.h"
+#import "PryvJSONUtility.h"
 #import "JSONKit.h"
 
-@implementation JSONUtility
+@implementation PryvJSONUtility
 
 
 + (NSData *)getDataFromJSONObject:(id)JSON

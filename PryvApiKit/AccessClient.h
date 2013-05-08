@@ -31,9 +31,9 @@
 
 
 #import <Foundation/Foundation.h>
-#import "PYClient.h"
+#import "PryvClient.h"
 
-@interface AccessClient : PYClient
+@interface AccessClient : PryvClient
 
 + (instancetype)accessClient;
 

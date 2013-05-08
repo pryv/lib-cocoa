@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PYEventClient : NSObject
+@interface PryvEventClient : NSObject
 
 
 // ---------------------------------------------------------------------------------------------------------------------

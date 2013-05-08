@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYFolder : NSObject
+@interface PryvFolder : NSObject
 {
     NSString *_folderId;
     NSString *_channelId;

@@ -6,16 +6,16 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventValueWebclip.h"
+#import "PryvEventValueWebclip.h"
 
-@implementation PYEventValueWebclip
+@implementation PryvEventValueWebclip
 
 @synthesize url = _url;
 @synthesize content = _content;
 
-+ (PYEventValueWebclip *)webclipFromDictionary:(NSDictionary *)JSON
++ (PryvEventValueWebclip *)webclipFromDictionary:(NSDictionary *)JSON
 {
-    PYEventValueWebclip *webclipValue = [[PYEventValueWebclip alloc] init];
+    PryvEventValueWebclip *webclipValue = [[PryvEventValueWebclip alloc] init];
     webclipValue.url = [JSON objectForKey:@"url"];
     webclipValue.content = [JSON objectForKey:@"content"];
     return webclipValue;

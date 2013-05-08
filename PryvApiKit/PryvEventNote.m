@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventNote.h"
-#import "PYEventType.h"
-#import "PYEventValueWebclip.h"
+#import "PryvEventNote.h"
+#import "PryvEventType.h"
+#import "PryvEventValueWebclip.h"
 
-@implementation PYEventNote
+@implementation PryvEventNote
 
 @synthesize htmlValue = _htmlValue;
 @synthesize txtValue = _txtValue;
@@ -24,7 +24,7 @@
     [super dealloc];
 }
 
-- (id)initWithType:(PYEventType *)eventType
+- (id)initWithType:(PryvEventType *)eventType
          noteValue:(id)noteValue
           folderId:(NSString *)folderId
               tags:(NSArray *)tags

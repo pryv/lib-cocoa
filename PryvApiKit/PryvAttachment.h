@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYAttachment : NSObject
+@interface PryvAttachment : NSObject
 {
     NSData *_fileData;
     NSString *_name;
@@ -28,6 +28,6 @@
                  name:(NSString *)name
              fileName:(NSString *)fileName;
 
-+ (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON;
++ (PryvAttachment *)attachmentFromDictionary:(NSDictionary *)JSON;
 
 @end

@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYAccess.h"
-#import "PYClient.h"
-#import "PYConstants.h"
-#import "PYChannel+JSON.h"
+#import "PryvAccess.h"
+#import "PryvClient.h"
+#import "PryvConstants.h"
+#import "PryvChannel+JSON.h"
 
-@implementation PYAccess
+@implementation PryvAccess
 
 @synthesize userID = _userID;
 @synthesize accessToken = _accessToken;
@@ -24,7 +24,7 @@
     if (self) {
         _userID = username;
         _accessToken = token;
-        _apiDomain = [PYClient defaultDomain];
+        _apiDomain = [PryvClient defaultDomain];
         _apiScheme = kPYAPIScheme;
     }
     return self;
@@ -54,7 +54,7 @@
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
     NSDictionary* headers = @{@"Authorization": self.accessToken};
 
-    [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
+    [PryvClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      if (serverTime == nil) {
@@ -86,7 +86,7 @@
 {
    
 
-    [self apiRequest:[PYClient urlPath:kROUTE_CHANNELS withParams:filter]
+    [self apiRequest:[PryvClient urlPath:kROUTE_CHANNELS withParams:filter]
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil
@@ -94,7 +94,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSMutableArray *channelList = [[NSMutableArray alloc] init];
                  for(NSDictionary *channelDictionary in JSON){
-                     PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
+                     PryvChannel *channelObject = [PryvChannel channelFromJson:channelDictionary];
                      channelObject.access = self;
                      [channelList addObject:channelObject];
                  }

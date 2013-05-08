@@ -8,8 +8,8 @@
 
 #import <PryvApiKit/PryvApiKit.h>
 
-@interface PYChannel (JSON)
+@interface PryvChannel (JSON)
 
-+ (PYChannel *) channelFromJson:(id)json;
++ (PryvChannel *) channelFromJson:(id)json;
 
 @end

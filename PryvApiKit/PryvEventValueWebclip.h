@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PYEventValueWebclip : NSObject
+@interface PryvEventValueWebclip : NSObject
 {
     NSString *_url;
     NSString *_content;
@@ -17,7 +17,7 @@
 @property (nonatomic, retain) NSString *url;
 @property (nonatomic, retain) NSString *content;
 
-+ (PYEventValueWebclip *)webclipFromDictionary:(NSDictionary *)JSON;
++ (PryvEventValueWebclip *)webclipFromDictionary:(NSDictionary *)JSON;
 - (id)initWithUrl:(NSString *)url content:(NSString *)content;
 
 @end

@@ -7,11 +7,11 @@
 //
 
 
-#import "PYClient.h"
-#import "PYConstants.h"
-#import "PYWebLoginViewController.h"
+#import "PryvClient.h"
+#import "PryvConstants.h"
+#import "PryvWebLoginViewController.h"
 
-@interface PYWebLoginViewController () <UIWebViewDelegate>
+@interface PryvWebLoginViewController () <UIWebViewDelegate>
 
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, retain) NSString *appID;
@@ -21,7 +21,7 @@
 @end
 
 
-@implementation PYWebLoginViewController
+@implementation PryvWebLoginViewController
 
 UIBarButtonItem *loadingActivityIndicator;
 UIWebView *webView;
@@ -35,8 +35,8 @@ NSString *username;
 NSString *token;
 
 
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
-    PYWebLoginViewController *login = [PYWebLoginViewController alloc];
++ (PryvWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
+    PryvWebLoginViewController *login = [PryvWebLoginViewController alloc];
     login.permissions = permissions;
     login.appID = appID;
     login.delegate = delegate;
@@ -46,7 +46,7 @@ NSString *token;
 }
 
 
-- (PYWebLoginViewController* )openOn
+- (PryvWebLoginViewController* )openOn
 {
     [self init];
     
@@ -200,9 +200,9 @@ BOOL requestedLoginView = false;
                                };
     
     
-    NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
+    NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PryvClient defaultDomain]];
     
-    [PYClient apiRequest:fullPathString
+    [PryvClient apiRequest:fullPathString
                  headers:nil
              requestType:PYRequestTypeAsync
                   method:PYRequestMethodPOST
@@ -240,7 +240,7 @@ BOOL requestedLoginView = false;
     self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
                                                       target:[NSBlockOperation blockOperationWithBlock:
                                                               ^{
-                                                                  [PYClient apiRequest:pollURLString
+                                                                  [PryvClient apiRequest:pollURLString
                                                                                 headers:nil
                                                                            requestType:PYRequestTypeAsync
                                                                                 method:PYRequestMethodGET
@@ -337,7 +337,7 @@ BOOL requestedLoginView = false;
 
 -  (void)successfulLoginWithUsername:(NSString *)username token:(NSString *)token
 {
-    [self.delegate pyWebLoginSuccess:[PYClient createAccessWithUsername:username andAccessToken:token]];
+    [self.delegate pyWebLoginSuccess:[PryvClient createAccessWithUsername:username andAccessToken:token]];
     [self close:nil];
 }
 

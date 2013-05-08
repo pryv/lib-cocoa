@@ -8,7 +8,7 @@
 
 #import "PYEViewController.h"
 #import "PryvApiKit.h"
-#import "PYWebLoginViewController.h"
+#import "PryvWebLoginViewController.h"
 
 @interface PYEViewController () <PYWebLoginDelegate>
 
@@ -24,12 +24,12 @@
 {
     [super viewDidLoad];
     
-    [PYClient setDefaultDomainStaging];
+    [PryvClient setDefaultDomainStaging];
         
-    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
+    PryvAccess *access = [PryvClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
         
-        for (PYChannel *channel in channelList) {
+        for (PryvChannel *channel in channelList) {
             
             
             if ([channel.channelId isEqualToString:@"position"]) {
@@ -41,9 +41,9 @@
                     NSLog(@"get all events error is %@",error);
                 }];
                 
-                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
+                PryvEventType *eventType = [[PryvEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
                 NSString *noteTextValue = @"newww432";
-                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
+                PryvEventNote *noteEvent = [[PryvEventNote alloc] initWithType:eventType
                                                                  noteValue:noteTextValue
                                                                   folderId:nil
                                                                       tags:nil
@@ -53,7 +53,7 @@
                 NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
                 NSData *imageData = [NSData dataWithContentsOfFile:filePath];
 
-                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
+                PryvAttachment *att = [[PryvAttachment alloc] initWithFileData:imageData
                                                                       name:imgName
                                                                   fileName:@"image003.jpg"];
                 [noteEvent addAttachment:att];
@@ -63,7 +63,7 @@
                 NSString *pdfPath = [[NSBundle mainBundle] pathForResource:pdfName ofType:@"pdf"];
                 NSData *pdfData = [NSData dataWithContentsOfFile:pdfPath];
 
-                PYAttachment *att1 = [[PYAttachment alloc] initWithFileData:pdfData
+                PryvAttachment *att1 = [[PryvAttachment alloc] initWithFileData:pdfData
                                                                       name:pdfName
                                                                   fileName:@"Pryv_ecosystem.pdf"];
                 [noteEvent addAttachment:att1];
@@ -179,8 +179,8 @@
     
     NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
     
-    [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"
+    [PryvClient setDefaultDomainStaging];
+    [PryvWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"
                                      andPermissions:permissions
                                            delegate:self];
 
@@ -192,7 +192,7 @@
     return self;
 }
 
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+- (void) pyWebLoginSuccess:(PryvAccess*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }

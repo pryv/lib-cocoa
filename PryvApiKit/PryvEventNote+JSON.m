@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventNote+JSON.h"
-#import "PYEvent+JSON.h"
-#import "PYEventType.h"
+#import "PryvEventNote+JSON.h"
+#import "PryvEvent+JSON.h"
+#import "PryvEventType.h"
 
-@implementation PYEventNote (JSON)
+@implementation PryvEventNote (JSON)
 
 + (id)noteEventFromDictionary:(NSDictionary *)JSON
 {
-    PYEventNote *event = (PYEventNote *)[self eventFromDictionary:JSON];
+    PryvEventNote *event = (PryvEventNote *)[self eventFromDictionary:JSON];
     
     id noteValue = [JSON objectForKey:@"value"];
     

@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-#import "PYEvent.h"
-#import "PYEvent+JSON.h"
-#import "PYEventType.h"
-#import "PYAttachment.h"
-#import "PYEventValueLocation.h"
-#import "PYEventValueWebclip.h"
-#import "PYEventNote.h"
-#import "PYEventNote+JSON.h"
-#import "PYEventPosition.h"
+#import "PryvEvent.h"
+#import "PryvEvent+JSON.h"
+#import "PryvEventType.h"
+#import "PryvAttachment.h"
+#import "PryvEventValueLocation.h"
+#import "PryvEventValueWebclip.h"
+#import "PryvEventNote.h"
+#import "PryvEventNote+JSON.h"
+#import "PryvEventPosition.h"
 
-@implementation PYEvent
+@implementation PryvEvent
 @synthesize eventId = _eventId;
 @synthesize channelId = _channelId;
 @synthesize time = _time;
@@ -111,12 +111,12 @@
     return self;
 }
 
-- (void)addAttachment:(PYAttachment *)attachment
+- (void)addAttachment:(PryvAttachment *)attachment
 {
     [self.attachments addObject:attachment];
 }
 
-- (void)removeAttachment:(PYAttachment *)attachmentToRemove
+- (void)removeAttachment:(PryvAttachment *)attachmentToRemove
 {
     [self.attachments removeObject:attachmentToRemove];
 }
@@ -124,16 +124,16 @@
 //Factory method
 + (id)getEventFromDictionary:(NSDictionary *)JSON;
 {    
-    PYEventType *eventType = [PYEventType eventTypeFromDictionary:[JSON objectForKey:@"type"]];
+    PryvEventType *eventType = [PryvEventType eventTypeFromDictionary:[JSON objectForKey:@"type"]];
     
     switch (eventType.eventClass) {
         case PYEventClassNote:{
-            PYEventNote *noteEvent = [PYEventNote noteEventFromDictionary:JSON];
+            PryvEventNote *noteEvent = [PryvEventNote noteEventFromDictionary:JSON];
             return [noteEvent autorelease];
         }
             break;
         case PYEventClassPosition:{
-            PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON];
+            PryvEvent *generalEvent = [PryvEvent eventFromDictionary:JSON];
             return [generalEvent autorelease];
 
         }
@@ -144,7 +144,7 @@
 //            break;
     }
     
-    PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON];
+    PryvEvent *generalEvent = [PryvEvent eventFromDictionary:JSON];
     return [generalEvent autorelease];
 
 //    return [NSNull null];

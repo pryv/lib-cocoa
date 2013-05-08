@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventTwitterValue.h"
+#import "PryvEventTwitterValue.h"
 
-@implementation PYEventTwitterValue
+@implementation PryvEventTwitterValue
 
 @end

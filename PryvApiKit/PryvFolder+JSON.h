@@ -8,8 +8,8 @@
 
 #import <PryvApiKit/PryvApiKit.h>
 
-@interface PYFolder (JSON)
+@interface PryvFolder (JSON)
 
-+ (PYFolder *)folderFromJSON:(id)json;
++ (PryvFolder *)folderFromJSON:(id)json;
 
 @end

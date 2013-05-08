@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYAsyncService.h"
-#import "PyErrorUtility.h"
-#import "JSONUtility.h"
+#import "PryvAsyncService.h"
+#import "PryvErrorUtility.h"
+#import "PryvJSONUtility.h"
+#import "PryvClient.h"
 
-@interface PYAsyncService ()
+@interface PryvAsyncService ()
 
 @property (nonatomic) BOOL running;
 
@@ -20,7 +21,7 @@
 
 @end
 
-@implementation PYAsyncService
+@implementation PryvAsyncService
 
 @synthesize responseData = _responseData;
 @synthesize connection = _connection;
@@ -45,20 +46,6 @@
         
     [super dealloc];
 }
-
-#pragma mark - Utilities
-
-//When an error occurs, the API returns a 4xx or 5xx status code, with the response body usually containing an error object detailing the cause
-
-- (NSIndexSet *)unacceptableStatusCodes {
-    return [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 200)];
-}
-
-- (BOOL)isUnacceptableStatusCode:(NSUInteger)statusCode {
-    
-    return [[self unacceptableStatusCodes] containsIndex:statusCode] ? YES : NO;
-}
-
 
 - (id)initWithRequest:(NSURLRequest *)request
 {
@@ -85,7 +72,7 @@
                             success:(PAAsyncServiceSuccessBlock)success
                             failure:(PAAsyncServiceFailureBlock)failure
 {
-    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+    PryvAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
     [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         if (success) {
@@ -179,9 +166,9 @@
     _running = NO;
 
 //    id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
-    id JSON = [JSONUtility getJSONObjectFromData:self.responseData];
+    id JSON = [PryvJSONUtility getJSONObjectFromData:self.responseData];
     
-    BOOL isUnacceptableStatusCode = [self isUnacceptableStatusCode:self.response.statusCode];
+    BOOL isUnacceptableStatusCode = [PryvClient isUnacceptableStatusCode:self.response.statusCode];
     if (isUnacceptableStatusCode)
 	{
         if (self.onFailure){

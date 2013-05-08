@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PYEventValueLocation : NSObject
+@interface PryvEventValueLocation : NSObject
 {
     float _latitude;
     float _longitude;
@@ -28,6 +28,6 @@
 @property (nonatomic) int speed;
 @property (nonatomic) int bearing;
 
-+ (PYEventValueLocation *)locatinFromDictionary:(NSDictionary *)JSON;
++ (PryvEventValueLocation *)locatinFromDictionary:(NSDictionary *)JSON;
 
 @end

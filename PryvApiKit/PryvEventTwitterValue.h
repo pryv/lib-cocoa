@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PYEventTwitterValue : NSObject
+@interface PryvEventTwitterValue : NSObject
 {
 }
 

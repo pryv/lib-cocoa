@@ -5,14 +5,14 @@
 //  Created by Nenad Jelic on 4/2/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
-@class PYEventValueLocation;
+@class PryvEventValueLocation;
 #import <PryvApiKit/PryvApiKit.h>
 
-@interface PYEventPosition : PYEvent
+@interface PryvEventPosition : PryvEvent
 {
-    PYEventValueLocation *_positionValue;
+    PryvEventValueLocation *_positionValue;
 }
 
-@property (nonatomic, retain) PYEventValueLocation *positionValue;
+@property (nonatomic, retain) PryvEventValueLocation *positionValue;
 
 @end

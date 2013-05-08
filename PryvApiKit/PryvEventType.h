@@ -21,7 +21,7 @@ typedef enum {
 
 #import <Foundation/Foundation.h>
 
-@interface PYEventType : NSObject
+@interface PryvEventType : NSObject
 {
     PYEventClass _eventClass;
     PYEventFormat _eventFormat;
@@ -36,6 +36,6 @@ typedef enum {
 @property (nonatomic, retain) NSString *eventFormatName;
 
 - (id)initWithClass:(PYEventClass)theEventClass andFormat:(PYEventFormat)theEventFormat;
-+ (PYEventType *)eventTypeFromDictionary:(NSDictionary *)JSON;
++ (PryvEventType *)eventTypeFromDictionary:(NSDictionary *)JSON;
 
 @end
