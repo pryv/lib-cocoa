@@ -36,9 +36,16 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 //@property (nonatomic, copy) NSString *accessToken;
 //@property (readonly, nonatomic) NSTimeInterval serverTimeInterval;
 
+
++ (NSString *)defaultDomain;
++ (void)setDefaultDomain:(NSString*) domain;
++ (void)setDefaultDomainStaging;
+
 + (NSString *)apiBaseUrl;
 
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
+
+
 
 + (NSString *)fileMIMEType:(NSString*)file;
 

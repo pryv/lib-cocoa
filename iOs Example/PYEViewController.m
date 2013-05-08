@@ -10,18 +10,21 @@
 #import "PryvApiKit.h"
 #import "PYWebLoginViewController.h"
 
-@interface PYEViewController ()
+@interface PYEViewController () <PYWebLoginDelegate>
 
 @end
 
-@implementation PYEViewController
+@implementation PYEViewController 
 
 @synthesize signinButton;
+
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    [PYClient setDefaultDomainStaging];
         
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
@@ -173,12 +176,31 @@
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
-    PYWebLoginViewController *loginVC = [[PYWebLoginViewController alloc] initWithNibName:nil bundle:nil];
-    [self presentViewController:loginVC animated:YES completion:NULL];
+    
+    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
+    
+    [PYClient setDefaultDomainStaging];
+    [PYWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"
+                                     andPermissions:permissions
+                                           delegate:self];
 
 }
 
+#pragma mark --PYWebLoginDelegate
 
+- (UIViewController *) pyWebLoginGetController {
+    return self;
+}
+
+- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
+}
+
+- (void) pyWebLoginAborded:(NSString*)reason {
+    NSLog(@"Signin Aborded: %@",reason);
+}
+
+#pragma mark -- 
 
 - (void)didReceiveMemoryWarning
 {

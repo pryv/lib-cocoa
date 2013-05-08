@@ -6,47 +6,96 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYWebLoginViewController.h"
+
 #import "PYClient.h"
+#import "PYConstants.h"
+#import "PYWebLoginViewController.h"
 
 @interface PYWebLoginViewController () <UIWebViewDelegate>
 
-@property (strong, nonatomic) UIWebView *webView;
+@property (nonatomic, retain) NSArray *permissions;
+@property (nonatomic, retain) NSString *appID;
 
-@property (strong, nonatomic) NSTimer *pollTimer;
-
-@property (assign, nonatomic) NSUInteger iteration;
-
-@property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) NSString *token;
-
+@property (nonatomic, retain) NSTimer *pollTimer;
 
 @end
 
 
 @implementation PYWebLoginViewController
 
-@synthesize webView = _webView;
+UIBarButtonItem *loadingActivityIndicator;
+UIWebView *webView;
+UIActivityIndicatorView *loadingActivityIndicatorView;
+UIBarButtonItem *refreshBarButtonItem;
 
-- (void)loadView
-{
-    [super loadView];
-    UIWebView *tmpWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-    self.webView = tmpWebView;
-    [tmpWebView release];
-    [self.view addSubview:_webView];
+
+NSUInteger iteration;
+
+NSString *username;
+NSString *token;
+
+
++ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
+    PYWebLoginViewController *login = [PYWebLoginViewController alloc];
+    login.permissions = permissions;
+    login.appID = appID;
+    login.delegate = delegate;
+    [login openOn];
     
-    self.webView.delegate = self;
-
+    return login;
 }
+
+
+- (PYWebLoginViewController* )openOn
+{
+    [self init];
+    
+    
+    NSLog(@"PYWebLoginViewControlleriOs:Open on");
+    
+    // -- navigation bar -- //
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(close:)];
+    
+    refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
+    self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
+    
+    // -- loading Indicator --//
+    loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    loadingActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];
+    
+    [self startLoading];
+    
+    // -- webview -- //
+    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
+    webView = [[UIWebView alloc] initWithFrame:applicationFrame];
+    [webView setDelegate:self];
+    [webView setBackgroundColor:[UIColor grayColor]];
+    [webView loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
+    
+    self.view = webView;
+    
+    // -- show on delegate's UIController -- //
+    [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
+    
+    [navigationController release];
+    
+    return self;
+}
+
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationDidBecomeActiveNotification
-                                                  object:nil];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    [self.webView release];
+    
+    self.pollTimer = nil;
+    
+    [webView release];
+    [refreshBarButtonItem release];
+    [loadingActivityIndicator release];
+    [loadingActivityIndicatorView release];
     [super dealloc];
 }
 
@@ -54,45 +103,27 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    NSLog(@"shouldStartLoadWithRequest ");
     return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
-{    
-    NSLog(@"webViewDidStartLoad ");
+{
+    [self startLoading];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    NSLog(@"webViewDidFinishLoad");
+    [self stopLoading];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    // TODO create an alert to notify a user of an error
-    NSLog(@"didFailLoadWithError %@", [error localizedDescription]);    
+    [self stopLoading];
+    NSLog(@"didFailLoadWithError %@", [error localizedDescription]);
 }
 
+#pragma mark - init
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (id)initWithSomething
-{
-    self = [super initWithNibName:@"PYWebLoginViewController" bundle:nil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-
-}
 
 - (void)viewDidLoad
 {
@@ -101,7 +132,7 @@
                                              selector:@selector(requestLoginView)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
-
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -116,39 +147,61 @@
     [self.pollTimer invalidate];
 }
 
+#pragma mark - Target Actions
+
+- (IBAction)close:(id)sender
+{
+    [self.pollTimer invalidate];
+    [self dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+}
+
+- (IBAction)reload:(id)sender
+{
+    [self requestLoginView];
+}
 
 #pragma mark - Private
+
+- (void)startLoading
+{
+    refreshBarButtonItem.enabled = NO;
+    [loadingActivityIndicatorView startAnimating];
+    self.navigationItem.rightBarButtonItem = loadingActivityIndicator;
+}
+
+- (void)stopLoading
+{
+    refreshBarButtonItem.enabled = YES;
+    [loadingActivityIndicatorView stopAnimating];
+    self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
+}
+
+
 
 // POST request to /access to obtain a login page URL and load the contents of the URL
 //      (which is a login form) to a child webView
 //      activate a timer loop
 
+BOOL requestedLoginView = false;
 - (void)requestLoginView
 {
+    requestedLoginView = true;
     // TODO extract the url to a more meaningful place
     NSString *preferredLanguageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
     
-    NSString *applicationChannelId = @"position";
-    NSString *channelName = @"Position";
-
     NSDictionary *postData = @{
-                             // TODO extract the app id some where to constants
-                             @"requestingAppId": @"pryv-mobile-position-ios",
-                             @"returnURL": @"false",
-                             @"languageCode" : preferredLanguageCode,
-                             @"requestedPermissions": @[
-                                     // channel for position events
-                                     @{
-                                         @"channelId" : applicationChannelId,
-                                         @"defaultName" : channelName,
-                                         @"level" : @"shared"
-                                         }
-                                     ]
-                             };
-
+                               // TODO extract the app id some where to constants
+                               @"requestingAppId": self.appID,
+                               @"returnURL": @"false",
+                               @"languageCode" : preferredLanguageCode,
+                               @"requestedPermissions": self.permissions
+                               };
     
-    NSString *fullPathString = [NSString stringWithFormat:@"%@/access", [PYClient apiBaseUrl]];
-
+    
+    NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
+    
     [PYClient apiRequest:fullPathString
                   access:nil
              requestType:PYRequestTypeAsync
@@ -156,39 +209,10 @@
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     
-                     [self handleSuccess:JSON];
-                     
+                     [self handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
-                     
                      [self handleFailure:error];
                  }];
-
-}
-
-- (void)handleSuccess:(id)JSON
-{
-    assert(JSON);
-    NSLog(@"Request Successful, response '%@'", JSON);
-    
-    assert([JSON isKindOfClass:[NSDictionary class]]);
-    NSDictionary *jsonDictionary = (NSDictionary *)JSON;
-    
-    assert([JSON objectForKey:@"url"]);
-    NSString *loginPageUrlString = jsonDictionary[@"url"];
-    
-    NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
-    assert(loginPageURL);
-    
-    NSString *pollUrlString = jsonDictionary[@"poll"];
-    assert(pollUrlString);
-        
-    NSTimeInterval pollTimeInterval = [jsonDictionary[@"poll_rate_ms"] doubleValue] /1000;
-    
-    [self.webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
-
-    [self pollURL:pollUrlString withTimeInterval:pollTimeInterval];
-    
     
 }
 
@@ -223,21 +247,19 @@
                                                                               postData:nil
                                                                            attachments:nil
                                                                                success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                   
                                                                                    [self handlePollSuccess:JSON];
-                                                                                   
-                                                                               } failure:^(NSError *error) {
-                                                                                   NSLog(@"error is %@",error);
+                                                                              } failure:^(NSError *error) {
+                                                                                   [self handleFailure:error];
                                                                                }];
-
+                                                                  
                                                               }]
                                                     selector:@selector(main) // send message main to NSBLockOperation
                                                     userInfo:nil
                                                      repeats:NO
                       ];
-
-
-
+    
+    
+    
 }
 
 - (void)handlePollSuccess:(id)JSON
@@ -248,10 +270,19 @@
     NSString *statusString = jsonDictionary[@"status"];
     
     if ([@"NEED_SIGNIN" isEqualToString:statusString]) {
+        if (requestedLoginView) {
+            requestedLoginView = false;
+            // -- open url only once !! -- //
+            assert([JSON objectForKey:@"url"]);
+            NSString *loginPageUrlString = jsonDictionary[@"url"];
+            NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
+            assert(loginPageURL);
+            [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+        }
         
         NSString *pollUrlString = jsonDictionary[@"poll"];
         assert(pollUrlString);
-                
+        
         NSString *pollTimeIntervalString = jsonDictionary[@"poll_rate_ms"];
         assert(pollTimeIntervalString);
         
@@ -293,8 +324,7 @@
             
         } else {
             
-            NSLog(@"poll request unknown status: %@", statusString);
-            
+            NSLog(@"poll request unknown status: %@", statusString); 
             NSString *message = NSLocalizedString(@"Unknown Error",);
             if ([jsonDictionary objectForKey:@"message"]) {
                 message = [jsonDictionary objectForKey:@"message"];
@@ -302,14 +332,14 @@
             
         }
     }
-
+    
 }
 
 -  (void)successfulLoginWithUsername:(NSString *)username token:(NSString *)token
 {
-    
+    [self.delegate pyWebLoginSuccess:[PYClient createAccessWithUsername:username andAccessToken:token]];
+    [self close:nil];
 }
-
 
 
 - (void)didReceiveMemoryWarning
@@ -319,7 +349,7 @@
 }
 
 - (void)viewDidUnload {
-    [self setWebView:nil];
+
     [super viewDidUnload];
 }
 @end

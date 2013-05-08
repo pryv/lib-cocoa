@@ -24,6 +24,22 @@
 
 @implementation PYClient
 
+
+static NSString *myDefaultDomain;
+
++ (NSString *)defaultDomain {
+    if (myDefaultDomain == nil) myDefaultDomain = kPYAPIDomain;
+    return myDefaultDomain;
+}
+
++ (void)setDefaultDomain:(NSString*) domain {
+    myDefaultDomain = domain;
+}
+
++ (void)setDefaultDomainStaging {
+    [PYClient setDefaultDomain:kPYAPIDomainStaging];
+}
+
 + (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 {
     PYAccess *access = [[PYAccess alloc] init];
@@ -91,13 +107,12 @@
 
 + (NSString *)apiBaseUrl
 {
-//    return @"https://reg.rec.la";
-    return [NSString stringWithFormat:@"%@://reg%@", kPYAPIScheme, kPYAPIHost];
+    return [NSString stringWithFormat:@"%@://reg%@", kPYAPIScheme, [self defaultDomain]];
 }
 
 + (NSString *)apiBaseUrlForAccess:(PYAccess *)access
 {
-    return [NSString stringWithFormat:@"%@://%@%@", kPYAPIScheme, access.userID, kPYAPIHost];
+    return [NSString stringWithFormat:@"%@://%@%@", kPYAPIScheme, access.userID, [self defaultDomain]];
 }
 
 + (BOOL)isReadyForAccess:(PYAccess *)access
