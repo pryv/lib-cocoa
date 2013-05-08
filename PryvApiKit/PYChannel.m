@@ -12,6 +12,7 @@
 #import "PYEvent.h"
 #import "PYEventNote.h"
 
+#import "PYConstants.h"
 
 @implementation PYChannel
 
@@ -68,7 +69,7 @@
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
    
-    [self apiRequest:@"events"
+    [self apiRequest:kROUTE_EVENTS
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -96,7 +97,7 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self apiRequest:@"events"
+    [self apiRequest:kROUTE_EVENTS
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[event dictionary]
@@ -125,7 +126,7 @@
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self apiRequest:@"events/start"
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"start"]
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[event dictionary]
@@ -163,7 +164,7 @@
 
     }
     
-    [self apiRequest:@"events/stop"
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"stop"]
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[postData autorelease]
@@ -190,7 +191,7 @@
                                       errorHandler:(void (^)(NSError *error))errorHandler
 
 {
-    [self apiRequest:@"events/running"
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"running"]
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -222,7 +223,7 @@
                             errorHandler:(void (^)(NSError *error))errorHandler
 {
 
-    [self apiRequest:[NSString stringWithFormat:@"events/%@",eventId]
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,eventId]
              requestType:reqType
                   method:PYRequestMethodPUT
                 postData:[eventObject dictionary]
@@ -251,18 +252,8 @@
                    successHandler:(void (^)(NSArray *folderList))successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler;
 {
-    NSMutableString *pathString = [NSMutableString stringWithString:@"folders"];
-    if (filter) {
-        
-        [pathString appendString:@"?"];
-        for (NSString *key in [filter allKeys])
-        {
-            [pathString appendFormat:@"%@=%@&",key,[filter valueForKey:key]];
-        }
-        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
-        
-    }
-    [self apiRequest:[pathString copy]
+ 
+    [self apiRequest:[PYClient urlPath:kROUTE_FOLDERS withParams:filter]
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -311,8 +302,7 @@
     
     [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
     
-        
-    [self apiRequest:@"folders"
+    [self apiRequest:kROUTE_FOLDERS
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[postData autorelease]
@@ -343,10 +333,7 @@
               errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"folders/%@",  folderId];
-    
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
-    
     if (newfolderName) {
         [postData setObject:newfolderName forKey:@"name"];
     }
@@ -361,7 +348,7 @@
     
     [postData setObject:[NSNumber numberWithBool:hidden] forKey:@"hidden"];
         
-    [self apiRequest:[pathString copy]
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_FOLDERS,  folderId]
              requestType:reqType
                   method:PYRequestMethodPUT
                 postData:[postData autorelease]
@@ -386,19 +373,7 @@
                    successHandler:(void (^)())successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithFormat:@"folders/%@", folderId];
-    if (filter) {
-        
-        [pathString appendString:@"?"];
-        for (NSString *key in [filter allKeys])
-        {
-            [pathString appendFormat:@"%@=%@&",key,[filter valueForKey:key]];
-        }
-        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
-        
-    }
-
-    [self apiRequest:[pathString copy]
+    [self apiRequest:[PYClient urlPath:[NSString stringWithFormat:@"%@/%@",kROUTE_FOLDERS, folderId] withParams:filter]
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil

@@ -139,6 +139,20 @@ static NSString *myDefaultDomain;
     return [(NSString *)MIMEType autorelease];
 }
 
++ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params
+{
+    if (path == nil) path = @"";
+    NSMutableString *pathString = [NSMutableString stringWithString:path];
+    if (params) {
+        [pathString appendString:@"?"];
+        for (NSString *key in [params allKeys])
+        {
+            [pathString appendFormat:@"%@=%@&",key,[params valueForKey:key]];
+        }
+        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+    }
+    return [pathString copy];
+}
 
 + (void) apiRequest:(NSString *)fullURL
             headers:(NSDictionary *)headers

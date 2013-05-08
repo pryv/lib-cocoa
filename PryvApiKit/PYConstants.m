@@ -14,6 +14,9 @@ NSString *const kPYAPIScheme = @"https";
 NSString *const kPYAPIDomain = @".pryv.io";
 NSString *const kPYAPIDomainStaging = @".rec.la";
 
+NSString *const kROUTE_CHANNELS = @"channels";
+NSString *const kROUTE_EVENTS = @"events";
+NSString *const kROUTE_FOLDERS =@"folders";
 
 NSString *const kPYUserTempToken = @"Ve69mGqqX5";
 

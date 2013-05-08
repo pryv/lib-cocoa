@@ -7,6 +7,8 @@
 //
 
 #import "PYAccess.h"
+#import "PYClient.h"
+#import "PYConstants.h"
 #import "PYChannel+JSON.h"
 
 @implementation PYAccess
@@ -15,6 +17,7 @@
 @synthesize accessToken = _accessToken;
 @synthesize apiDomain = _apiDomain;
 @synthesize apiScheme = _apiScheme;
+
 
 - (void)dealloc
 {
@@ -28,8 +31,6 @@
     return [NSString stringWithFormat:@"%@://%@%@", self.apiScheme, self.userID, self.apiDomain];
 }
 
-
-
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -41,9 +42,9 @@
     if (path == nil) path = @"";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
     NSDictionary* headers = @{@"Authorization": self.accessToken};
+
     [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
 }
-
 
 #pragma mark - PrYv API Channel get all (GET /channnels)
 
@@ -52,21 +53,9 @@
                     successHandler:(void (^)(NSArray *))successHandler
                       errorHandler:(void (^)(NSError *))errorHandler
 {
-    NSMutableString *pathString = [NSMutableString stringWithString:@"channels"];
-    if (filter) {
-        
-        [pathString appendString:@"?"];
-        for (NSString *key in [filter allKeys])
-        {
-            [pathString appendFormat:@"%@=%@&",key,[filter valueForKey:key]];
-        }
-        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
-        
-    }
-    
-    
-    
-    [self apiRequest:pathString
+   
+
+    [self apiRequest:[PYClient urlPath:kROUTE_CHANNELS withParams:filter]
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil
@@ -120,8 +109,7 @@
                     successHandler:(void (^)())successHandler
                       errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSString *pathString = [NSString stringWithFormat:@"channels/%@", channelId];
-    [self apiRequest:pathString
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_CHANNELS, channelId]
          requestType:reqType
               method:PYRequestMethodPUT
             postData:data
@@ -142,9 +130,8 @@
                       successHandler:(void (^)())successHandler
                         errorHandler:(void (^)(NSError *error))errorHandler
 {
-    NSString *pathString = [NSString stringWithFormat:@"channels/%@", channelId];
     
-    [self apiRequest:pathString
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_CHANNELS, channelId]
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil
