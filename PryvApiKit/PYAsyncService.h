@@ -12,7 +12,7 @@ typedef void(^PAAsyncServiceFailureBlock)(NSURLRequest *request, NSHTTPURLRespon
 
 #import <Foundation/Foundation.h>
 
-@interface PryvAsyncService : NSObject <NSURLConnectionDelegate>
+@interface PYAsyncService : NSObject <NSURLConnectionDelegate>
 {
     NSURLConnection *_connection;
     NSURLRequest *_request;

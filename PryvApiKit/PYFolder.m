@@ -4,10 +4,10 @@
 //
 
 
-#import "PryvFolder.h"
+#import "PYFolder.h"
 
 
-@implementation PryvFolder
+@implementation PYFolder
 
 @synthesize folderId = _folderId;
 @synthesize channelId = _channelId;

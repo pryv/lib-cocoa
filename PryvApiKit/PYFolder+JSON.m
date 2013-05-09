@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvFolder+JSON.h"
+#import "PYFolder+JSON.h"
 
-@implementation PryvFolder (JSON)
+@implementation PYFolder (JSON)
 
-+ (PryvFolder *)folderFromJSON:(id)JSON
++ (PYFolder *)folderFromJSON:(id)JSON
 {
     NSDictionary *jsonDictionary = JSON;
-    PryvFolder *folder = [[PryvFolder alloc] init];
+    PYFolder *folder = [[PYFolder alloc] init];
     folder.folderId = [jsonDictionary objectForKey:@"id"];
     
     [folder setValue:[jsonDictionary objectForKey:@"channelId"] forKey:@"channelId"];
@@ -33,7 +33,7 @@
     return [folder autorelease];
 }
 
-+ (void)setChildrenForFolder:(PryvFolder *)folder withArray:(NSArray *)children
++ (void)setChildrenForFolder:(PYFolder *)folder withArray:(NSArray *)children
 {
     NSMutableArray *childrenArrayOfFolders = [[NSMutableArray alloc] init];
     for (NSDictionary *folderDic in children) {

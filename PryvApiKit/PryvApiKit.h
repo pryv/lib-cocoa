@@ -9,20 +9,18 @@
 //Temporary
 #import "AccessClient.h"
 
-#import <PryvApiKit/PryvError.h>
-#import <PryvApiKit/PryvConstants.h>
-#import <PryvApiKit/PryvErrorUtility.h>
+#import <PryvApiKit/PYError.h>
+#import <PryvApiKit/PYConstants.h>
+#import <PryvApiKit/PYErrorUtility.h>
 
 // Model
-#import <PryvApiKit/PryvChannel.h>
-#import <PryvApiKit/PryvEvent.h>
-#import <PryvApiKit/PryvAccess.h>
-#import <PryvApiKit/PryvFolder.h>
-#import <PryvApiKit/PryvAttachment.h>
-#import <PryvApiKit/PryvEventNote.h>
-#import <PryvApiKit/PryvEventType.h>
+#import <PryvApiKit/PYChannel.h>
+#import <PryvApiKit/PYEvent.h>
+#import <PryvApiKit/PYAccess.h>
+#import <PryvApiKit/PYFolder.h>
+#import <PryvApiKit/PYAttachment.h>
 
 // Pryv Api Client
-#import <PryvApiKit/PryvClient.h>
-#import <PryvApiKit/PryvEventClient.h>
+#import <PryvApiKit/PYClient.h>
+#import <PryvApiKit/PYEventClient.h>
 

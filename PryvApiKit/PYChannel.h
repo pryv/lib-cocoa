@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-@class PryvFolder;
-@class PryvEvent;
+@class PYFolder;
+@class PYEvent;
 
 #import <Foundation/Foundation.h>
-#import "PryvClient.h"
+#import "PYClient.h"
 
-@interface PryvChannel : NSObject
+@interface PYChannel : NSObject
 {
-    PryvAccess *_access;
+    PYAccess *_access;
     NSString *_channelId;
     NSString *_name;
     NSTimeInterval _timeCount;
@@ -24,7 +24,7 @@
 
 }
 
-@property (nonatomic, retain) PryvAccess *access;
+@property (nonatomic, retain) PYAccess *access;
 @property (nonatomic, copy, readonly) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic)       NSTimeInterval timeCount;
@@ -49,13 +49,13 @@
 
 //POST /{channel-id}/events
 /*Records a new event. Events recorded this way must be completed events, i.e. either period events with a known duration or mark events. To start a running period event, post a events/start request. In addition to the usual JSON, this request accepts standard multipart/form-data content to support the creation of event with attached files in a single request. When sending a multipart request, one content part must hold the JSON for the new event and all other content parts must be the attached files.*/
-- (void)createEvent:(PryvEvent *)event
+- (void)createEvent:(PYEvent *)event
         requestType:(PYRequestType)reqType
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler;
 
 //POST /{channel-id}/events/start
-- (void)startPeriodEvent:(PryvEvent *)event
+- (void)startPeriodEvent:(PYEvent *)event
              requestType:(PYRequestType)reqType
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler;
@@ -84,7 +84,7 @@
  All event fields are optional, and only modified properties must be included, for other properties put nil
  @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set) 
  */
-- (void)setModifiedEventAttributesObject:(PryvEvent *)eventObject
+- (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
                               forEventId:(NSString *)eventId
                              requestType:(PYRequestType)reqType
                           successHandler:(void (^)(NSString *stoppedId))successHandler

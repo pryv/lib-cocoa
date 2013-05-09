@@ -12,17 +12,17 @@
 #endif
 
 
-#import "PryvClient.h"
-#import "PryvConstants.h"
-#import "PryvError.h"
-#import "PryvErrorUtility.h"
-#import "PryvAccess.h"
-#import "PryvAttachment.h"
-#import "PryvAsyncService.h"
-#import "PryvJSONUtility.h"
+#import "PYClient.h"
+#import "PYConstants.h"
+#import "PYError.h"
+#import "PYErrorUtility.h"
+#import "PYAccess.h"
+#import "PYAttachment.h"
+#import "PYAsyncService.h"
+#import "PYJSONUtility.h"
 
 
-@implementation PryvClient
+@implementation PYClient
 
 
 static NSString *myDefaultDomain;
@@ -37,12 +37,12 @@ static NSString *myDefaultDomain;
 }
 
 + (void)setDefaultDomainStaging {
-    [PryvClient setDefaultDomain:kPYAPIDomainStaging];
+    [PYClient setDefaultDomain:kPYAPIDomainStaging];
 }
 
-+ (PryvAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
++ (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 {
-    PryvAccess *access = [[PryvAccess alloc] initWithUsername:username andAccessToken:token];
+    PYAccess *access = [[PYAccess alloc] initWithUsername:username andAccessToken:token];
     return [access autorelease];
 }
 
@@ -66,7 +66,7 @@ static NSString *myDefaultDomain;
 }
 
 
-+ (NSError *)createNotReadyErrorForAccess:(PryvAccess *)access
++ (NSError *)createNotReadyErrorForAccess:(PYAccess *)access
 {
     NSError *error;
     if (access.userID == nil || access.userID.length == 0) {
@@ -199,7 +199,7 @@ static NSString *myDefaultDomain;
     if (attachments && attachments.count) {
         
 //        NSData *data = [NSJSONSerialization dataWithJSONObject:postDataa options:0 error:nil];
-        NSData *data = [PryvJSONUtility getDataFromJSONObject:postDataa];
+        NSData *data = [PYJSONUtility getDataFromJSONObject:postDataa];
 
         NSMutableData *bodyData = [[NSMutableData alloc] init];
         NSString *boundaryIdentifier = [NSString stringWithFormat:@"--%@--", [[NSProcessInfo processInfo] globallyUniqueString]];
@@ -217,7 +217,7 @@ static NSString *myDefaultDomain;
         
         
         // param: attachment
-        for (PryvAttachment *attachment in attachments) {
+        for (PYAttachment *attachment in attachments) {
         
             [bodyData appendData:boundaryData];
             [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", attachment.name, attachment.fileName] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -245,7 +245,7 @@ static NSString *myDefaultDomain;
         
         if (postDataa) {
 //            request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
-            request.HTTPBody = [PryvJSONUtility getDataFromJSONObject:postDataa];
+            request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
         
 
@@ -254,13 +254,13 @@ static NSString *myDefaultDomain;
     switch (reqType) {
         case PYRequestTypeAsync:{
             
-            [PryvAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+            [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 if (successHandler) {
                     successHandler(request,response,JSON);
                 }
             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                 if (failureHandler) {
-                    NSError *errorToReturn = [PryvErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
+                    NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
                     failureHandler(errorToReturn);
                 }
             }];
@@ -278,7 +278,7 @@ static NSString *myDefaultDomain;
 //            NSLog(@"error is %@",error);
             
 //            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
-            id JSON = [PryvJSONUtility getJSONObjectFromData:responseData];
+            id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
             
             if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
                 httpURLResponse = (NSHTTPURLResponse *)urlResponse;
@@ -287,7 +287,7 @@ static NSString *myDefaultDomain;
             BOOL isUnacceptableStatusCode = [[self class] isUnacceptableStatusCode:httpURLResponse.statusCode];
             if ( isUnacceptableStatusCode && failureHandler ) {
                 
-                NSError *errorToReturn = [PryvErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse];
+                NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse];
                 failureHandler (errorToReturn);
                 
             }else if (successHandler) {

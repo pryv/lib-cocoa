@@ -7,14 +7,13 @@
 //
 
 
-#import "PryvChannel.h"
-#import "PryvFolder+JSON.h"
-#import "PryvEvent.h"
-#import "PryvEventNote.h"
+#import "PYChannel.h"
+#import "PYFolder+JSON.h"
+#import "PYEvent.h"
 
-#import "PryvConstants.h"
+#import "PYConstants.h"
 
-@implementation PryvChannel
+@implementation PYChannel
 
 @synthesize access = _access;
 @synthesize channelId = _channelId;
@@ -77,7 +76,7 @@
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                      for (NSDictionary *eventDic in JSON) {
-                         [eventsArray addObject:[PryvEvent getEventFromDictionary:eventDic]];
+                         [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
                      }
                      if (successHandler) {
                          successHandler([eventsArray autorelease]);
@@ -92,7 +91,7 @@
 }
 
 //POST /{channel-id}/events
-- (void)createEvent:(PryvEvent *)event
+- (void)createEvent:(PYEvent *)event
         requestType:(PYRequestType)reqType
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
@@ -121,7 +120,7 @@
 
 
 //POST /{channel-id}/events/start
-- (void)startPeriodEvent:(PryvEvent *)event
+- (void)startPeriodEvent:(PYEvent *)event
              requestType:(PYRequestType)reqType
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler
@@ -200,7 +199,7 @@
                      
                      NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                      for (NSDictionary *eventDic in JSON) {
-                         [eventsArray addObject:[PryvEvent getEventFromDictionary:eventDic]];
+                         [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
                      }
                      if (successHandler) {
                          successHandler([eventsArray autorelease]);
@@ -216,7 +215,7 @@
 }
 
 //PUT /{channel-id}/events/{event-id}
-- (void)setModifiedEventAttributesObject:(PryvEvent *)eventObject
+- (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
                               forEventId:(NSString *)eventId
                              requestType:(PYRequestType)reqType
                           successHandler:(void (^)(NSString *stoppedId))successHandler
@@ -253,7 +252,7 @@
                      errorHandler:(void (^)(NSError *error))errorHandler;
 {
  
-    [self apiRequest:[PryvClient urlPath:kROUTE_FOLDERS withParams:filter]
+    [self apiRequest:[PYClient urlPath:kROUTE_FOLDERS withParams:filter]
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -261,7 +260,7 @@
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                          NSMutableArray *folderList = [[NSMutableArray alloc] init];
                          for (NSDictionary *folderDictionary in JSON) {
-                             PryvFolder *folderObject = [PryvFolder folderFromJSON:folderDictionary];
+                             PYFolder *folderObject = [PYFolder folderFromJSON:folderDictionary];
                              [folderList addObject:folderObject];
                          }
                          if (successHandler) {
@@ -373,7 +372,7 @@
                    successHandler:(void (^)())successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self apiRequest:[PryvClient urlPath:[NSString stringWithFormat:@"%@/%@",kROUTE_FOLDERS, folderId] withParams:filter]
+    [self apiRequest:[PYClient urlPath:[NSString stringWithFormat:@"%@/%@",kROUTE_FOLDERS, folderId] withParams:filter]
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil

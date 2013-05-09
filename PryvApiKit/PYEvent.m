@@ -6,22 +6,17 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-#import "PryvEvent.h"
-#import "PryvEvent+JSON.h"
-#import "PryvEventType.h"
-#import "PryvAttachment.h"
-#import "PryvEventValueLocation.h"
-#import "PryvEventValueWebclip.h"
-#import "PryvEventNote.h"
-#import "PryvEventNote+JSON.h"
-#import "PryvEventPosition.h"
+#import "PYEvent.h"
+#import "PYEvent+JSON.h"
+#import "PYAttachment.h"
 
-@implementation PryvEvent
+@implementation PYEvent
 @synthesize eventId = _eventId;
 @synthesize channelId = _channelId;
 @synthesize time = _time;
 @synthesize duration = _duration;
 @synthesize type = _type;
+@synthesize value = _value;
 @synthesize folderId = _folderId;
 @synthesize tags = _tags;
 @synthesize eventDescription = _eventDescription;
@@ -30,12 +25,17 @@
 @synthesize trashed = _trashed;
 @synthesize modified = _modified;
 
+
 - (NSDictionary *)dictionary {
     
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     if (_type) {
-        [dic setObject:@{@"class": self.type.eventClassName, @"format" : self.type.eventFormatName} forKey:@"type"];
+        [dic setObject:_type forKey:@"type"];
+    }
+    
+    if (_value) {
+        [dic setObject:_value forKey:@"value"];
     }
     
     if (_folderId && _folderId.length > 0) {
@@ -82,6 +82,9 @@
     [description appendFormat:@", self.clientData=%@", self.clientData];
     [description appendFormat:@", self.trashed=%d", self.trashed];
     [description appendFormat:@", self.modified=%@", self.modified];
+    [description appendFormat:@", self.TYPE=%@", self.type];
+    [description appendFormat:@", self.VALUE=%@",self.value];
+
     [description appendString:@">"];
     
     return description;
@@ -92,6 +95,7 @@
     [_eventId release];
     [_channelId release];
     [_type release];
+    [_value release];
     [_folderId release];
     [_tags release];
     [_eventDescription release];
@@ -111,43 +115,20 @@
     return self;
 }
 
-- (void)addAttachment:(PryvAttachment *)attachment
+- (void)addAttachment:(PYAttachment *)attachment
 {
     [self.attachments addObject:attachment];
 }
 
-- (void)removeAttachment:(PryvAttachment *)attachmentToRemove
+- (void)removeAttachment:(PYAttachment *)attachmentToRemove
 {
     [self.attachments removeObject:attachmentToRemove];
 }
 
-//Factory method
 + (id)getEventFromDictionary:(NSDictionary *)JSON;
-{    
-    PryvEventType *eventType = [PryvEventType eventTypeFromDictionary:[JSON objectForKey:@"type"]];
-    
-    switch (eventType.eventClass) {
-        case PYEventClassNote:{
-            PryvEventNote *noteEvent = [PryvEventNote noteEventFromDictionary:JSON];
-            return [noteEvent autorelease];
-        }
-            break;
-        case PYEventClassPosition:{
-            PryvEvent *generalEvent = [PryvEvent eventFromDictionary:JSON];
-            return [generalEvent autorelease];
-
-        }
-            break;
-//
-//        default:{
-//        }
-//            break;
-    }
-    
-    PryvEvent *generalEvent = [PryvEvent eventFromDictionary:JSON];
+{        
+    PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON];
     return [generalEvent autorelease];
-
-//    return [NSNull null];
     
 }
 

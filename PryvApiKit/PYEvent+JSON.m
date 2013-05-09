@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvEvent+JSON.h"
-#import "PryvEventType.h"
+#import "PYEvent+JSON.h"
+#import "PYAttachment.h"
 
-@implementation PryvEvent (JSON)
+@implementation PYEvent (JSON)
 
 + (id)eventFromDictionary:(NSDictionary *)JSON
 {
-    PryvEvent *event = [[self alloc] init];
+    PYEvent *event = [[self alloc] init];
     event.eventId = [JSON objectForKey:@"id"];
     event.channelId = [JSON objectForKey:@"channelId"];
     event.time = [[JSON objectForKey:@"time"] doubleValue];
@@ -24,7 +24,9 @@
         event.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
     
-    event.type = [PryvEventType eventTypeFromDictionary:[JSON objectForKey:@"type"]];
+    event.type = [JSON objectForKey:@"type"];
+    event.value = [JSON objectForKey:@"value"];
+    
     event.folderId = [JSON objectForKey:@"folderId"];
     event.tags = [JSON objectForKey:@"tags"];
     event.eventDescription = [JSON objectForKey:@"description"];
@@ -35,11 +37,8 @@
         NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
         
         [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
-            [attachmentObjects addObject:[PryvAttachment attachmentFromDictionary:obj]];
+            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
         }];
-//        for (NSDictionary *attachmentDic in attachments) {
-//            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:attachmentDic]];
-//        }
         
         event.attachments = attachmentObjects;
         [attachmentObjects release];

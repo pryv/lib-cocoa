@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvErrorUtility.h"
-#import "PryvError.h"
+#import "PYErrorUtility.h"
+#import "PYError.h"
 
-@implementation PryvErrorUtility
+@implementation PYErrorUtility
 
 /*
  When an error occurs, the API returns a 4xx or 5xx status code, with the response body usually containing an error object detailing the cause.

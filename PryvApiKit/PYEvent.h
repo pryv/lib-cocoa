@@ -6,20 +6,22 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-@class PryvLocation;
-@class PryvEventType;
-@class PryvAttachment;
+@class PYLocation;
+@class PYEventType;
+@class PYAttachment;
 
 #import <Foundation/Foundation.h>
 
-@interface PryvEvent : NSObject
+@interface PYEvent : NSObject
 {
     NSString  *_eventId;
     NSString  *_channelId;
     
     NSTimeInterval _time;
     NSTimeInterval _duration;
-    PryvEventType *_type;
+    
+    NSDictionary *_type;
+    id _value;
     
     NSString *_folderId;
     NSArray *_tags;
@@ -37,7 +39,9 @@
 
 @property (nonatomic) NSTimeInterval time;
 @property (nonatomic) NSTimeInterval duration;
-@property (nonatomic, retain) PryvEventType *type;
+
+@property (nonatomic, retain) NSDictionary *type;
+@property (nonatomic, retain) id value;
 
 @property (nonatomic, retain) NSString *folderId;
 @property (nonatomic, retain) NSArray *tags;
@@ -49,8 +53,8 @@
 @property (nonatomic) BOOL trashed;
 @property (nonatomic, retain) NSDate *modified;
 
-- (void)addAttachment:(PryvAttachment *)attachment;
-- (void)removeAttachment:(PryvAttachment *)attachmentToRemove;
+- (void)addAttachment:(PYAttachment *)attachment;
+- (void)removeAttachment:(PYAttachment *)attachmentToRemove;
 
 + (id)getEventFromDictionary:(NSDictionary *)JSON;
 - (NSDictionary *)dictionary;

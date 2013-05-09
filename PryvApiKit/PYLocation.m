@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvLocation.h"
+#import "PYLocation.h"
 
-@implementation PryvLocation{
+@implementation PYLocation{
    
 }
 @synthesize longitude=_longitude;

@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvChannel+JSON.h"
+#import "PYChannel+JSON.h"
 
-@implementation PryvChannel (JSON)
+@implementation PYChannel (JSON)
 
-+ (PryvChannel *)channelFromJson:(id)json
++ (PYChannel *)channelFromJson:(id)json
 {
     NSDictionary *jsonDictionary = json;
-    PryvChannel *channel = [[PryvChannel alloc] init];
+    PYChannel *channel = [[PYChannel alloc] init];
     
     //because it's readonly property in this case is used KVC to set property
     [channel setValue:[jsonDictionary objectForKey:@"id"] forKey:@"channelId"];

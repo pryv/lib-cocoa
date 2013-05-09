@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PryvLocation : NSObject
+@interface PYLocation : NSObject
 {
     NSNumber *_longitude;
     

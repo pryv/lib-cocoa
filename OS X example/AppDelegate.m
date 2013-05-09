@@ -28,10 +28,10 @@
 //        
 //    }];
     
-    PryvAccess *access = [PryvClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
+    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
         
-        for (PryvChannel *channel in channelList) {
+        for (PYChannel *channel in channelList) {
             
             
             if ([channel.channelId isEqualToString:@"position"]) {
@@ -43,9 +43,9 @@
                     NSLog(@"get all events error is %@",error);
                 }];
                 
-                PryvEventType *eventType = [[PryvEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
+                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
                 NSString *noteTextValue = @"OS X";
-                PryvEventNote *noteEvent = [[PryvEventNote alloc] initWithType:eventType
+                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
                                                                  noteValue:noteTextValue
                                                                   folderId:nil
                                                                       tags:nil
@@ -55,7 +55,7 @@
                 NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
                 NSData *imageData = [NSData dataWithContentsOfFile:filePath];
                 
-                PryvAttachment *att = [[PryvAttachment alloc] initWithFileData:imageData
+                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
                                                                       name:imgName
                                                                   fileName:@"image003.jpg"];
                 [noteEvent addAttachment:att];
@@ -65,7 +65,7 @@
                 NSString *pdfPath = [[NSBundle mainBundle] pathForResource:pdfName ofType:@"pdf"];
                 NSData *pdfData = [NSData dataWithContentsOfFile:pdfPath];
                 
-                PryvAttachment *att1 = [[PryvAttachment alloc] initWithFileData:pdfData
+                PYAttachment *att1 = [[PYAttachment alloc] initWithFileData:pdfData
                                                                        name:pdfName
                                                                    fileName:@"Pryv_ecosystem.pdf"];
                 [noteEvent addAttachment:att1];

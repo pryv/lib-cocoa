@@ -8,7 +8,7 @@
 
 #import <PryvApiKit/PryvApiKit.h>
 
-@interface PryvEvent (JSON)
+@interface PYEvent (JSON)
 
 + (id)eventFromDictionary:(NSDictionary *)JSON;
 

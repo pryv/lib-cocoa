@@ -4,10 +4,10 @@
 //
 
 
-#import "PryvAttachment.h"
+#import "PYAttachment.h"
 
 
-@implementation PryvAttachment
+@implementation PYAttachment
 
 @synthesize fileData = _fileData;
 @synthesize name = _name;
@@ -28,9 +28,9 @@
     return self;
 }
 
-+ (PryvAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
++ (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
 {
-    PryvAttachment *attachment = [[PryvAttachment alloc] init];
+    PYAttachment *attachment = [[PYAttachment alloc] init];
     attachment.fileName = [JSON objectForKey:@"fileName"];
     attachment.mimeType = [JSON objectForKey:@"type"];
     attachment.size = [JSON objectForKey:@"size"];

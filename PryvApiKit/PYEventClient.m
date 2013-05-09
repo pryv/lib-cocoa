@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvEventClient.h"
+#import "PYEventClient.h"
 
-@implementation PryvEventClient
+@implementation PYEventClient
 
 -(id)init
 {

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvConstants.h"
+#import "PYConstants.h"
 
 #pragma mark - API
 

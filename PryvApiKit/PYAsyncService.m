@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvAsyncService.h"
-#import "PryvErrorUtility.h"
-#import "PryvJSONUtility.h"
-#import "PryvClient.h"
+#import "PYAsyncService.h"
+#import "PYErrorUtility.h"
+#import "PYJSONUtility.h"
+#import "PYClient.h"
 
-@interface PryvAsyncService ()
+@interface PYAsyncService ()
 
 @property (nonatomic) BOOL running;
 
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation PryvAsyncService
+@implementation PYAsyncService
 
 @synthesize responseData = _responseData;
 @synthesize connection = _connection;
@@ -72,7 +72,7 @@
                             success:(PAAsyncServiceSuccessBlock)success
                             failure:(PAAsyncServiceFailureBlock)failure
 {
-    PryvAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
     [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         if (success) {
@@ -166,9 +166,9 @@
     _running = NO;
 
 //    id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
-    id JSON = [PryvJSONUtility getJSONObjectFromData:self.responseData];
+    id JSON = [PYJSONUtility getJSONObjectFromData:self.responseData];
     
-    BOOL isUnacceptableStatusCode = [PryvClient isUnacceptableStatusCode:self.response.statusCode];
+    BOOL isUnacceptableStatusCode = [PYClient isUnacceptableStatusCode:self.response.statusCode];
     if (isUnacceptableStatusCode)
 	{
         if (self.onFailure){

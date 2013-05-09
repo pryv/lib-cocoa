@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PryvJSONUtility : NSObject
+@interface PYJSONUtility : NSObject
 
 + (NSData *)getDataFromJSONObject:(id)JSON;
 + (id)getJSONObjectFromData:(NSData *)JSONData;
