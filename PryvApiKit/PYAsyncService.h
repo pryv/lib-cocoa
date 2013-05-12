@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-typedef void(^PAAsyncServiceSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON);
-typedef void(^PAAsyncServiceFailureBlock)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON);
+typedef void(^PAAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
+typedef void(^PAAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON);
 
 
 #import <Foundation/Foundation.h>

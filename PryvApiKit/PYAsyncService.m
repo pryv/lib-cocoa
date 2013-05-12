@@ -68,19 +68,19 @@
     return self;
 }
 
-+ (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
++ (void)JSONRequestServiceWithRequest:(NSURLRequest *)req
                             success:(PAAsyncServiceSuccessBlock)success
                             failure:(PAAsyncServiceFailureBlock)failure
 {
-    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:req] autorelease];
     
-    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
         if (success) {
-            success (request, response, JSON);
+            success (req, resp, JSON);
         }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
         if (failure) {
-            failure (request, response, error, JSON);
+            failure (req, resp, error, JSON);
         }
     }];
 }

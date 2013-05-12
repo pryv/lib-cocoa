@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+#import "Reachability.h"
+@class PYEvent;
 
 @interface PYAccess : NSObject
 {
@@ -17,6 +19,12 @@
     NSString *_apiDomain;
     NSTimeInterval _serverTimeInterval;
     NSTimeInterval _lastTimeServerContact;
+    
+    Reachability *_connectionReachability;
+    BOOL _online;
+    NSMutableArray *_eventsNotSync;
+    NSUInteger _attachmentsCountNotSync;
+    NSInteger _attachmentSizeNotSync;
 }
 
 @property (nonatomic, copy) NSString *userID;
@@ -25,11 +33,23 @@
 @property (nonatomic, copy) NSString *apiDomain;
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
+@property (nonatomic, retain) Reachability *connectionReachability;
+
+//online/offline
+@property (nonatomic, readonly, getter = isOnline) BOOL online;
+@property (nonatomic, retain) NSMutableArray *eventsNotSync;
+@property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
+@property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
+
 
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 - (NSString *)apiBaseUrl;
+
+- (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error;
+
+- (void)syncEvents;
 
 
 - (void) apiRequest:(NSString *)path

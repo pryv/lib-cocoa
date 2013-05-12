@@ -10,6 +10,9 @@
 
 @interface PYErrorUtility : NSObject
 
-+ (NSError *)getErrorFromJSONResponse:(id)JSONerror error:(NSError *)error withResponse: (NSHTTPURLResponse *)response;
++ (NSError *)getErrorFromJSONResponse:(id)JSONerror
+                                error:(NSError *)error
+                         withResponse:(NSHTTPURLResponse *)response
+                           andRequest:(NSURLRequest *)request;
 
 @end

@@ -251,31 +251,48 @@ static NSString *myDefaultDomain;
 
     }
     
+    [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
+    
+
+    
+}
+
++ (void)sendRequest:(NSURLRequest *)request
+        withReqType:(PYRequestType)reqType
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler
+{
     switch (reqType) {
         case PYRequestTypeAsync:{
             
-            [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+            [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
                 if (successHandler) {
-                    successHandler(request,response,JSON);
+                    successHandler(req,resp,JSON);
                 }
-            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+            } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
                 if (failureHandler) {
-                    NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:response];
+                    NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
                     failureHandler(errorToReturn);
                 }
             }];
-                        
+            
         }
             break;
         case PYRequestTypeSync:{
             
             NSError *error = nil;
             NSHTTPURLResponse *httpURLResponse = nil;
-            NSURLResponse *urlResponse = nil;
+            NSHTTPURLResponse *urlResponse = nil;
             
             NSData *responseData = nil;
-            responseData = [NSURLConnection sendSynchronousRequest: request returningResponse: &urlResponse error: &error];
-//            NSLog(@"error is %@",error);
+            responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+            //            NSLog(@"error is %@",error);
+            if (error && failureHandler) {
+                NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:nil error:error withResponse:urlResponse andRequest:request];
+                failureHandler(errorToReturn);
+                return;
+                
+            }
             
 //            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
             id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
@@ -287,7 +304,7 @@ static NSString *myDefaultDomain;
             BOOL isUnacceptableStatusCode = [[self class] isUnacceptableStatusCode:httpURLResponse.statusCode];
             if ( isUnacceptableStatusCode && failureHandler ) {
                 
-                NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse];
+                NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse andRequest:request];
                 failureHandler (errorToReturn);
                 
             }else if (successHandler) {
@@ -302,7 +319,6 @@ static NSString *myDefaultDomain;
             break;
     }
 
-    
 }
 
 

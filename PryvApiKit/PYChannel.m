@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-
 #import "PYChannel.h"
 #import "PYFolder+JSON.h"
 #import "PYEvent.h"
@@ -111,6 +110,9 @@
                      }
                                           
                  } failure:^(NSError *error) {
+                     
+                     [self.access addEvent:event toUnsyncListIfNeeds:error];
+                     
                      if (errorHandler) {
                          errorHandler (error);
                      }
@@ -125,7 +127,7 @@
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"start"]
+        [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"start"]
              requestType:reqType
                   method:PYRequestMethodPOST
                 postData:[event dictionary]

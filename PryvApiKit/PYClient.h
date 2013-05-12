@@ -49,6 +49,10 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 + (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params;
 
++ (void)sendRequest:(NSURLRequest *)request
+        withReqType:(PYRequestType)reqType
+            success:(PYClientSuccessBlock)successHandler
+            failure:(PYClientFailureBlock)failureHandler;
 
 + (void) apiRequest:(NSString *)fullURL
             headers:(NSDictionary*)headers

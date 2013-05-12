@@ -6,6 +6,10 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+NSString const *kUnsyncEventsEventKey       = @"pryv.unsyncevents.Event";
+NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
+//NSString const *kUnsyncEventsRequestTypeKey = @"pryv.unsyncevents.RequestType";
+
 #import "PYAccess.h"
 #import "PYClient.h"
 #import "PYConstants.h"
@@ -18,6 +22,10 @@
 @synthesize apiDomain = _apiDomain;
 @synthesize apiScheme = _apiScheme;
 @synthesize serverTimeInterval = _serverTimeInterval;
+@synthesize connectionReachability = _connectionReachability;
+@synthesize eventsNotSync = _eventsNotSync;
+@synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
+@synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
@@ -26,16 +34,143 @@
         _accessToken = token;
         _apiDomain = [PYClient defaultDomain];
         _apiScheme = kPYAPIScheme;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
+        self.connectionReachability = [Reachability reachabilityForInternetConnection];
+        [self.connectionReachability startNotifier];
+        [self pyAccessStatus:self.connectionReachability];
+
+
     }
     return self;
 }
 
 - (void)dealloc
 {
-    _userID = nil;
-    _accessToken = nil;
+    self.userID = nil;
+    self.accessToken = nil;
+    self.apiDomain = nil;
+    self.apiScheme = nil;
+    self.connectionReachability = nil;
+    self.eventsNotSync = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
+
+- (BOOL)isOnline
+{
+    return _online;
+}
+
+- (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error
+{
+    if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
+        NSLog(@"No internet error, put this event in non sync list");
+        NSMutableURLRequest *request = error.userInfo[PryvRequestKey];
+        NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+        NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : event,
+                                             kUnsyncEventsRequestKey : request,
+                                             };
+        [self.eventsNotSync addObject:nonSyncEventObject];
+        
+    }
+
+}
+
+- (NSMutableArray *)eventsNotSync
+{
+    if (!_eventsNotSync) {
+        _eventsNotSync = [[NSMutableArray alloc] init];
+    }
+    
+    return _eventsNotSync;
+}
+
+#pragma mark - Reachability
+
+//Called by Reachability whenever status changes.
+
+- (void)reachabilityChanged:(NSNotification *)notif
+{
+	Reachability* curReach = [notif object];
+	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    NetworkStatus netStatus = [curReach currentReachabilityStatus];
+    if (netStatus == NotReachable) {
+        //No internet
+        NSLog(@"No internet");
+        _online = NO;
+    }else{
+        //HAVE Internet
+        NSLog(@"HAVE internet");
+        _online = YES;
+        if (self.eventsNotSync && self.eventsNotSync.count > 0) {
+            for (NSArray *eventRequest in self.eventsNotSync) {
+//                eventRequest[0]
+            }
+        }
+    }
+}
+
+- (void)pyAccessStatus:(Reachability *)currReach
+{
+    if (currReach == self.connectionReachability) {
+        if (currReach.currentReachabilityStatus == NotReachable) {
+            NSLog(@"No internet, cannot create access");
+            _online = NO;
+        }else{
+            NSLog(@"HAVE internet acces created");
+            _online = YES;
+        }
+    }
+}
+
+- (NSUInteger)attachmentsCountNotSync
+{
+    NSUInteger attCount = 0;
+    for (NSDictionary *eventDic in self.eventsNotSync) {
+        PYEvent *event = eventDic[kUnsyncEventsEventKey];
+        if (event.attachments.count > 0) {
+            attCount += event.attachments.count;
+        }
+    }
+    
+    return attCount;
+}
+
+- (NSInteger)attachmentSizeNotSync
+{
+    NSUInteger attSize = 0;
+    for (NSDictionary *eventDic in self.eventsNotSync) {
+        PYEvent *event = eventDic[kUnsyncEventsEventKey];
+        for (PYAttachment *attachment in event.attachments) {
+            attSize += attachment.fileData.length; //numberOfBytes
+        }
+    }
+    
+    return attSize;
+
+}
+
+- (void)syncEvents
+{
+    
+    NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
+    [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
+    
+    for (NSDictionary *eventDic in nonSyncEvents) {
+        NSURLRequest *request = eventDic[kUnsyncEventsRequestKey];
+        
+//        PYRequestType reqType = [eventDic[kUnsyncEventsRequestTypeKey] intValue];
+        [PYClient sendRequest:request withReqType:PYRequestTypeAsync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+            NSLog(@"JSON %@",JSON);
+            [self.eventsNotSync removeObject:eventDic];
+            NSLog(@"self.eventsNotSync list after sync %@",self.eventsNotSync);
+        } failure:^(NSError *error) {
+            NSLog(@"syncEvents error %@",error);
+        }];
+        
+    }
+}
+
 
 - (NSString *)apiBaseUrl;
 {

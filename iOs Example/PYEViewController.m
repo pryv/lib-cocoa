@@ -27,14 +27,20 @@
     [PYClient setDefaultDomainStaging];
         
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-    [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
+    NSLog(@"isOnline %d",access.isOnline);
+    NSLog(@"log");
+
+    
+    [access getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
         
         for (PYChannel *channel in channelList) {
+            
+
             
             
             if ([channel.channelId isEqualToString:@"position"]) {
                 
-                [channel getAllEventsWithRequestType:PYRequestTypeAsync successHandler:^(NSArray *eventList) {
+                [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
                     
                     NSLog(@"eventList is %@",eventList);
                 } errorHandler:^(NSError *error) {
@@ -42,10 +48,10 @@
                 }];
                 
                 PYEvent *event = [[PYEvent alloc] init];
-                event.tags = @[@"tag1",@"tag2"];
+                event.tags = @[@"tagSync",@"tag2Sync"];
                 event.value = @"test general value";
                 event.type = @{@"class": @"note", @"format" : @"txt"};
-                //Default.png
+
                 NSString *imgName = @"Default";
                 NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"png"];
                 NSData *imageData = [NSData dataWithContentsOfFile:filePath];
@@ -60,7 +66,18 @@
                     NSLog(@"success %@", newEventId);
                 } errorHandler:^(NSError *error) {
                     NSLog(@"error %@",error);
+                    NSMutableURLRequest *request = error.userInfo[PryvRequestKey];
+                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
                 }];
+                
+                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    NSLog(@"success %@", newEventId);
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"error %@",error);
+                    NSMutableURLRequest *request = error.userInfo[PryvRequestKey];
+                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+                }];
+
                 
                 
 //                [channel setModifiedEventAttributesObject:noteEvent
@@ -111,53 +128,14 @@
         
         
     } errorHandler:^(NSError *error) {
-        
+        NSLog(@"getChannels error %@",error);
+        NSLog(@"isOnline %d",access.isOnline);
+
     }];
     
+    [access syncEvents];
     
-//    [[PYApiConnectionClient sharedPYApiConnectionClient] startClientWithUserId:@"perkikiki"
-//                                                         oAuthToken:kPYUserTempToken
-//                                                     successHandler:^(NSTimeInterval serverTime)
-//     {
-//         NSLog(@"success");
-//     }errorHandler:^(NSError *error) {
-//        NSLog(@"");
-//    }];
-//
-//    NSString *channelId = @"position";
-//    
-//    NSMutableDictionary *channelData = [[NSMutableDictionary alloc] init];
-//    [channelData setObject:@"Position2" forKey:@"name"];
-//
-//    NSMutableDictionary *clientData = [[NSMutableDictionary alloc] init];
-//    [clientData setObject:@"value" forKey:@"key"];
-//    [channelData setObject:clientData forKey:@"clientData"];
-//        
-//    [[PYChannelClient sharedPYChannelClient] editChannelWithRequestType:PYRequestTypeSync channelId:channelId data:channelData successHandler:^(){
-//        NSLog(@"edit success");
-//    } errorHandler:^(NSError *error){
-//        NSLog(@"edit error %@", error);
-//    }];
-//    
-//    [[PYFolderClient sharedPYFolderClient] getFoldersWithRequestType:PYRequestTypeAsync
-//                                                filterParams:nil
-//                                              successHandler:^(NSArray *folderList)
-//     {
-//         NSLog(@"folder list %@",folderList);
-//     }errorHandler:^(NSError *error) {
-//         NSLog(@"error %@",error);
-//     }];
-//    
-//    
-//    [[PYChannelClient sharedPYChannelClient] getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList)
-//    {
-//        NSLog(@"channel list %@", channelList);
-//    } errorHandler:^(NSError *error) {
-//        NSLog(@"error %@", error);
-//    }];
-//    
-//
-//    NSLog(@"end of viewDidLoad");
+    
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
