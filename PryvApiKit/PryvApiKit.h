@@ -23,4 +23,5 @@
 // Pryv Api Client
 #import <PryvApiKit/PYClient.h>
 #import <PryvApiKit/PYEventClient.h>
+#import <PryvApiKit/PYWebLoginViewController.h>
 
