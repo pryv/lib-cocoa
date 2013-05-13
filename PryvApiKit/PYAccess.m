@@ -46,12 +46,18 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)dealloc
 {
-    self.userID = nil;
-    self.accessToken = nil;
-    self.apiDomain = nil;
-    self.apiScheme = nil;
-    self.connectionReachability = nil;
-    self.eventsNotSync = nil;
+    [_userID release];
+    _userID = nil;
+    [_accessToken release];
+    _accessToken = nil;
+    [_apiDomain release];
+    _apiDomain = nil;
+    [_apiScheme release];
+    _apiScheme = nil;
+    [_connectionReachability release];
+    _connectionReachability = nil;
+    [_eventsNotSync release];
+    _eventsNotSync = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
