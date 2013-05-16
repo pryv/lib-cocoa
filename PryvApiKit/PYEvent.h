@@ -20,7 +20,8 @@
     NSTimeInterval _time;
     NSTimeInterval _duration;
     
-    NSDictionary *_type;
+    NSString *_eventClass;
+    NSString *_eventFormat;
     id _value;
     
     NSString *_folderId;
@@ -40,7 +41,9 @@
 @property (nonatomic) NSTimeInterval time;
 @property (nonatomic) NSTimeInterval duration;
 
-@property (nonatomic, retain) NSDictionary *type;
+@property (nonatomic, retain) NSString *eventClass;
+@property (nonatomic, retain) NSString *eventFormat;
+
 @property (nonatomic, retain) id value;
 
 @property (nonatomic, retain) NSString *folderId;

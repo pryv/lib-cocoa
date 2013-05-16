@@ -15,7 +15,8 @@
 @synthesize channelId = _channelId;
 @synthesize time = _time;
 @synthesize duration = _duration;
-@synthesize type = _type;
+@synthesize eventClass = _eventClass;
+@synthesize eventFormat = _eventFormat;
 @synthesize value = _value;
 @synthesize folderId = _folderId;
 @synthesize tags = _tags;
@@ -30,8 +31,10 @@
     
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    if (_type) {
-        [dic setObject:_type forKey:@"type"];
+
+    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
+        [dic setObject:@{@"class": _eventClass, @"format" : _eventFormat}
+                forKey:@"type"];
     }
     
     if (_value) {
@@ -70,11 +73,12 @@
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@", self.eventClass=%@", self.eventClass];
+    [description appendFormat:@", self.eventFormat=%@", self.eventFormat];
     [description appendFormat:@", self.eventId=%@", self.eventId];
     [description appendFormat:@", self.channelId=%@", self.channelId];
     [description appendFormat:@", self.time=%f", self.time];
     [description appendFormat:@", self.duration=%f", self.duration];
-    [description appendFormat:@", self.type=%@", self.type];
     [description appendFormat:@", self.folderId=%@", self.folderId];
     [description appendFormat:@", self.tags=%@", self.tags];
     [description appendFormat:@", self.description=%@", self.eventDescription];
@@ -82,7 +86,6 @@
     [description appendFormat:@", self.clientData=%@", self.clientData];
     [description appendFormat:@", self.trashed=%d", self.trashed];
     [description appendFormat:@", self.modified=%@", self.modified];
-    [description appendFormat:@", self.TYPE=%@", self.type];
     [description appendFormat:@", self.VALUE=%@",self.value];
 
     [description appendString:@">"];
@@ -94,7 +97,8 @@
 {
     [_eventId release];
     [_channelId release];
-    [_type release];
+    [_eventClass release];
+    [_eventFormat release];
     [_value release];
     [_folderId release];
     [_tags release];
@@ -109,7 +113,6 @@
 {
     self = [super init];
     if (self) {
-//        self.trashed = NO;
     }
     
     return self;

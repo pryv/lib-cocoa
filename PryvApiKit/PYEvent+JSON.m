@@ -24,7 +24,9 @@
         event.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
     
-    event.type = [JSON objectForKey:@"type"];
+    NSDictionary *typeDic = [JSON objectForKey:@"type"];
+    event.eventClass = [typeDic objectForKey:@"class"];
+    event.eventFormat = [typeDic objectForKey:@"format"];
     event.value = [JSON objectForKey:@"value"];
     
     event.folderId = [JSON objectForKey:@"folderId"];

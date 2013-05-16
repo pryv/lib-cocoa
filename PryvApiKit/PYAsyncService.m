@@ -37,13 +37,7 @@
     _request = nil;
     [_response release];
     _response = nil;
-    
-//    [_onSuccess release];
-//    _onSuccess = nil;
-//    
-//    [_onFailure release];
-//    _onFailure = nil;
-    
+        
     [super dealloc];
 }
 

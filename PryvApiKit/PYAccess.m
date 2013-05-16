@@ -26,6 +26,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize eventsNotSync = _eventsNotSync;
 @synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
+@synthesize lastTimeServerContact = _lastTimeServerContact;
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
@@ -98,7 +99,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (void)reachabilityChanged:(NSNotification *)notif
 {
 	Reachability* curReach = [notif object];
-	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
     NetworkStatus netStatus = [curReach currentReachabilityStatus];
     if (netStatus == NotReachable) {
         //No internet
