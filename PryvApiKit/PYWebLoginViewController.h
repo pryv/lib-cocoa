@@ -15,6 +15,7 @@
 - (UIViewController*) pyWebLoginGetController;
 - (void) pyWebLoginSuccess:(PYAccess*)pyAccess;
 - (void) pyWebLoginAborded:(NSString*)reason;
+- (void) pyWebLoginError:(NSError*)error;
 @end
 
 

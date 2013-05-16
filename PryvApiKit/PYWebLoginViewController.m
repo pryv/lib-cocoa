@@ -8,6 +8,8 @@
 
 
 #import "PYClient.h"
+#import "PYError.h"
+#import "PYErrorUtility.h"
 #import "PYConstants.h"
 #import "PYWebLoginViewController.h"
 
@@ -34,6 +36,7 @@ NSUInteger iteration;
 NSString *username;
 NSString *token;
 
+BOOL closing;
 
 + (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
     PYWebLoginViewController *login = [PYWebLoginViewController alloc];
@@ -49,13 +52,13 @@ NSString *token;
 - (PYWebLoginViewController* )openOn
 {
     [self init];
-    
+    closing = false;
     
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
     
     // -- navigation bar -- //
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(close:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     
     refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
     self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
@@ -83,6 +86,15 @@ NSString *token;
     return self;
 }
 
+- (void)close
+{
+    if (closing) return;
+    closing = true;
+    [self.pollTimer invalidate];
+    [self dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+}
 
 - (void)dealloc
 {
@@ -128,17 +140,15 @@ NSString *token;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(requestLoginView)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
     
+        
     // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self requestLoginView];
+   [self requestLoginView];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -149,12 +159,11 @@ NSString *token;
 
 #pragma mark - Target Actions
 
-- (IBAction)close:(id)sender
+
+
+- (IBAction)cancel:(id)sender
 {
-    [self.pollTimer invalidate];
-    [self dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
+    [self abordedWithReason:@"Canceled by user"];
 }
 
 - (IBAction)reload:(id)sender
@@ -219,6 +228,13 @@ BOOL requestedLoginView = false;
 - (void)handleFailure:(NSError *)error
 {
     NSLog(@"[HTTPClient Error]: %@", error);
+    NSString *content = [NSString stringWithFormat:@"<html><center><h1>PrYv Signup</h1></center><hr><center>error: %@ ...</center></html>",[error localizedDescription]];
+    [webView loadHTMLString:content baseURL:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+        [self abordedWithError:error];
+    });
+    
 }
 
 
@@ -228,7 +244,7 @@ BOOL requestedLoginView = false;
     NSLog(@"create a poll request with interval: %f", pollTimeInterval);
     
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        NSLog(@"stop polling if app is in backround");
+        NSLog(@"stop polling if app is in background");
         return;
     }
     
@@ -303,16 +319,15 @@ BOOL requestedLoginView = false;
             NSString *username = jsonDictionary[@"username"];
             NSString *token = jsonDictionary[@"token"];
             
-            [self successfulLoginWithUsername:username token:token];
+            [self successfullLoginWithUsername:username token:token];
             
         } else if ([@"REFUSED" isEqualToString:statusString]) {
             
             NSString *message = jsonDictionary[@"message"];
-            assert(message);
-            
+            [self abordedWithReason:message];
             
         } else if ([@"ERROR" isEqualToString:statusString]) {
-            
+           
             NSString *message = jsonDictionary[@"message"];
             assert(message);
             
@@ -320,6 +335,8 @@ BOOL requestedLoginView = false;
             if ([jsonDictionary objectForKey:@"id"]) {
                 errorCode = jsonDictionary[@"id"];
             }
+            
+            [self abordedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
             
             
         } else {
@@ -330,17 +347,30 @@ BOOL requestedLoginView = false;
                 message = [jsonDictionary objectForKey:@"message"];
             }
             
+            [self abordedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
+            
         }
     }
     
 }
 
--  (void)successfulLoginWithUsername:(NSString *)username token:(NSString *)token
+-  (void)successfullLoginWithUsername:(NSString *)username token:(NSString *)token
 {
     [self.delegate pyWebLoginSuccess:[PYClient createAccessWithUsername:username andAccessToken:token]];
-    [self close:nil];
+    [self close];
 }
 
+-  (void)abordedWithReason:(NSString *)reason
+{
+    [self.delegate pyWebLoginAborded:reason];
+    [self close];
+}
+
+-  (void)abordedWithError:(NSError *)error
+{
+    [self.delegate pyWebLoginError:error];
+    [self close];
+}
 
 - (void)didReceiveMemoryWarning
 {

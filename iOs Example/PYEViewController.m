@@ -35,8 +35,6 @@
         
         for (PYChannel *channel in channelList) {
             
-
-            
             
             if ([channel.channelId isEqualToString:@"position"]) {
                 
@@ -160,10 +158,14 @@
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }
-
 - (void) pyWebLoginAborded:(NSString*)reason {
     NSLog(@"Signin Aborded: %@",reason);
 }
+
+- (void) pyWebLoginError:(NSError*)error {
+    NSLog(@"Signin Error: %@",error);
+}
+
 
 #pragma mark -- 
 
