@@ -71,7 +71,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
         NSLog(@"No internet error, put this event in non sync list");
-        NSMutableURLRequest *request = error.userInfo[PryvRequestKey];
+        NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
         NSLog(@"request.bodyLength %d",request.HTTPBody.length);
         NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : event,
                                              kUnsyncEventsRequestKey : request,
@@ -133,7 +133,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     NSUInteger attCount = 0;
     for (NSDictionary *eventDic in self.eventsNotSync) {
-        PYEvent *event = eventDic[kUnsyncEventsEventKey];
+        PYEvent *event = [eventDic objectForKey:kUnsyncEventsEventKey];
         if (event.attachments.count > 0) {
             attCount += event.attachments.count;
         }
@@ -146,7 +146,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     NSUInteger attSize = 0;
     for (NSDictionary *eventDic in self.eventsNotSync) {
-        PYEvent *event = eventDic[kUnsyncEventsEventKey];
+        PYEvent *event = [eventDic objectForKey:kUnsyncEventsEventKey];
         for (PYAttachment *attachment in event.attachments) {
             attSize += attachment.fileData.length; //numberOfBytes
         }
@@ -163,7 +163,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
     
     for (NSDictionary *eventDic in nonSyncEvents) {
-        NSURLRequest *request = eventDic[kUnsyncEventsRequestKey];
+        NSURLRequest *request = [eventDic objectForKey:kUnsyncEventsRequestKey];
         
 //        PYRequestType reqType = [eventDic[kUnsyncEventsRequestTypeKey] intValue];
         [PYClient sendRequest:request withReqType:PYRequestTypeAsync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {

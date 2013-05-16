@@ -23,5 +23,11 @@
 // Pryv Api Client
 #import <PryvApiKit/PYClient.h>
 #import <PryvApiKit/PYEventClient.h>
+
+#if TARGET_OS_MAC
+
+#else 
 #import <PryvApiKit/PYWebLoginViewController.h>
+#endif
+
 
