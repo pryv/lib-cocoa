@@ -28,54 +28,58 @@
 //        
 //    }];
     
+    [PYClient setDefaultDomainStaging];
+    
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-    [access getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
+    NSLog(@"isOnline %d",access.isOnline);
+    NSLog(@"log");
+    
+    
+    [access getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
         
         for (PYChannel *channel in channelList) {
             
             
             if ([channel.channelId isEqualToString:@"position"]) {
                 
-                [channel getAllEventsWithRequestType:PYRequestTypeAsync successHandler:^(NSArray *eventList) {
+                [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
                     
-                    
+                    NSLog(@"eventList is %@",eventList);
                 } errorHandler:^(NSError *error) {
                     NSLog(@"get all events error is %@",error);
                 }];
                 
-                PYEventType *eventType = [[PYEventType alloc] initWithClass:PYEventClassNote andFormat:PYEventFormatTxt];
-                NSString *noteTextValue = @"OS X";
-                PYEventNote *noteEvent = [[PYEventNote alloc] initWithType:eventType
-                                                                 noteValue:noteTextValue
-                                                                  folderId:nil
-                                                                      tags:nil
-                                                               description:nil
-                                                                clientData:nil];
-                NSString *imgName = @"image003";
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"jpg"];
+                PYEvent *event = [[PYEvent alloc] init];
+                event.tags = @[@"tagSync",@"tag2Sync"];
+                event.value = @"test general value";
+                event.type = @{@"class": @"note", @"format" : @"txt"};
+                
+                NSString *imgName = @"Default";
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"png"];
                 NSData *imageData = [NSData dataWithContentsOfFile:filePath];
                 
                 PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
                                                                       name:imgName
-                                                                  fileName:@"image003.jpg"];
-                [noteEvent addAttachment:att];
+                                                                  fileName:@"Default.png"];
+                [event addAttachment:att];
                 
                 
-                NSString *pdfName = @"Pryv_ecosystem";
-                NSString *pdfPath = [[NSBundle mainBundle] pathForResource:pdfName ofType:@"pdf"];
-                NSData *pdfData = [NSData dataWithContentsOfFile:pdfPath];
-                
-                PYAttachment *att1 = [[PYAttachment alloc] initWithFileData:pdfData
-                                                                       name:pdfName
-                                                                   fileName:@"Pryv_ecosystem.pdf"];
-                [noteEvent addAttachment:att1];
-                
-                
-                [channel createEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
                     NSLog(@"success %@", newEventId);
                 } errorHandler:^(NSError *error) {
                     NSLog(@"error %@",error);
+                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
+                    NSLog(@"request.bodyLength %ld",request.HTTPBody.length);
                 }];
+                
+                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    NSLog(@"success %@", newEventId);
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"error %@",error);
+                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
+                    NSLog(@"request.bodyLength %ld",(unsigned long)request.HTTPBody.length);
+                }];
+                
                 
                 
             }
