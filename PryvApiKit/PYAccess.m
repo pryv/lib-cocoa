@@ -74,6 +74,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         NSLog(@"No internet error, put this event in non sync list");
         NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
         NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+        event.time = [[NSDate date] doubleValue];
         NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : event,
                                              kUnsyncEventsRequestKey : request,
                                              };
@@ -157,24 +158,32 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 }
 
-- (void)syncEvents
+- (void)batchSyncEventsWithoutAttachment
 {
     
     NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
     [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
     
     for (NSDictionary *eventDic in nonSyncEvents) {
-        NSURLRequest *request = [eventDic objectForKey:kUnsyncEventsRequestKey];
         
+        PYEvent *eventToSync = [eventDic objectForKey:kUnsyncEventsEventKey];
+        
+        if (!eventToSync.attachments.count) {
+            NSURLRequest *request = [eventDic objectForKey:kUnsyncEventsRequestKey];
+            
 //        PYRequestType reqType = [eventDic[kUnsyncEventsRequestTypeKey] intValue];
-        [PYClient sendRequest:request withReqType:PYRequestTypeAsync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-            NSLog(@"JSON %@",JSON);
-            [self.eventsNotSync removeObject:eventDic];
-            NSLog(@"self.eventsNotSync list after sync %@",self.eventsNotSync);
-        } failure:^(NSError *error) {
-            NSLog(@"syncEvents error %@",error);
-        }];
-        
+            [PYClient sendRequest:request withReqType:PYRequestTypeAsync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                NSLog(@"JSON %@",JSON);
+                
+                eventToSync.synchedAt = [[NSDate date] doubleValue];
+                
+                [self.eventsNotSync removeObject:eventDic];
+                NSLog(@"self.eventsNotSync list after sync %@",self.eventsNotSync);
+            } failure:^(NSError *error) {
+                NSLog(@"syncEvents error %@",error);
+            }];
+
+        }
     }
 }
 

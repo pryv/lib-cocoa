@@ -25,6 +25,7 @@
 @synthesize clientData = _clientData;
 @synthesize trashed = _trashed;
 @synthesize modified = _modified;
+@synthesize synchedAt = _synchedAt;
 
 
 - (NSDictionary *)dictionary {

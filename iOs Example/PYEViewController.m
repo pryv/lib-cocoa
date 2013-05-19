@@ -69,13 +69,13 @@
                     NSLog(@"request.bodyLength %d",request.HTTPBody.length);
                 }];
                 
-                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                    NSLog(@"success %@", newEventId);
-                } errorHandler:^(NSError *error) {
-                    NSLog(@"error %@",error);
-                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
-                }];
+//                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+//                    NSLog(@"success %@", newEventId);
+//                } errorHandler:^(NSError *error) {
+//                    NSLog(@"error %@",error);
+//                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
+//                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+//                }];
 
                 
                 
@@ -132,7 +132,7 @@
 
     }];
     
-    [access syncEvents];
+    [access batchSyncEventsWithoutAttachment];
     
     
 }

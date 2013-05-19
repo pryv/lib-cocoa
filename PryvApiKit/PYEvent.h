@@ -31,6 +31,7 @@
     NSDictionary *_clientData;
     BOOL _trashed;
     NSDate *_modified;
+    NSTimeInterval _synchedAt;
 
 }
 
@@ -55,6 +56,9 @@
 @property (nonatomic, retain) NSDictionary *clientData;
 @property (nonatomic) BOOL trashed;
 @property (nonatomic, retain) NSDate *modified;
+
+//event that were in unsyncList
+@property NSTimeInterval synchedAt;
 
 - (void)addAttachment:(PYAttachment *)attachment;
 - (void)removeAttachment:(PYAttachment *)attachmentToRemove;

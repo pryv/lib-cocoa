@@ -49,7 +49,7 @@
 
 - (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error;
 
-- (void)syncEvents;
+- (void)batchSyncEventsWithoutAttachment;
 
 
 - (void) apiRequest:(NSString *)path
