@@ -78,6 +78,8 @@
 		4E582DE816C25379003B59DB /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DE616C25379003B59DB /* MainStoryboard_iPhone.storyboard */; };
 		4E582DEB16C25379003B59DB /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DE916C25379003B59DB /* MainStoryboard_iPad.storyboard */; };
 		4E582DEE16C25379003B59DB /* PYEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E582DED16C25379003B59DB /* PYEViewController.m */; };
+		4EA29C53174B7AAA00233897 /* Reachability.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D82A989173EDE2A00CB100D /* Reachability.h */; };
+		4EA29C54174B7AAA00233897 /* JSONKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D75F4CA173304F200380629 /* JSONKit.h */; };
 		8A6D9E7216FB5895008F2B2C /* PYClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8AB2361D16FA895800B28F06 /* PYClient.h */; };
 		8A6D9E7616FB79A1008F2B2C /* PYErrorUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PYErrorUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A6D9E7716FB79A1008F2B2C /* PYErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PYErrorUtility.m */; };
@@ -129,6 +131,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				4EA29C53174B7AAA00233897 /* Reachability.h in CopyFiles */,
+				4EA29C54174B7AAA00233897 /* JSONKit.h in CopyFiles */,
 				3D4C386817416B65004E75BE /* PYWebLoginViewController.h in CopyFiles */,
 				3D75F4D51733058900380629 /* AccessClient.h in CopyFiles */,
 				3D75F4D41733057700380629 /* PYError.h in CopyFiles */,
@@ -852,6 +856,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOs Example/iOs Example-Prefix.pch";
+				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "iOs Example/iOs Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
@@ -875,6 +880,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOs Example/iOs Example-Prefix.pch";
+				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "iOs Example/iOs Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
@@ -999,7 +1005,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
 				GCC_VERSION = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1021,7 +1027,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
 				GCC_VERSION = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",

@@ -283,23 +283,23 @@ BOOL requestedLoginView = false;
     NSDictionary *jsonDictionary = (NSDictionary *)JSON;
     
     // check status
-    NSString *statusString = jsonDictionary[@"status"];
+    NSString *statusString = [jsonDictionary objectForKey:@"status"];
     
     if ([@"NEED_SIGNIN" isEqualToString:statusString]) {
         if (requestedLoginView) {
             requestedLoginView = false;
             // -- open url only once !! -- //
             assert([JSON objectForKey:@"url"]);
-            NSString *loginPageUrlString = jsonDictionary[@"url"];
+            NSString *loginPageUrlString = [jsonDictionary objectForKey:@"url"];
             NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
             assert(loginPageURL);
             [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
         }
         
-        NSString *pollUrlString = jsonDictionary[@"poll"];
+        NSString *pollUrlString = [jsonDictionary objectForKey:@"poll"];
         assert(pollUrlString);
         
-        NSString *pollTimeIntervalString = jsonDictionary[@"poll_rate_ms"];
+        NSString *pollTimeIntervalString = [jsonDictionary objectForKey:@"poll_rate_ms"];
         assert(pollTimeIntervalString);
         
         NSTimeInterval pollTimeInterval = [pollTimeIntervalString doubleValue] / 1000;
@@ -316,24 +316,24 @@ BOOL requestedLoginView = false;
         if ([@"ACCEPTED" isEqualToString:statusString]) {
             
             // if status ACCEPTED proceed with username and token
-            NSString *username = jsonDictionary[@"username"];
-            NSString *token = jsonDictionary[@"token"];
+            NSString *username = [jsonDictionary objectForKey:@"username"];
+            NSString *token = [jsonDictionary objectForKey:@"token"];
             
             [self successfullLoginWithUsername:username token:token];
             
         } else if ([@"REFUSED" isEqualToString:statusString]) {
             
-            NSString *message = jsonDictionary[@"message"];
+            NSString *message = [jsonDictionary objectForKey:@"message"];
             [self abordedWithReason:message];
             
         } else if ([@"ERROR" isEqualToString:statusString]) {
            
-            NSString *message = jsonDictionary[@"message"];
+            NSString *message = [jsonDictionary objectForKey:@"message"];
             assert(message);
             
             NSString *errorCode = nil;
             if ([jsonDictionary objectForKey:@"id"]) {
-                errorCode = jsonDictionary[@"id"];
+                errorCode = [jsonDictionary objectForKey:@"id"];
             }
             
             [self abordedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
