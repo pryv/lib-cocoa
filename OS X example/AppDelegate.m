@@ -52,7 +52,8 @@
                 PYEvent *event = [[PYEvent alloc] init];
                 event.tags = @[@"tagSync",@"tag2Sync"];
                 event.value = @"test general value";
-                event.type = @{@"class": @"note", @"format" : @"txt"};
+                event.eventClass = @"note";
+                event.eventFormat = @"txt";
                 
                 NSString *imgName = @"Default";
                 NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"png"];
