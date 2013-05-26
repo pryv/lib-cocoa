@@ -23,6 +23,7 @@
 // Pryv Api Client
 #import <PryvApiKit/PYClient.h>
 #import <PryvApiKit/PYEventClient.h>
+#import <PryvApiKit/PYCachingController.h>
 
 #if TARGET_OS_MAC
 
