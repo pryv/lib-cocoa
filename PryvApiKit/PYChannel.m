@@ -9,7 +9,7 @@
 #import "PYChannel.h"
 #import "PYFolder+JSON.h"
 #import "PYEvent.h"
-
+#import "PYEventsCachingUtillity.h"
 #import "PYConstants.h"
 
 @implementation PYChannel
@@ -78,11 +78,18 @@
                          [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
                      }
                      if (successHandler) {
+                         [PYEventsCachingUtillity cacheEvents:JSON];
                          successHandler([eventsArray autorelease]);
                      }
                                           
                  } failure:^(NSError *error) {
                      if (errorHandler) {
+                         if ([PYEventsCachingUtillity getEventsFromCache].count) {
+                             NSMutableDictionary *errorUserInfo = [[NSDictionary dictionaryWithDictionary:error.userInfo] mutableCopy];
+                             [errorUserInfo setObject:[PYEventsCachingUtillity getEventsFromCache] forKey:@"CachedEvents"];
+                             NSError *errorWithCachedEvents = [NSError errorWithDomain:PryvSDKDomain code:0 userInfo:errorUserInfo];
+                             errorHandler (errorWithCachedEvents);
+                         }
                          errorHandler (error);
                      }
                  }];

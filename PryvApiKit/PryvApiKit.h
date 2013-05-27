@@ -24,6 +24,7 @@
 #import <PryvApiKit/PYClient.h>
 #import <PryvApiKit/PYEventClient.h>
 #import <PryvApiKit/PYCachingController.h>
+#import <PryvApiKit/PYEventsCachingUtillity.h>
 
 #if TARGET_OS_MAC
 

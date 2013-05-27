@@ -25,7 +25,8 @@
     [super viewDidLoad];
     
     [PYClient setDefaultDomainStaging];
-        
+    
+    NSLog(@"events from cache %@",[PYEventsCachingUtillity getEventsFromCache]);
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     NSLog(@"isOnline %d",access.isOnline);
     NSLog(@"log");

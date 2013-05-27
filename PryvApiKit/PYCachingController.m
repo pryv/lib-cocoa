@@ -7,6 +7,9 @@
 //
 
 #import "PYCachingController.h"
+#import "PYJSONUtility.h"
+#import "PYEvent.h"
+#import "PYEvent+JSON.h"
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
@@ -45,6 +48,22 @@
 - (NSData *)getEventDataForKey:(NSString *)key;
 {
 	return [NSData dataWithContentsOfFile:[self.localDataPath stringByAppendingPathComponent:key]];
+}
+
+- (NSArray *)getAllEventsFromCache
+{
+    //It will be array of PYEvents objects
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localDataPath error:nil];
+    NSArray *filesWithSelectedPrefix = [files filteredArrayUsingPredicate:
+                                        [NSPredicate predicateWithFormat:@"self BEGINSWITH[cd] 'event_'"]];
+//    NSLog(@"%@", filesWithSelectedPrefix);
+    NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
+    for (NSString *eventCachedName in filesWithSelectedPrefix) {
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
+        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
+    }
+    
+    return arrayOFCachedEvents;
 }
 
 + (id)sharedManager {

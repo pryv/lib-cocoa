@@ -18,5 +18,6 @@
 - (BOOL)isEventDataCachedForKey:(NSString *)key;
 - (void)cacheEventData:(NSData *)data withKey:(NSString *)key;
 - (NSData *)getEventDataForKey:(NSString *)key;
+- (NSArray *)getAllEventsFromCache;
 
 @end
