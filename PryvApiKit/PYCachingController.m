@@ -45,18 +45,42 @@
 		[[NSFileManager defaultManager] createFileAtPath:[self.localDataPath stringByAppendingPathComponent:key] contents:data attributes:nil];
 }
 
+- (void)cacheNSURLRequest:(NSURLRequest *)req withKey:(NSString *)key
+{
+    if (key)
+        [NSKeyedArchiver archiveRootObject:req toFile:[self.localDataPath stringByAppendingPathComponent:key]];
+}
+
+- (NSURLRequest *)getNSURLRequestForKey:(NSString *)key
+{
+    if (key)
+        return [NSKeyedUnarchiver unarchiveObjectWithFile:[self.localDataPath stringByAppendingPathComponent:key]];
+    return nil;
+}
+
 - (NSData *)getEventDataForKey:(NSString *)key;
 {
-	return [NSData dataWithContentsOfFile:[self.localDataPath stringByAppendingPathComponent:key]];
+    if (key)
+        return [NSData dataWithContentsOfFile:[self.localDataPath stringByAppendingPathComponent:key]];
+    return nil;
+}
+
+- (NSArray *)getAllFilesWithPredicateFormat:(NSString *)format
+{
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localDataPath error:nil];
+    NSArray *filesWithSelectedPrefix = [files filteredArrayUsingPredicate:
+                                        [NSPredicate predicateWithFormat:format]];
+    return filesWithSelectedPrefix;
+
 }
 
 - (NSArray *)getAllEventsFromCache
 {
-    //It will be array of PYEvents objects
-    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localDataPath error:nil];
-    NSArray *filesWithSelectedPrefix = [files filteredArrayUsingPredicate:
-                                        [NSPredicate predicateWithFormat:@"self BEGINSWITH[cd] 'event_'"]];
-//    NSLog(@"%@", filesWithSelectedPrefix);
+    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'event_'"];
+    if (!filesWithSelectedPrefix.count) {
+        return nil;
+    }
+    
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
     for (NSString *eventCachedName in filesWithSelectedPrefix) {
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
@@ -64,6 +88,34 @@
     }
     
     return arrayOFCachedEvents;
+}
+
+- (NSArray *)getAllUnsyncEventsFromCache
+{
+    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'unsync_event_'"];
+    if (!filesWithSelectedPrefix.count) {
+        return nil;
+    }
+    
+    NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
+    for (NSString *eventCachedName in filesWithSelectedPrefix) {
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
+        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
+    }
+    
+    return arrayOFCachedEvents;
+
+}
+
+- (PYEvent *)getEventWithKey:(NSString *)key;
+{
+    if ([self isEventDataCachedForKey:key]) {
+        NSData *eventData = [self getEventDataForKey:key];
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
+        return [PYEvent eventFromDictionary:eventDic];
+    }
+    
+    return nil;
 }
 
 + (id)sharedManager {

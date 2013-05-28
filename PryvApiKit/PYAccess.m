@@ -14,6 +14,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYClient.h"
 #import "PYConstants.h"
 #import "PYChannel+JSON.h"
+#import "PYEventsCachingUtillity.h"
 
 @implementation PYAccess
 
@@ -71,7 +72,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error
 {
     if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
-        NSLog(@"No internet error, put this event in non sync list");
+        NSLog(@"No internet error, put this event in non sync list and cache it if caching is enabled for library");
         NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
         NSLog(@"request.bodyLength %d",request.HTTPBody.length);
         event.time = [[NSDate date] doubleValue];
@@ -82,6 +83,32 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         
     }
 
+}
+
+- (void)serializeNonSyncList:(NSDictionary *)nonSyncList
+{
+    for (NSDictionary *nonSyncEventObject in nonSyncList) {
+        PYEvent *eventForCache = nonSyncEventObject[kUnsyncEventsEventKey];
+        [PYEventsCachingUtillity cacheUnsyncEvent:eventForCache];
+        [PYEventsCachingUtillity cacheURLRequest:nonSyncEventObject[kUnsyncEventsRequestKey] forEventId:eventForCache.eventId];
+        //getNSURLRequest
+    }
+}
+
+- (void)deserializeNonSyncList
+{
+    NSArray *nonSyncEventsArray = [PYEventsCachingUtillity getUnsyncEventsFromCache];
+    
+    for (PYEvent *unsyncEvent in nonSyncEventsArray) {
+        NSURLRequest *unsyncURLReq = [PYEventsCachingUtillity getNSURLRequestForEventId:unsyncEvent.eventId];
+        NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : unsyncEvent,
+                                             kUnsyncEventsRequestKey : unsyncURLReq,
+                                             };
+
+        [self.eventsNotSync addObject:nonSyncEventObject];
+
+    }
+    
 }
 
 - (NSMutableArray *)eventsNotSync

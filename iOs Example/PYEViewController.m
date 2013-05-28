@@ -18,8 +18,6 @@
 
 @synthesize signinButton;
 
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -27,6 +25,10 @@
     [PYClient setDefaultDomainStaging];
     
     NSLog(@"events from cache %@",[PYEventsCachingUtillity getEventsFromCache]);
+    
+    PYEvent *event = [PYEventsCachingUtillity getEventFromCacheWithEventId:@"eeKNFIBOnJ" isUnsync:NO];
+    NSLog(@"event for key is %@",event);
+    
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     NSLog(@"isOnline %d",access.isOnline);
     NSLog(@"log");
@@ -41,9 +43,9 @@
                 
                 [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
                     
-                    NSLog(@"eventList is %@",eventList);
+//                    NSLog(@"eventList is %@",eventList);
                 } errorHandler:^(NSError *error) {
-                    NSLog(@"get all events error is %@",error);
+//                    NSLog(@"get all events error is %@",error);
                 }];
                 
                 PYEvent *event = [[PYEvent alloc] init];
@@ -63,11 +65,11 @@
 
                 
                 [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                    NSLog(@"success %@", newEventId);
+//                    NSLog(@"success %@", newEventId);
                 } errorHandler:^(NSError *error) {
-                    NSLog(@"error %@",error);
+//                    NSLog(@"error %@",error);
                     NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+//                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
                 }];
                 
 //                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
@@ -128,8 +130,8 @@
         
         
     } errorHandler:^(NSError *error) {
-        NSLog(@"getChannels error %@",error);
-        NSLog(@"isOnline %d",access.isOnline);
+//        NSLog(@"getChannels error %@",error);
+//        NSLog(@"isOnline %d",access.isOnline);
 
     }];
     

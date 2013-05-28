@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+@class PYEvent;
 #import <Foundation/Foundation.h>
 
 @interface PYCachingController : NSObject
@@ -19,5 +20,9 @@
 - (void)cacheEventData:(NSData *)data withKey:(NSString *)key;
 - (NSData *)getEventDataForKey:(NSString *)key;
 - (NSArray *)getAllEventsFromCache;
+- (NSArray *)getAllUnsyncEventsFromCache;
+- (PYEvent *)getEventWithKey:(NSString *)key;
+- (void)cacheNSURLRequest:(NSURLRequest *)req withKey:(NSString *)key;
+- (NSURLRequest *)getNSURLRequestForKey:(NSString *)key;
 
 @end
