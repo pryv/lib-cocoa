@@ -32,16 +32,14 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
     if (self) {
-        _userID = username;
-        _accessToken = token;
-        _apiDomain = [PYClient defaultDomain];
-        _apiScheme = kPYAPIScheme;
+        self.userID = username;
+        self.accessToken = token;
+        self.apiDomain = [PYClient defaultDomain];
+        self.apiScheme = kPYAPIScheme;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         [self pyAccessStatus:self.connectionReachability];
-
-
     }
     return self;
 }
@@ -106,9 +104,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                                              };
 
         [self.eventsNotSync addObject:nonSyncEventObject];
-
     }
-    
 }
 
 - (NSMutableArray *)eventsNotSync
@@ -182,12 +178,10 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
     
     return attSize;
-
 }
 
 - (void)batchSyncEventsWithoutAttachment
 {
-    
     NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
     [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
     
