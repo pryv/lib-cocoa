@@ -32,10 +32,11 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
     if (self) {
-        _userID = username;
-        _accessToken = token;
-        _apiDomain = [PYClient defaultDomain];
-        _apiScheme = kPYAPIScheme;
+        //master
+        self.userID = username;
+        self.accessToken = token;
+        self.apiDomain = [PYClient defaultDomain];
+        self.apiScheme = kPYAPIScheme;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
