@@ -62,37 +62,49 @@
 
 //GET /{channel-id}/events
 
+- (void)getEventsWithRequestType:(PYRequestType)reqType
+                        postData:(NSDictionary*)postData
+                     successHandler:(void (^) (NSArray *eventList))successHandler
+                       errorHandler:(void (^)(NSError *error))errorHandler
+{
+    [self apiRequest:kROUTE_EVENTS
+         requestType:reqType
+              method:PYRequestMethodGET
+            postData:postData
+         attachments:nil
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+                 for (NSDictionary *eventDic in JSON) {
+                     [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
+                 }
+                 if (successHandler) {
+                     [PYEventsCachingUtillity cacheEvents:JSON];
+                     successHandler([eventsArray autorelease]);
+                 }
+                 
+             } failure:^(NSError *error) {
+                 if (errorHandler) {
+                     if ([PYEventsCachingUtillity getEventsFromCache].count) {
+                         NSMutableDictionary *errorUserInfo = [[NSDictionary dictionaryWithDictionary:error.userInfo] mutableCopy];
+                         [errorUserInfo setObject:[PYEventsCachingUtillity getEventsFromCache] forKey:@"CachedEvents"];
+                         NSError *errorWithCachedEvents = [NSError errorWithDomain:PryvSDKDomain code:0 userInfo:errorUserInfo];
+                         errorHandler (errorWithCachedEvents);
+                     }
+                     errorHandler (error);
+                 }
+             }];
+    
+}
+
+
 - (void)getAllEventsWithRequestType:(PYRequestType)reqType
                      successHandler:(void (^) (NSArray *eventList))successHandler
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
-   
-    [self apiRequest:kROUTE_EVENTS
-             requestType:reqType
-                  method:PYRequestMethodGET
-                postData:nil
-             attachments:nil
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
-                     for (NSDictionary *eventDic in JSON) {
-                         [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
-                     }
-                     if (successHandler) {
-                         [PYEventsCachingUtillity cacheEvents:JSON];
-                         successHandler([eventsArray autorelease]);
-                     }
-                                          
-                 } failure:^(NSError *error) {
-                     if (errorHandler) {
-                         if ([PYEventsCachingUtillity getEventsFromCache].count) {
-                             NSMutableDictionary *errorUserInfo = [[NSDictionary dictionaryWithDictionary:error.userInfo] mutableCopy];
-                             [errorUserInfo setObject:[PYEventsCachingUtillity getEventsFromCache] forKey:@"CachedEvents"];
-                             NSError *errorWithCachedEvents = [NSError errorWithDomain:PryvSDKDomain code:0 userInfo:errorUserInfo];
-                             errorHandler (errorWithCachedEvents);
-                         }
-                         errorHandler (error);
-                     }
-                 }];
+    [self getEventsWithRequestType:reqType
+                                  postData:nil
+                            successHandler:successHandler
+                      errorHandler:errorHandler];
 
 }
 
