@@ -9,7 +9,7 @@
 //  PYFilter is a seprated object for future optimization and Socket.io usage
 //
 //
-//  Usage an app create a Filter then call refresh() to get new events
+//  Usage: An app create a Filter then call refresh() to get new events
 //
 //  In the future we should add a Filter.listen(delegate) 
 //

@@ -40,8 +40,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         [self pyAccessStatus:self.connectionReachability];
-
-
     }
     return self;
 }
@@ -106,9 +104,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                                              };
 
         [self.eventsNotSync addObject:nonSyncEventObject];
-
     }
-    
 }
 
 - (NSMutableArray *)eventsNotSync
@@ -182,12 +178,10 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
     
     return attSize;
-
 }
 
 - (void)batchSyncEventsWithoutAttachment
 {
-    
     NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
     [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
     
