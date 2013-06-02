@@ -32,6 +32,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
     if (self) {
+        //master branch
         self.userID = username;
         self.accessToken = token;
         self.apiDomain = [PYClient defaultDomain];
