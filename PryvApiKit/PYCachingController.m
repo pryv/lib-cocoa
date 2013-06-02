@@ -10,6 +10,7 @@
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
+#import "PYEventFilter.h"
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
@@ -73,6 +74,13 @@
     return filesWithSelectedPrefix;
 
 }
+
+
+- (NSArray *)getEventsFromCacheWithFilter:(PYEventFilter *)eventFilter
+{
+    return [eventFilter onArray:[self getAllEventsFromCache]];
+}
+
 
 - (NSArray *)getAllEventsFromCache
 {

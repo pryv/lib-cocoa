@@ -119,13 +119,7 @@
 //                                        NSLog(@"error is %@",error);
 //                                    }];
 
-                
-
             }
-            
-            
-
-
         }
         
         
@@ -134,10 +128,7 @@
 //        NSLog(@"isOnline %d",access.isOnline);
 
     }];
-    
     [access batchSyncEventsWithoutAttachment];
-    
-    
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
