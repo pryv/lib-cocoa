@@ -63,14 +63,15 @@
 //GET /{channel-id}/events
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                        postData:(NSDictionary*)postData
+                        filter:(NSDictionary*)filterDic
                      successHandler:(void (^) (NSArray *eventList))successHandler
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self apiRequest:kROUTE_EVENTS
+    
+    [self apiRequest:[PYClient urlPath:kROUTE_EVENTS withParams:filterDic]
          requestType:reqType
               method:PYRequestMethodGET
-            postData:postData
+            postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
@@ -78,18 +79,22 @@
                      [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
                  }
                  if (successHandler) {
-                     [PYEventsCachingUtillity cacheEvents:JSON];
+                     NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
+                     if (currentNumberOfEventsInCache == 0) {
+                         //Only first time cache events (if caching is enabled)
+                         [PYEventsCachingUtillity cacheEvents:JSON];
+                     }
                      successHandler([eventsArray autorelease]);
                  }
                  
              } failure:^(NSError *error) {
                  if (errorHandler) {
-                     if ([PYEventsCachingUtillity getEventsFromCache].count) {
-                         NSMutableDictionary *errorUserInfo = [[NSDictionary dictionaryWithDictionary:error.userInfo] mutableCopy];
-                         [errorUserInfo setObject:[PYEventsCachingUtillity getEventsFromCache] forKey:@"CachedEvents"];
-                         NSError *errorWithCachedEvents = [NSError errorWithDomain:PryvSDKDomain code:0 userInfo:errorUserInfo];
-                         errorHandler (errorWithCachedEvents);
-                     }
+//                     if ([PYEventsCachingUtillity getEventsFromCache].count) {
+//                         NSMutableDictionary *errorUserInfo = [[NSDictionary dictionaryWithDictionary:error.userInfo] mutableCopy];
+//                         [errorUserInfo setObject:[PYEventsCachingUtillity getEventsFromCache] forKey:@"CachedEvents"];
+//                         NSError *errorWithCachedEvents = [NSError errorWithDomain:PryvSDKDomain code:0 userInfo:errorUserInfo];
+//                         errorHandler (errorWithCachedEvents);
+//                     }
                      errorHandler (error);
                  }
              }];
@@ -102,8 +107,8 @@
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
     [self getEventsWithRequestType:reqType
-                                  postData:nil
-                            successHandler:successHandler
+                            filter:nil
+                    successHandler:successHandler
                       errorHandler:errorHandler];
 
 }
@@ -114,6 +119,7 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
+    event.timeIntervalWhenCreationTried = [[NSDate date] timeIntervalSince1970];
     [self apiRequest:kROUTE_EVENTS
              requestType:reqType
                   method:PYRequestMethodPOST

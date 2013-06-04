@@ -11,7 +11,7 @@
 		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
 		3D2397B9173308B500A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
 		3D2397BA17330C0100A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
-		3D2397BD1733109A00A72637 /* PYJSONUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D2397BB1733109900A72637 /* PYJSONUtility.h */; };
+		3D2397BD1733109A00A72637 /* PYJSONUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D2397BB1733109900A72637 /* PYJSONUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D2397BE1733109A00A72637 /* PYJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PYJSONUtility.m */; };
 		3D2397BF1733109A00A72637 /* PYJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PYJSONUtility.m */; };
 		3D4C386817416B65004E75BE /* PYWebLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
@@ -20,6 +20,7 @@
 		3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
 		3D67412817106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
 		3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
+		3D6A9577175E75C900FF614E /* PYEventFilter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; };
 		3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6BE313171C75EB0023A39C /* PYAsyncService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
 		3D6BE317171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
@@ -86,7 +87,7 @@
 		4E582DE816C25379003B59DB /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DE616C25379003B59DB /* MainStoryboard_iPhone.storyboard */; };
 		4E582DEB16C25379003B59DB /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DE916C25379003B59DB /* MainStoryboard_iPad.storyboard */; };
 		4E582DEE16C25379003B59DB /* PYEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E582DED16C25379003B59DB /* PYEViewController.m */; };
-		4E6DFE101757417F000DFF7A /* PYEventFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; };
+		4E6DFE101757417F000DFF7A /* PYEventFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4E6DFE111757417F000DFF7A /* PYEventFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6DFE0F1757417F000DFF7A /* PYEventFilter.m */; };
 		4E6DFE121757417F000DFF7A /* PYEventFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6DFE0F1757417F000DFF7A /* PYEventFilter.m */; };
 		4EA29C53174B7AAA00233897 /* Reachability.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D82A989173EDE2A00CB100D /* Reachability.h */; };
@@ -142,6 +143,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				3D6A9577175E75C900FF614E /* PYEventFilter.h in CopyFiles */,
 				3DC817121754028700A91142 /* PYEventsCachingUtillity.h in CopyFiles */,
 				3D9DCF331752C0C00010FE84 /* PYCachingController.h in CopyFiles */,
 				4EA29C53174B7AAA00233897 /* Reachability.h in CopyFiles */,
@@ -549,6 +551,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D2397BD1733109A00A72637 /* PYJSONUtility.h in Headers */,
+				4E6DFE101757417F000DFF7A /* PYEventFilter.h in Headers */,
 				3DC8170F1754021D00A91142 /* PYEventsCachingUtillity.h in Headers */,
 				3D9DCF301752BEE20010FE84 /* PYCachingController.h in Headers */,
 				3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */,
@@ -570,9 +574,7 @@
 				3D6D3BBC16F8BBDE0072F480 /* PYConstants.h in Headers */,
 				3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */,
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
-				3D2397BD1733109A00A72637 /* PYJSONUtility.h in Headers */,
 				3D82A98B173EDE2A00CB100D /* Reachability.h in Headers */,
-				4E6DFE101757417F000DFF7A /* PYEventFilter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

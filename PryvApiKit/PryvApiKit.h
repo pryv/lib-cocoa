@@ -16,6 +16,7 @@
 // Model
 #import <PryvApiKit/PYChannel.h>
 #import <PryvApiKit/PYEvent.h>
+#import <PryvApiKit/PYEventFilter.h>
 #import <PryvApiKit/PYAccess.h>
 #import <PryvApiKit/PYFolder.h>
 #import <PryvApiKit/PYAttachment.h>

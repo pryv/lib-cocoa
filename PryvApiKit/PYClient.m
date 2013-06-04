@@ -184,9 +184,7 @@ static NSString *myDefaultDomain;
     url = [NSURL URLWithString:fullURL];
     
     
-    [request setURL:url];
-    NSLog(@"url path is %@",[url absoluteString]);
-    
+    [request setURL:url];    
     NSDictionary *postDataa = postData;
         
     if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )
@@ -264,7 +262,7 @@ static NSString *myDefaultDomain;
 {
     switch (reqType) {
         case PYRequestTypeAsync:{
-            
+            NSLog(@"started async request with url: %@",[[request URL] absoluteString]);
             [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
                 if (successHandler) {
                     successHandler(req,resp,JSON);
@@ -285,6 +283,7 @@ static NSString *myDefaultDomain;
             NSHTTPURLResponse *urlResponse = nil;
             
             NSData *responseData = nil;
+            NSLog(@"started sync request with url: %@",[[request URL] absoluteString]);
             responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
             //            NSLog(@"error is %@",error);
             if (error && failureHandler) {

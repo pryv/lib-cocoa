@@ -63,9 +63,7 @@
     _onlyFoldersIDs = onlyFoldersIDs;
     _tags = tags;
     _limit = limit;
-    
 }
-
 
 /**
  * process can be considered as finished when both lists has been received
@@ -77,17 +75,16 @@
 {
     // get all event cached matching this filter
     // question should we use forKey:@"CachedEvents" ?
-    NSMutableArray* cachedEvents = [self onArray:[PYEventsCachingUtillity getEventsFromCache] limit:self.limit];
+    NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
+    NSMutableArray* cachedEvents = [self onArray:allEventsFromCache limit:self.limit];
     gotCachedEvents(cachedEvents);
     
     // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)
-    NSDictionary* cachedEventsDir = nil;
-    
-    
+//    NSDictionary* cachedEventsDir = nil;
     
     // get ALL online events matching this request .. This can be optimized if the API provides journaling
     [_channel getEventsWithRequestType:reqType
-                              postData:[self dictionaryFilter]
+                              filter:[self dictionaryFromFilter]
                          successHandler:^(NSArray *onlineEventList) {
                              // TODO UPDATE self.lastRefresh
                              
@@ -100,10 +97,11 @@
                              PYEvent *cachedEvent;
                              NSEnumerator *e = [onlineEventList objectEnumerator];
                              while ((event = [e nextObject]) != nil) {
-                                 cachedEvent = [cachedEventsDir objectForKey:event.eventId];
+//                                 cachedEvent = [cachedEventsDir objectForKey:event.eventId];
+                                 cachedEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:event.eventId];
                                  
                                  // if event not in sent cache
-                                 if (! cachedEvent) {
+                                 if (!cachedEvent) {
                                      [eventsToAdd addObject:event];
                                      // TODO Add to app cache if not done by getEventsWithRequestType
                                  } else if (cachedEvent.modified != event.modified){
@@ -122,9 +120,7 @@
                              
                          }
                         errorHandler:errorHandler];
-    
 }
-
 
 /** 
  * TODO may be nice to get a predicate out of this filer 

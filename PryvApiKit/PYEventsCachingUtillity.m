@@ -21,27 +21,22 @@
     return NO;
 }
 
-+ (void)cacheURLRequest:(NSURLRequest *)request forEventId:(NSString *)eventId
++ (void)cacheURLRequest:(NSURLRequest *)request forEventKey:(NSString *)uniqueKey
 {
-    NSString *requestKey = [NSString stringWithFormat:@"request_%@",eventId];
+    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
     [[PYCachingController sharedManager] cacheNSURLRequest:request withKey:requestKey];
 
 }
 
-+ (NSURLRequest *)getNSURLRequestForEventId:(NSString *)eventId
++ (NSURLRequest *)getNSURLRequestForEventKey:(NSString *)uniqueKey;
 {
-    NSString *requestKey = [NSString stringWithFormat:@"request_%@",eventId];
+    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
     return [[PYCachingController sharedManager] getNSURLRequestForKey:requestKey];
 }
 
-+ (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key isUnsync:(BOOL)unsync
++ (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
 {
-    NSString *eventKey;
-    if (unsync) {
-        eventKey = [NSString stringWithFormat:@"unsync_event_%@",key];
-    }else{
-        eventKey = [NSString stringWithFormat:@"event_%@",key];
-    }
+    NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
     [[PYCachingController sharedManager] cacheEventData:[PYJSONUtility getDataFromJSONObject:event] withKey:eventKey];
     
 }
@@ -50,30 +45,27 @@
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *eventDic in events) {
-            [self cacheEvent:eventDic WithKey:eventDic[@"id"] isUnsync:NO];
+            [self cacheEvent:eventDic WithKey:eventDic[@"id"]];
         }
 
-    }
-}
-
-+ (void)cacheEventObjects:(NSArray *)eventObjects
-{
-    if ([self cachingEnabled]) {
-        
     }
 }
 
 + (void)cacheEvent:(PYEvent *)event
 {
     NSDictionary *eventDic = [event dictionary];
-    [self cacheEvent:eventDic WithKey:eventDic[@"id"] isUnsync:NO];
+    [self cacheEvent:eventDic WithKey:[self getKeyForEvent:event]];
 }
 
-+ (void)cacheUnsyncEvent:(PYEvent *)event
++ (NSString *)getKeyForEvent:(PYEvent *)event
 {
-    NSDictionary *eventDic = [event dictionary];
-    [self cacheEvent:eventDic WithKey:eventDic[@"id"] isUnsync:YES];
-
+    if (!event.eventId) {
+        //If event is created offline or/and it's not synched ever, event doesn't have id so use alternate way for unique id
+        //event.timeIntervalWhenCreationTried is created when user tried to create event
+        return [[NSNumber numberWithDouble:event.timeIntervalWhenCreationTried] stringValue];
+    }
+    
+    return event.eventId;
 }
 
 
@@ -82,19 +74,9 @@
     return [[PYCachingController sharedManager] getAllEventsFromCache];
 }
 
-+ (NSArray *)getUnsyncEventsFromCache
++ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId
 {
-    return [[PYCachingController sharedManager] getAllUnsyncEventsFromCache];
-}
-
-+ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId isUnsync:(BOOL)unsync
-{
-    NSString *eventKey;
-    if (unsync) {
-        eventKey = [NSString stringWithFormat:@"unsync_event_%@",eventId];
-    }else{
-        eventKey = [NSString stringWithFormat:@"event_%@",eventId];
-    }
+    NSString *eventKey = [NSString stringWithFormat:@"event_%@",eventId];
     return [[PYCachingController sharedManager] getEventWithKey:eventKey];
 
 }

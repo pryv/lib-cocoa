@@ -29,6 +29,7 @@ NSString *const kPrYvChannelEventFilterOnlyFolders = @"onlyFolders";
 
 // the following should not be set as constants
 NSString *const kPYUserTempToken = @"Ve69mGqqX5";
+NSString *const kPYUserTempTokenMladen = @"PeySaPzMsM";
 
 NSString *const kPrYvApplicationChannelId = @"position";
 NSString *const kPrYvApplicationChannelName = @"Position";

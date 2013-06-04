@@ -98,22 +98,22 @@
     return arrayOFCachedEvents;
 }
 
-- (NSArray *)getAllUnsyncEventsFromCache
-{
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'unsync_event_'"];
-    if (!filesWithSelectedPrefix.count) {
-        return nil;
-    }
-    
-    NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
-    for (NSString *eventCachedName in filesWithSelectedPrefix) {
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
-        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
-    }
-    
-    return arrayOFCachedEvents;
-
-}
+//- (NSArray *)getAllUnsyncEventsFromCache
+//{
+//    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'unsync_event_'"];
+//    if (!filesWithSelectedPrefix.count) {
+//        return nil;
+//    }
+//    
+//    NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
+//    for (NSString *eventCachedName in filesWithSelectedPrefix) {
+//        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
+//        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
+//    }
+//    
+//    return arrayOFCachedEvents;
+//
+//}
 
 - (PYEvent *)getEventWithKey:(NSString *)key;
 {

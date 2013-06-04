@@ -88,18 +88,20 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     for (NSDictionary *nonSyncEventObject in nonSyncList) {
         PYEvent *eventForCache = nonSyncEventObject[kUnsyncEventsEventKey];
-        [PYEventsCachingUtillity cacheUnsyncEvent:eventForCache];
-        [PYEventsCachingUtillity cacheURLRequest:nonSyncEventObject[kUnsyncEventsRequestKey] forEventId:eventForCache.eventId];
-        //getNSURLRequest
+        [PYEventsCachingUtillity cacheEvent:eventForCache];
+        
+        NSString *eventKey = [PYEventsCachingUtillity getKeyForEvent:eventForCache];
+        [PYEventsCachingUtillity cacheURLRequest:nonSyncEventObject[kUnsyncEventsRequestKey] forEventKey:eventKey];
     }
 }
 
 - (void)deserializeNonSyncList
 {
-    NSArray *nonSyncEventsArray = [PYEventsCachingUtillity getUnsyncEventsFromCache];
+    NSArray *nonSyncEventsArray = [PYEventsCachingUtillity getEventsFromCache];
     
     for (PYEvent *unsyncEvent in nonSyncEventsArray) {
-        NSURLRequest *unsyncURLReq = [PYEventsCachingUtillity getNSURLRequestForEventId:unsyncEvent.eventId];
+        NSString *eventKey = [PYEventsCachingUtillity getKeyForEvent:unsyncEvent];
+        NSURLRequest *unsyncURLReq = [PYEventsCachingUtillity getNSURLRequestForEventKey:eventKey];
         NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : unsyncEvent,
                                              kUnsyncEventsRequestKey : unsyncURLReq,
                                              };

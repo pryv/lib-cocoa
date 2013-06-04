@@ -20,7 +20,7 @@
 - (void)cacheEventData:(NSData *)data withKey:(NSString *)key;
 - (NSData *)getEventDataForKey:(NSString *)key;
 - (NSArray *)getAllEventsFromCache;
-- (NSArray *)getAllUnsyncEventsFromCache;
+//- (NSArray *)getAllUnsyncEventsFromCache;
 - (PYEvent *)getEventWithKey:(NSString *)key;
 - (void)cacheNSURLRequest:(NSURLRequest *)req withKey:(NSString *)key;
 - (NSURLRequest *)getNSURLRequestForKey:(NSString *)key;

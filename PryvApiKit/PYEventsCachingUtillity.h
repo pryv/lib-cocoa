@@ -12,17 +12,16 @@
 @interface PYEventsCachingUtillity : NSObject
 
 + (void)cacheEvent:(PYEvent *)event;
-+ (void)cacheUnsyncEvent:(PYEvent *)event;
 //Array of event JSON data(dictionaries)
 + (void)cacheEvents:(NSArray *)events;
-//Array  of PYEvent objects
-+ (void)cacheEventObjects:(NSArray *)eventObjects;
 //Archive NSURLRequest
-+ (void)cacheURLRequest:(NSURLRequest *)request forEventId:(NSString *)eventId;
-+ (NSURLRequest *)getNSURLRequestForEventId:(NSString *)eventId;
++ (void)cacheURLRequest:(NSURLRequest *)request forEventKey:(NSString *)uniqueKey;
++ (NSURLRequest *)getNSURLRequestForEventKey:(NSString *)uniqueKey;
 
 + (NSArray *)getEventsFromCache;
-+ (NSArray *)getUnsyncEventsFromCache;
-+ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId isUnsync:(BOOL)unsync;
++ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId;
+
+//Utility
++ (NSString *)getKeyForEvent:(PYEvent *)event;
 
 @end

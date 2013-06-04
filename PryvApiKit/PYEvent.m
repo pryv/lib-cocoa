@@ -26,6 +26,7 @@
 @synthesize trashed = _trashed;
 @synthesize modified = _modified;
 @synthesize synchedAt = _synchedAt;
+@synthesize timeIntervalWhenCreationTried = _timeIntervalWhenCreationTried;
 
 
 - (NSDictionary *)dictionary {

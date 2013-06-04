@@ -45,7 +45,7 @@
 //GET /{channel-id}/events
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                        postData:(NSDictionary*)postData
+                          filter:(NSDictionary*)filterDic
                   successHandler:(void (^) (NSArray *eventList))successHandler
                     errorHandler:(void (^)(NSError *error))errorHandler;
 
