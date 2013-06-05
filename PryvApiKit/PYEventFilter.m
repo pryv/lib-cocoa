@@ -76,7 +76,8 @@
     // get all event cached matching this filter
     // question should we use forKey:@"CachedEvents" ?
     NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
-    NSMutableArray* cachedEvents = [self onArray:allEventsFromCache limit:self.limit];
+    
+    NSMutableArray* cachedEvents = [self filterCachedEvents:allEventsFromCache];
     gotCachedEvents(cachedEvents);
     
     // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)
@@ -92,28 +93,37 @@
                              NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
                              NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
                              
-                             
-                             PYEvent *event;
+                             PYEvent *onlineEvent;
                              PYEvent *cachedEvent;
-                             NSEnumerator *e = [onlineEventList objectEnumerator];
-                             while ((event = [e nextObject]) != nil) {
-//                                 cachedEvent = [cachedEventsDir objectForKey:event.eventId];
-                                 cachedEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:event.eventId];
+                             NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
+                             while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
+                                 NSLog(@"onlineEventId %@",onlineEvent.eventId);
+                                 cachedEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:onlineEvent.eventId];
                                  
                                  // if event not in sent cache
                                  if (!cachedEvent) {
-                                     [eventsToAdd addObject:event];
                                      // TODO Add to app cache if not done by getEventsWithRequestType
-                                 } else if (cachedEvent.modified != event.modified){
-                                     [eventsModified addObject:event];
+                                     [eventsToAdd addObject:onlineEvent];
+                                     [PYEventsCachingUtillity cacheEvent:onlineEvent];
+                                     
+                                 } else if ([cachedEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
+                                     [eventsModified addObject:onlineEvent];
                                  }
                              }
                              
                              // find object that are not present anymore
-                             NSEnumerator *e2 = [cachedEvents objectEnumerator];
-                             while ((cachedEvent = [e2 nextObject]) != nil) {
-                                // if cachedEvent not in onlineEventList ->
-                                 [eventsToRemove addObject:cachedEvent];
+                             for (PYEvent *cachedEvent in cachedEvents) {
+                                 BOOL isInOnlineList = NO;
+                                 for (PYEvent *onlineEvent in onlineEventList) {
+                                     if ([cachedEvent.eventId compare:onlineEvent.eventId] == NSOrderedSame) {
+                                         isInOnlineList = YES;
+                                         break;
+                                     }
+                                 }
+                                 if (isInOnlineList == NO) {
+                                     // if cachedEvent not in onlineEventList ->
+                                     [eventsToRemove addObject:cachedEvent];
+                                 }
                              }
                              
                              gotOnlineEvents(eventsToAdd, eventsToRemove, eventsModified);
@@ -128,9 +138,19 @@
  **/
 -(NSPredicate *)predicate
 {
-    NSPredicate *predicate = nil;
-    [NSException raise:@"Not implemented" format:@"PYEventFilter.predicate is not yet implemented"];
-    return predicate;
+//    NSString *value = @"eTSWipUboJ";
+//    NSPredicate *workingPredicate = [NSPredicate predicateWithFormat:@"eventId == %@",value];
+
+    
+//    NSPredicate *fromTimeP = [NSPredicate predicateWithFormat:@"time <= %@",self.fromTime];
+//    NSPredicate *toTimeP = [NSPredicate predicateWithFormat:@"time >= %@",self.toTime];
+    NSPredicate *onlyFolderIdsP = [NSPredicate predicateWithFormat:@"%K contains[cd] %@",@"tags", @"tag1"];
+    
+    return onlyFolderIdsP;
+
+//    NSPredicate *predicate = nil;
+//    [NSException raise:@"Not implemented" format:@"PYEventFilter.predicate is not yet implemented"];
+//    return predicate;
 }
 
 /**
@@ -157,9 +177,9 @@
     }
     
 
-    if (self.tags != nil) {
-        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
-    }
+//    if (self.tags != nil) {
+//        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
+//    }
     
     return dic;
 }
@@ -176,28 +196,29 @@
         return false;
     }
     
-    if (self.tags != nil) {
-        [NSException raise:@"Not implemented" format:@"PYEventFilter.matchEvent tag matching is not yet implemented"];
-    }
+//    if (self.tags != nil) {
+//        [NSException raise:@"Not implemented" format:@"PYEventFilter.matchEvent tag matching is not yet implemented"];
+//    }
     
     return true;
 }
 
-
-
--(NSMutableArray *)onArray:(NSArray *)eventArray limit:(NSUInteger)limit
+-(NSMutableArray *)filterCachedEvents:(NSArray *)cachedEventsArray
 {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     
+    
+    NSArray *array = [cachedEventsArray filteredArrayUsingPredicate:[self predicate]];
+    
     // Would be nice to use  result = [eventErray filteredArrayUsingPredicate:[self predicate]];
-    NSEnumerator *e = [eventArray objectEnumerator];
+    NSEnumerator *e = [cachedEventsArray objectEnumerator];
     PYEvent *event;
 
     int count = 0;
     while (((event = [e nextObject]) != nil) &&  [self matchEvent:event]) {
         [result addObject:event];
         count++;
-        if (limit > 0 && count >= limit) {
+        if (self.limit > 0 && count >= self.limit) {
             return result;
         }
     }

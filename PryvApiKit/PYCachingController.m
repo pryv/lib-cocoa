@@ -27,6 +27,7 @@
 		NSError *error = nil;
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"PYCachingController"];
+        NSLog(@"self.localDataPath %@",self.localDataPath);
 		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:_localDataPath])
 			[[NSFileManager defaultManager] createDirectoryAtPath:_localDataPath withIntermediateDirectories:NO attributes:nil error:&error];

@@ -29,8 +29,21 @@
     event.eventFormat = [typeDic objectForKey:@"format"];
     event.value = [JSON objectForKey:@"value"];
     
-    event.folderId = [JSON objectForKey:@"folderId"];
-    event.tags = [JSON objectForKey:@"tags"];
+    id folderId = [JSON objectForKey:@"folderId"];
+    if ([folderId isKindOfClass:[NSNull class]]) {
+        event.folderId = nil;
+    }else{
+        event.folderId = folderId;
+    }
+
+    
+    id tags = [JSON objectForKey:@"tags"];
+    if ([tags isKindOfClass:[NSNull class]]) {
+        event.tags = nil;
+    }else{
+        event.tags = tags;
+    }
+    
     event.eventDescription = [JSON objectForKey:@"description"];
     
     NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];

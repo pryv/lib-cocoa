@@ -44,6 +44,21 @@
                 } errorHandler:^(NSError *error) {
                     NSLog(@"get all events error is %@",error);
                 }];
+                
+                PYEvent *event = [[PYEvent alloc] init];
+                event.tags = @[@"tagclass",@"tagformat"];
+                event.value = @"test general value";
+                event.eventClass = @"note";
+                event.eventFormat = @"txt";
+                event.tags = @[@"tag1, tag2"];
+                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    NSLog(@"success %@", newEventId);
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"error %@",error);
+//                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
+                    //                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+                }];
+
 
                 
                 NSDate *today = [NSDate date];
@@ -59,7 +74,7 @@
                                                                              toTime:[toTime timeIntervalSince1970]
                                                                               limit:10
                                                                      onlyFoldersIDs:nil
-                                                                               tags:nil];
+                                                                               tags:@[@"tag1", @"tag2", @"tag3"]];
                 
                 [eventFilter getEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *eventList) {
                     NSLog(@"cached eventList %@",eventList);
@@ -72,11 +87,6 @@
                 }];
                 
 //
-//                PYEvent *event = [[PYEvent alloc] init];
-//                event.tags = @[@"tagclass",@"tagformat"];
-//                event.value = @"test general value";
-//                event.eventClass = @"note";
-//                event.eventFormat = @"txt";
 //
 //                NSString *imgName = @"Default";
 //                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"png"];
@@ -88,13 +98,6 @@
 //                [event addAttachment:att];
 //
 //                
-//                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-////                    NSLog(@"success %@", newEventId);
-//                } errorHandler:^(NSError *error) {
-////                    NSLog(@"error %@",error);
-//                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-////                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
-//                }];
                 
 //                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
 //                    NSLog(@"success %@", newEventId);
