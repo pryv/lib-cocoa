@@ -138,19 +138,17 @@
  **/
 -(NSPredicate *)predicate
 {
-//    NSString *value = @"eTSWipUboJ";
-//    NSPredicate *workingPredicate = [NSPredicate predicateWithFormat:@"eventId == %@",value];
-
+//    NSString *value = @"TTZ3TJ0xt5";
+//    NSPredicate *workingPredicate = [NSPredicate predicateWithFormat:@"eventId == %@",value];    
     
-//    NSPredicate *fromTimeP = [NSPredicate predicateWithFormat:@"time <= %@",self.fromTime];
-//    NSPredicate *toTimeP = [NSPredicate predicateWithFormat:@"time >= %@",self.toTime];
-    NSPredicate *onlyFolderIdsP = [NSPredicate predicateWithFormat:@"%K contains[cd] %@",@"tags", @"tag1"];
+    //@"time >= %f AND time <= %f AND ALL tags IN %@ AND folderId IN %@"
+    NSString *predicateStr = @"time >= %f AND time <= %f AND ALL tags IN %@";
+    NSPredicate *fromTimeP = [NSPredicate predicateWithFormat:predicateStr,
+                              self.fromTime,
+                              self.toTime,
+                              self.tags];
     
-    return onlyFolderIdsP;
-
-//    NSPredicate *predicate = nil;
-//    [NSException raise:@"Not implemented" format:@"PYEventFilter.predicate is not yet implemented"];
-//    return predicate;
+    return fromTimeP;
 }
 
 /**
@@ -205,23 +203,24 @@
 
 -(NSMutableArray *)filterCachedEvents:(NSArray *)cachedEventsArray
 {
-    NSMutableArray* result = [[NSMutableArray alloc] init];
+//    NSMutableArray* result = [[NSMutableArray alloc] init];
     
     
-    NSArray *array = [cachedEventsArray filteredArrayUsingPredicate:[self predicate]];
+    NSArray *result = [cachedEventsArray filteredArrayUsingPredicate:[self predicate]];
+    return [result mutableCopy];
     
     // Would be nice to use  result = [eventErray filteredArrayUsingPredicate:[self predicate]];
-    NSEnumerator *e = [cachedEventsArray objectEnumerator];
-    PYEvent *event;
-
-    int count = 0;
-    while (((event = [e nextObject]) != nil) &&  [self matchEvent:event]) {
-        [result addObject:event];
-        count++;
-        if (self.limit > 0 && count >= self.limit) {
-            return result;
-        }
-    }
+//    NSEnumerator *e = [cachedEventsArray objectEnumerator];
+//    PYEvent *event;
+//
+//    int count = 0;
+//    while (((event = [e nextObject]) != nil) &&  [self matchEvent:event]) {
+//        [result addObject:event];
+//        count++;
+//        if (self.limit > 0 && count >= self.limit) {
+//            return result;
+//        }
+//    }
 
     
     return result;

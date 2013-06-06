@@ -45,27 +45,26 @@
                     NSLog(@"get all events error is %@",error);
                 }];
                 
-                PYEvent *event = [[PYEvent alloc] init];
-                event.tags = @[@"tagclass",@"tagformat"];
-                event.value = @"test general value";
-                event.eventClass = @"note";
-                event.eventFormat = @"txt";
-                event.tags = @[@"tag1, tag2"];
-                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                    NSLog(@"success %@", newEventId);
-                } errorHandler:^(NSError *error) {
-                    NSLog(@"error %@",error);
-//                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-                    //                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
-                }];
-
-
+//                PYEvent *event = [[PYEvent alloc] init];
+//                event.tags = @[@"tagclass",@"tagformat"];
+//                event.value = @"test general value";
+//                event.eventClass = @"note";
+//                event.eventFormat = @"txt";
+//                event.tags = @[@"tag1", @"tag2", @"ttag", @"ttart"];
+//                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+//                    NSLog(@"success %@", newEventId);
+//                } errorHandler:^(NSError *error) {
+//                    NSLog(@"error %@",error);
+////                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
+//                    //                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+//                }];
                 
                 NSDate *today = [NSDate date];
                 NSCalendar *cal = [NSCalendar currentCalendar];
                 NSDateComponents *components = [[NSDateComponents alloc] init];
                 //get 2 days before yesterday
-                [components setDay:-5];
+//                [components setDay:-1];
+                [components setHour:-1];
                 NSDate *fromTime = [cal dateByAddingComponents:components toDate:today options:0];
                 NSDate *toTime = today;
 
@@ -74,7 +73,7 @@
                                                                              toTime:[toTime timeIntervalSince1970]
                                                                               limit:10
                                                                      onlyFoldersIDs:nil
-                                                                               tags:@[@"tag1", @"tag2", @"tag3"]];
+                                                                               tags:@[@"tag1, tag2", @"ytar"]];
                 
                 [eventFilter getEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *eventList) {
                     NSLog(@"cached eventList %@",eventList);
