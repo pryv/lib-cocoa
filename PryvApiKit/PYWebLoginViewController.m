@@ -70,6 +70,7 @@ BOOL closing;
     [self startLoading];
     
     // -- webview -- //
+    [self cleanURLCache];
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
     webView = [[UIWebView alloc] initWithFrame:applicationFrame];
     [webView setDelegate:self];
@@ -370,6 +371,12 @@ BOOL requestedLoginView = false;
 {
     [self.delegate pyWebLoginError:error];
     [self close];
+}
+
+- (void)cleanURLCache
+{
+    // remove all cached responses
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 - (void)didReceiveMemoryWarning
