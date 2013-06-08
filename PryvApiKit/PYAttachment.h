@@ -29,5 +29,5 @@
              fileName:(NSString *)fileName;
 
 + (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON;
-
+- (NSDictionary *)cachingDictionary;
 @end

@@ -38,4 +38,13 @@
     return [attachment autorelease];
 }
 
+- (NSDictionary *)cachingDictionary
+{
+    NSDictionary *attachmentObject = @{@"fileName": self.fileName,
+                                       @"type" : self.mimeType,
+                                       @"size" : self.size};
+    return attachmentObject;
+    
+}
+
 @end

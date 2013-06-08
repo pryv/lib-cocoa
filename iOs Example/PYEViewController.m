@@ -48,10 +48,10 @@
                 
 //                    PYEvent *event = [[PYEvent alloc] init];
 //                    event.folderId = @"folderId";
-//                    event.value = @"test general value67e";
+//                    event.value = @"test general modified value11";
 //                    event.eventClass = @"note";
 //                    event.eventFormat = @"txt";
-//                    event.tags = @[@"tag", @"tag2", @"ttag1", @"ttart1"];
+//                    event.tags = @[@"tag1", @"tag21", @"mode1"];
 //                    [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
 //                        NSLog(@"success %@", newEventId);
 //                    } errorHandler:^(NSError *error) {
@@ -59,9 +59,9 @@
 ////                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
 ////                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
 //                    }];
-                
-                
-//                [channel setModifiedEventAttributesObject:event forEventId:@"VVD1gYrotM" requestType:PYRequestTypeSync successHandler:^(NSString *stoppedId) {
+//                
+//                
+//                [channel setModifiedEventAttributesObject:event forEventId:@"TexaDs906J" requestType:PYRequestTypeSync successHandler:^(NSString *stoppedId) {
 //                    NSLog(@"success");
 //                } errorHandler:^(NSError *error) {
 //                    NSLog(@"error %@",error);

@@ -16,7 +16,7 @@
  * To pass in an API request
  * DRAFT CODE UNTESTED
  **/
-+ (NSDictionary *)dictionaryFromFilter:(PYEventFilter *)filter
++ (NSDictionary *)filteredEvents:(PYEventFilter *)filter
 {
     NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
     if (filter.fromTime != PYEventFilter_UNDEFINED_FROMTIME) {

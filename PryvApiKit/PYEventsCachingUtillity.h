@@ -12,6 +12,7 @@
 @interface PYEventsCachingUtillity : NSObject
 
 + (void)cacheEvent:(PYEvent *)event;
++ (void)removeEvent:(PYEvent *)event;
 //Array of event JSON data(dictionaries)
 + (void)cacheEvents:(NSArray *)events;
 //Archive NSURLRequest

@@ -82,29 +82,35 @@
     // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)    
     // get ALL online events matching this request .. This can be optimized if the API provides journaling
     [_channel getEventsWithRequestType:reqType
-                                filter:[PYEventFilterUtility dictionaryFromFilter:self]
+                                filter:[PYEventFilterUtility filteredEvents:self]
                          successHandler:^(NSArray *onlineEventList) {
                              // TODO UPDATE self.lastRefresh
+                             self.lastRefresh = [[NSDate date] timeIntervalSince1970];
                              
                              NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
                              NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
                              NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
                              
-                             PYEvent *onlineEvent;
-                             PYEvent *cachedEvent;
+                             PYEvent *onlineEvent;                             
                              NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
                              while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
-                                 NSLog(@"onlineEventId %@",onlineEvent.eventId);
-                                 cachedEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:onlineEvent.eventId];
                                  
-                                 // if event not in sent cache
-                                 if (!cachedEvent) {
+                                 NSLog(@"onlineEventId %@",onlineEvent.eventId);
+                                 PYEvent *cachedOnlineEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:onlineEvent.eventId];
+                                 
+                                 if (!cachedOnlineEvent) {
+                                     // if online event isn't in cache
                                      // TODO Add to app cache if not done by getEventsWithRequestType
                                      [eventsToAdd addObject:onlineEvent];
                                      [PYEventsCachingUtillity cacheEvent:onlineEvent];
                                      
-                                 } else if ([cachedEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
+                                 } else if ([cachedOnlineEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
+                                     //If online event is in cache and if it's modified add to modified list and cache event
                                      [eventsModified addObject:onlineEvent];
+                                     [PYEventsCachingUtillity cacheEvent:onlineEvent];
+                                 }else{
+                                     //event is cached and not modified
+                                     NSLog(@"event is cached and not modified");
                                  }
                              }
                              
@@ -120,6 +126,7 @@
                                  if (isInOnlineList == NO) {
                                      // if cachedEvent not in onlineEventList ->
                                      [eventsToRemove addObject:cachedEvent];
+                                     [PYEventsCachingUtillity removeEvent:cachedEvent];
                                  }
                              }
                              gotOnlineEvents(eventsToAdd, eventsToRemove, eventsModified);
@@ -127,10 +134,7 @@
                         errorHandler:errorHandler];
 }
 
-
-
-
-+(void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
++ (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
     /** Sort untested **/
     if (sortAscending) {
         [events sortUsingFunction:_compareEventByTimeAsc context:nil];
@@ -138,7 +142,6 @@
         [events sortUsingFunction:_compareEventByTimeDesc context:nil];
     }
 }
-
 
 /**
  * Untested

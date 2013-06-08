@@ -41,6 +41,13 @@
     
 }
 
++ (void)removeEvent:(PYEvent *)event WithKey:(NSString *)key
+{
+    NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
+    [[PYCachingController sharedManager] removeEvent:eventKey];
+
+}
+
 + (void)cacheEvents:(NSArray *)events
 {
     if ([self cachingEnabled]) {
@@ -53,8 +60,13 @@
 
 + (void)cacheEvent:(PYEvent *)event
 {
-    NSDictionary *eventDic = [event dictionary];
+    NSDictionary *eventDic = [event cachingDictionary];
     [self cacheEvent:eventDic WithKey:[self getKeyForEvent:event]];
+}
+
++ (void)removeEvent:(PYEvent *)event
+{
+    [self removeEvent:event WithKey:[self getKeyForEvent:event]];
 }
 
 + (NSString *)getKeyForEvent:(PYEvent *)event

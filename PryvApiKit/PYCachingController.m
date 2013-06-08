@@ -82,6 +82,14 @@
     return [eventFilter onArray:[self getAllEventsFromCache]];
 }
 
+- (void)removeEvent:(NSString *)key
+{
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
+    if (error) {
+        NSAssert(@"Error in removing event", @"");
+    }
+}
 
 - (NSArray *)getAllEventsFromCache
 {

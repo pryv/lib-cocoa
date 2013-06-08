@@ -10,7 +10,7 @@
 
 @interface PYEventFilterUtility : NSObject
 
-+ (NSDictionary *)dictionaryFromFilter:(PYEventFilter *)filter;
++ (NSDictionary *)filteredEvents:(PYEventFilter *)filter;
 + (NSArray *)filterCachedEvents:(NSArray *)cachedEventsArray withFilter:(PYEventFilter *)filter;
 
 @end

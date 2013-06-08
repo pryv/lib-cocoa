@@ -66,5 +66,6 @@
 
 + (id)getEventFromDictionary:(NSDictionary *)JSON;
 - (NSDictionary *)dictionary;
+- (NSDictionary *)cachingDictionary;
 
 @end

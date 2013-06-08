@@ -29,8 +29,70 @@
 @synthesize timeIntervalWhenCreationTried = _timeIntervalWhenCreationTried;
 
 
-- (NSDictionary *)dictionary {
+
+- (NSDictionary *)cachingDictionary
+{
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     
+    if (_eventId && _eventId.length > 0) {
+        [dic setObject:_eventId forKey:@"id"];
+    }
+    
+    if (_channelId && _channelId.length > 0) {
+        [dic setObject:_channelId forKey:@"channelId"];
+    }
+    
+    if (_time > 0) {
+        [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
+    }
+    
+    if (_duration) {
+        [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
+    }
+    
+    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
+        [dic setObject:@{@"class": _eventClass, @"format" : _eventFormat}
+                forKey:@"type"];
+    }
+    
+    if (_value) {
+        [dic setObject:_value forKey:@"value"];
+    }
+    
+    if (_folderId && _folderId.length > 0) {
+        [dic setObject:_folderId forKey:@"folderId"];
+    }
+    
+    if (_tags && _tags.count > 0) {
+        [dic setObject:_tags forKey:@"tags"];
+    }
+    
+    if (_eventDescription && _eventDescription.length > 0) {
+        [dic setObject:_eventDescription forKey:@"description"];
+    }
+    
+    [dic setObject:[NSNumber numberWithBool:_trashed] forKey:@"trashed"];
+    [dic setObject:[NSNumber numberWithDouble:[_modified timeIntervalSince1970]] forKey:@"modified"];
+    
+    if (_clientData && _clientData.count > 0) {
+        [dic setObject:_clientData forKey:@"clientData"];
+    }
+    
+    if (_attachments && _attachments.count > 0) {
+        NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
+        [_attachments enumerateObjectsUsingBlock:^(PYAttachment *attachment, NSUInteger idx, BOOL *stop) {
+            [attachments setObject:[attachment cachingDictionary] forKey:attachment.fileName];
+        }];
+        
+        [dic setObject:attachments forKey:@"attachments"];
+    }
+    
+    return [dic autorelease];
+
+}
+
+
+- (NSDictionary *)dictionary {
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 

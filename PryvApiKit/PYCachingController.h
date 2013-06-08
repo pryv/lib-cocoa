@@ -19,6 +19,7 @@
 - (BOOL)isEventDataCachedForKey:(NSString *)key;
 - (void)cacheEventData:(NSData *)data withKey:(NSString *)key;
 - (NSData *)getEventDataForKey:(NSString *)key;
+- (void)removeEvent:(NSString *)key;
 - (NSArray *)getAllEventsFromCache;
 //- (NSArray *)getAllUnsyncEventsFromCache;
 - (PYEvent *)getEventWithKey:(NSString *)key;
