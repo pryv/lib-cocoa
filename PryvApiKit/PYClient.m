@@ -119,7 +119,6 @@ static NSString *myDefaultDomain;
         default:
             break;
     }
-
 }
 
 + (NSString *)fileMIMEType:(NSString*)file
@@ -148,6 +147,33 @@ static NSString *myDefaultDomain;
         [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
     }
     return [pathString copy];
+}
+
++ (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params
+{
+    if (path == nil) path = @"";
+    NSMutableString *pathString = [NSMutableString stringWithString:path];
+
+    [pathString appendString:@"?"];
+    for (NSString *key in [params allKeys])
+    {
+        id value = [params objectForKey:key];
+        if ([value isKindOfClass:[NSArray class]]) {
+            NSArray *valueArray = value;
+            [pathString appendFormat:@"%@=",key];
+            for (id arrayValue in valueArray) {
+                [pathString appendFormat:@"%@,",arrayValue];
+                
+            }
+            [pathString appendString:@"&"];
+        }else{
+            [pathString appendFormat:@"%@=%@&",key,[params objectForKey:key]];
+            
+        }
+    }
+    [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+    return pathString;
+
 }
 
 + (void) apiRequest:(NSString *)fullURL

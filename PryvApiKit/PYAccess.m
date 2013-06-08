@@ -261,7 +261,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
    
 
-    [self apiRequest:[PYClient urlPath:kROUTE_CHANNELS withParams:filter]
+    [self apiRequest:[PYClient getURLPath:kROUTE_CHANNELS withParams:filter]
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil

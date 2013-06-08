@@ -68,7 +68,7 @@
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    [self apiRequest:[PYClient urlPath:kROUTE_EVENTS withParams:filterDic]
+    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil
@@ -279,7 +279,7 @@
                      errorHandler:(void (^)(NSError *error))errorHandler;
 {
  
-    [self apiRequest:[PYClient urlPath:kROUTE_FOLDERS withParams:filter]
+    [self apiRequest:[PYClient getURLPath:kROUTE_FOLDERS withParams:filter]
              requestType:reqType
                   method:PYRequestMethodGET
                 postData:nil
@@ -399,7 +399,7 @@
                    successHandler:(void (^)())successHandler
                      errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self apiRequest:[PYClient urlPath:[NSString stringWithFormat:@"%@/%@",kROUTE_FOLDERS, folderId] withParams:filter]
+    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_FOLDERS, folderId] withParams:filter]
              requestType:reqType
                   method:PYRequestMethodDELETE
                 postData:nil

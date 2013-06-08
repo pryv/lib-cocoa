@@ -25,7 +25,7 @@
 }
 
 @property (nonatomic, retain) PYAccess *access;
-@property (nonatomic, copy, readonly) NSString *channelId;
+@property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic)       NSTimeInterval timeCount;
 @property (nonatomic, copy) NSDictionary *clientData;

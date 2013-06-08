@@ -19,7 +19,7 @@
 #import "PYEvent.h"
 #import "PYClient.h"
 #import "PYEventsCachingUtillity.h"
-#import "PYConstants.h"
+#import "PYEventFilterUtility.h"
 
 @implementation PYEventFilter
 
@@ -76,16 +76,13 @@
     // get all event cached matching this filter
     // question should we use forKey:@"CachedEvents" ?
     NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
+    NSArray* filteredEventsFromCache = [PYEventFilterUtility filterCachedEvents:allEventsFromCache withFilter:self];
+    gotCachedEvents(filteredEventsFromCache);
     
-    NSMutableArray* cachedEvents = [self filterCachedEvents:allEventsFromCache];
-    gotCachedEvents(cachedEvents);
-    
-    // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)
-//    NSDictionary* cachedEventsDir = nil;
-    
+    // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)    
     // get ALL online events matching this request .. This can be optimized if the API provides journaling
     [_channel getEventsWithRequestType:reqType
-                              filter:[self dictionaryFromFilter]
+                                filter:[PYEventFilterUtility dictionaryFromFilter:self]
                          successHandler:^(NSArray *onlineEventList) {
                              // TODO UPDATE self.lastRefresh
                              
@@ -112,7 +109,7 @@
                              }
                              
                              // find object that are not present anymore
-                             for (PYEvent *cachedEvent in cachedEvents) {
+                             for (PYEvent *cachedEvent in filteredEventsFromCache) {
                                  BOOL isInOnlineList = NO;
                                  for (PYEvent *onlineEvent in onlineEventList) {
                                      if ([cachedEvent.eventId compare:onlineEvent.eventId] == NSOrderedSame) {
@@ -125,106 +122,13 @@
                                      [eventsToRemove addObject:cachedEvent];
                                  }
                              }
-                             
                              gotOnlineEvents(eventsToAdd, eventsToRemove, eventsModified);
-                             
                          }
                         errorHandler:errorHandler];
 }
 
-/** 
- * TODO may be nice to get a predicate out of this filer 
- *
- **/
--(NSPredicate *)predicate
-{
-//    NSString *value = @"TTZ3TJ0xt5";
-//    NSPredicate *workingPredicate = [NSPredicate predicateWithFormat:@"eventId == %@",value];    
-    
-    //@"time >= %f AND time <= %f AND ALL tags IN %@ AND folderId IN %@"
-    NSString *predicateStr = @"time >= %f AND time <= %f AND ALL tags IN %@";
-    NSPredicate *fromTimeP = [NSPredicate predicateWithFormat:predicateStr,
-                              self.fromTime,
-                              self.toTime,
-                              self.tags];
-    
-    return fromTimeP;
-}
 
-/**
- * To pass in an API request
- * DRAFT CODE UNTESTED
- **/
--(NSDictionary *)dictionaryFromFilter
-{
-    NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
-    if (self.fromTime != PYEventFilter_UNDEFINED_FROMTIME) {
-        [dic setObject:[NSString stringWithFormat:@"%f",self.fromTime] forKey:kPrYvChannelEventFilterFromTime];
-    }
-    
-    if (self.toTime != PYEventFilter_UNDEFINED_TOTIME) {
-        [dic setObject:[NSString stringWithFormat:@"%f",self.toTime] forKey:kPrYvChannelEventFilterToTime];
-    }
-    
-    if (self.limit > 0) {
-        [dic setObject:[NSString stringWithFormat:@"%i",self.limit] forKey:kPrYvChannelEventFilterLimit];
-    }
-    
-    if (self.onlyFoldersIDs != nil) {
-        [dic setObject:self.onlyFoldersIDs forKey:kPrYvChannelEventFilterOnlyFolders];
-    }
-    
 
-//    if (self.tags != nil) {
-//        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
-//    }
-    
-    return dic;
-}
-
--(BOOL) matchEvent:(PYEvent *)event
-{
-    if (self.fromTime > event.time) { return false; }
-    
-    if (self.toTime < event.time) { return false; }
-    
-    
-    if ((self.onlyFoldersIDs != nil) &&
-        ([self.onlyFoldersIDs indexOfObject:event.folderId] == NSNotFound)) {
-        return false;
-    }
-    
-//    if (self.tags != nil) {
-//        [NSException raise:@"Not implemented" format:@"PYEventFilter.matchEvent tag matching is not yet implemented"];
-//    }
-    
-    return true;
-}
-
--(NSMutableArray *)filterCachedEvents:(NSArray *)cachedEventsArray
-{
-//    NSMutableArray* result = [[NSMutableArray alloc] init];
-    
-    
-    NSArray *result = [cachedEventsArray filteredArrayUsingPredicate:[self predicate]];
-    return [result mutableCopy];
-    
-    // Would be nice to use  result = [eventErray filteredArrayUsingPredicate:[self predicate]];
-//    NSEnumerator *e = [cachedEventsArray objectEnumerator];
-//    PYEvent *event;
-//
-//    int count = 0;
-//    while (((event = [e nextObject]) != nil) &&  [self matchEvent:event]) {
-//        [result addObject:event];
-//        count++;
-//        if (self.limit > 0 && count >= self.limit) {
-//            return result;
-//        }
-//    }
-
-    
-    return result;
-}
 
 +(void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
     /** Sort untested **/

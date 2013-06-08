@@ -47,7 +47,9 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 + (BOOL)isUnacceptableStatusCode:(NSUInteger)statusCode;
 
-+ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params;
+//+ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params;
++ (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params;
+
 
 + (void)sendRequest:(NSURLRequest *)request
         withReqType:(PYRequestType)reqType

@@ -37,7 +37,8 @@
         
         for (PYChannel *channel in channelList) {
         
-            if ([channel.channelId isEqualToString:@"position"]) {
+            //Nenad_test channel
+            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
             
                 [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
                     NSLog(@"eventList is %@",eventList);
@@ -45,35 +46,44 @@
                     NSLog(@"get all events error is %@",error);
                 }];
                 
-//                PYEvent *event = [[PYEvent alloc] init];
-//                event.tags = @[@"tagclass",@"tagformat"];
-//                event.value = @"test general value";
-//                event.eventClass = @"note";
-//                event.eventFormat = @"txt";
-//                event.tags = @[@"tag1", @"tag2", @"ttag", @"ttart"];
-//                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-//                    NSLog(@"success %@", newEventId);
+//                    PYEvent *event = [[PYEvent alloc] init];
+//                    event.folderId = @"folderId";
+//                    event.value = @"test general value67e";
+//                    event.eventClass = @"note";
+//                    event.eventFormat = @"txt";
+//                    event.tags = @[@"tag", @"tag2", @"ttag1", @"ttart1"];
+//                    [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+//                        NSLog(@"success %@", newEventId);
+//                    } errorHandler:^(NSError *error) {
+//                        NSLog(@"error %@",error);
+////                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
+////                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+//                    }];
+                
+                
+//                [channel setModifiedEventAttributesObject:event forEventId:@"VVD1gYrotM" requestType:PYRequestTypeSync successHandler:^(NSString *stoppedId) {
+//                    NSLog(@"success");
 //                } errorHandler:^(NSError *error) {
 //                    NSLog(@"error %@",error);
-////                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-//                    //                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
 //                }];
+
+                
                 
                 NSDate *today = [NSDate date];
                 NSCalendar *cal = [NSCalendar currentCalendar];
                 NSDateComponents *components = [[NSDateComponents alloc] init];
-                //get 2 days before yesterday
-//                [components setDay:-1];
-                [components setHour:-1];
+                [components setDay:-60];
+//                [components setHour:-1];
                 NSDate *fromTime = [cal dateByAddingComponents:components toDate:today options:0];
                 NSDate *toTime = today;
 
+                //onlyFolderIds -> there is problem when sending problemIds in get request (NSArray type)
                 PYEventFilter *eventFilter = [[PYEventFilter alloc] initWithChannel:channel
                                                                            fromTime:[fromTime timeIntervalSince1970]
                                                                              toTime:[toTime timeIntervalSince1970]
                                                                               limit:10
                                                                      onlyFoldersIDs:nil
-                                                                               tags:@[@"tag1, tag2", @"ytar"]];
+                                                                               tags:@[@"tag2"]];
                 
                 [eventFilter getEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *eventList) {
                     NSLog(@"cached eventList %@",eventList);
@@ -155,17 +165,17 @@
 
     }];
     
-    PYAccess *access2 = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:@"PeySaPzMsM"];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [access2 getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
-            for (PYChannel *pyChannel in channelList)
-            {
-                NSLog(@"channel: %@",pyChannel.name);
-            }
-        } errorHandler:^(NSError *error) {
-            NSLog(@"error: %@",error);
-        }];
-    });
+//    PYAccess *access2 = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:@"PeySaPzMsM"];
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        [access2 getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
+//            for (PYChannel *pyChannel in channelList)
+//            {
+//                NSLog(@"channel: %@",pyChannel.name);
+//            }
+//        } errorHandler:^(NSError *error) {
+//            NSLog(@"error: %@",error);
+//        }];
+//    });
     
 //    PYAccess *access2 = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:@"Ve69mGqqX5"];
 //    [access2 getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
