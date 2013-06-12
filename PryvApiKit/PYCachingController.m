@@ -10,6 +10,8 @@
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
+#import "PYChannel.h"
+#import "PYChannel+JSON.h"
 #import "PYEventFilter.h"
 
 @interface PYCachingController ()
@@ -36,12 +38,12 @@
 	return self;
 }
 
-- (BOOL)isEventDataCachedForKey:(NSString *)key
+- (BOOL)isDataCachedForKey:(NSString *)key
 {
 	return key && [[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]];
 }
 
-- (void)cacheEventData:(NSData *)data withKey:(NSString *)key;
+- (void)cacheData:(NSData *)data withKey:(NSString *)key
 {
 	if (key)
 		[[NSFileManager defaultManager] createFileAtPath:[self.localDataPath stringByAppendingPathComponent:key] contents:data attributes:nil];
@@ -60,7 +62,7 @@
     return nil;
 }
 
-- (NSData *)getEventDataForKey:(NSString *)key;
+- (NSData *)getDataForKey:(NSString *)key
 {
     if (key)
         return [NSData dataWithContentsOfFile:[self.localDataPath stringByAppendingPathComponent:key]];
@@ -100,11 +102,28 @@
     
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
     for (NSString *eventCachedName in filesWithSelectedPrefix) {
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:eventCachedName]];
         [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
     }
     
     return arrayOFCachedEvents;
+}
+
+- (NSArray *)getAllChannelsFromCache
+{
+    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'channel_'"];
+    if (!filesWithSelectedPrefix.count) {
+        return nil;
+    }
+    
+    NSMutableArray *arrayOFCachedChannels = [[NSMutableArray alloc] init];
+    for (NSString *channelCachedName in filesWithSelectedPrefix) {
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:channelCachedName]];
+        [arrayOFCachedChannels addObject:[PYEvent eventFromDictionary:eventDic]];
+    }
+    
+    return arrayOFCachedChannels;
+
 }
 
 //- (NSArray *)getAllUnsyncEventsFromCache
@@ -126,13 +145,25 @@
 
 - (PYEvent *)getEventWithKey:(NSString *)key;
 {
-    if ([self isEventDataCachedForKey:key]) {
-        NSData *eventData = [self getEventDataForKey:key];
+    if ([self isDataCachedForKey:key]) {
+        NSData *eventData = [self getDataForKey:key];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
         return [PYEvent eventFromDictionary:eventDic];
     }
     
     return nil;
+}
+
+- (PYChannel *)getChannelWithKey:(NSString *)key
+{
+    if ([self isDataCachedForKey:key]) {
+        NSData *channelData = [self getDataForKey:key];
+        NSDictionary *channelDic = [PYJSONUtility getJSONObjectFromData:channelData];
+        return [PYChannel channelFromJson:channelDic];
+    }
+    
+    return nil;
+
 }
 
 + (id)sharedManager {

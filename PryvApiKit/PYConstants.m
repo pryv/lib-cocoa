@@ -24,7 +24,8 @@ NSString *const kROUTE_FOLDERS =@"folders";
 NSString *const kPrYvChannelEventFilterLimit = @"limit";
 NSString *const kPrYvChannelEventFilterFromTime = @"fromTime";
 NSString *const kPrYvChannelEventFilterToTime = @"toTime";
-NSString *const kPrYvChannelEventFilterOnlyFolders = @"onlyFolders";
+NSString *const kPrYvChannelEventFilterOnlyFolders = @"onlyFolders[]";
+NSString *const kPrYvChannelEventFilterTags = @"tags[]";
 
 
 // the following should not be set as constants

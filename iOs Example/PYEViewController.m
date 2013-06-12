@@ -39,13 +39,16 @@
         
             //Nenad_test channel
             if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
-            
-                [channel getAllEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *eventList) {
-                    NSLog(@"eventList is %@",eventList);
-                } errorHandler:^(NSError *error) {
-                    NSLog(@"get all events error is %@",error);
-                }];
                 
+                
+                [channel getAllEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *cachedEventList) {
+                    NSLog(@"cached list count %d",cachedEventList.count);
+                } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+                    NSLog(@"eventsToAdd.count %d, eventsToRemove.count %d, eventModified.count %d",eventsToAdd.count,eventsToRemove.count,eventModified.count);
+                } errorHandler:^(NSError *error) {
+                    
+                }];
+                            
 //                    PYEvent *event = [[PYEvent alloc] init];
 //                    event.folderId = @"folderId";
 //                    event.value = @"test general modified value11";
@@ -77,12 +80,12 @@
                 NSDate *fromTime = [cal dateByAddingComponents:components toDate:today options:0];
                 NSDate *toTime = today;
 
-                //onlyFolderIds -> there is problem when sending problemIds in get request (NSArray type)
+                //onlyFolderIds -> there is problem when sending onlyFoldersIDs in get request (NSArray type)
                 PYEventFilter *eventFilter = [[PYEventFilter alloc] initWithChannel:channel
                                                                            fromTime:[fromTime timeIntervalSince1970]
                                                                              toTime:[toTime timeIntervalSince1970]
                                                                               limit:10
-                                                                     onlyFoldersIDs:nil
+                                                                     onlyFoldersIDs:@[@"folderId"]
                                                                                tags:@[@"tag2"]];
                 
                 [eventFilter getEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *eventList) {

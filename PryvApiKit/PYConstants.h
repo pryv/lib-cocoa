@@ -30,3 +30,4 @@ FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterLimit;
 FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterOnlyFolders;
 FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterFromTime;
 FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterToTime;
+FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterTags;

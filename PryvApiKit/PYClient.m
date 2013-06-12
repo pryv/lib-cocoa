@@ -161,9 +161,15 @@ static NSString *myDefaultDomain;
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *valueArray = value;
             [pathString appendFormat:@"%@=",key];
-            for (id arrayValue in valueArray) {
-                [pathString appendFormat:@"%@,",arrayValue];
+            for (int i = 0; i < valueArray.count; i++) {
                 
+                id arrayValue = valueArray[i];
+                [pathString appendFormat:@"%@",arrayValue];
+                
+                if (i != valueArray.count - 1) {
+                    //If it's not last element add comma (,)
+                    [pathString appendString:@","];
+                }
             }
             [pathString appendString:@"&"];
         }else{

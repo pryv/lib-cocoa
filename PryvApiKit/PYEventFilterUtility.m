@@ -32,14 +32,15 @@
     }
     
     //Doesn't work when sending - error in request parameters
-    //    if (self.onlyFoldersIDs != nil) {
-    //        [dic setObject:self.onlyFoldersIDs forKey:kPrYvChannelEventFilterOnlyFolders];
-    //    }
+    if (filter.onlyFoldersIDs != nil) {
+        [dic setObject:filter.onlyFoldersIDs forKey:kPrYvChannelEventFilterOnlyFolders];
+    }
     
     //Not implemeted in web service
-    //    if (self.tags != nil) {
-    //        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
-    //    }
+    if (filter.tags != nil) {
+        [dic setObject:filter.tags forKey:kPrYvChannelEventFilterTags];
+//        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
+    }
     
     return dic;
 }

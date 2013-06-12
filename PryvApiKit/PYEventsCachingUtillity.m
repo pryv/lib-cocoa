@@ -37,7 +37,7 @@
 + (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
-    [[PYCachingController sharedManager] cacheEventData:[PYJSONUtility getDataFromJSONObject:event] withKey:eventKey];
+    [[PYCachingController sharedManager] cacheData:[PYJSONUtility getDataFromJSONObject:event] withKey:eventKey];
     
 }
 
@@ -71,11 +71,11 @@
 
 + (NSString *)getKeyForEvent:(PYEvent *)event
 {
-    if (!event.eventId) {
-        //If event is created offline or/and it's not synched ever, event doesn't have id so use alternate way for unique id
-        //event.timeIntervalWhenCreationTried is created when user tried to create event
-        return [[NSNumber numberWithDouble:event.timeIntervalWhenCreationTried] stringValue];
-    }
+//    if (!event.eventId) {
+//        //If event is created offline or/and it's not synched ever, event doesn't have id so use alternate way for unique id
+//        //event.timeIntervalWhenCreationTried is created when user tried to create event
+//        return [[NSNumber numberWithDouble:event.timeIntervalWhenCreationTried] stringValue];
+//    }
     
     return event.eventId;
 }

@@ -15,6 +15,12 @@
 		3D2397BE1733109A00A72637 /* PYJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PYJSONUtility.m */; };
 		3D2397BF1733109A00A72637 /* PYJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PYJSONUtility.m */; };
 		3D4C386817416B65004E75BE /* PYWebLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
+		3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */; };
+		3D5B9CB21768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */; };
+		3D5B9CB31768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */; };
+		3D5B9CB71768FFC0007A107A /* PYFoldersCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */; };
+		3D5B9CB81768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB61768FFC0007A107A /* PYFoldersCachingUtillity.m */; };
+		3D5B9CB91768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB61768FFC0007A107A /* PYFoldersCachingUtillity.m */; };
 		3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D64493717639F070042C14C /* PYEventFilterUtility.h */; };
 		3D64493A17639F070042C14C /* PYEventFilterUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64493817639F070042C14C /* PYEventFilterUtility.m */; };
@@ -174,6 +180,10 @@
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYJSONUtility.h; sourceTree = "<group>"; };
 		3D2397BC1733109A00A72637 /* PYJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYJSONUtility.m; sourceTree = "<group>"; };
+		3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannelsCachingUtillity.h; sourceTree = "<group>"; };
+		3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannelsCachingUtillity.m; sourceTree = "<group>"; };
+		3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFoldersCachingUtillity.h; sourceTree = "<group>"; };
+		3D5B9CB61768FFC0007A107A /* PYFoldersCachingUtillity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFoldersCachingUtillity.m; sourceTree = "<group>"; };
 		3D61E1D51729D87000BE1E80 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		3D64493717639F070042C14C /* PYEventFilterUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventFilterUtility.h; sourceTree = "<group>"; };
 		3D64493817639F070042C14C /* PYEventFilterUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventFilterUtility.m; sourceTree = "<group>"; };
@@ -309,6 +319,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D5B9CAE1768FF5E007A107A /* CachingChannels */ = {
+			isa = PBXGroup;
+			children = (
+				3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */,
+				3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */,
+			);
+			name = CachingChannels;
+			sourceTree = "<group>";
+		};
+		3D5B9CB41768FFA7007A107A /* CachingFolders */ = {
+			isa = PBXGroup;
+			children = (
+				3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */,
+				3D5B9CB61768FFC0007A107A /* PYFoldersCachingUtillity.m */,
+			);
+			name = CachingFolders;
+			sourceTree = "<group>";
+		};
 		3D67FF9C17340E57008D437F /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -414,8 +442,6 @@
 		3D9DCF2D1752BEB80010FE84 /* CachingEvents */ = {
 			isa = PBXGroup;
 			children = (
-				3D9DCF2E1752BEE20010FE84 /* PYCachingController.h */,
-				3D9DCF2F1752BEE20010FE84 /* PYCachingController.m */,
 				3DC8170D1754021D00A91142 /* PYEventsCachingUtillity.h */,
 				3DC8170E1754021D00A91142 /* PYEventsCachingUtillity.m */,
 			);
@@ -527,6 +553,10 @@
 		FBC2048316B95B3800CB5FFB /* PryvApiKit */ = {
 			isa = PBXGroup;
 			children = (
+				3D9DCF2E1752BEE20010FE84 /* PYCachingController.h */,
+				3D9DCF2F1752BEE20010FE84 /* PYCachingController.m */,
+				3D5B9CB41768FFA7007A107A /* CachingFolders */,
+				3D5B9CAE1768FF5E007A107A /* CachingChannels */,
 				3D9DCF2D1752BEB80010FE84 /* CachingEvents */,
 				3D82A988173EDE0600CB100D /* Reachability */,
 				3D67FF9C17340E57008D437F /* Login */,
@@ -583,6 +613,8 @@
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
 				3D82A98B173EDE2A00CB100D /* Reachability.h in Headers */,
 				3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */,
+				3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */,
+				3D5B9CB71768FFC0007A107A /* PYFoldersCachingUtillity.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,6 +803,8 @@
 				3DC817101754021D00A91142 /* PYEventsCachingUtillity.m in Sources */,
 				4E6DFE111757417F000DFF7A /* PYEventFilter.m in Sources */,
 				3D64493A17639F070042C14C /* PYEventFilterUtility.m in Sources */,
+				3D5B9CB21768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */,
+				3D5B9CB81768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +834,8 @@
 				3DC817111754021D00A91142 /* PYEventsCachingUtillity.m in Sources */,
 				4E6DFE121757417F000DFF7A /* PYEventFilter.m in Sources */,
 				3D64493B17639F070042C14C /* PYEventFilterUtility.m in Sources */,
+				3D5B9CB31768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */,
+				3D5B9CB91768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

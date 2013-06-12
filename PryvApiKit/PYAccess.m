@@ -15,6 +15,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConstants.h"
 #import "PYChannel+JSON.h"
 #import "PYEventsCachingUtillity.h"
+#import "PYChannelsCachingUtillity.h"
 
 @implementation PYAccess
 
@@ -74,14 +75,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         NSLog(@"No internet error, put this event in non sync list and cache it if caching is enabled for library");
         NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
         NSLog(@"request.bodyLength %d",request.HTTPBody.length);
+        event.eventId = @"ajhsdjasgdjh";
         event.time = [[NSDate date] doubleValue];
         NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : event,
                                              kUnsyncEventsRequestKey : request,
                                              };
         [self.eventsNotSync addObject:nonSyncEventObject];
-        
     }
-
 }
 
 - (void)serializeNonSyncList:(NSDictionary *)nonSyncList
@@ -274,6 +274,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                      [channelList addObject:channelObject];
                  }
                  if(successHandler){
+                     [PYChannelsCachingUtillity cacheChannels:JSON];
                      successHandler(channelList);
                  }
              } failure:^(NSError *error){

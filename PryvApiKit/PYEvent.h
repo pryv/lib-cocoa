@@ -32,11 +32,11 @@
     BOOL _trashed;
     NSDate *_modified;
     NSTimeInterval _synchedAt;
-    NSTimeInterval _timeIntervalWhenCreationTried;
+//    NSTimeInterval _timeIntervalWhenCreationTried;
 
 }
 //this is very useful for caching and separating synced from non synced event(ever), because we need unique string for caching
-@property (nonatomic) NSTimeInterval timeIntervalWhenCreationTried;
+//@property (nonatomic) NSTimeInterval timeIntervalWhenCreationTried;
 @property (nonatomic, retain) NSString  *eventId;
 @property (nonatomic, retain) NSString  *channelId;
 

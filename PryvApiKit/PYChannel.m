@@ -57,17 +57,17 @@
     [self.access apiRequest:newPath requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
 }
 
-
 #pragma mark - Events manipulation
 
 //GET /{channel-id}/events
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                        filter:(NSDictionary*)filterDic
-                     successHandler:(void (^) (NSArray *eventList))successHandler
-                       errorHandler:(void (^)(NSError *error))errorHandler
+                          filter:(NSDictionary*)filterDic
+                  successHandler:(void (^) (NSArray *eventList))onlineEventsList
+                    errorHandler:(void (^)(NSError *error))errorHandler
 {
-    
+    //This method should retrieve always online events and need to cache (sync) online events
+
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
          requestType:reqType
               method:PYRequestMethodGET
@@ -78,13 +78,13 @@
                  for (NSDictionary *eventDic in JSON) {
                      [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
                  }
-                 if (successHandler) {
-                     NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
-                     if (currentNumberOfEventsInCache == 0) {
+                 if (onlineEventsList) {
+//                     NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
+//                     if (currentNumberOfEventsInCache == 0) {
                          //Only first time cache events (if caching is enabled)
                          [PYEventsCachingUtillity cacheEvents:JSON];
-                     }
-                     successHandler([eventsArray autorelease]);
+//                     }
+                     onlineEventsList([eventsArray autorelease]);
                  }
                  
              } failure:^(NSError *error) {
@@ -103,14 +103,78 @@
 
 
 - (void)getAllEventsWithRequestType:(PYRequestType)reqType
-                     successHandler:(void (^) (NSArray *eventList))successHandler
+                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))onlineEvents
                        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    [self getEventsWithRequestType:reqType
-                            filter:nil
-                    successHandler:successHandler
-                      errorHandler:errorHandler];
+    //Return current cached events and online list(for visual details)
+    NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
 
+    if (cachedEvents) {
+        NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
+        if (currentNumberOfEventsInCache > 0) {
+            //if there are cached events return it, when get response send notification for new objects
+            cachedEvents(allEventsFromCache);
+        }
+    }
+    //This method should retrieve always online events
+    //In this method we should synchronize events from cache with ones online and to return current online list
+//    [self getEventsWithRequestType:reqType
+//                            filter:nil
+//                    successHandler:onlineEventsList
+//                      errorHandler:errorHandler];
+    [self getEventsWithRequestType:reqType
+                                filter:nil
+                        successHandler:^(NSArray *onlineEventList) {
+                            //When come here all events(onlineEventList) are already cached
+                            //Here some events should be removed from cache (if any)
+                            //It doesn't need to be cached because they are already cached just before successHandler is called
+                            // TODO UPDATE self.lastRefresh
+//                            self.lastRefresh = [[NSDate date] timeIntervalSince1970];
+                            
+                            NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+                            NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+                            NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
+                            
+                            PYEvent *onlineEvent;
+                            NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
+                            while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
+                                
+                                NSLog(@"onlineEventId %@",onlineEvent.eventId);
+                                PYEvent *cachedOnlineEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:onlineEvent.eventId];
+                                
+                                if (!cachedOnlineEvent) {
+                                    // if online event isn't in cache
+                                    // TODO Add to app cache if not done by getEventsWithRequestType
+                                    [eventsToAdd addObject:onlineEvent];
+                                    
+                                } else if ([cachedOnlineEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
+                                    //If online event is in cache and if it's modified add to modified list
+                                    [eventsModified addObject:onlineEvent];
+                                }else{
+                                    //event is cached and not modified
+                                    NSLog(@"event is cached and not modified");
+                                }
+                            }
+                            
+                            // find object that are not present anymore
+                            for (PYEvent *cachedEvent in allEventsFromCache) {
+                                BOOL isInOnlineList = NO;
+                                for (PYEvent *onlineEvent in onlineEventList) {
+                                    if ([cachedEvent.eventId compare:onlineEvent.eventId] == NSOrderedSame) {
+                                        isInOnlineList = YES;
+                                        break;
+                                    }
+                                }
+                                if (isInOnlineList == NO) {
+                                    // if cachedEvent not in onlineEventList ->
+                                    [eventsToRemove addObject:cachedEvent];
+                                    [PYEventsCachingUtillity removeEvent:cachedEvent];
+                                }
+                            }
+                            onlineEvents(eventsToAdd, eventsToRemove, eventsModified);
+                        }
+                          errorHandler:errorHandler];
 }
 
 //POST /{channel-id}/events
@@ -119,7 +183,7 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
-    event.timeIntervalWhenCreationTried = [[NSDate date] timeIntervalSince1970];
+//    event.timeIntervalWhenCreationTried = [[NSDate date] timeIntervalSince1970];
     [self apiRequest:kROUTE_EVENTS
              requestType:reqType
                   method:PYRequestMethodPOST

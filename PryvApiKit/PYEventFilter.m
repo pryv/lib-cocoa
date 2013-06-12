@@ -84,6 +84,9 @@
     [_channel getEventsWithRequestType:reqType
                                 filter:[PYEventFilterUtility filteredEvents:self]
                          successHandler:^(NSArray *onlineEventList) {
+                             //When come here all events(onlineEventList) are already cached
+                             //Here some events should be removed from cache (if any)
+                             //It doesn't need to be cached because they are already cached just before successHandler is called
                              // TODO UPDATE self.lastRefresh
                              self.lastRefresh = [[NSDate date] timeIntervalSince1970];
                              
@@ -102,12 +105,10 @@
                                      // if online event isn't in cache
                                      // TODO Add to app cache if not done by getEventsWithRequestType
                                      [eventsToAdd addObject:onlineEvent];
-                                     [PYEventsCachingUtillity cacheEvent:onlineEvent];
                                      
                                  } else if ([cachedOnlineEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
-                                     //If online event is in cache and if it's modified add to modified list and cache event
+                                     //If online event is in cache and if it's modified add to modified list
                                      [eventsModified addObject:onlineEvent];
-                                     [PYEventsCachingUtillity cacheEvent:onlineEvent];
                                  }else{
                                      //event is cached and not modified
                                      NSLog(@"event is cached and not modified");
