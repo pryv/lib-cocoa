@@ -21,18 +21,18 @@
     return NO;
 }
 
-+ (void)cacheURLRequest:(NSURLRequest *)request forEventKey:(NSString *)uniqueKey
-{
-    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
-    [[PYCachingController sharedManager] cacheNSURLRequest:request withKey:requestKey];
-
-}
-
-+ (NSURLRequest *)getNSURLRequestForEventKey:(NSString *)uniqueKey;
-{
-    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
-    return [[PYCachingController sharedManager] getNSURLRequestForKey:requestKey];
-}
+//+ (void)cacheURLRequest:(NSURLRequest *)request forEventKey:(NSString *)uniqueKey
+//{
+//    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
+//    [[PYCachingController sharedManager] cacheNSURLRequest:request withKey:requestKey];
+//
+//}
+//
+//+ (NSURLRequest *)getNSURLRequestForEventKey:(NSString *)uniqueKey;
+//{
+//    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
+//    return [[PYCachingController sharedManager] getNSURLRequestForKey:requestKey];
+//}
 
 + (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
 {

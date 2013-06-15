@@ -33,6 +33,12 @@
     NSDate *_modified;
     NSTimeInterval _synchedAt;
 //    NSTimeInterval _timeIntervalWhenCreationTried;
+    
+    BOOL _hasTmpId;
+    BOOL _notSyncAdd;
+    BOOL _notSyncModify;
+    BOOL _notSyncTrashOrDelete;
+    BOOL _isSyncTriedNow;
 
 }
 //this is very useful for caching and separating synced from non synced event(ever), because we need unique string for caching
@@ -57,6 +63,12 @@
 @property (nonatomic, retain) NSDictionary *clientData;
 @property (nonatomic) BOOL trashed;
 @property (nonatomic, retain) NSDate *modified;
+
+@property (nonatomic) BOOL hasTmpId;
+@property (nonatomic) BOOL notSyncAdd;
+@property (nonatomic) BOOL notSyncModify;
+@property (nonatomic) BOOL notSyncTrashOrDelete;
+@property (nonatomic) BOOL isSyncTriedNow;
 
 //event that were in unsyncList
 @property NSTimeInterval synchedAt;

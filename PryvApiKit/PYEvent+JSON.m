@@ -63,7 +63,36 @@
     event.clientData = [JSON objectForKey:@"clientData"];
     event.trashed = [[JSON objectForKey:@"trashed"] boolValue];
     event.modified = [NSDate dateWithTimeIntervalSince1970:[[JSON objectForKey:@"modified"] doubleValue]];
+    
+    
+    NSNumber *hasTmpId = [JSON objectForKey:@"hasTmpId"];
+    if ([hasTmpId isKindOfClass:[NSNull class]]) {
+        event.hasTmpId = NO;
+    }else{
+        event.hasTmpId = [hasTmpId boolValue];
+    }
 
+    NSNumber *notSyncAdd = [JSON objectForKey:@"notSyncAdd"];
+    if ([notSyncAdd isKindOfClass:[NSNull class]]) {
+        event.notSyncAdd = NO;
+    }else{
+        event.notSyncAdd = [notSyncAdd boolValue];
+    }
+    
+    NSNumber *notSyncModify = [JSON objectForKey:@"notSyncModify"];
+    if ([notSyncModify isKindOfClass:[NSNull class]]) {
+        event.notSyncModify = NO;
+    }else{
+        event.notSyncModify = [notSyncModify boolValue];
+    }
+
+    NSNumber *notSyncTrashOrDelete = [JSON objectForKey:@"notSyncTrashOrDelete"];
+    if ([notSyncTrashOrDelete isKindOfClass:[NSNull class]]) {
+        event.notSyncTrashOrDelete = NO;
+    }else{
+        event.notSyncTrashOrDelete = [notSyncTrashOrDelete boolValue];
+    }
+    
     return event;
 }
 

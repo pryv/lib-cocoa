@@ -27,8 +27,11 @@
 @synthesize modified = _modified;
 @synthesize synchedAt = _synchedAt;
 //@synthesize timeIntervalWhenCreationTried = _timeIntervalWhenCreationTried;
-
-
+@synthesize hasTmpId = _hasTmpId;
+@synthesize notSyncAdd = _notSyncAdd;
+@synthesize notSyncModify = _notSyncModify;
+@synthesize notSyncTrashOrDelete = _notSyncTrashOrDelete;
+@synthesize isSyncTriedNow = _isSyncTriedNow;
 
 - (NSDictionary *)cachingDictionary
 {
@@ -86,6 +89,12 @@
         
         [dic setObject:attachments forKey:@"attachments"];
     }
+    
+    [dic setObject:[NSNumber numberWithBool:_hasTmpId] forKey:@"hasTmpId"];
+    [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
+    [dic setObject:[NSNumber numberWithBool:_notSyncModify] forKey:@"notSyncModify"];
+    [dic setObject:[NSNumber numberWithBool:_notSyncTrashOrDelete] forKey:@"notSyncTrashOrDelete"];
+    
     
     return [dic autorelease];
 

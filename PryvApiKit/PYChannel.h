@@ -32,6 +32,7 @@
 @property (nonatomic, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
 @property (nonatomic, getter = isTrashed) BOOL trashed;
 
+- (void)syncNotSynchedEventsIfAny;
 
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
@@ -41,17 +42,26 @@
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
+- (void)getOnlineEventWithId:(NSString *)eventId
+                      requestType:(PYRequestType)reqType
+                   successHandler:(void (^) (PYEvent *event))onlineEvent
+                     errorHandler:(void (^) (NSError *error))errorHandler;
 
-//GET /{channel-id}/events
-
+//This is not supposed to be called directly by client app
+/**
+ @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
+ */
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                           filter:(NSDictionary*)filterDic
                   successHandler:(void (^) (NSArray *eventList))onlineEventsList
-                    errorHandler:(void (^)(NSError *error))errorHandler;
+                    errorHandler:(void (^) (NSError *error))errorHandler
+              shouldSyncAndCache:(BOOL)syncAndCache;
+
 
 - (void)getAllEventsWithRequestType:(PYRequestType)reqType
                     gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))onlineEvents
+                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                        errorHandler:(void (^)(NSError *error))errorHandler;
 
 //POST /{channel-id}/events
@@ -60,6 +70,20 @@
         requestType:(PYRequestType)reqType
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ @discussion
+ DELETE /{channel-id}/events/{event-id}
+ Trashes or deletes the specified event, depending on its current state:
+ If the event is not already in the trash, it will be moved to the trash (i.e. flagged as trashed)
+ If the event is already in the trash, it will be irreversibly deleted (including all its attached files, if any).
+ 
+ */
+- (void)trashOrDeleteEvent:(PYEvent *)event
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 //POST /{channel-id}/events/start
 - (void)startPeriodEvent:(PYEvent *)event

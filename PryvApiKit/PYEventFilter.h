@@ -56,7 +56,7 @@
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                  gotCachedEvents:(void (^) (NSArray *eventList))gotCachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))gotOnlineEvents
+                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^) (NSError *error))errorHandler;
 
 

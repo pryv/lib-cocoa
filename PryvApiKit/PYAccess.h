@@ -22,7 +22,7 @@
     
     Reachability *_connectionReachability;
     BOOL _online;
-    NSMutableArray *_eventsNotSync;
+    NSMutableSet *_eventsNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
 }
@@ -37,7 +37,7 @@
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;
-@property (nonatomic, retain) NSMutableArray *eventsNotSync;
+@property (nonatomic, retain) NSMutableSet *eventsNotSync;
 @property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
 @property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
 
@@ -47,7 +47,7 @@
 
 - (NSString *)apiBaseUrl;
 
-- (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error;
+- (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error;
 
 - (void)batchSyncEventsWithoutAttachment;
 
@@ -72,9 +72,15 @@
  @param errorHandler   NSError object if some error occurs
  */
 
+- (void)getAllChannelsWithRequestType:(PYRequestType)reqType
+                    gotCachedChannels:(void (^) (NSArray *cachedChannelList))cachedChannels
+                    gotOnlineChannels:(void (^) (NSArray *onlineChannelList))onlineChannels
+                         errorHandler:(void (^)(NSError *error))errorHandler;
+
+
 - (void)getChannelsWithRequestType:(PYRequestType)reqType
-                      filterParams:(NSDictionary *)filter
-                    successHandler:(void (^)(NSArray *channelList))successHandler
+                            filter:(NSDictionary*)filterDic
+                    successHandler:(void (^) (NSArray *channelsList))onlineChannelList
                       errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**

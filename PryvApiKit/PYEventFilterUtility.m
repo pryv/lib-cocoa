@@ -8,14 +8,91 @@
 
 #import "PYEventFilterUtility.h"
 #import "PYEventFilter.h"
+#import "PYEvent.h"
+#import "PYEventsCachingUtillity.h"
+#import "PYChannel.h"
 
 @implementation PYEventFilterUtility
 
 
-/**
- * To pass in an API request
- * DRAFT CODE UNTESTED
- **/
++ (void)createEventsSyncDetails:(NSArray *)onlineEventList
+                  offlineEvents:(NSArray *)cachedEvents
+                    eventsToAdd:(NSMutableArray *)eventsToAdd
+                 eventsToRemove:(NSMutableArray *)eventsToRemove
+                 eventsModified:(NSMutableArray *)eventsModified
+{
+    PYEvent *onlineEvent;
+    NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
+    while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
+        
+        NSLog(@"onlineEventId %@",onlineEvent.eventId);
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@",onlineEvent.eventId];
+        NSArray *results = [cachedEvents filteredArrayUsingPredicate:predicate];
+        
+        PYEvent *cachedOnlineEvent;
+        if (results.count == 0) {
+            cachedOnlineEvent = nil;
+        }else{
+            cachedOnlineEvent = [results objectAtIndex:0];
+        }
+//        PYEvent *cachedOnlineEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:onlineEvent.eventId];
+        
+        if (!cachedOnlineEvent) {
+            // if online event isn't in cache
+            // TODO Add to app cache if not done by getEventsWithRequestType
+            [eventsToAdd addObject:onlineEvent];
+            
+        } else if ([cachedOnlineEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
+            //If online event is in cache and if it's modified add to modified list
+            [eventsModified addObject:onlineEvent];
+        }else{
+            //event is cached and not modified
+            NSLog(@"event is cached and not modified");
+        }
+    }
+    
+    for (PYEvent *cachedEvent in cachedEvents) {
+        
+        NSArray *results;
+
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@",cachedEvent.eventId];
+        results = [onlineEventList filteredArrayUsingPredicate:predicate];
+        
+        if (results.count == 0) {
+            // if cachedEvent not in onlineEventList ->
+            [eventsToRemove addObject:cachedEvent];
+            [PYEventsCachingUtillity removeEvent:cachedEvent];
+            
+        }
+
+    }
+}
+
++ (void)syncEventWithServerId:(NSString *)eventId
+          withEventWithTempId:(NSString *)eventIdTmp
+{
+    //mapping function
+    //In this method we were search for event with eventId on server and we should replace eventWith 'eventIdTmp' in cache
+
+}
+
++ (void)getAndCacheEventWithServerId:(NSString *)eventId
+                           inChannel:(PYChannel *)channel
+                         requestType:(PYRequestType)reqType
+{
+    //In this method we will ask server for event with eventId and we'll cache it
+    [channel getOnlineEventWithId:eventId
+                      requestType:reqType
+                   successHandler:^(PYEvent *event) {
+                       
+                       [PYEventsCachingUtillity cacheEvent:event];
+        
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"error");
+                }];
+}
+
 + (NSDictionary *)filteredEvents:(PYEventFilter *)filter
 {
     NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];

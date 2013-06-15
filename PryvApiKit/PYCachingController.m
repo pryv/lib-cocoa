@@ -79,10 +79,10 @@
 }
 
 
-- (NSArray *)getEventsFromCacheWithFilter:(PYEventFilter *)eventFilter
-{
-    return [eventFilter onArray:[self getAllEventsFromCache]];
-}
+//- (NSArray *)getEventsFromCacheWithFilter:(PYEventFilter *)eventFilter
+//{
+//    return [eventFilter onArray:[self getAllEventsFromCache]];
+//}
 
 - (void)removeEvent:(NSString *)key
 {
@@ -102,12 +102,25 @@
     
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
     for (NSString *eventCachedName in filesWithSelectedPrefix) {
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:eventCachedName]];
+        NSData *eventData = [self getDataForKey:eventCachedName];
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
         [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
     }
     
     return arrayOFCachedEvents;
 }
+
+- (PYEvent *)getEventWithKey:(NSString *)key;
+{
+    if ([self isDataCachedForKey:key]) {
+        NSData *eventData = [self getDataForKey:key];
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
+        return [PYEvent eventFromDictionary:eventDic];
+    }
+    
+    return nil;
+}
+
 
 - (NSArray *)getAllChannelsFromCache
 {
@@ -118,8 +131,8 @@
     
     NSMutableArray *arrayOFCachedChannels = [[NSMutableArray alloc] init];
     for (NSString *channelCachedName in filesWithSelectedPrefix) {
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:channelCachedName]];
-        [arrayOFCachedChannels addObject:[PYEvent eventFromDictionary:eventDic]];
+        NSDictionary *channelDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:channelCachedName]];
+        [arrayOFCachedChannels addObject:[PYChannel channelFromJson:channelDic]];
     }
     
     return arrayOFCachedChannels;
@@ -143,16 +156,6 @@
 //
 //}
 
-- (PYEvent *)getEventWithKey:(NSString *)key;
-{
-    if ([self isDataCachedForKey:key]) {
-        NSData *eventData = [self getDataForKey:key];
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        return [PYEvent eventFromDictionary:eventDic];
-    }
-    
-    return nil;
-}
 
 - (PYChannel *)getChannelWithKey:(NSString *)key
 {

@@ -39,7 +39,7 @@
 
 + (NSArray *)getChannelsFromCache
 {
-    return [[PYCachingController sharedManager] getAllEventsFromCache];
+    return [[PYCachingController sharedManager] getAllChannelsFromCache];
 }
 
 + (PYChannel *)getChannelFromCacheWithChannelId:(NSString *)channelId

@@ -70,11 +70,10 @@
  */
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                  gotCachedEvents:(void (^) (NSArray *eventList))gotCachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))gotOnlineEvents
+                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^) (NSError *error))errorHandler
 {
     // get all event cached matching this filter
-    // question should we use forKey:@"CachedEvents" ?
     NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
     NSArray* filteredEventsFromCache = [PYEventFilterUtility filterCachedEvents:allEventsFromCache withFilter:self];
     gotCachedEvents(filteredEventsFromCache);
@@ -87,52 +86,21 @@
                              //When come here all events(onlineEventList) are already cached
                              //Here some events should be removed from cache (if any)
                              //It doesn't need to be cached because they are already cached just before successHandler is called
-                             // TODO UPDATE self.lastRefresh
                              self.lastRefresh = [[NSDate date] timeIntervalSince1970];
                              
                              NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
                              NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
                              NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
                              
-                             PYEvent *onlineEvent;                             
-                             NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
-                             while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
-                                 
-                                 NSLog(@"onlineEventId %@",onlineEvent.eventId);
-                                 PYEvent *cachedOnlineEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:onlineEvent.eventId];
-                                 
-                                 if (!cachedOnlineEvent) {
-                                     // if online event isn't in cache
-                                     // TODO Add to app cache if not done by getEventsWithRequestType
-                                     [eventsToAdd addObject:onlineEvent];
-                                     
-                                 } else if ([cachedOnlineEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
-                                     //If online event is in cache and if it's modified add to modified list
-                                     [eventsModified addObject:onlineEvent];
-                                 }else{
-                                     //event is cached and not modified
-                                     NSLog(@"event is cached and not modified");
-                                 }
-                             }
+                             [PYEventFilterUtility createEventsSyncDetails:onlineEventList
+                                                             offlineEvents:filteredEventsFromCache
+                                                               eventsToAdd:eventsToAdd
+                                                            eventsToRemove:eventsToRemove
+                                                            eventsModified:eventsModified];
                              
-                             // find object that are not present anymore
-                             for (PYEvent *cachedEvent in filteredEventsFromCache) {
-                                 BOOL isInOnlineList = NO;
-                                 for (PYEvent *onlineEvent in onlineEventList) {
-                                     if ([cachedEvent.eventId compare:onlineEvent.eventId] == NSOrderedSame) {
-                                         isInOnlineList = YES;
-                                         break;
-                                     }
-                                 }
-                                 if (isInOnlineList == NO) {
-                                     // if cachedEvent not in onlineEventList ->
-                                     [eventsToRemove addObject:cachedEvent];
-                                     [PYEventsCachingUtillity removeEvent:cachedEvent];
-                                 }
-                             }
-                             gotOnlineEvents(eventsToAdd, eventsToRemove, eventsModified);
+                             syncDetails(eventsToAdd, eventsToRemove, eventsModified);
                          }
-                        errorHandler:errorHandler];
+                        errorHandler:errorHandler shouldSyncAndCache:YES];
 }
 
 + (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
