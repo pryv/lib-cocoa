@@ -39,6 +39,7 @@
     BOOL _notSyncModify;
     BOOL _notSyncTrashOrDelete;
     BOOL _isSyncTriedNow;
+    NSDictionary *_modifiedEventPropertiesAndValues;
 
 }
 //this is very useful for caching and separating synced from non synced event(ever), because we need unique string for caching
@@ -69,6 +70,7 @@
 @property (nonatomic) BOOL notSyncModify;
 @property (nonatomic) BOOL notSyncTrashOrDelete;
 @property (nonatomic) BOOL isSyncTriedNow;
+@property (nonatomic, retain) NSDictionary *modifiedEventPropertiesAndValues;
 
 //event that were in unsyncList
 @property NSTimeInterval synchedAt;

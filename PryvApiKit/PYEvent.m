@@ -32,6 +32,7 @@
 @synthesize notSyncModify = _notSyncModify;
 @synthesize notSyncTrashOrDelete = _notSyncTrashOrDelete;
 @synthesize isSyncTriedNow = _isSyncTriedNow;
+@synthesize modifiedEventPropertiesAndValues = _modifiedEventPropertiesAndValues;
 
 - (NSDictionary *)cachingDictionary
 {
@@ -94,7 +95,11 @@
     [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
     [dic setObject:[NSNumber numberWithBool:_notSyncModify] forKey:@"notSyncModify"];
     [dic setObject:[NSNumber numberWithBool:_notSyncTrashOrDelete] forKey:@"notSyncTrashOrDelete"];
+    if (_modifiedEventPropertiesAndValues) {
+        [dic setObject:_modifiedEventPropertiesAndValues forKey:@"modifiedProperties"];
+    }
     
+    [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
     
     return [dic autorelease];
 

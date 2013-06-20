@@ -13,6 +13,8 @@
 #import "PYChannel.h"
 #import "PYChannel+JSON.h"
 #import "PYEventFilter.h"
+#import "PYFolder.h"
+#import "PYFolder+JSON.h"
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
@@ -93,6 +95,15 @@
     }
 }
 
+- (void)removeFolder:(NSString *)key
+{
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
+    if (error) {
+        NSAssert(@"Error in removing folder", @"");
+    }
+}
+
 - (NSArray *)getAllEventsFromCache
 {
     NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'event_'"];
@@ -136,9 +147,23 @@
     }
     
     return arrayOFCachedChannels;
-
 }
 
+- (NSArray *)getAllFoldersFromCache
+{
+    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'folder_'"];
+    if (!filesWithSelectedPrefix.count) {
+        return nil;
+    }
+    
+    NSMutableArray *arrayOFCachedFolders = [[NSMutableArray alloc] init];
+    for (NSString *folderCachedName in filesWithSelectedPrefix) {
+        NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:folderCachedName]];
+        [arrayOFCachedFolders addObject:[PYFolder folderFromJSON:folderDic]];
+    }
+    
+    return arrayOFCachedFolders;
+}
 //- (NSArray *)getAllUnsyncEventsFromCache
 //{
 //    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'unsync_event_'"];
@@ -167,6 +192,16 @@
     
     return nil;
 
+}
+- (PYFolder *)getFolderWithKey:(NSString *)key
+{
+    if ([self isDataCachedForKey:key]) {
+        NSData *folderData = [self getDataForKey:key];
+        NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:folderData];
+        return [PYFolder folderFromJSON:folderDic];
+    }
+    
+    return nil;
 }
 
 + (id)sharedManager {

@@ -8,6 +8,7 @@
 
 @class PYEvent;
 @class PYChannel;
+@class PYFolder;
 #import <Foundation/Foundation.h>
 
 @interface PYCachingController : NSObject
@@ -21,6 +22,7 @@
 - (void)cacheData:(NSData *)data withKey:(NSString *)key;
 - (NSData *)getDataForKey:(NSString *)key;
 - (void)removeEvent:(NSString *)key;
+- (void)removeFolder:(NSString *)key;
 - (NSArray *)getAllEventsFromCache;
 //- (NSArray *)getAllUnsyncEventsFromCache;
 - (PYEvent *)getEventWithKey:(NSString *)key;
@@ -30,4 +32,7 @@
 //Channels
 - (NSArray *)getAllChannelsFromCache;
 - (PYChannel *)getChannelWithKey:(NSString *)key;
+//Folders
+- (NSArray *)getAllFoldersFromCache;
+- (PYFolder *)getFolderWithKey:(NSString *)key;
 @end

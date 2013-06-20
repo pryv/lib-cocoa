@@ -24,9 +24,6 @@
     
     [PYClient setDefaultDomainStaging];
     
-//    NSLog(@"events from cache %@",[PYEventsCachingUtillity getEventsFromCache]);
-    
-    
     PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
     NSLog(@"isOnline %d",access.isOnline);
     NSLog(@"log");
@@ -34,211 +31,55 @@
     [access getAllChannelsWithRequestType:PYRequestTypeSync gotCachedChannels:^(NSArray *cachedChannelList) {
         NSLog(@"cachedChannelList %@",cachedChannelList);
         
-//        PYEvent *event = [PYEventsCachingUtillity getEventFromCacheWithEventId:@"eTosaIJ50f"];
-//        NSLog(@"event for key is %@",event);
-//        
         for (PYChannel *channel in cachedChannelList) {
-            
             //Nenad_test channel
             if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
                 
-//                [channel trashOrDeleteEvent:event withRequestType:PYRequestTypeSync successHandler:^{
-//                    NSLog(@"success");
-//                } errorHandler:^(NSError *error) {
-//                    NSLog(@"error");
-//                }];
+                PYFolder *folder = [[PYFolder alloc] init];
+                folder.folderId  = @"newTestId2";
+                folder.name  = @"newTestName2";
+                folder.trashed = YES;
                 
-                PYEvent *event = [[PYEvent alloc] init];
-                event.folderId = @"folderId";
-                event.value = @"test general modified value11";
-                event.eventClass = @"note";
-                event.eventFormat = @"txt";
-                event.tags = @[@"tag1", @"tag21", @"mode1"];
-                event.clientData = @{@"clDataKey": @"clientDataObject"};
-                
-                
-//                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-//                    NSLog(@"succed");
-//                } errorHandler:^(NSError *error) {
-//                    NSLog(@"error");
-//                }];
-                
-                NSLog(@"TURN ON Internet here");
-                
-                //Radi dobro ali ne prikazuje tacne podatke posto kesira ranije
-                [channel getAllEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *cachedEventList) {
-                    
-                } gotOnlineEvents:^(NSArray *onlineEventList) {
-                    
-                } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-                    
+                [channel createFolder:folder withRequestType:PYRequestTypeSync successHandler:^(NSString *createdFolderId) {
+                    NSLog(@"success");
                 } errorHandler:^(NSError *error) {
-                    
+                    NSLog(@"error");
                 }];
                 
-//                [channel getAllEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *cachedEventList) {
-////                    NSLog(@"cached list count %d",cachedEventList.count);
-//                } gotOnlineEvents:^(NSArray *onlineEventList) {
-////                    NSLog(@"onlineEventList.count %d",onlineEventList.count);
-//                } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-////                    NSLog(@"eventsToAdd.count %d, eventsToRemove.count %d, eventModified.count %d",eventsToAdd.count,eventsToRemove.count,eventModified.count);
+//                [channel getAllFoldersWithRequestType:PYRequestTypeSync
+//                                         filterParams:nil
+//                                     gotCachedFolders:^(NSArray *cachedFoldersList) {
+//                    NSLog(@"");
+//                } gotOnlineFolders:^(NSArray *onlineFolderList) {
+//                    NSLog(@"");
 //                } errorHandler:^(NSError *error) {
-////                    NSLog(@"error %@",error);
+//                    NSLog(@"error");
 //                }];
             }
         }
-
     } gotOnlineChannels:^(NSArray *onlineChannelList) {
-//        NSLog(@"onlineChannelList %@",onlineChannelList);
+        
+//        for (PYChannel *channel in onlineChannelList) {
+//            
+//            //Nenad_test channel
+//            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
+//                [channel getAllEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *cachedEventList) {
+//                    
+//                } gotOnlineEvents:^(NSArray *onlineEventList) {
+//                    
+//                } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
+//
+//            }
+//        }
+        
     } errorHandler:^(NSError *error) {
-//        NSLog(@"isOnline %d",access.isOnline);
+        NSLog(@"isOnline %d",access.isOnline);
     }];
      
-//
-//                    PYEvent *event = [[PYEvent alloc] init];
-//                    event.folderId = @"folderId";
-//                    event.value = @"test general modified value11";
-//                    event.eventClass = @"note";
-//                    event.eventFormat = @"txt";
-//                    event.tags = @[@"tag1", @"tag21", @"mode1"];
-////                    [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-////                        NSLog(@"success %@", newEventId);
-////                    } errorHandler:^(NSError *error) {
-////                        NSLog(@"error %@",error);
-//////                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-//////                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
-////                    }];
-////                
-////                
-////                [channel setModifiedEventAttributesObject:event forEventId:@"TexaDs906J" requestType:PYRequestTypeSync successHandler:^(NSString *stoppedId) {
-////                    NSLog(@"success");
-////                } errorHandler:^(NSError *error) {
-////                    NSLog(@"error %@",error);
-////                }];
-//
-//                
-//                
-//                NSDate *today = [NSDate date];
-//                NSCalendar *cal = [NSCalendar currentCalendar];
-//                NSDateComponents *components = [[NSDateComponents alloc] init];
-//                [components setDay:-60];
-////                [components setHour:-1];
-//                NSDate *fromTime = [cal dateByAddingComponents:components toDate:today options:0];
-//                NSDate *toTime = today;
-//
-//                //onlyFolderIds -> there is problem when sending onlyFoldersIDs in get request (NSArray type)
-//                PYEventFilter *eventFilter = [[PYEventFilter alloc] initWithChannel:channel
-//                                                                           fromTime:[fromTime timeIntervalSince1970]
-//                                                                             toTime:[toTime timeIntervalSince1970]
-//                                                                              limit:10
-//                                                                     onlyFoldersIDs:@[@"folderId"]
-//                                                                               tags:@[@"tag2"]];
-//                
-//                [eventFilter getEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *eventList) {
-//                    NSLog(@"cached eventList %@",eventList);
-//                } gotOnlineEvents:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-//                    NSLog(@"eventsToAdd %@",eventsToAdd);
-//                    NSLog(@"eventsToRemove %@",eventsToRemove);
-//                    NSLog(@"eventModified %@",eventModified);
-//                } errorHandler:^(NSError *error) {
-//                    NSLog(@"error is %@",error);
-//                }];
-//                
-////
-////
-////                NSString *imgName = @"Default";
-////                NSString *filePath = [[NSBundle mainBundle] pathForResource:imgName ofType:@"png"];
-////                NSData *imageData = [NSData dataWithContentsOfFile:filePath];
-////                
-////                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData
-////                                                                      name:imgName
-////                                                                  fileName:@"Default.png"];
-////                [event addAttachment:att];
-////
-////                
-//                
-////                [channel createEvent:event requestType:PYRequestTypeSync successHandler:^(NSString *newEventId, NSString *stoppedId) {
-////                    NSLog(@"success %@", newEventId);
-////                } errorHandler:^(NSError *error) {
-////                    NSLog(@"error %@",error);
-////                    NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-////                    NSLog(@"request.bodyLength %d",request.HTTPBody.length);
-////                }];
-//
-//                
-//                
-////                [channel setModifiedEventAttributesObject:noteEvent
-////                                               forEventId:@"VPRioMho45"
-////                                              requestType:PYRequestTypeSync
-////                                           successHandler:^(NSString *stoppedId) {
-////                    
-////                } errorHandler:^(NSError *error) {
-////                    
-////                }];
-////                
-////                [channel startPeriodEvent:noteEvent requestType:PYRequestTypeSync successHandler:^(NSString *createdFolderId) {
-////                    
-////                } errorHandler:^(NSError *error) {
-////                    
-////                }];
-//
-//                
-////                [channel getRunningPeriodEventsWithRequestType:PYRequestTypeSync successHandler:^(NSArray *arrayOfEvents) {
-////                    
-////                } errorHandler:^(NSError *error) {
-////                    
-////                }];
-//                
-////                [channel stopPeriodEventWithId:@"VV6i4_7t4Jdd" onDate:nil requestType:PYRequestTypeSync successHandler:^(NSString *stoppedEventId) {
-////                    
-////                } errorHandler:^(NSError *error) {
-////
-////                }];
-//                
-////                [channel getFoldersWithRequestType:PYRequestTypeAsync
-////                                      filterParams:@{@"includeHidden": @"true", @"state" : @"all"}
-////                                    successHandler:^(NSArray *folderList) {
-////                                        
-////                                        NSLog(@"folder list %@",folderList);
-////                                    } errorHandler:^(NSError *error) {
-////                                        NSLog(@"error is %@",error);
-////                                    }];
-//
-//            }
-//        }
-     
-     
-//    PYAccess *access2 = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:@"PeySaPzMsM"];
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [access2 getChannelsWithRequestType:PYRequestTypeSync filterParams:nil successHandler:^(NSArray *channelList) {
-//            for (PYChannel *pyChannel in channelList)
-//            {
-//                NSLog(@"channel: %@",pyChannel.name);
-//            }
-//        } errorHandler:^(NSError *error) {
-//            NSLog(@"error: %@",error);
-//        }];
-//    });
-    
-//    PYAccess *access2 = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:@"Ve69mGqqX5"];
-//    [access2 getChannelsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *channelList) {
-//        
-//        for (PYChannel *channel in channelList) {            
-//            if ([channel.channelId isEqualToString:@"position"]) {
-//                
-//                
-//            }
-//        }
-//        
-//        
-//    } errorHandler:^(NSError *error) {
-//        
-//        NSLog(@"error is %@",error);
-//    }];
-    
-    
-    
-//    [access batchSyncEventsWithoutAttachment];
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {

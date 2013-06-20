@@ -93,6 +93,20 @@
         event.notSyncTrashOrDelete = [notSyncTrashOrDelete boolValue];
     }
     
+    NSDictionary *modifiedProperties = [JSON objectForKey:@"modifiedProperties"];
+    if ([modifiedProperties isKindOfClass:[NSNull class]]) {
+        event.modifiedEventPropertiesAndValues = nil;
+    }else{
+        event.modifiedEventPropertiesAndValues = modifiedProperties;
+    }
+    
+    NSNumber *synchedAt = [JSON objectForKey:@"synchedAt"];
+    if ([synchedAt isKindOfClass:[NSNull class]]) {
+        event.synchedAt = 0;
+    }else{
+        event.synchedAt = [synchedAt doubleValue];
+    }
+    
     return event;
 }
 

@@ -10,6 +10,7 @@
 #import "PYClient.h"
 #import "Reachability.h"
 @class PYEvent;
+@class PYFolder;
 
 @interface PYAccess : NSObject
 {
@@ -23,6 +24,7 @@
     Reachability *_connectionReachability;
     BOOL _online;
     NSMutableSet *_eventsNotSync;
+    NSMutableSet *_foldersNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
 }
@@ -38,6 +40,7 @@
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;
 @property (nonatomic, retain) NSMutableSet *eventsNotSync;
+@property (nonatomic, retain) NSMutableSet *foldersNotSync;
 @property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
 @property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
 
@@ -48,6 +51,7 @@
 - (NSString *)apiBaseUrl;
 
 - (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error;
+- (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error;
 
 - (void)batchSyncEventsWithoutAttachment;
 

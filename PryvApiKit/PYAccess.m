@@ -15,6 +15,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConstants.h"
 #import "PYChannel+JSON.h"
 #import "PYEventsCachingUtillity.h"
+#import "PYFoldersCachingUtillity.h"
 #import "PYChannelsCachingUtillity.h"
 
 @implementation PYAccess
@@ -26,6 +27,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize connectionReachability = _connectionReachability;
 @synthesize eventsNotSync = _eventsNotSync;
+@synthesize foldersNotSync = _foldersNotSync;
 @synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
@@ -81,6 +83,18 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
+- (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error
+{
+    /*When we deserialize unsync list (when app starts) we will know what folders are not sync with these informations:
+     They have one of these flags or combination of them
+     notSyncAdd
+     notSyncModify
+     */
+    [self.foldersNotSync addObject:folder];
+    
+}
+
+
 - (void)deserializeNonSyncList
 {
     NSArray *nonSyncEventsArray = [PYEventsCachingUtillity getEventsFromCache];
@@ -90,6 +104,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [self.eventsNotSync addObject:event];
         }
     }
+    
+    NSArray *nonSyncFoldersArray = [PYFoldersCachingUtillity getFoldersFromCache];
+    
+    for (PYFolder *folder in nonSyncFoldersArray) {
+        if (folder.notSyncAdd || folder.notSyncModify) {
+            [self.foldersNotSync addObject:folder];
+        }
+    }
+
     
 }
 
@@ -129,6 +152,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
     
     return _eventsNotSync;
+}
+
+- (NSMutableSet *)foldersNotSync
+{
+    if (!_foldersNotSync) {
+        _foldersNotSync = [[NSMutableSet alloc] init];
+    }
+    
+    return _foldersNotSync;
 }
 
 #pragma mark - Reachability

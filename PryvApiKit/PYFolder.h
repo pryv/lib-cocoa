@@ -18,12 +18,17 @@
     NSArray *_children;
     BOOL _hidden;
     BOOL _trashed;
-
-
+    
+    BOOL _isSyncTriedNow;
+    BOOL _hasTmpId;
+    BOOL _notSyncAdd;
+    BOOL _notSyncModify;
+    NSTimeInterval _synchedAt;
+    NSDictionary *_modifiedEventPropertiesAndValues;
 }
 
 @property (nonatomic, copy) NSString *folderId;
-@property (nonatomic, copy, readonly) NSString *channelId;
+@property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
 @property (nonatomic, copy) NSDictionary *clientData;
@@ -34,5 +39,16 @@
 
 @property (nonatomic, assign, getter = isHidden) BOOL hidden;
 @property (nonatomic, assign, getter = isTrashed) BOOL trashed;
+
+@property (nonatomic) BOOL isSyncTriedNow;
+@property (nonatomic) BOOL hasTmpId;
+@property (nonatomic) BOOL notSyncAdd;
+@property (nonatomic) BOOL notSyncModify;
+@property (nonatomic) NSTimeInterval synchedAt;
+@property (nonatomic, retain) NSDictionary *modifiedEventPropertiesAndValues;
+
+
+- (NSDictionary *)dictionary;
+- (NSDictionary *)cachingDictionary;
 
 @end

@@ -33,6 +33,7 @@
 @property (nonatomic, getter = isTrashed) BOOL trashed;
 
 - (void)syncNotSynchedEventsIfAny;
+- (void)syncNotSynchedFoldersIfAny;
 
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
@@ -46,6 +47,12 @@
                       requestType:(PYRequestType)reqType
                    successHandler:(void (^) (PYEvent *event))onlineEvent
                      errorHandler:(void (^) (NSError *error))errorHandler;
+
+- (void)getOnlineFolderWithId:(NSString *)folderId
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^) (PYFolder *folder))onlineFolder
+                 errorHandler:(void (^) (NSError *error))errorHandler;
+
 
 //This is not supposed to be called directly by client app
 /**
@@ -121,6 +128,17 @@
                           successHandler:(void (^)(NSString *stoppedId))successHandler
                             errorHandler:(void (^)(NSError *error))errorHandler;
 
+
+//This is not supposed to be called directly by client app
+/**
+ @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
+ */
+
+- (void)getFoldersWithRequestType:(PYRequestType)reqType
+                     filterParams:(NSDictionary *)filter
+                   successHandler:(void (^) (NSArray *foldersList))onlineFoldersList
+                     errorHandler:(void (^) (NSError *error))errorHandler
+               shouldSyncAndCache:(BOOL)syncAndCache;
 /**
  @discussion
  Get list of all folders
@@ -131,9 +149,11 @@
  @param filterParams - > Query string parameters (parentId, includeHidden, state ...) They are optional. If you don't filter put nil
  
  */
-- (void)getFoldersWithRequestType:(PYRequestType)reqType
+
+- (void)getAllFoldersWithRequestType:(PYRequestType)reqType
                      filterParams:(NSDictionary *)filter
-                   successHandler:(void (^)(NSArray *folderList))successHandler
+                 gotCachedFolders:(void (^) (NSArray *cachedFoldersList))cachedFolders
+                 gotOnlineFolders:(void (^) (NSArray *onlineFolderList))onlineFolders
                      errorHandler:(void (^)(NSError *error))errorHandler;
 
 
@@ -144,14 +164,19 @@
  POST /{channel-id}/folders/
  
  */
-- (void)createFolderWithId:(NSString *)folderId
-                      name:(NSString *)folderName
-                  parentId:(NSString *)parentId
-                  isHidden:(BOOL)hidden
-          customClientData:(NSDictionary *)clientData
-       withRequestType:(PYRequestType)reqType
-        successHandler:(void (^)(NSString *createdFolderId))successHandler
-          errorHandler:(void (^)(NSError *error))errorHandler;
+//- (void)createFolderWithId:(NSString *)folderId
+//                      name:(NSString *)folderName
+//                  parentId:(NSString *)parentId
+//                  isHidden:(BOOL)hidden
+//          customClientData:(NSDictionary *)clientData
+//       withRequestType:(PYRequestType)reqType
+//        successHandler:(void (^)(NSString *createdFolderId))successHandler
+//          errorHandler:(void (^)(NSError *error))errorHandler;
+- (void)createFolder:(PYFolder *)folder
+     withRequestType:(PYRequestType)reqType
+      successHandler:(void (^)(NSString *createdFolderId))successHandler
+        errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 
 /**
@@ -161,14 +186,12 @@
  PUT /{channel-id}/folders/{id}
  
  */
-- (void)modifyFolderWithId:(NSString *)folderId
-                      name:(NSString *)newfolderName
-                  parentId:(NSString *)newparentId
-                  isHidden:(BOOL)hidden
-          customClientData:(NSDictionary *)clientData
-           withRequestType:(PYRequestType)reqType
-            successHandler:(void (^)())successHandler
-              errorHandler:(void (^)(NSError *error))errorHandler;
+
+- (void)setModifiedFolderAttributesObject:(PYFolder *)folderObject
+                              forFolderId:(NSString *)folderId
+                              requestType:(PYRequestType)reqType
+                           successHandler:(void (^)())successHandler
+                             errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**
  @discussion
