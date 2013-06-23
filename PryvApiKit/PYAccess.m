@@ -97,9 +97,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)deserializeNonSyncList
 {
-    NSArray *nonSyncEventsArray = [PYEventsCachingUtillity getEventsFromCache];
+    NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
     
-    for (PYEvent *event in nonSyncEventsArray) {
+    for (PYEvent *event in allEventsFromCache) {
         if (event.notSyncAdd || event.notSyncModify || event.notSyncTrashOrDelete) {
             [self.eventsNotSync addObject:event];
         }
@@ -180,11 +180,17 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         //HAVE Internet
         NSLog(@"HAVE internet");
         _online = YES;
-        if (self.eventsNotSync && self.eventsNotSync.count > 0) {
-            for (NSArray *eventRequest in self.eventsNotSync) {
-//                eventRequest[0]
+        [self getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:NULL gotOnlineChannels:^(NSArray *onlineChannelList) {
+            
+            //Sync ALL events and folders
+            for (PYChannel *channel in onlineChannelList) {
+                [channel syncNotSynchedFoldersIfAny];
+                [channel syncNotSynchedEventsIfAny];
             }
-        }
+            
+        } errorHandler:^(NSError *error) {
+            
+        }];
     }
 }
 

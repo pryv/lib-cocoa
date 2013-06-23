@@ -28,41 +28,16 @@
     NSLog(@"isOnline %d",access.isOnline);
     NSLog(@"log");
     
-    [access getAllChannelsWithRequestType:PYRequestTypeSync gotCachedChannels:^(NSArray *cachedChannelList) {
+    PYEvent *event = [PYEventsCachingUtillity getEventFromCacheWithEventId:@"eT3iGs4W05"];
+    
+    [access getAllChannelsWithRequestType:PYRequestTypeSync
+                        gotCachedChannels:^(NSArray *cachedChannelList) {
         NSLog(@"cachedChannelList %@",cachedChannelList);
         
         for (PYChannel *channel in cachedChannelList) {
             //Nenad_test channel
             if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
                 
-                PYFolder *folder = [[PYFolder alloc] init];
-                folder.folderId  = @"newTestId2";
-                folder.name  = @"newTestName2";
-                folder.trashed = YES;
-                
-                [channel createFolder:folder withRequestType:PYRequestTypeSync successHandler:^(NSString *createdFolderId) {
-                    NSLog(@"success");
-                } errorHandler:^(NSError *error) {
-                    NSLog(@"error");
-                }];
-                
-//                [channel getAllFoldersWithRequestType:PYRequestTypeSync
-//                                         filterParams:nil
-//                                     gotCachedFolders:^(NSArray *cachedFoldersList) {
-//                    NSLog(@"");
-//                } gotOnlineFolders:^(NSArray *onlineFolderList) {
-//                    NSLog(@"");
-//                } errorHandler:^(NSError *error) {
-//                    NSLog(@"error");
-//                }];
-            }
-        }
-    } gotOnlineChannels:^(NSArray *onlineChannelList) {
-        
-//        for (PYChannel *channel in onlineChannelList) {
-//            
-//            //Nenad_test channel
-//            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
 //                [channel getAllEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *cachedEventList) {
 //                    
 //                } gotOnlineEvents:^(NSArray *onlineEventList) {
@@ -72,14 +47,72 @@
 //                } errorHandler:^(NSError *error) {
 //                    
 //                }];
-//
-//            }
-//        }
+
+                PYEvent *event = [[PYEvent alloc] init];
+                event.value = @"attachment value1";
+                event.eventFormat = @"txt";
+                event.eventClass = @"note";
+                NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
+                NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
+                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Default123" fileName:@"SomeFileName123"];
+                [event addAttachment:att];
+                
+                
+                [channel createEvent:event
+                         requestType:PYRequestTypeSync
+                      successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    
+                } errorHandler:^(NSError *error) {
+                    
+                }];
+            }
+        }
+    
+    
+            
+    } gotOnlineChannels:^(NSArray *onlineChannelList) {
+        
+
+        for (PYChannel *channel in onlineChannelList) {
+            
+            //Nenad_test channel
+            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
+                
+//                PYEvent *event = [[PYEvent alloc] init];
+//                event.value = @"attachment value1";
+//                event.eventFormat = @"txt";
+//                event.eventClass = @"note";
+//                NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
+//                NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
+//                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Default" fileName:@"SomeFileName"];
+//                [event addAttachment:att];
+                
+                
+//                [channel createEvent:event
+//                         requestType:PYRequestTypeSync
+//                      successHandler:^(NSString *newEventId, NSString *stoppedId) {
+//                          
+//                      } errorHandler:^(NSError *error) {
+//                          
+//                      }];
+
+//                [channel getAllEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *cachedEventList) {
+//                    
+//                } gotOnlineEvents:^(NSArray *onlineEventList) {
+//                    
+//                } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
+
+            }
+        }
         
     } errorHandler:^(NSError *error) {
         NSLog(@"isOnline %d",access.isOnline);
     }];
-     
+    
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {

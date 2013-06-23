@@ -262,7 +262,28 @@
     
 }
 
+- (void)getAttachmentDataForFileName:(NSString *)fileName
+                             eventId:(NSString *)eventId
+                         requestType:(PYRequestType)reqType
+                      successHandler:(void (^) (NSData * filedata))success
+                        errorHandler:(void (^) (NSError *error))errorHandler
+{
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, eventId ,fileName]
+         requestType:reqType
+              method:PYRequestMethodGET
+            postData:nil
+         attachments:nil
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 //In this case this is not JSON object, it's file's NSData
+                 success(JSON);
+                 
+             } failure:^(NSError *error) {
+                 if (errorHandler) {
+                     errorHandler (error);
+                 }
+             }];
 
+}
 
 //GET /{channel-id}/events
 
@@ -292,12 +313,36 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
-                 for (NSDictionary *eventDic in JSON) {
-                     [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
+                 
+                 NSMutableArray *eventsCachingArray = [[NSMutableArray alloc] init];
+                 [eventsCachingArray addObjectsFromArray:JSON];
+                 
+                 for (int i = 0; i < [JSON count]; i++) {
+                     
+                     NSDictionary *eventDic = [JSON objectAtIndex:i];
+                     
+                     PYEvent *event = [PYEvent getEventFromDictionary:eventDic];
+                     [eventsArray addObject:event];
+                     if (event.attachments.count > 0) {
+                         for (int i = 0; i < event.attachments.count; i++) {
+                             PYAttachment *attachment = [event.attachments objectAtIndex:i];
+                             NSString *fileName = attachment.fileName;
+                             [self getAttachmentDataForFileName:fileName
+                                                        eventId:event.eventId
+                                                    requestType:PYRequestTypeSync
+                                                 successHandler:^(NSData *filedata) {
+                                                     
+                                                     attachment.fileData = filedata;
+                                                     [eventsCachingArray replaceObjectAtIndex:i withObject:[event cachingDictionary]];
+                                                     
+                                                     
+                             } errorHandler:errorHandler];
+                         }
+                     }
                  }
                  
                  if (syncAndCache == YES) {
-                     [PYEventsCachingUtillity cacheEvents:JSON];
+                     [PYEventsCachingUtillity cacheEvents:eventsCachingArray];
                  }
                  if (onlineEventsList) {
                      //cacheEvents method will overwrite contents of currently cached file
@@ -397,7 +442,12 @@
                              //this is random id
                              event.eventId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
                              //return that created id so it can work offline. Event will be cached when added to unsync list
-                             
+                             if (event.attachments.count > 0) {
+                                 for (PYAttachment *attachment in event.attachments) {
+//                                     attachment.mimeType = @"mimeType";
+                                     attachment.size = [NSNumber numberWithInt:attachment.fileData.length];
+                                 }
+                             }
                              [PYEventsCachingUtillity cacheEvent:event];
                              [self.access addEvent:event toUnsyncList:error];
 

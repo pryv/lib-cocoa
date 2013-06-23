@@ -54,6 +54,13 @@
                  errorHandler:(void (^) (NSError *error))errorHandler;
 
 
+
+- (void)getAttachmentDataForFileName:(NSString *)fileName
+                             eventId:(NSString *)eventId
+                         requestType:(PYRequestType)reqType
+                      successHandler:(void (^) (NSData * filedata))success
+                        errorHandler:(void (^) (NSError *error))errorHandler;
+
 //This is not supposed to be called directly by client app
 /**
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server

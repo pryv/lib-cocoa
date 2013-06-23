@@ -8,6 +8,7 @@
 
 #import "PYEvent+JSON.h"
 #import "PYAttachment.h"
+#import "PYCachingController.h"
 
 @implementation PYEvent (JSON)
 
@@ -52,7 +53,14 @@
         NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
         
         [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
-            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
+            PYAttachment *attachment = [PYAttachment attachmentFromDictionary:obj];
+            NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", event.eventId, attachment.fileName];
+            
+            if ([[PYCachingController sharedManager] isDataCachedForKey:attachmentDataKey]) {
+                NSData *fileDataFromCache = [[PYCachingController sharedManager] getDataForKey:attachmentDataKey];
+                attachment.fileData = fileDataFromCache;
+            }
+            [attachmentObjects addObject:attachment];
         }];
         
         event.attachments = attachmentObjects;

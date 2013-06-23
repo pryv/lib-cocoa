@@ -21,23 +21,40 @@
     return NO;
 }
 
-//+ (void)cacheURLRequest:(NSURLRequest *)request forEventKey:(NSString *)uniqueKey
-//{
-//    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
-//    [[PYCachingController sharedManager] cacheNSURLRequest:request withKey:requestKey];
-//
-//}
-//
-//+ (NSURLRequest *)getNSURLRequestForEventKey:(NSString *)uniqueKey;
-//{
-//    NSString *requestKey = [NSString stringWithFormat:@"request_%@",uniqueKey];
-//    return [[PYCachingController sharedManager] getNSURLRequestForKey:requestKey];
-//}
-
 + (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
 {
+    NSMutableDictionary *eventForCache = [event mutableCopy];
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
-    [[PYCachingController sharedManager] cacheData:[PYJSONUtility getDataFromJSONObject:event] withKey:eventKey];
+    NSMutableDictionary *attachmentsDic = [[eventForCache objectForKey:@"attachments"] mutableCopy];
+    
+    if (attachmentsDic && attachmentsDic.count > 0) {
+        
+        
+        [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
+            
+            NSMutableDictionary *mutableAttachmentDataDic = [attachmentDataDic mutableCopy];
+            
+            NSString *eventId = [eventForCache objectForKey:@"id"];
+            NSString *fileName = [mutableAttachmentDataDic objectForKey:@"fileName"];
+            if (!fileName) {
+                fileName = @"";
+            }
+            
+            NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", eventId, fileName];
+            NSData *attachmentData = [mutableAttachmentDataDic objectForKey:@"attachmentData"];
+            [[PYCachingController sharedManager] cacheData:attachmentData
+                                                   withKey:attachmentDataKey];
+            
+            [mutableAttachmentDataDic removeObjectForKey:@"attachmentData"];
+            [attachmentsDic setObject:mutableAttachmentDataDic forKey:key];
+
+        }];
+        
+        [eventForCache setObject:attachmentsDic forKey:@"attachments"];
+    }
+    
+    NSData *eventData = [PYJSONUtility getDataFromJSONObject:eventForCache];
+    [[PYCachingController sharedManager] cacheData:eventData withKey:eventKey];
     
 }
 

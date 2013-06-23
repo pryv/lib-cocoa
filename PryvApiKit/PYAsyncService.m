@@ -159,7 +159,6 @@
 //    NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
     _running = NO;
 
-//    id JSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:nil];
     id JSON = [PYJSONUtility getJSONObjectFromData:self.responseData];
     
     BOOL isUnacceptableStatusCode = [PYClient isUnacceptableStatusCode:self.response.statusCode];
@@ -175,7 +174,11 @@
         return;
 	}
 
-    
+    if (JSON == nil) {
+        //This is not valid JSON object, this means that this is attached file (NSData)
+        JSON = self.responseData;
+    }
+
     if (self.onSuccess)
     {
         self.onSuccess(self.request, self.response, JSON);

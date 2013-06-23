@@ -325,8 +325,11 @@ static NSString *myDefaultDomain;
                 
             }
             
-//            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
             id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+            if (JSON == nil) {
+                //This is not valid JSON object, this means that this is attached file (NSData)
+                JSON = responseData;
+            }
             
             if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
                 httpURLResponse = (NSHTTPURLResponse *)urlResponse;

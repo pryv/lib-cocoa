@@ -15,9 +15,6 @@
 + (void)removeEvent:(PYEvent *)event;
 //Array of event JSON data(dictionaries)
 + (void)cacheEvents:(NSArray *)events;
-//Archive NSURLRequest
-//+ (void)cacheURLRequest:(NSURLRequest *)request forEventKey:(NSString *)uniqueKey;
-//+ (NSURLRequest *)getNSURLRequestForEventKey:(NSString *)uniqueKey;
 
 + (NSArray *)getEventsFromCache;
 + (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId;
