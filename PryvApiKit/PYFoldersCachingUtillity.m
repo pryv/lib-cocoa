@@ -54,7 +54,7 @@
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *folderDic in folders) {
-            [self cacheFolder:folderDic WithKey:folderDic[@"id"]];
+            [self cacheFolder:folderDic WithKey:[folderDic objectForKey:@"id"]];
         }        
     }
 }

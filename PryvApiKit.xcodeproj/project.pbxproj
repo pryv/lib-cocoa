@@ -14,6 +14,11 @@
 		3D2397BD1733109A00A72637 /* PYJSONUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D2397BB1733109900A72637 /* PYJSONUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D2397BE1733109A00A72637 /* PYJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PYJSONUtility.m */; };
 		3D2397BF1733109A00A72637 /* PYJSONUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2397BC1733109A00A72637 /* PYJSONUtility.m */; };
+		3D4897401778E8AC008C7B66 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E582DF516C25379003B59DB /* SenTestingKit.framework */; };
+		3D4897411778E8AC008C7B66 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD28EBA17135EA900602603 /* UIKit.framework */; };
+		3D4897421778E8AC008C7B66 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
+		3D4897481778E8AC008C7B66 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D4897461778E8AC008C7B66 /* InfoPlist.strings */; };
+		3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */; };
 		3D4C386817416B65004E75BE /* PYWebLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
 		3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */; };
 		3D5B9CB21768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */; };
@@ -186,6 +191,12 @@
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYJSONUtility.h; sourceTree = "<group>"; };
 		3D2397BC1733109A00A72637 /* PYJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYJSONUtility.m; sourceTree = "<group>"; };
+		3D48973F1778E8AC008C7B66 /* libPryvApiKitLogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libPryvApiKitLogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D4897451778E8AC008C7B66 /* libPryvApiKitLogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libPryvApiKitLogicTests-Info.plist"; sourceTree = "<group>"; };
+		3D4897471778E8AC008C7B66 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3D4897491778E8AC008C7B66 /* libPryvApiKitLogicTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libPryvApiKitLogicTests.h; sourceTree = "<group>"; };
+		3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libPryvApiKitLogicTests.m; sourceTree = "<group>"; };
+		3D48974C1778E8AC008C7B66 /* libPryvApiKitLogicTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libPryvApiKitLogicTests-Prefix.pch"; sourceTree = "<group>"; };
 		3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannelsCachingUtillity.h; sourceTree = "<group>"; };
 		3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannelsCachingUtillity.m; sourceTree = "<group>"; };
 		3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFoldersCachingUtillity.h; sourceTree = "<group>"; };
@@ -284,6 +295,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3D48973B1778E8AC008C7B66 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D4897401778E8AC008C7B66 /* SenTestingKit.framework in Frameworks */,
+				3D4897411778E8AC008C7B66 /* UIKit.framework in Frameworks */,
+				3D4897421778E8AC008C7B66 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3DAF21C6172B28E900B62416 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -329,6 +350,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D4897431778E8AC008C7B66 /* libPryvApiKitLogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				3D4897491778E8AC008C7B66 /* libPryvApiKitLogicTests.h */,
+				3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */,
+				3D4897441778E8AC008C7B66 /* Supporting Files */,
+			);
+			path = libPryvApiKitLogicTests;
+			sourceTree = "<group>";
+		};
+		3D4897441778E8AC008C7B66 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3D4897451778E8AC008C7B66 /* libPryvApiKitLogicTests-Info.plist */,
+				3D4897461778E8AC008C7B66 /* InfoPlist.strings */,
+				3D48974C1778E8AC008C7B66 /* libPryvApiKitLogicTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		3D5B9CAE1768FF5E007A107A /* CachingChannels */ = {
 			isa = PBXGroup;
 			children = (
@@ -521,6 +562,7 @@
 				FBC2048316B95B3800CB5FFB /* PryvApiKit */,
 				4E582DD416C25378003B59DB /* iOs Example */,
 				3DAF21CB172B28E900B62416 /* OS X example */,
+				3D4897431778E8AC008C7B66 /* libPryvApiKitLogicTests */,
 				FBC2047C16B95B3700CB5FFB /* Frameworks */,
 				FBC2047B16B95B3700CB5FFB /* Products */,
 			);
@@ -535,6 +577,7 @@
 				FBC2049616B95F1B00CB5FFB /* libPryvApiKit.a */,
 				4E582DCE16C25378003B59DB /* iOs Example.app */,
 				3DAF21C9172B28E900B62416 /* OS X example.app */,
+				3D48973F1778E8AC008C7B66 /* libPryvApiKitLogicTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -637,6 +680,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		3D48973E1778E8AC008C7B66 /* libPryvApiKitLogicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D48974D1778E8AC008C7B66 /* Build configuration list for PBXNativeTarget "libPryvApiKitLogicTests" */;
+			buildPhases = (
+				3D48973A1778E8AC008C7B66 /* Sources */,
+				3D48973B1778E8AC008C7B66 /* Frameworks */,
+				3D48973C1778E8AC008C7B66 /* Resources */,
+				3D48973D1778E8AC008C7B66 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libPryvApiKitLogicTests;
+			productName = libPryvApiKitLogicTests;
+			productReference = 3D48973F1778E8AC008C7B66 /* libPryvApiKitLogicTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		3DAF21C8172B28E900B62416 /* OS X example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3DAF21DD172B28E900B62416 /* Build configuration list for PBXNativeTarget "OS X example" */;
@@ -732,11 +793,20 @@
 				FBC2049516B95F1B00CB5FFB /* libPryvApiKit.a */,
 				4E582DCD16C25378003B59DB /* iOs Example */,
 				3DAF21C8172B28E900B62416 /* OS X example */,
+				3D48973E1778E8AC008C7B66 /* libPryvApiKitLogicTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3D48973C1778E8AC008C7B66 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D4897481778E8AC008C7B66 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3DAF21C7172B28E900B62416 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -772,7 +842,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3D48973D1778E8AC008C7B66 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		3D48973A1778E8AC008C7B66 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3DAF21C5172B28E900B62416 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -870,6 +964,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		3D4897461778E8AC008C7B66 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D4897471778E8AC008C7B66 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		3DAF21CE172B28E900B62416 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -929,6 +1031,50 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		3D48974E1778E8AC008C7B66 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iOs Example.app/iOs Example";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		3D48974F1778E8AC008C7B66 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iOs Example.app/iOs Example";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Prefix.pch";
+				INFOPLIST_FILE = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
 		3DAF21DE172B28E900B62416 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1127,7 +1273,7 @@
 				);
 				PRODUCT_NAME = PryvApiKit;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
-				SDKROOT = iphoneos4.3;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1149,7 +1295,7 @@
 				);
 				PRODUCT_NAME = PryvApiKit;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
-				SDKROOT = iphoneos4.3;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1159,6 +1305,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3D48974D1778E8AC008C7B66 /* Build configuration list for PBXNativeTarget "libPryvApiKitLogicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D48974E1778E8AC008C7B66 /* Debug */,
+				3D48974F1778E8AC008C7B66 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		3DAF21DD172B28E900B62416 /* Build configuration list for PBXNativeTarget "OS X example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

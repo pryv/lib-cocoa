@@ -69,7 +69,7 @@
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *eventDic in events) {
-            [self cacheEvent:eventDic WithKey:eventDic[@"id"]];
+            [self cacheEvent:eventDic WithKey:[eventDic objectForKey:@"id"]];
         }
 
     }

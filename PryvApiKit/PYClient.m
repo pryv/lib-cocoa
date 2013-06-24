@@ -163,7 +163,7 @@ static NSString *myDefaultDomain;
             [pathString appendFormat:@"%@=",key];
             for (int i = 0; i < valueArray.count; i++) {
                 
-                id arrayValue = valueArray[i];
+                id arrayValue = [valueArray objectAtIndex:i];
                 [pathString appendFormat:@"%@",arrayValue];
                 
                 if (i != valueArray.count - 1) {
