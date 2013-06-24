@@ -19,6 +19,7 @@
 		3D4897421778E8AC008C7B66 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
 		3D4897481778E8AC008C7B66 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D4897461778E8AC008C7B66 /* InfoPlist.strings */; };
 		3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */; };
+		3D4897541778EE34008C7B66 /* PryvCachingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D4897531778EE34008C7B66 /* PryvCachingTests.m */; };
 		3D4C386817416B65004E75BE /* PYWebLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
 		3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */; };
 		3D5B9CB21768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */; };
@@ -197,6 +198,8 @@
 		3D4897491778E8AC008C7B66 /* libPryvApiKitLogicTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libPryvApiKitLogicTests.h; sourceTree = "<group>"; };
 		3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libPryvApiKitLogicTests.m; sourceTree = "<group>"; };
 		3D48974C1778E8AC008C7B66 /* libPryvApiKitLogicTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libPryvApiKitLogicTests-Prefix.pch"; sourceTree = "<group>"; };
+		3D4897521778EE34008C7B66 /* PryvCachingTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvCachingTests.h; sourceTree = "<group>"; };
+		3D4897531778EE34008C7B66 /* PryvCachingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvCachingTests.m; sourceTree = "<group>"; };
 		3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannelsCachingUtillity.h; sourceTree = "<group>"; };
 		3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannelsCachingUtillity.m; sourceTree = "<group>"; };
 		3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFoldersCachingUtillity.h; sourceTree = "<group>"; };
@@ -355,6 +358,8 @@
 			children = (
 				3D4897491778E8AC008C7B66 /* libPryvApiKitLogicTests.h */,
 				3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */,
+				3D4897521778EE34008C7B66 /* PryvCachingTests.h */,
+				3D4897531778EE34008C7B66 /* PryvCachingTests.m */,
 				3D4897441778E8AC008C7B66 /* Supporting Files */,
 			);
 			path = libPryvApiKitLogicTests;
@@ -864,6 +869,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */,
+				3D4897541778EE34008C7B66 /* PryvCachingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

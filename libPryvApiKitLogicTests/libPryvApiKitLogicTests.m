@@ -7,15 +7,12 @@
 //
 
 #import "libPryvApiKitLogicTests.h"
-#import "PYCachingController.h"
 
 @interface libPryvApiKitLogicTests ()
-@property (nonatomic, retain) NSData *imageData;
 
 @end
 
 @implementation libPryvApiKitLogicTests
-@synthesize imageData = _imageData;
 
 - (void)setUp
 {
@@ -29,22 +26,13 @@
     // Tear-down code here.
     
     [super tearDown];
-    [_imageData release];
 }
 
 - (void)testExample
 {
-    NSString *key = @"ImageDataKey";
-    [[PYCachingController sharedManager] cacheData:self.imageData withKey:key];
-    STAssertTrue([[PYCachingController sharedManager] isDataCachedForKey:@"ImageDataKey"], @"Data isn't cached for key %@",key);
+//    STFail(@"Unit tests are not implemented yet in libPryvApiKitLogicTests");
     
+    STAssertTrue(2+3==5, @"");
 }
-
-//- (void)testExample
-//{
-////    STFail(@"Unit tests are not implemented yet in libPryvApiKitLogicTests");
-//    
-//    STAssertTrue(2+3==5, @"");
-//}
 
 @end
