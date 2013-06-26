@@ -26,6 +26,7 @@
 #import <PryvApiKit/PYEventClient.h>
 #import <PryvApiKit/PYCachingController.h>
 #import <PryvApiKit/PYEventsCachingUtillity.h>
+#import <PryvApiKit/PYChannelsCachingUtillity.h>
 
 #if TARGET_OS_MAC
 

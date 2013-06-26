@@ -8,6 +8,7 @@
 
 #import "PryvCachingTests.h"
 #import "PYCachingController.h"
+#import "PryvApiKit.h"
 
 @interface PryvCachingTests ()
 @property (nonatomic, retain) NSData *imageData;
@@ -20,6 +21,7 @@
 {
     [super setUp];
     // Set-up code here.
+
     NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
     self.imageData = [NSData dataWithContentsOfFile:imagePath];
 }

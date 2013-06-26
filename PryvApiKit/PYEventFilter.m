@@ -76,8 +76,10 @@
     // get all event cached matching this filter
     NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
     NSArray* filteredEventsFromCache = [PYEventFilterUtility filterCachedEvents:allEventsFromCache withFilter:self];
-    gotCachedEvents(filteredEventsFromCache);
     
+    if (gotCachedEvents) {
+        gotCachedEvents(filteredEventsFromCache);
+    }
     // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)    
     // get ALL online events matching this request .. This can be optimized if the API provides journaling
     [_channel getEventsWithRequestType:reqType
@@ -98,7 +100,9 @@
                                                             eventsToRemove:eventsToRemove
                                                             eventsModified:eventsModified];
                              
-                             syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                             if (syncDetails) {
+                                 syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                             }
                          }
                         errorHandler:errorHandler shouldSyncAndCache:YES];
 }

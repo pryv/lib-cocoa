@@ -28,7 +28,7 @@
     NSLog(@"isOnline %d",access.isOnline);
     NSLog(@"log");
     
-    PYEvent *event = [PYEventsCachingUtillity getEventFromCacheWithEventId:@"eT3iGs4W05"];
+//    PYEvent *event = [PYEventsCachingUtillity getEventFromCacheWithEventId:@"eT3iGs4W05"];
     
     [access getAllChannelsWithRequestType:PYRequestTypeSync
                         gotCachedChannels:^(NSArray *cachedChannelList) {
@@ -48,23 +48,23 @@
 //                    
 //                }];
 
-                PYEvent *event = [[PYEvent alloc] init];
-                event.value = @"attachment value1";
-                event.eventFormat = @"txt";
-                event.eventClass = @"note";
-                NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
-                NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
-                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Default123" fileName:@"SomeFileName123"];
-                [event addAttachment:att];
-                
-                
-                [channel createEvent:event
-                         requestType:PYRequestTypeSync
-                      successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                    
-                } errorHandler:^(NSError *error) {
-                    
-                }];
+//                PYEvent *event = [[PYEvent alloc] init];
+//                event.value = @"attachment value1";
+//                event.eventFormat = @"txt";
+//                event.eventClass = @"note";
+//                NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
+//                NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
+//                PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Default123" fileName:@"SomeFileName123"];
+//                [event addAttachment:att];
+//                
+//                
+//                [channel createEvent:event
+//                         requestType:PYRequestTypeSync
+//                      successHandler:^(NSString *newEventId, NSString *stoppedId) {
+//                    
+//                } errorHandler:^(NSError *error) {
+//                    
+//                }];
             }
         }
     

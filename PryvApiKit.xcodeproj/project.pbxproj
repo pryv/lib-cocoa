@@ -21,20 +21,23 @@
 		3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */; };
 		3D4897541778EE34008C7B66 /* PryvCachingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D4897531778EE34008C7B66 /* PryvCachingTests.m */; };
 		3D4C386817416B65004E75BE /* PYWebLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
-		3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */; };
+		3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D5B9CB21768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */; };
 		3D5B9CB31768FFA2007A107A /* PYChannelsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB01768FFA2007A107A /* PYChannelsCachingUtillity.m */; };
-		3D5B9CB71768FFC0007A107A /* PYFoldersCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */; };
+		3D5B9CB71768FFC0007A107A /* PYFoldersCachingUtillity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D5B9CB81768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB61768FFC0007A107A /* PYFoldersCachingUtillity.m */; };
 		3D5B9CB91768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B9CB61768FFC0007A107A /* PYFoldersCachingUtillity.m */; };
 		3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */ = {isa = PBXBuildFile; fileRef = FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D64493717639F070042C14C /* PYEventFilterUtility.h */; };
+		3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D64493717639F070042C14C /* PYEventFilterUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D64493A17639F070042C14C /* PYEventFilterUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64493817639F070042C14C /* PYEventFilterUtility.m */; };
 		3D64493B17639F070042C14C /* PYEventFilterUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64493817639F070042C14C /* PYEventFilterUtility.m */; };
 		3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67412417106EA10050B251 /* PYEvent+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
 		3D67412817106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
 		3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
+		3D6925E4177B73400031F624 /* PYAccessTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E3177B73400031F624 /* PYAccessTests.m */; };
+		3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E6177B79150031F624 /* PYEventsTests.m */; };
+		3D6925EA177B87DC0031F624 /* PYChannelsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E9177B87DC0031F624 /* PYChannelsTests.m */; };
 		3D6A9577175E75C900FF614E /* PYEventFilter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; };
 		3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6BE313171C75EB0023A39C /* PYAsyncService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
@@ -63,10 +66,10 @@
 		3D75F4D31733056A00380629 /* CWLSynthesizeSingleton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */; };
 		3D75F4D41733057700380629 /* PYError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6D3BC016F8BD5C0072F480 /* PYError.h */; };
 		3D75F4D51733058900380629 /* AccessClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DD608ED1702545400905533 /* AccessClient.h */; };
-		3D80798D176A5DC4009ECE86 /* PYChannelFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D80798B176A5DC4009ECE86 /* PYChannelFilter.h */; };
+		3D80798D176A5DC4009ECE86 /* PYChannelFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D80798B176A5DC4009ECE86 /* PYChannelFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D80798E176A5DC4009ECE86 /* PYChannelFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D80798C176A5DC4009ECE86 /* PYChannelFilter.m */; };
 		3D80798F176A5DC4009ECE86 /* PYChannelFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D80798C176A5DC4009ECE86 /* PYChannelFilter.m */; };
-		3D807992176A6DAE009ECE86 /* PYChannelFilterUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D807990176A6DAE009ECE86 /* PYChannelFilterUtility.h */; };
+		3D807992176A6DAE009ECE86 /* PYChannelFilterUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D807990176A6DAE009ECE86 /* PYChannelFilterUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D807993176A6DAE009ECE86 /* PYChannelFilterUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D807991176A6DAE009ECE86 /* PYChannelFilterUtility.m */; };
 		3D807994176A6DAE009ECE86 /* PYChannelFilterUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D807991176A6DAE009ECE86 /* PYChannelFilterUtility.m */; };
 		3D82A98B173EDE2A00CB100D /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D82A989173EDE2A00CB100D /* Reachability.h */; };
@@ -211,6 +214,12 @@
 		3D67412517106EA10050B251 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
 		3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYWebLoginViewController.h; sourceTree = "<group>"; };
 		3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYWebLoginViewController.m; sourceTree = "<group>"; };
+		3D6925E2177B73400031F624 /* PYAccessTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAccessTests.h; sourceTree = "<group>"; };
+		3D6925E3177B73400031F624 /* PYAccessTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAccessTests.m; sourceTree = "<group>"; };
+		3D6925E5177B79150031F624 /* PYEventsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventsTests.h; sourceTree = "<group>"; };
+		3D6925E6177B79150031F624 /* PYEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventsTests.m; sourceTree = "<group>"; };
+		3D6925E8177B87DC0031F624 /* PYChannelsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannelsTests.h; sourceTree = "<group>"; };
+		3D6925E9177B87DC0031F624 /* PYChannelsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannelsTests.m; sourceTree = "<group>"; };
 		3D6BE313171C75EB0023A39C /* PYAsyncService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAsyncService.h; sourceTree = "<group>"; };
 		3D6BE314171C75EB0023A39C /* PYAsyncService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAsyncService.m; sourceTree = "<group>"; };
 		3D6C755D1703812B000B9195 /* PYAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAccess.h; sourceTree = "<group>"; };
@@ -360,6 +369,12 @@
 				3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */,
 				3D4897521778EE34008C7B66 /* PryvCachingTests.h */,
 				3D4897531778EE34008C7B66 /* PryvCachingTests.m */,
+				3D6925E2177B73400031F624 /* PYAccessTests.h */,
+				3D6925E3177B73400031F624 /* PYAccessTests.m */,
+				3D6925E8177B87DC0031F624 /* PYChannelsTests.h */,
+				3D6925E9177B87DC0031F624 /* PYChannelsTests.m */,
+				3D6925E5177B79150031F624 /* PYEventsTests.h */,
+				3D6925E6177B79150031F624 /* PYEventsTests.m */,
 				3D4897441778E8AC008C7B66 /* Supporting Files */,
 			);
 			path = libPryvApiKitLogicTests;
@@ -456,6 +471,7 @@
 		3D6FCEAF16F7C3B60003D970 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
+				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
 				4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */,
 				4E6DFE0F1757417F000DFF7A /* PYEventFilter.m */,
 				3D64493717639F070042C14C /* PYEventFilterUtility.h */,
@@ -464,7 +480,6 @@
 				3D80798C176A5DC4009ECE86 /* PYChannelFilter.m */,
 				3D807990176A6DAE009ECE86 /* PYChannelFilterUtility.h */,
 				3D807991176A6DAE009ECE86 /* PYChannelFilterUtility.m */,
-				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
 				3D6BE313171C75EB0023A39C /* PYAsyncService.h */,
 				3D6BE314171C75EB0023A39C /* PYAsyncService.m */,
 				8AB2361D16FA895800B28F06 /* PYClient.h */,
@@ -650,6 +665,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */,
+				3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */,
+				3D5B9CB71768FFC0007A107A /* PYFoldersCachingUtillity.h in Headers */,
+				3D80798D176A5DC4009ECE86 /* PYChannelFilter.h in Headers */,
+				3D807992176A6DAE009ECE86 /* PYChannelFilterUtility.h in Headers */,
 				3D2397BD1733109A00A72637 /* PYJSONUtility.h in Headers */,
 				4E6DFE101757417F000DFF7A /* PYEventFilter.h in Headers */,
 				3DC8170F1754021D00A91142 /* PYEventsCachingUtillity.h in Headers */,
@@ -674,11 +694,6 @@
 				3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */,
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
 				3D82A98B173EDE2A00CB100D /* Reachability.h in Headers */,
-				3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */,
-				3D5B9CB11768FFA2007A107A /* PYChannelsCachingUtillity.h in Headers */,
-				3D5B9CB71768FFC0007A107A /* PYFoldersCachingUtillity.h in Headers */,
-				3D80798D176A5DC4009ECE86 /* PYChannelFilter.h in Headers */,
-				3D807992176A6DAE009ECE86 /* PYChannelFilterUtility.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,6 +885,9 @@
 			files = (
 				3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */,
 				3D4897541778EE34008C7B66 /* PryvCachingTests.m in Sources */,
+				3D6925E4177B73400031F624 /* PYAccessTests.m in Sources */,
+				3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */,
+				3D6925EA177B87DC0031F624 /* PYChannelsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1318,6 +1336,7 @@
 				3D48974F1778E8AC008C7B66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DAF21DD172B28E900B62416 /* Build configuration list for PBXNativeTarget "OS X example" */ = {
 			isa = XCConfigurationList;

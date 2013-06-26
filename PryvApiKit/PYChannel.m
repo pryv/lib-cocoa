@@ -395,8 +395,13 @@
                                                               eventsToAdd:eventsToAdd
                                                            eventsToRemove:eventsToRemove
                                                            eventsModified:eventsModified];
-                            onlineEvents(onlineEventList);
-                            syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                            if (onlineEvents) {
+                                onlineEvents(onlineEventList);
+                            }
+                            
+                            if (syncDetails) {
+                                syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                            }
                         }
                           errorHandler:errorHandler
                     shouldSyncAndCache:YES];
