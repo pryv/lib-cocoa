@@ -38,6 +38,7 @@
 		3D6925E4177B73400031F624 /* PYAccessTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E3177B73400031F624 /* PYAccessTests.m */; };
 		3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E6177B79150031F624 /* PYEventsTests.m */; };
 		3D6925EA177B87DC0031F624 /* PYChannelsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E9177B87DC0031F624 /* PYChannelsTests.m */; };
+		3D6925ED177B90380031F624 /* PYFoldersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925EC177B90380031F624 /* PYFoldersTests.m */; };
 		3D6A9577175E75C900FF614E /* PYEventFilter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; };
 		3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6BE313171C75EB0023A39C /* PYAsyncService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
@@ -220,6 +221,8 @@
 		3D6925E6177B79150031F624 /* PYEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventsTests.m; sourceTree = "<group>"; };
 		3D6925E8177B87DC0031F624 /* PYChannelsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannelsTests.h; sourceTree = "<group>"; };
 		3D6925E9177B87DC0031F624 /* PYChannelsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannelsTests.m; sourceTree = "<group>"; };
+		3D6925EB177B90380031F624 /* PYFoldersTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFoldersTests.h; sourceTree = "<group>"; };
+		3D6925EC177B90380031F624 /* PYFoldersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFoldersTests.m; sourceTree = "<group>"; };
 		3D6BE313171C75EB0023A39C /* PYAsyncService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAsyncService.h; sourceTree = "<group>"; };
 		3D6BE314171C75EB0023A39C /* PYAsyncService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAsyncService.m; sourceTree = "<group>"; };
 		3D6C755D1703812B000B9195 /* PYAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAccess.h; sourceTree = "<group>"; };
@@ -373,6 +376,8 @@
 				3D6925E3177B73400031F624 /* PYAccessTests.m */,
 				3D6925E8177B87DC0031F624 /* PYChannelsTests.h */,
 				3D6925E9177B87DC0031F624 /* PYChannelsTests.m */,
+				3D6925EB177B90380031F624 /* PYFoldersTests.h */,
+				3D6925EC177B90380031F624 /* PYFoldersTests.m */,
 				3D6925E5177B79150031F624 /* PYEventsTests.h */,
 				3D6925E6177B79150031F624 /* PYEventsTests.m */,
 				3D4897441778E8AC008C7B66 /* Supporting Files */,
@@ -888,6 +893,7 @@
 				3D6925E4177B73400031F624 /* PYAccessTests.m in Sources */,
 				3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */,
 				3D6925EA177B87DC0031F624 /* PYChannelsTests.m in Sources */,
+				3D6925ED177B90380031F624 /* PYFoldersTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

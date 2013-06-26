@@ -59,6 +59,10 @@
                                          
                                      } successHandler:NULL errorHandler:^(NSError *error) {
                                      }];
+    
+    [self.channelForTest trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:NULL errorHandler:^(NSError *error) {
+        STFail(@"Error occured");
+    }];
         
 }
 
@@ -66,4 +70,5 @@
 {
     [super tearDown];
 }
+
 @end
