@@ -66,9 +66,9 @@
     
     NSDictionary *modifiedProperties = [jsonDictionary objectForKey:@"modifiedProperties"];
     if ([modifiedProperties isKindOfClass:[NSNull class]]) {
-        folder.modifiedEventPropertiesAndValues = nil;
+        folder.modifiedFolderPropertiesAndValues = nil;
     }else{
-        folder.modifiedEventPropertiesAndValues = modifiedProperties;
+        folder.modifiedFolderPropertiesAndValues = modifiedProperties;
     }
 
     

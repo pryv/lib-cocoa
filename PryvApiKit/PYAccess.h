@@ -49,13 +49,18 @@
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 - (NSString *)apiBaseUrl;
-
+/**
+ Add event to unsync list. If app tryed to create, modify or trash event and it fails due to no internet access it will be added to unsync list
+ */
 - (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error;
+/**
+ Add folder to unsync list. If app tryed to create, modify or trash folder and it fails due to no internet access it will be added to unsync list
+ */
 - (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error;
 
-- (void)batchSyncEventsWithoutAttachment;
-
-
+/**
+ Low level method for web service communication
+ */
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method

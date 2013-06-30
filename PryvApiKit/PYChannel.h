@@ -32,9 +32,18 @@
 @property (nonatomic, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
 @property (nonatomic, getter = isTrashed) BOOL trashed;
 
+/**
+ Sync all events from list
+ */
 - (void)syncNotSynchedEventsIfAny;
+/**
+ Sync all folders from list
+ */
 - (void)syncNotSynchedFoldersIfAny;
 
+/**
+ Low level method for web service communication adapted for channles service
+ */
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -43,18 +52,24 @@
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
+/**
+ Get online event with id from server. This method mustn't cache event
+ */
 - (void)getOnlineEventWithId:(NSString *)eventId
                       requestType:(PYRequestType)reqType
                    successHandler:(void (^) (PYEvent *event))onlineEvent
                      errorHandler:(void (^) (NSError *error))errorHandler;
-
+/**
+ Get online folder with id from server. This methos mustn't cache folder
+ */
 - (void)getOnlineFolderWithId:(NSString *)folderId
                   requestType:(PYRequestType)reqType
                successHandler:(void (^) (PYFolder *folder))onlineFolder
                  errorHandler:(void (^) (NSError *error))errorHandler;
 
-
-
+/**
+ Get attachment NSData for file name and event id
+ */
 - (void)getAttachmentDataForFileName:(NSString *)fileName
                              eventId:(NSString *)eventId
                          requestType:(PYRequestType)reqType

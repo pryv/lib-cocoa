@@ -10,9 +10,17 @@
 
 @interface PYChannelsCachingUtillity : NSObject
 
+/**
+ Cache channel json objects on disk
+ */
 + (void)cacheChannels:(NSArray *)channels;
-
+/**
+ Get all PYChannel objects from disk
+ */
 + (NSArray *)getChannelsFromCache;
+/**
+ Get PYChannel from disk for key(channelId)
+ */
 + (PYChannel *)getChannelFromCacheWithChannelId:(NSString *)channelId;
 
 

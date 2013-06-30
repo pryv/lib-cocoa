@@ -24,7 +24,7 @@
 @synthesize notSyncAdd = _notSyncAdd;
 @synthesize notSyncModify = _notSyncModify;
 @synthesize synchedAt = _synchedAt;
-@synthesize modifiedEventPropertiesAndValues = _modifiedEventPropertiesAndValues;
+@synthesize modifiedFolderPropertiesAndValues = _modifiedFolderPropertiesAndValues;
 
 - (void)dealloc
 {
@@ -66,8 +66,8 @@
     [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
     [dic setObject:[NSNumber numberWithBool:_notSyncModify] forKey:@"notSyncModify"];
     [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
-    if (_modifiedEventPropertiesAndValues) {
-        [dic setObject:_modifiedEventPropertiesAndValues forKey:@"modifiedProperties"];
+    if (_modifiedFolderPropertiesAndValues) {
+        [dic setObject:_modifiedFolderPropertiesAndValues forKey:@"modifiedProperties"];
     }
     
     return [dic autorelease];

@@ -51,19 +51,6 @@
 		[[NSFileManager defaultManager] createFileAtPath:[self.localDataPath stringByAppendingPathComponent:key] contents:data attributes:nil];
 }
 
-- (void)cacheNSURLRequest:(NSURLRequest *)req withKey:(NSString *)key
-{
-    if (key)
-        [NSKeyedArchiver archiveRootObject:req toFile:[self.localDataPath stringByAppendingPathComponent:key]];
-}
-
-- (NSURLRequest *)getNSURLRequestForKey:(NSString *)key
-{
-    if (key)
-        return [NSKeyedUnarchiver unarchiveObjectWithFile:[self.localDataPath stringByAppendingPathComponent:key]];
-    return nil;
-}
-
 - (NSData *)getDataForKey:(NSString *)key
 {
     if (key)

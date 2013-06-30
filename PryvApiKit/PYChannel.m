@@ -77,7 +77,7 @@
                 if (folder.notSyncModify) {
                     NSLog(@"for modifified unsync folders with serverId we have to provide only modified values, not full event object");
                     
-                    NSDictionary *modifiedPropertiesDic = folder.modifiedEventPropertiesAndValues;
+                    NSDictionary *modifiedPropertiesDic = folder.modifiedFolderPropertiesAndValues;
                     PYFolder *modifiedFolder = [[PYFolder alloc] init];
                     modifiedFolder.isSyncTriedNow = YES;
                     
@@ -852,7 +852,7 @@
                          }];
                          
                          //We have to know what properties are modified in order to make succesfull request
-                         currentFolderFromCache.modifiedEventPropertiesAndValues = [folderObject dictionary];
+                         currentFolderFromCache.modifiedFolderPropertiesAndValues = [folderObject dictionary];
                          //We must have cached modified properties of folder in cache
                          [PYFoldersCachingUtillity cacheFolder:currentFolderFromCache];
                          
