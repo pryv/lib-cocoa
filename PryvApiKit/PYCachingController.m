@@ -80,12 +80,6 @@
 
 }
 
-
-//- (NSArray *)getEventsFromCacheWithFilter:(PYEventFilter *)eventFilter
-//{
-//    return [eventFilter onArray:[self getAllEventsFromCache]];
-//}
-
 - (void)removeEvent:(NSString *)key
 {
     NSError *error = nil;
@@ -164,23 +158,6 @@
     
     return arrayOFCachedFolders;
 }
-//- (NSArray *)getAllUnsyncEventsFromCache
-//{
-//    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'unsync_event_'"];
-//    if (!filesWithSelectedPrefix.count) {
-//        return nil;
-//    }
-//    
-//    NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
-//    for (NSString *eventCachedName in filesWithSelectedPrefix) {
-//        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:[self getEventDataForKey:eventCachedName]];
-//        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
-//    }
-//    
-//    return arrayOFCachedEvents;
-//
-//}
-
 
 - (PYChannel *)getChannelWithKey:(NSString *)key
 {

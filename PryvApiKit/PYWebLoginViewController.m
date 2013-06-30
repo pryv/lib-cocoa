@@ -200,13 +200,16 @@ BOOL requestedLoginView = false;
     // TODO extract the url to a more meaningful place
     NSString *preferredLanguageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
     
-    NSDictionary *postData = @{
-                               // TODO extract the app id some where to constants
-                               @"requestingAppId": self.appID,
-                               @"returnURL": @"false",
-                               @"languageCode" : preferredLanguageCode,
-                               @"requestedPermissions": self.permissions
-                               };
+//    NSDictionary *postData = @{
+//                               // TODO extract the app id some where to constants
+//                               @"requestingAppId": self.appID,
+//                               @"returnURL": @"false",
+//                               @"languageCode" : preferredLanguageCode,
+//                               @"requestedPermissions": self.permissions
+//                               };
+    NSArray *objects = [NSArray arrayWithObjects:self.appID, @"false", preferredLanguageCode, self.permissions, nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"requestingAppId", @"returnURL", @"languageCode", @"requestedPermissions", nil];
+    NSDictionary *postData = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
     
     
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];

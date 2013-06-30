@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-@class PYLocation;
 @class PYEventType;
 @class PYAttachment;
 
@@ -42,8 +41,7 @@
     NSDictionary *_modifiedEventPropertiesAndValues;
 
 }
-//this is very useful for caching and separating synced from non synced event(ever), because we need unique string for caching
-//@property (nonatomic) NSTimeInterval timeIntervalWhenCreationTried;
+
 @property (nonatomic, retain) NSString  *eventId;
 @property (nonatomic, retain) NSString  *channelId;
 

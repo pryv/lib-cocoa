@@ -33,18 +33,6 @@
     [super dealloc];
 }
 
-- (NSString *)description
-{
-    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@", self.id=%@", self.channelId];
-    [description appendFormat:@", self.name=%@", self.name];
-    [description appendFormat:@", self.clientData=%@", self.clientData];
-    [description appendFormat:@", self.enforceNoEventsOverlap=%d", self.enforceNoEventsOverlap];
-    [description appendFormat:@", self.trashed=%d", self.trashed];
-    [description appendString:@">"];
-    return description;
-}
-
 - (void)syncNotSynchedFoldersIfAny
 {
     NSMutableArray *nonSyncFolders = [[[NSMutableArray alloc] init] autorelease];
@@ -544,7 +532,6 @@
                  }
 
              }];
-    
 }
 
 - (void)trashOrDeleteEvent:(PYEvent *)event
@@ -570,12 +557,10 @@
                          
                          event.notSyncTrashOrDelete = YES;                         
                          event.modified = [NSDate date];
-//                         event.channelId = self.channelId;
                          
                          if (event.trashed == NO) {
                              event.trashed = YES;
                              [PYEventsCachingUtillity cacheEvent:event];
-//                             [self.access addEvent:event toUnsyncList:error];
                          }else{
                              //if event has trashed = yes flag it needs to be deleted from cache
                              [PYEventsCachingUtillity removeEvent:event];
@@ -799,8 +784,6 @@
                                  //If we didn't try to sync folder from unsync list that means that we have to cache that folder, otherwise leave it as is
                                  folder.channelId = self.channelId;
                                  folder.notSyncAdd = YES;
-//                                 folder.time = [[NSDate date] timeIntervalSince1970];
-//                                 event.modified = [NSDate date];
                                  //When we try to create folder and we came here it have tmpId
                                  folder.hasTmpId = YES;
                                  //this is random id
@@ -862,7 +845,6 @@
                          PYFolder *currentFolderFromCache = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:folderId];
                          
                          currentFolderFromCache.notSyncModify = YES;
-//                         currentFolderFromCache.modified = [NSDate date];
                          
                          NSDictionary *modifiedPropertiesDic = [folderObject dictionary];
                          [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {

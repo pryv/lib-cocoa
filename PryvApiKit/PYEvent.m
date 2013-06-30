@@ -26,7 +26,6 @@
 @synthesize trashed = _trashed;
 @synthesize modified = _modified;
 @synthesize synchedAt = _synchedAt;
-//@synthesize timeIntervalWhenCreationTried = _timeIntervalWhenCreationTried;
 @synthesize hasTmpId = _hasTmpId;
 @synthesize notSyncAdd = _notSyncAdd;
 @synthesize notSyncModify = _notSyncModify;
@@ -55,8 +54,10 @@
     }
     
     if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-        [dic setObject:@{@"class": _eventClass, @"format" : _eventFormat}
-                forKey:@"type"];
+        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
+        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+        [dic setObject:typeDic forKey:@"type"];
     }
     
     if (_value) {
@@ -111,8 +112,12 @@
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 
     if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-        [dic setObject:@{@"class": _eventClass, @"format" : _eventFormat}
-                forKey:@"type"];
+        
+        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
+        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+
+        [dic setObject:typeDic forKey:@"type"];
     }
     
     if (_value) {

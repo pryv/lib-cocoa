@@ -20,9 +20,6 @@
                  eventsToRemove:(NSMutableArray *)eventsToRemove
                  eventsModified:(NSMutableArray *)eventsModified;
 
-+ (void)syncEventWithServerId:(NSString *)eventId
-          withEventWithTempId:(NSString *)eventIdTmp;
-
 + (void)getAndCacheEventWithServerId:(NSString *)eventId
                            inChannel:(PYChannel *)channel
                          requestType:(PYRequestType)reqType;

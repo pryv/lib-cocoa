@@ -59,7 +59,12 @@
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
     
-    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
+//    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
+    
+    NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"channelId" @"level", nil];
+    
+    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
     [PYWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"

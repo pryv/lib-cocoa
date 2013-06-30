@@ -116,35 +116,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
-//- (void)batchSyncEventsWithoutAttachment
-//{
-//    NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
-//    [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
-//    
-//    for (NSDictionary *eventDic in nonSyncEvents) {
-//        
-//        PYEvent *eventToSync = [eventDic objectForKey:kUnsyncEventsEventKey];
-//        
-//        if (!eventToSync.attachments.count) {
-//            NSURLRequest *request = [eventDic objectForKey:kUnsyncEventsRequestKey];
-//            
-////        PYRequestType reqType = [eventDic[kUnsyncEventsRequestTypeKey] intValue];
-//            [PYClient sendRequest:request withReqType:PYRequestTypeAsync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//                NSLog(@"JSON %@",JSON);
-//                
-//                eventToSync.synchedAt = [[NSDate date] doubleValue];
-//                
-//                [self.eventsNotSync removeObject:eventDic];
-//                NSLog(@"self.eventsNotSync list after sync %@",self.eventsNotSync);
-//            } failure:^(NSError *error) {
-//                NSLog(@"syncEvents error %@",error);
-//            }];
-//            
-//        }
-//    }
-//}
-
-
 - (NSMutableSet *)eventsNotSync
 {
     if (!_eventsNotSync) {
@@ -248,16 +219,19 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     if (path == nil) path = @"";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
-    NSDictionary* headers = @{@"Authorization": self.accessToken};
+//    NSDictionary* headers = @{@"Authorization": self.accessToken};
+    NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
 
     [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      if (serverTime == nil) {
                           NSLog(@"Error cannot find Server-Time in headers");
-         
+                         
+                         NSDictionary *errorInfoDic = [NSDictionary dictionaryWithObject:@"Error cannot find Server-Time in headers"
+                                                                                  forKey:@"message"];
                          NSError *errorToReturn =
-                         [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:@{@"message":@"Error cannot find Server-Time in headers"}] autorelease];
+                         [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
                          failureHandler(errorToReturn);
 
                      } else {
@@ -336,31 +310,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
      ];
 
 }
-
-//#pragma mark - PrYv API Channel create (POST /channnels)
-
-//- (void)createChannelWithRequestType:(PYRequestType)reqType
-//                             channel:(PYChannel *)newChannel
-//                      successHandler:(void (^)(PYChannel *channel))successHandler
-//                        errorhandler:(void (^)(NSError *error))errorHandler
-//{
-//    NSString *pathString = @"/channels";
-//
-//    NSDictionary *postData = [PYChannel jsonFromChannel:newChannel];
-//
-//    [[self class] apiRequest:pathString requestType:reqType method:PYRequestMethodPOST postData:postData success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//        NSLog(@"JSON %@", JSON);
-//        NSString *channelId = [JSON objectForKey:@"id"];
-//        newChannel.channelId = channelId;
-//        if(successHandler){
-//            successHandler(newChannel);
-//        }
-//    } failure:^(NSError *error){
-//        if(errorHandler){
-//            errorHandler(error);
-//        }
-//    }];
-//}
 
 - (void)editChannelWithRequestType:(PYRequestType)reqType
                          channelId:(NSString *)channelId

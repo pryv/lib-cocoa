@@ -69,14 +69,6 @@
     }
 }
 
-+ (void)syncEventWithServerId:(NSString *)eventId
-          withEventWithTempId:(NSString *)eventIdTmp
-{
-    //mapping function
-    //In this method we were search for event with eventId on server and we should replace eventWith 'eventIdTmp' in cache
-
-}
-
 + (void)getAndCacheEventWithServerId:(NSString *)eventId
                            inChannel:(PYChannel *)channel
                          requestType:(PYRequestType)reqType

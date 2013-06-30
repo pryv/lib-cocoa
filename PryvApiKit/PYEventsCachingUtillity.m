@@ -87,13 +87,7 @@
 }
 
 + (NSString *)getKeyForEvent:(PYEvent *)event
-{
-//    if (!event.eventId) {
-//        //If event is created offline or/and it's not synched ever, event doesn't have id so use alternate way for unique id
-//        //event.timeIntervalWhenCreationTried is created when user tried to create event
-//        return [[NSNumber numberWithDouble:event.timeIntervalWhenCreationTried] stringValue];
-//    }
-    
+{    
     return event.eventId;
 }
 

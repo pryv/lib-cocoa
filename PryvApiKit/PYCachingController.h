@@ -24,7 +24,6 @@
 - (void)removeEvent:(NSString *)key;
 - (void)removeFolder:(NSString *)key;
 - (NSArray *)getAllEventsFromCache;
-//- (NSArray *)getAllUnsyncEventsFromCache;
 - (PYEvent *)getEventWithKey:(NSString *)key;
 - (void)cacheNSURLRequest:(NSURLRequest *)req withKey:(NSString *)key;
 - (NSURLRequest *)getNSURLRequestForKey:(NSString *)key;

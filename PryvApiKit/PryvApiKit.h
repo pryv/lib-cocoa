@@ -6,9 +6,6 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-//Temporary
-#import "AccessClient.h"
-
 #import <PryvApiKit/PYError.h>
 #import <PryvApiKit/PYConstants.h>
 #import <PryvApiKit/PYErrorUtility.h>

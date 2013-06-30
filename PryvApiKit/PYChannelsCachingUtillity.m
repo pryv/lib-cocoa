@@ -30,7 +30,6 @@
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *channelDic in channels) {
-//            [self cacheEvent:eventDic WithKey:eventDic[@"id"]];
             [self cacheChannel:channelDic WithKey:[channelDic objectForKey:@"id"]];
         }
         

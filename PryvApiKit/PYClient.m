@@ -11,7 +11,6 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #endif
 
-
 #import "PYClient.h"
 #import "PYConstants.h"
 #import "PYError.h"
@@ -21,9 +20,7 @@
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
 
-
 @implementation PYClient
-
 
 static NSString *myDefaultDomain;
 
@@ -75,9 +72,6 @@ static NSString *myDefaultDomain;
     else if (access.accessToken == nil || access.accessToken.length == 0) {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorTokenNotSet userInfo:nil];
     }
-//    else if (self.channelId == nil || self.channelId.length == 0) {
-//        error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorChannelNotSet userInfo:nil];
-//    }
     else {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorUnknown userInfo:nil];
     }
@@ -228,9 +222,7 @@ static NSString *myDefaultDomain;
     
     if (attachments && attachments.count) {
         
-//        NSData *data = [NSJSONSerialization dataWithJSONObject:postDataa options:0 error:nil];
         NSData *data = [PYJSONUtility getDataFromJSONObject:postDataa];
-
         NSMutableData *bodyData = [[NSMutableData alloc] init];
         NSString *boundaryIdentifier = [NSString stringWithFormat:@"--%@--", [[NSProcessInfo processInfo] globallyUniqueString]];
         NSData *boundaryData = [[NSString stringWithFormat:@"--%@\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding];
@@ -244,7 +236,6 @@ static NSString *myDefaultDomain;
         [bodyData appendData:[@"Content-Disposition: form-data; name=\"event\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
         [bodyData appendData:data];
         [bodyData appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        
         
         // param: attachment
         for (PYAttachment *attachment in attachments) {
@@ -274,7 +265,6 @@ static NSString *myDefaultDomain;
         request.timeoutInterval = 60.0f;
         
         if (postDataa) {
-//            request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
         
@@ -282,9 +272,6 @@ static NSString *myDefaultDomain;
     }
     
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
-    
-
-    
 }
 
 + (void)sendRequest:(NSURLRequest *)request
@@ -317,12 +304,10 @@ static NSString *myDefaultDomain;
             NSData *responseData = nil;
             NSLog(@"started sync request with url: %@",[[request URL] absoluteString]);
             responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-            //            NSLog(@"error is %@",error);
             if (error && failureHandler) {
                 NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:nil error:error withResponse:urlResponse andRequest:request];
                 failureHandler(errorToReturn);
                 return;
-                
             }
             
             id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
@@ -344,8 +329,6 @@ static NSString *myDefaultDomain;
             }else if (successHandler) {
                 successHandler (request, httpURLResponse, JSON);
             }
-            
-            
         }
             break;
             
@@ -354,7 +337,5 @@ static NSString *myDefaultDomain;
     }
 
 }
-
-
 
 @end
