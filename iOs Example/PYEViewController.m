@@ -62,7 +62,7 @@
 //    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
     
     NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"channelId" @"level", nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
     
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
     
