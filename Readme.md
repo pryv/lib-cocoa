@@ -5,8 +5,20 @@ PryvApiKit is an iOS static library and OS X framework. It handles all networkin
 a framework for use in Mac OS X
 
 ## libPryvApiKit.a
-a static library for use in iOS
+This is static library for use in iOS. Usage is pretty straightforward.  
+First of all you need to create PYAccess object:  
 
+`PYAccess *access = [PYClient createAccessWithUsername:@"username" andAccessToken:@"accessToken"];`
+
+With `PYAccess` object you can browse channels, folders and events with permissions you have in access token
+
+    [access getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:^(NSArray *cachedChannelList) {
+        
+    } gotOnlineChannels:^(NSArray *onlineChannelList) {
+        
+    } errorHandler:^(NSError *error) {
+        
+    }];
 
 ## License
 
