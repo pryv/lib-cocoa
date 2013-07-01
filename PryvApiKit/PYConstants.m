@@ -18,7 +18,19 @@ NSString *const kROUTE_CHANNELS = @"channels";
 NSString *const kROUTE_EVENTS = @"events";
 NSString *const kROUTE_FOLDERS =@"folders";
 
+
+
+
+NSString *const kPrYvChannelEventFilterLimit = @"limit";
+NSString *const kPrYvChannelEventFilterFromTime = @"fromTime";
+NSString *const kPrYvChannelEventFilterToTime = @"toTime";
+NSString *const kPrYvChannelEventFilterOnlyFolders = @"onlyFolders[]";
+NSString *const kPrYvChannelEventFilterTags = @"tags[]";
+
+
+// the following should not be set as constants
 NSString *const kPYUserTempToken = @"Ve69mGqqX5";
+NSString *const kPYUserTempTokenMladen = @"PeySaPzMsM";
 
 NSString *const kPrYvApplicationChannelId = @"position";
 NSString *const kPrYvApplicationChannelName = @"Position";

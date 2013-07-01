@@ -35,7 +35,26 @@
     attachment.mimeType = [JSON objectForKey:@"type"];
     attachment.size = [JSON objectForKey:@"size"];
     
+    
     return [attachment autorelease];
+}
+
+- (NSDictionary *)cachingDictionary
+{
+    //"attachmentData" key won't be ever available when we read attachment from cache
+    NSDictionary *attachmentObject = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:self.fileName,
+                                                                          self.mimeType,
+                                                                          self.size,
+                                                                          self.fileData,
+                                                                          nil]
+                                                                 forKeys:[NSArray arrayWithObjects:@"fileName",
+                                                                          @"type",
+                                                                          @"size",
+                                                                          @"attachmentData",
+                                                                          nil]];
+    
+    return attachmentObject;
+    
 }
 
 @end

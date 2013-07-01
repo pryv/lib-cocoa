@@ -11,18 +11,30 @@
 
 @interface PYEventsCachingUtillity : NSObject
 
+/**
+ Cache PYEvent object on disk
+ */
 + (void)cacheEvent:(PYEvent *)event;
-+ (void)cacheUnsyncEvent:(PYEvent *)event;
-//Array of event JSON data(dictionaries)
+/**
+ Remove PYEvent object from disk
+ */
++ (void)removeEvent:(PYEvent *)event;
+/**
+ Cache event json objects on disk
+ */
 + (void)cacheEvents:(NSArray *)events;
-//Array  of PYEvent objects
-+ (void)cacheEventObjects:(NSArray *)eventObjects;
-//Archive NSURLRequest
-+ (void)cacheURLRequest:(NSURLRequest *)request forEventId:(NSString *)eventId;
-+ (NSURLRequest *)getNSURLRequestForEventId:(NSString *)eventId;
-
+/**
+ Get all PYEvent objects from disk
+ */
 + (NSArray *)getEventsFromCache;
-+ (NSArray *)getUnsyncEventsFromCache;
-+ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId isUnsync:(BOOL)unsync;
+/**
+ Get PYEvent object from disk with key(eventId)
+ */
++ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId;
+
+/**
+ Utility method - Get key for event
+ */
++ (NSString *)getKeyForEvent:(PYEvent *)event;
 
 @end

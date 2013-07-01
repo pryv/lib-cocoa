@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface PYErrorUtility : NSObject
-
+/**
+ Get NSError object for server response
+ */
 + (NSError *)getErrorFromJSONResponse:(id)JSONerror
                                 error:(NSError *)error
                          withResponse:(NSHTTPURLResponse *)response

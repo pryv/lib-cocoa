@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PYChannel.h"
+#import "PYConstants.h"
 
 #define PYEventFilter_UNDEFINED_FROMTIME DBL_MIN
 #define PYEventFilter_UNDEFINED_TOTIME DBL_MAX
@@ -52,10 +53,12 @@
                        limit:(NSUInteger)limit
               onlyFoldersIDs:(NSArray *)onlyFoldersIDs
                         tags:(NSArray *)tags;
-
+/**
+ This method gets sync details for event filter
+ */
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                  gotCachedEvents:(void (^) (NSArray *eventList))gotCachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))gotOnlineEvents
+                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^) (NSError *error))errorHandler;
 
 

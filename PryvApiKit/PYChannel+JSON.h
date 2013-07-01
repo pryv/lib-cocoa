@@ -10,6 +10,9 @@
 
 @interface PYChannel (JSON)
 
+/**
+ Get PYChannel object from server
+ */
 + (PYChannel *) channelFromJson:(id)json;
 
 @end

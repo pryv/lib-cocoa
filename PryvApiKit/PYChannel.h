@@ -25,14 +25,25 @@
 }
 
 @property (nonatomic, retain) PYAccess *access;
-@property (nonatomic, copy, readonly) NSString *channelId;
+@property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic)       NSTimeInterval timeCount;
 @property (nonatomic, copy) NSDictionary *clientData;
 @property (nonatomic, getter = isEnforceNoEventsOverlap) BOOL enforceNoEventsOverlap;
 @property (nonatomic, getter = isTrashed) BOOL trashed;
 
+/**
+ Sync all events from list
+ */
+- (void)syncNotSynchedEventsIfAny;
+/**
+ Sync all folders from list
+ */
+- (void)syncNotSynchedFoldersIfAny;
 
+/**
+ Low level method for web service communication adapted for channles service
+ */
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -41,11 +52,46 @@
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
+/**
+ Get online event with id from server. This method mustn't cache event
+ */
+- (void)getOnlineEventWithId:(NSString *)eventId
+                      requestType:(PYRequestType)reqType
+                   successHandler:(void (^) (PYEvent *event))onlineEvent
+                     errorHandler:(void (^) (NSError *error))errorHandler;
+/**
+ Get online folder with id from server. This methos mustn't cache folder
+ */
+- (void)getOnlineFolderWithId:(NSString *)folderId
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^) (PYFolder *folder))onlineFolder
+                 errorHandler:(void (^) (NSError *error))errorHandler;
 
-//GET /{channel-id}/events
+/**
+ Get attachment NSData for file name and event id
+ */
+- (void)getAttachmentDataForFileName:(NSString *)fileName
+                             eventId:(NSString *)eventId
+                         requestType:(PYRequestType)reqType
+                      successHandler:(void (^) (NSData * filedata))success
+                        errorHandler:(void (^) (NSError *error))errorHandler;
+
+//This is not supposed to be called directly by client app
+/**
+ @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
+ */
+- (void)getEventsWithRequestType:(PYRequestType)reqType
+                          filter:(NSDictionary*)filterDic
+                  successHandler:(void (^) (NSArray *eventList))onlineEventsList
+                    errorHandler:(void (^) (NSError *error))errorHandler
+              shouldSyncAndCache:(BOOL)syncAndCache;
+
+
 - (void)getAllEventsWithRequestType:(PYRequestType)reqType
-                          successHandler:(void (^) (NSArray *eventList))successHandler
-                            errorHandler:(void (^)(NSError *error))errorHandler;
+                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                       errorHandler:(void (^)(NSError *error))errorHandler;
 
 //POST /{channel-id}/events
 /*Records a new event. Events recorded this way must be completed events, i.e. either period events with a known duration or mark events. To start a running period event, post a events/start request. In addition to the usual JSON, this request accepts standard multipart/form-data content to support the creation of event with attached files in a single request. When sending a multipart request, one content part must hold the JSON for the new event and all other content parts must be the attached files.*/
@@ -53,6 +99,20 @@
         requestType:(PYRequestType)reqType
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ @discussion
+ DELETE /{channel-id}/events/{event-id}
+ Trashes or deletes the specified event, depending on its current state:
+ If the event is not already in the trash, it will be moved to the trash (i.e. flagged as trashed)
+ If the event is already in the trash, it will be irreversibly deleted (including all its attached files, if any).
+ 
+ */
+- (void)trashOrDeleteEvent:(PYEvent *)event
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 //POST /{channel-id}/events/start
 - (void)startPeriodEvent:(PYEvent *)event
@@ -90,6 +150,17 @@
                           successHandler:(void (^)(NSString *stoppedId))successHandler
                             errorHandler:(void (^)(NSError *error))errorHandler;
 
+
+//This is not supposed to be called directly by client app
+/**
+ @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
+ */
+
+- (void)getFoldersWithRequestType:(PYRequestType)reqType
+                     filterParams:(NSDictionary *)filter
+                   successHandler:(void (^) (NSArray *foldersList))onlineFoldersList
+                     errorHandler:(void (^) (NSError *error))errorHandler
+               shouldSyncAndCache:(BOOL)syncAndCache;
 /**
  @discussion
  Get list of all folders
@@ -100,9 +171,11 @@
  @param filterParams - > Query string parameters (parentId, includeHidden, state ...) They are optional. If you don't filter put nil
  
  */
-- (void)getFoldersWithRequestType:(PYRequestType)reqType
+
+- (void)getAllFoldersWithRequestType:(PYRequestType)reqType
                      filterParams:(NSDictionary *)filter
-                   successHandler:(void (^)(NSArray *folderList))successHandler
+                 gotCachedFolders:(void (^) (NSArray *cachedFoldersList))cachedFolders
+                 gotOnlineFolders:(void (^) (NSArray *onlineFolderList))onlineFolders
                      errorHandler:(void (^)(NSError *error))errorHandler;
 
 
@@ -113,14 +186,19 @@
  POST /{channel-id}/folders/
  
  */
-- (void)createFolderWithId:(NSString *)folderId
-                      name:(NSString *)folderName
-                  parentId:(NSString *)parentId
-                  isHidden:(BOOL)hidden
-          customClientData:(NSDictionary *)clientData
-       withRequestType:(PYRequestType)reqType
-        successHandler:(void (^)(NSString *createdFolderId))successHandler
-          errorHandler:(void (^)(NSError *error))errorHandler;
+//- (void)createFolderWithId:(NSString *)folderId
+//                      name:(NSString *)folderName
+//                  parentId:(NSString *)parentId
+//                  isHidden:(BOOL)hidden
+//          customClientData:(NSDictionary *)clientData
+//       withRequestType:(PYRequestType)reqType
+//        successHandler:(void (^)(NSString *createdFolderId))successHandler
+//          errorHandler:(void (^)(NSError *error))errorHandler;
+- (void)createFolder:(PYFolder *)folder
+     withRequestType:(PYRequestType)reqType
+      successHandler:(void (^)(NSString *createdFolderId))successHandler
+        errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 
 /**
@@ -130,14 +208,12 @@
  PUT /{channel-id}/folders/{id}
  
  */
-- (void)modifyFolderWithId:(NSString *)folderId
-                      name:(NSString *)newfolderName
-                  parentId:(NSString *)newparentId
-                  isHidden:(BOOL)hidden
-          customClientData:(NSDictionary *)clientData
-           withRequestType:(PYRequestType)reqType
-            successHandler:(void (^)())successHandler
-              errorHandler:(void (^)(NSError *error))errorHandler;
+
+- (void)setModifiedFolderAttributesObject:(PYFolder *)folderObject
+                              forFolderId:(NSString *)folderId
+                              requestType:(PYRequestType)reqType
+                           successHandler:(void (^)())successHandler
+                             errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**
  @discussion

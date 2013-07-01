@@ -15,6 +15,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConstants.h"
 #import "PYChannel+JSON.h"
 #import "PYEventsCachingUtillity.h"
+#import "PYFoldersCachingUtillity.h"
+#import "PYChannelsCachingUtillity.h"
 
 @implementation PYAccess
 
@@ -25,6 +27,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize connectionReachability = _connectionReachability;
 @synthesize eventsNotSync = _eventsNotSync;
+@synthesize foldersNotSync = _foldersNotSync;
 @synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
@@ -32,7 +35,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
     if (self) {
-        //master
         self.userID = username;
         self.accessToken = token;
         self.apiDomain = [PYClient defaultDomain];
@@ -41,8 +43,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         [self pyAccessStatus:self.connectionReachability];
-
-
+        [self deserializeNonSyncList];
     }
     return self;
 }
@@ -70,55 +71,67 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return _online;
 }
 
-- (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error
-{
-    if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
-        NSLog(@"No internet error, put this event in non sync list and cache it if caching is enabled for library");
-        NSMutableURLRequest *request = [error.userInfo objectForKey:PryvRequestKey];
-        NSLog(@"request.bodyLength %d",request.HTTPBody.length);
-        event.time = [[NSDate date] doubleValue];
-        NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : event,
-                                             kUnsyncEventsRequestKey : request,
-                                             };
-        [self.eventsNotSync addObject:nonSyncEventObject];
-        
-    }
-
+- (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error
+{    
+    /*When we deserialize unsync list (when app starts) we will know what events are not sync with these informations:
+     They have one of these flags or combination of them
+     notSyncAdd
+     notSyncModify
+     notSyncTrashOrDelete
+     */
+    [self.eventsNotSync addObject:event];
+    
 }
 
-- (void)serializeNonSyncList:(NSDictionary *)nonSyncList
+- (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error
 {
-    for (NSDictionary *nonSyncEventObject in nonSyncList) {
-        PYEvent *eventForCache = nonSyncEventObject[kUnsyncEventsEventKey];
-        [PYEventsCachingUtillity cacheUnsyncEvent:eventForCache];
-        [PYEventsCachingUtillity cacheURLRequest:nonSyncEventObject[kUnsyncEventsRequestKey] forEventId:eventForCache.eventId];
-        //getNSURLRequest
-    }
+    /*When we deserialize unsync list (when app starts) we will know what folders are not sync with these informations:
+     They have one of these flags or combination of them
+     notSyncAdd
+     notSyncModify
+     */
+    [self.foldersNotSync addObject:folder];
+    
 }
+
 
 - (void)deserializeNonSyncList
 {
-    NSArray *nonSyncEventsArray = [PYEventsCachingUtillity getUnsyncEventsFromCache];
+    NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
     
-    for (PYEvent *unsyncEvent in nonSyncEventsArray) {
-        NSURLRequest *unsyncURLReq = [PYEventsCachingUtillity getNSURLRequestForEventId:unsyncEvent.eventId];
-        NSDictionary *nonSyncEventObject = @{kUnsyncEventsEventKey : unsyncEvent,
-                                             kUnsyncEventsRequestKey : unsyncURLReq,
-                                             };
-
-        [self.eventsNotSync addObject:nonSyncEventObject];
-
+    for (PYEvent *event in allEventsFromCache) {
+        if (event.notSyncAdd || event.notSyncModify || event.notSyncTrashOrDelete) {
+            [self.eventsNotSync addObject:event];
+        }
     }
+    
+    NSArray *nonSyncFoldersArray = [PYFoldersCachingUtillity getFoldersFromCache];
+    
+    for (PYFolder *folder in nonSyncFoldersArray) {
+        if (folder.notSyncAdd || folder.notSyncModify) {
+            [self.foldersNotSync addObject:folder];
+        }
+    }
+
     
 }
 
-- (NSMutableArray *)eventsNotSync
+- (NSMutableSet *)eventsNotSync
 {
     if (!_eventsNotSync) {
-        _eventsNotSync = [[NSMutableArray alloc] init];
+        _eventsNotSync = [[NSMutableSet alloc] init];
     }
     
     return _eventsNotSync;
+}
+
+- (NSMutableSet *)foldersNotSync
+{
+    if (!_foldersNotSync) {
+        _foldersNotSync = [[NSMutableSet alloc] init];
+    }
+    
+    return _foldersNotSync;
 }
 
 #pragma mark - Reachability
@@ -138,11 +151,17 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         //HAVE Internet
         NSLog(@"HAVE internet");
         _online = YES;
-        if (self.eventsNotSync && self.eventsNotSync.count > 0) {
-            for (NSArray *eventRequest in self.eventsNotSync) {
-//                eventRequest[0]
+        [self getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:NULL gotOnlineChannels:^(NSArray *onlineChannelList) {
+            
+            //Sync ALL events and folders
+            for (PYChannel *channel in onlineChannelList) {
+                [channel syncNotSynchedFoldersIfAny];
+                [channel syncNotSynchedEventsIfAny];
             }
-        }
+            
+        } errorHandler:^(NSError *error) {
+            
+        }];
     }
 }
 
@@ -183,38 +202,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
     
     return attSize;
-
 }
-
-- (void)batchSyncEventsWithoutAttachment
-{
-    
-    NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
-    [nonSyncEvents addObjectsFromArray:self.eventsNotSync];
-    
-    for (NSDictionary *eventDic in nonSyncEvents) {
-        
-        PYEvent *eventToSync = [eventDic objectForKey:kUnsyncEventsEventKey];
-        
-        if (!eventToSync.attachments.count) {
-            NSURLRequest *request = [eventDic objectForKey:kUnsyncEventsRequestKey];
-            
-//        PYRequestType reqType = [eventDic[kUnsyncEventsRequestTypeKey] intValue];
-            [PYClient sendRequest:request withReqType:PYRequestTypeAsync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                NSLog(@"JSON %@",JSON);
-                
-                eventToSync.synchedAt = [[NSDate date] doubleValue];
-                
-                [self.eventsNotSync removeObject:eventDic];
-                NSLog(@"self.eventsNotSync list after sync %@",self.eventsNotSync);
-            } failure:^(NSError *error) {
-                NSLog(@"syncEvents error %@",error);
-            }];
-
-        }
-    }
-}
-
 
 - (NSString *)apiBaseUrl;
 {
@@ -231,16 +219,19 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     if (path == nil) path = @"";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
-    NSDictionary* headers = @{@"Authorization": self.accessToken};
+//    NSDictionary* headers = @{@"Authorization": self.accessToken};
+    NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
 
     [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      if (serverTime == nil) {
                           NSLog(@"Error cannot find Server-Time in headers");
-         
+                         
+                         NSDictionary *errorInfoDic = [NSDictionary dictionaryWithObject:@"Error cannot find Server-Time in headers"
+                                                                                  forKey:@"message"];
                          NSError *errorToReturn =
-                         [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:@{@"message":@"Error cannot find Server-Time in headers"}] autorelease];
+                         [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
                          failureHandler(errorToReturn);
 
                      } else {
@@ -258,27 +249,58 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 #pragma mark - PrYv API Channel get all (GET /channnels)
 
-- (void)getChannelsWithRequestType:(PYRequestType)reqType
-                      filterParams:(NSDictionary *)filter
-                    successHandler:(void (^)(NSArray *))successHandler
-                      errorHandler:(void (^)(NSError *))errorHandler
-{
-   
+- (void)getAllChannelsWithRequestType:(PYRequestType)reqType
+                    gotCachedChannels:(void (^) (NSArray *cachedChannelList))cachedChannels
+                    gotOnlineChannels:(void (^) (NSArray *onlineChannelList))onlineChannels
+                         errorHandler:(void (^)(NSError *error))errorHandler;
 
-    [self apiRequest:[PYClient urlPath:kROUTE_CHANNELS withParams:filter]
+{
+    //Return current cached channels
+    NSArray *allChannelsFromCache = [PYChannelsCachingUtillity getChannelsFromCache];
+    [allChannelsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self];
+    if (cachedChannels) {
+        NSUInteger currentNumberOfChannelsInCache = [PYChannelsCachingUtillity getChannelsFromCache].count;
+        if (currentNumberOfChannelsInCache > 0) {
+            //if there are cached channels return it, when get response return in onlineList
+            cachedChannels(allChannelsFromCache);
+        }
+    }
+
+    //This method should retrieve always online channels and channelsToAdd, channelsModified, channelsToRemove (for visual details) - not yet implemented due to web service limitations
+    [self getChannelsWithRequestType:reqType
+                              filter:nil
+                      successHandler:^(NSArray *channelsList) {
+                            if (onlineChannels) {
+                                onlineChannels(channelsList);
+                            }
+                      }
+                        errorHandler:errorHandler];
+
+}
+
+- (void)getChannelsWithRequestType:(PYRequestType)reqType
+                            filter:(NSDictionary*)filterDic
+                    successHandler:(void (^) (NSArray *eventList))onlineChannelList
+                      errorHandler:(void (^)(NSError *error))errorHandler
+{
+    //This method should retrieve always online channels and need to cache (sync) online channels
+
+    [self apiRequest:[PYClient getURLPath:kROUTE_CHANNELS withParams:filterDic]
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 
                  NSMutableArray *channelList = [[NSMutableArray alloc] init];
                  for(NSDictionary *channelDictionary in JSON){
                      PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
                      channelObject.access = self;
                      [channelList addObject:channelObject];
                  }
-                 if(successHandler){
-                     successHandler(channelList);
+                 if(onlineChannelList){
+                     [PYChannelsCachingUtillity cacheChannels:JSON];
+                     onlineChannelList([channelList autorelease]);
                  }
              } failure:^(NSError *error){
                  if(errorHandler){
@@ -286,32 +308,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                  }
              }
      ];
+
 }
-
-//#pragma mark - PrYv API Channel create (POST /channnels)
-
-//- (void)createChannelWithRequestType:(PYRequestType)reqType
-//                             channel:(PYChannel *)newChannel
-//                      successHandler:(void (^)(PYChannel *channel))successHandler
-//                        errorhandler:(void (^)(NSError *error))errorHandler
-//{
-//    NSString *pathString = @"/channels";
-//
-//    NSDictionary *postData = [PYChannel jsonFromChannel:newChannel];
-//
-//    [[self class] apiRequest:pathString requestType:reqType method:PYRequestMethodPOST postData:postData success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//        NSLog(@"JSON %@", JSON);
-//        NSString *channelId = [JSON objectForKey:@"id"];
-//        newChannel.channelId = channelId;
-//        if(successHandler){
-//            successHandler(newChannel);
-//        }
-//    } failure:^(NSError *error){
-//        if(errorHandler){
-//            errorHandler(error);
-//        }
-//    }];
-//}
 
 - (void)editChannelWithRequestType:(PYRequestType)reqType
                          channelId:(NSString *)channelId

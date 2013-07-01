@@ -10,6 +10,9 @@
 
 @interface PYFolder (JSON)
 
+/**
+ Get PYFolder object from json dictionary representation (JSON representation can include additioanl helper properties for folder). It means that this method 'read' folder from disk and from server
+ */
 + (PYFolder *)folderFromJSON:(id)json;
 
 @end

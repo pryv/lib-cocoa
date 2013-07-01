@@ -23,19 +23,10 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 @class PYAccess;
 
-//#if TARGET_OS_MAC
-//#import <CoreServices/CoreServices.h>
-
-
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
 @interface PYClient : NSObject 
-
-//@property (nonatomic, copy) NSString *username;
-//@property (nonatomic, copy) NSString *accessToken;
-//@property (readonly, nonatomic) NSTimeInterval serverTimeInterval;
-
 
 + (NSString *)defaultDomain;
 + (void)setDefaultDomain:(NSString*) domain;
@@ -47,7 +38,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 + (BOOL)isUnacceptableStatusCode:(NSUInteger)statusCode;
 
-+ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params;
++ (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params;
 
 + (void)sendRequest:(NSURLRequest *)request
         withReqType:(PYRequestType)reqType
@@ -62,8 +53,5 @@ typedef void(^PYClientFailureBlock)(NSError *error);
         attachments:(NSArray *)attachments
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
-
-
-
 
 @end

@@ -11,7 +11,6 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #endif
 
-
 #import "PYClient.h"
 #import "PYConstants.h"
 #import "PYError.h"
@@ -21,9 +20,7 @@
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
 
-
 @implementation PYClient
-
 
 static NSString *myDefaultDomain;
 
@@ -75,9 +72,6 @@ static NSString *myDefaultDomain;
     else if (access.accessToken == nil || access.accessToken.length == 0) {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorTokenNotSet userInfo:nil];
     }
-//    else if (self.channelId == nil || self.channelId.length == 0) {
-//        error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorChannelNotSet userInfo:nil];
-//    }
     else {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorUnknown userInfo:nil];
     }
@@ -119,7 +113,6 @@ static NSString *myDefaultDomain;
         default:
             break;
     }
-
 }
 
 + (NSString *)fileMIMEType:(NSString*)file
@@ -148,6 +141,39 @@ static NSString *myDefaultDomain;
         [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
     }
     return [pathString copy];
+}
+
++ (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params
+{
+    if (path == nil) path = @"";
+    NSMutableString *pathString = [NSMutableString stringWithString:path];
+
+    [pathString appendString:@"?"];
+    for (NSString *key in [params allKeys])
+    {
+        id value = [params objectForKey:key];
+        if ([value isKindOfClass:[NSArray class]]) {
+            NSArray *valueArray = value;
+            [pathString appendFormat:@"%@=",key];
+            for (int i = 0; i < valueArray.count; i++) {
+                
+                id arrayValue = [valueArray objectAtIndex:i];
+                [pathString appendFormat:@"%@",arrayValue];
+                
+                if (i != valueArray.count - 1) {
+                    //If it's not last element add comma (,)
+                    [pathString appendString:@","];
+                }
+            }
+            [pathString appendString:@"&"];
+        }else{
+            [pathString appendFormat:@"%@=%@&",key,[params objectForKey:key]];
+            
+        }
+    }
+    [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
+    return pathString;
+
 }
 
 + (void) apiRequest:(NSString *)fullURL
@@ -184,9 +210,7 @@ static NSString *myDefaultDomain;
     url = [NSURL URLWithString:fullURL];
     
     
-    [request setURL:url];
-    NSLog(@"url path is %@",[url absoluteString]);
-    
+    [request setURL:url];    
     NSDictionary *postDataa = postData;
         
     if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )
@@ -198,9 +222,7 @@ static NSString *myDefaultDomain;
     
     if (attachments && attachments.count) {
         
-//        NSData *data = [NSJSONSerialization dataWithJSONObject:postDataa options:0 error:nil];
         NSData *data = [PYJSONUtility getDataFromJSONObject:postDataa];
-
         NSMutableData *bodyData = [[NSMutableData alloc] init];
         NSString *boundaryIdentifier = [NSString stringWithFormat:@"--%@--", [[NSProcessInfo processInfo] globallyUniqueString]];
         NSData *boundaryData = [[NSString stringWithFormat:@"--%@\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding];
@@ -214,7 +236,6 @@ static NSString *myDefaultDomain;
         [bodyData appendData:[@"Content-Disposition: form-data; name=\"event\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
         [bodyData appendData:data];
         [bodyData appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        
         
         // param: attachment
         for (PYAttachment *attachment in attachments) {
@@ -244,7 +265,6 @@ static NSString *myDefaultDomain;
         request.timeoutInterval = 60.0f;
         
         if (postDataa) {
-//            request.HTTPBody = [NSJSONSerialization dataWithJSONObject:postDataa options:NSJSONReadingMutableContainers error:nil];
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
         
@@ -252,9 +272,6 @@ static NSString *myDefaultDomain;
     }
     
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
-    
-
-    
 }
 
 + (void)sendRequest:(NSURLRequest *)request
@@ -264,7 +281,7 @@ static NSString *myDefaultDomain;
 {
     switch (reqType) {
         case PYRequestTypeAsync:{
-            
+            NSLog(@"started async request with url: %@",[[request URL] absoluteString]);
             [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
                 if (successHandler) {
                     successHandler(req,resp,JSON);
@@ -285,17 +302,19 @@ static NSString *myDefaultDomain;
             NSHTTPURLResponse *urlResponse = nil;
             
             NSData *responseData = nil;
+            NSLog(@"started sync request with url: %@",[[request URL] absoluteString]);
             responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-            //            NSLog(@"error is %@",error);
             if (error && failureHandler) {
                 NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:nil error:error withResponse:urlResponse andRequest:request];
                 failureHandler(errorToReturn);
                 return;
-                
             }
             
-//            id JSON = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
             id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+            if (JSON == nil) {
+                //This is not valid JSON object, this means that this is attached file (NSData)
+                JSON = responseData;
+            }
             
             if ([urlResponse isKindOfClass:[NSHTTPURLResponse class]]) {
                 httpURLResponse = (NSHTTPURLResponse *)urlResponse;
@@ -310,8 +329,6 @@ static NSString *myDefaultDomain;
             }else if (successHandler) {
                 successHandler (request, httpURLResponse, JSON);
             }
-            
-            
         }
             break;
             
@@ -320,7 +337,5 @@ static NSString *myDefaultDomain;
     }
 
 }
-
-
 
 @end

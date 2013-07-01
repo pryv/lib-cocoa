@@ -8,6 +8,7 @@
 
 #import "PYEvent+JSON.h"
 #import "PYAttachment.h"
+#import "PYCachingController.h"
 
 @implementation PYEvent (JSON)
 
@@ -29,8 +30,21 @@
     event.eventFormat = [typeDic objectForKey:@"format"];
     event.value = [JSON objectForKey:@"value"];
     
-    event.folderId = [JSON objectForKey:@"folderId"];
-    event.tags = [JSON objectForKey:@"tags"];
+    id folderId = [JSON objectForKey:@"folderId"];
+    if ([folderId isKindOfClass:[NSNull class]]) {
+        event.folderId = nil;
+    }else{
+        event.folderId = folderId;
+    }
+
+    
+    id tags = [JSON objectForKey:@"tags"];
+    if ([tags isKindOfClass:[NSNull class]]) {
+        event.tags = nil;
+    }else{
+        event.tags = tags;
+    }
+    
     event.eventDescription = [JSON objectForKey:@"description"];
     
     NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
@@ -39,7 +53,14 @@
         NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
         
         [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
-            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
+            PYAttachment *attachment = [PYAttachment attachmentFromDictionary:obj];
+            NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", event.eventId, attachment.fileName];
+            
+            if ([[PYCachingController sharedManager] isDataCachedForKey:attachmentDataKey]) {
+                NSData *fileDataFromCache = [[PYCachingController sharedManager] getDataForKey:attachmentDataKey];
+                attachment.fileData = fileDataFromCache;
+            }
+            [attachmentObjects addObject:attachment];
         }];
         
         event.attachments = attachmentObjects;
@@ -50,7 +71,50 @@
     event.clientData = [JSON objectForKey:@"clientData"];
     event.trashed = [[JSON objectForKey:@"trashed"] boolValue];
     event.modified = [NSDate dateWithTimeIntervalSince1970:[[JSON objectForKey:@"modified"] doubleValue]];
+    
+    
+    NSNumber *hasTmpId = [JSON objectForKey:@"hasTmpId"];
+    if ([hasTmpId isKindOfClass:[NSNull class]]) {
+        event.hasTmpId = NO;
+    }else{
+        event.hasTmpId = [hasTmpId boolValue];
+    }
 
+    NSNumber *notSyncAdd = [JSON objectForKey:@"notSyncAdd"];
+    if ([notSyncAdd isKindOfClass:[NSNull class]]) {
+        event.notSyncAdd = NO;
+    }else{
+        event.notSyncAdd = [notSyncAdd boolValue];
+    }
+    
+    NSNumber *notSyncModify = [JSON objectForKey:@"notSyncModify"];
+    if ([notSyncModify isKindOfClass:[NSNull class]]) {
+        event.notSyncModify = NO;
+    }else{
+        event.notSyncModify = [notSyncModify boolValue];
+    }
+
+    NSNumber *notSyncTrashOrDelete = [JSON objectForKey:@"notSyncTrashOrDelete"];
+    if ([notSyncTrashOrDelete isKindOfClass:[NSNull class]]) {
+        event.notSyncTrashOrDelete = NO;
+    }else{
+        event.notSyncTrashOrDelete = [notSyncTrashOrDelete boolValue];
+    }
+    
+    NSDictionary *modifiedProperties = [JSON objectForKey:@"modifiedProperties"];
+    if ([modifiedProperties isKindOfClass:[NSNull class]]) {
+        event.modifiedEventPropertiesAndValues = nil;
+    }else{
+        event.modifiedEventPropertiesAndValues = modifiedProperties;
+    }
+    
+    NSNumber *synchedAt = [JSON objectForKey:@"synchedAt"];
+    if ([synchedAt isKindOfClass:[NSNull class]]) {
+        event.synchedAt = 0;
+    }else{
+        event.synchedAt = [synchedAt doubleValue];
+    }
+    
     return event;
 }
 

@@ -20,6 +20,14 @@ FOUNDATION_EXPORT NSString *const kROUTE_EVENTS;
 FOUNDATION_EXPORT NSString *const kROUTE_FOLDERS;
 
 FOUNDATION_EXPORT NSString *const kPYUserTempToken;
+FOUNDATION_EXPORT NSString *const kPYUserTempTokenMladen;
 
 FOUNDATION_EXPORT NSString *const kPrYvApplicationChannelId;
 FOUNDATION_EXPORT NSString *const kPrYvApplicationChannelName;
+
+
+FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterLimit;
+FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterOnlyFolders;
+FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterFromTime;
+FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterToTime;
+FOUNDATION_EXPORT NSString *const kPrYvChannelEventFilterTags;

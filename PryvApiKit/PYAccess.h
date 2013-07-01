@@ -10,6 +10,7 @@
 #import "PYClient.h"
 #import "Reachability.h"
 @class PYEvent;
+@class PYFolder;
 
 @interface PYAccess : NSObject
 {
@@ -22,7 +23,8 @@
     
     Reachability *_connectionReachability;
     BOOL _online;
-    NSMutableArray *_eventsNotSync;
+    NSMutableSet *_eventsNotSync;
+    NSMutableSet *_foldersNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
 }
@@ -37,7 +39,8 @@
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;
-@property (nonatomic, retain) NSMutableArray *eventsNotSync;
+@property (nonatomic, retain) NSMutableSet *eventsNotSync;
+@property (nonatomic, retain) NSMutableSet *foldersNotSync;
 @property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
 @property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
 
@@ -46,12 +49,18 @@
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 - (NSString *)apiBaseUrl;
+/**
+ Add event to unsync list. If app tryed to create, modify or trash event and it fails due to no internet access it will be added to unsync list
+ */
+- (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error;
+/**
+ Add folder to unsync list. If app tryed to create, modify or trash folder and it fails due to no internet access it will be added to unsync list
+ */
+- (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error;
 
-- (void)addEvent:(PYEvent *)event toUnsyncListIfNeeds:(NSError *)error;
-
-- (void)batchSyncEventsWithoutAttachment;
-
-
+/**
+ Low level method for web service communication
+ */
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -72,9 +81,15 @@
  @param errorHandler   NSError object if some error occurs
  */
 
+- (void)getAllChannelsWithRequestType:(PYRequestType)reqType
+                    gotCachedChannels:(void (^) (NSArray *cachedChannelList))cachedChannels
+                    gotOnlineChannels:(void (^) (NSArray *onlineChannelList))onlineChannels
+                         errorHandler:(void (^)(NSError *error))errorHandler;
+
+
 - (void)getChannelsWithRequestType:(PYRequestType)reqType
-                      filterParams:(NSDictionary *)filter
-                    successHandler:(void (^)(NSArray *channelList))successHandler
+                            filter:(NSDictionary*)filterDic
+                    successHandler:(void (^) (NSArray *channelsList))onlineChannelList
                       errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**
