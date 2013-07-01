@@ -1044,7 +1044,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1064,7 +1064,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Prefix.pch";
 				INFOPLIST_FILE = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUNDLE_LOADER)";

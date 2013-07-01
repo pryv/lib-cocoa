@@ -23,8 +23,8 @@
     STAssertNotNil(self.channelForTest, @"Test channel isn't created");
     
     PYFolder *folder = [[PYFolder alloc] init];
-    folder.folderId = @"testFolderId12qwe";
-    folder.name = @"testFolderName8736qweq";
+    folder.folderId = @"snfjsgfu6";
+    folder.name = @"jskdhf738rgwjh";
     
     
     __block NSString *createdFolderIdFromServer;
@@ -32,11 +32,11 @@
         STAssertNotNil(createdFolderId, @"Error");
         createdFolderIdFromServer = createdFolderId;
     } errorHandler:^(NSError *error) {
-        NSLog(@"error %@",error);
+        STFail(@"Change folder name or folder id to run this test correctly see error from server %@",error);
     }];
     
     
-    NSString *fakeFolderId = @"ashdgasgduasd";
+    NSString *fakeFolderId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
     PYFolder *folderFromCacheWithFakeId = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:fakeFolderId];
     STAssertNil(folderFromCacheWithFakeId, @"This must be nil. It's fake folder id");
     
