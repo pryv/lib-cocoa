@@ -10,10 +10,10 @@ First of all you need to obtain access token. To achieve this you should setup p
 
 Example:
 
-`NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
- NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];`
-    
-`NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];`
+	NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
+	NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
+	    
+	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 
 After this preparation you actaully achieve access token in this method
 
@@ -23,15 +23,15 @@ After this preparation you actaully achieve access token in this method
 
 Here you are sending `appId` and array of permissons. Instance of `UIWebView` will come out and will ask you for username and password. If everything went ok you'll get response in delegate method. See below..
 
-`- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
-    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
-    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
-}
-`
+	- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+	    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
+	    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
+	}
+
 
 That username and token is used for creating PYAccess object.
 
-`PYAccess *access = [PYClient createAccessWithUsername:@"username" andAccessToken:@"accessToken"];`
+	PYAccess *access = [PYClient createAccessWithUsername:@"username" andAccessToken:@"accessToken"];
 
 With `PYAccess` object you can browse channels, folders and events with permissions you have in access token
 
