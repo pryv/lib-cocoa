@@ -284,7 +284,7 @@
     /*
         This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
         This method doesn't care about current cache, it's interested in online events only
-        It should retrieve always online events for this channel and need to cache (sync) online events (before caching sync unsyched, because we don't want to loose ynsuc changes)
+        It should retrieve always online events for this channel and need to cache (sync) online events (before caching sync unsyched, because we don't want to loose unsuc changes)
      */
     
     /*if there are events that are not synched with server, they need to be synched first and after that cached
