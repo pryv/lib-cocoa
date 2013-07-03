@@ -168,7 +168,9 @@ You can trash/delete folder in this way:
         
     }];
 
+Some words about caching. If caching is enabled for library when you request channels, folders or events from server thay will be cached automatically. If you want to create event and you get successful response that event will be cached automatically for you. Same rules apply for other types. If you are offline library still works. All channels, folders or events will be cached on disk with tempId and will be put in unsync list. When internet comes that unsync list will be synched with server and all events, folders or channels will be cached automatically. Developer doesn't need to care about caching, all process about it is done in backrgound. Developer should use public API methods as usual. From my pov I'll rather take out `gotCachedFolders` `gotCachedEvents` and `gotCachedChannels` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
 
+Also, there are some testing classes that are testing wheter or not objective c public API works with web service. To perform tests start iOS example in simulator first. After this step stop the simulator and chooselibPryvApiKit.a scheme. Go on Product->Test in xCode. 
 
 
 ## License
