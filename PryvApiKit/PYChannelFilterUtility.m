@@ -69,7 +69,7 @@
         }
         case PYChannelStateTrashed:
         {
-            channelPredicate = [NSPredicate predicateWithFormat:@"trashed == %@", @YES];
+            channelPredicate = [NSPredicate predicateWithFormat:@"trashed == YES"];
             break;
         }
         default:
