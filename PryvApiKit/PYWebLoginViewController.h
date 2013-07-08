@@ -26,7 +26,7 @@
 
 @property (nonatomic, assign) id  delegate;
 
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate;
++ (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate;
 
 @end
 

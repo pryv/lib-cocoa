@@ -38,7 +38,7 @@ NSString *token;
 
 BOOL closing;
 
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
++ (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
     PYWebLoginViewController *login = [PYWebLoginViewController alloc];
     login.permissions = permissions;
     login.appID = appID;
