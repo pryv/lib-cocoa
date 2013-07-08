@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CDAF32C178B53AD0070049C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
 		3D1F6A07170B6A6400DF893C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1F6A06170B6A6400DF893C /* CoreLocation.framework */; };
 		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
 		3D2397B9173308B500A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
@@ -181,6 +182,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0CDAF32B178B53AD0070049C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYJSONUtility.h; sourceTree = "<group>"; };
 		3D2397BC1733109A00A72637 /* PYJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYJSONUtility.m; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CDAF32C178B53AD0070049C /* WebKit.framework in Frameworks */,
 				3DAF21E2172B298D00B62416 /* PryvApiKit.framework in Frameworks */,
 				3DAF21CA172B28E900B62416 /* Cocoa.framework in Frameworks */,
 			);
@@ -560,6 +563,7 @@
 		FBC2047016B95B3700CB5FFB = {
 			isa = PBXGroup;
 			children = (
+				0CDAF32B178B53AD0070049C /* WebKit.framework */,
 				FBC2048316B95B3800CB5FFB /* PryvApiKit */,
 				4E582DD416C25378003B59DB /* iOs Example */,
 				3DAF21CB172B28E900B62416 /* OS X example */,

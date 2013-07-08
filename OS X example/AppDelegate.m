@@ -8,8 +8,13 @@
 
 #import "AppDelegate.h"
 #import "PryvApiKit.h"
+#import <Availability.h>
+#import "PYWebLoginViewController.h"
 
 @implementation AppDelegate
+
+@synthesize webView;
+@dynamic window;
 
 - (void)dealloc
 {
@@ -26,6 +31,18 @@
     [access getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:NULL gotOnlineChannels:^(NSArray *onlineChannelList) {
         NSLog(@"online channels list %@",onlineChannelList);
     } errorHandler:NULL];
+    
+    NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
+    
+    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
+    
+    [PYClient setDefaultDomainStaging];
+//    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
+//                                      andPermissions:permissions
+//                                            delegate:self];
+    
+    
 }
 
 @end

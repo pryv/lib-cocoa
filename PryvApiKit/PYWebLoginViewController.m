@@ -13,22 +13,31 @@
 #import "PYConstants.h"
 #import "PYWebLoginViewController.h"
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+@interface PYWebLoginViewController ()
+#else
 @interface PYWebLoginViewController () <UIWebViewDelegate>
+#endif
 
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, retain) NSString *appID;
-
 @property (nonatomic, retain) NSTimer *pollTimer;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+@property (nonatomic, retain) WebView *webView;
+#endif
 
 @end
 
 
 @implementation PYWebLoginViewController
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#else
 UIBarButtonItem *loadingActivityIndicator;
 UIWebView *webView;
 UIActivityIndicatorView *loadingActivityIndicatorView;
 UIBarButtonItem *refreshBarButtonItem;
+#endif
 
 
 NSUInteger iteration;
@@ -43,6 +52,9 @@ BOOL closing;
     login.permissions = permissions;
     login.appID = appID;
     login.delegate = delegate;
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    login.webView = [[WebView alloc] initWithFrame:(NSRect)frameRect frameName:(NSString *)frameName groupName:(NSString *)groupName];
+    #endif
     [login openOn];
     
     return login;
