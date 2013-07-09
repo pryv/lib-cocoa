@@ -7,43 +7,24 @@
 //
 
 #import "AppDelegate.h"
-#import "PryvApiKit.h"
-#import <Availability.h>
-#import "PYWebLoginViewController.h"
+#import "WelcomeWindowController.h"
+
 
 @implementation AppDelegate
 
-@synthesize window;
-@synthesize webView;
 
 - (void)dealloc
 {
+    [welcomeWindowController release];
     [super dealloc];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
-    
-    [PYClient setDefaultDomainStaging];
-    
-    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-    [access getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:NULL gotOnlineChannels:^(NSArray *onlineChannelList) {
-        NSLog(@"online channels list %@",onlineChannelList);
-    } errorHandler:NULL];
-    
-    NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
-    
-    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
-    
-    [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
-                                      andPermissions:permissions
-                                            delegate:self
-                                         withWebView:&webView];
-    
+    welcomeWindowController = [[WelcomeWindowController alloc] initWithWindowNibName:@"WelcomeWindowController"];
+    [welcomeWindowController showWindow:self];
     
 }
+
 
 @end

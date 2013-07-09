@@ -9,7 +9,12 @@
 /* Begin PBXBuildFile section */
 		0C2DEE94178BF79400CDBB54 /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
 		0C2DEE95178BFC8800CDBB54 /* PYWebLoginViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
+		0C54EE0E178C4D3600235B84 /* SigninWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C54EE0C178C4D3600235B84 /* SigninWindowController.m */; };
+		0C54EE0F178C4D3600235B84 /* SigninWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C54EE0D178C4D3600235B84 /* SigninWindowController.xib */; };
+		0C54EE15178C5EBE00235B84 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C54EE14178C5EBE00235B84 /* WebViewController.m */; };
 		0C60CCF8178C07F800406974 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
+		0C60CD01178C462400406974 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C60CCFF178C462400406974 /* WelcomeWindowController.m */; };
+		0C60CD02178C462400406974 /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C60CD00178C462400406974 /* WelcomeWindowController.xib */; };
 		0CDAF32C178B53AD0070049C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
 		3D1F6A07170B6A6400DF893C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1F6A06170B6A6400DF893C /* CoreLocation.framework */; };
 		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
@@ -185,6 +190,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C54EE0B178C4D3600235B84 /* SigninWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninWindowController.h; sourceTree = "<group>"; };
+		0C54EE0C178C4D3600235B84 /* SigninWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninWindowController.m; sourceTree = "<group>"; };
+		0C54EE0D178C4D3600235B84 /* SigninWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SigninWindowController.xib; sourceTree = "<group>"; };
+		0C54EE13178C5EBD00235B84 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		0C54EE14178C5EBE00235B84 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		0C60CCFE178C462400406974 /* WelcomeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeWindowController.h; sourceTree = "<group>"; };
+		0C60CCFF178C462400406974 /* WelcomeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
+		0C60CD00178C462400406974 /* WelcomeWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WelcomeWindowController.xib; sourceTree = "<group>"; };
 		0CDAF32B178B53AD0070049C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYJSONUtility.h; sourceTree = "<group>"; };
@@ -354,6 +367,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C54EE16178C609D00235B84 /* NIB Files */ = {
+			isa = PBXGroup;
+			children = (
+				0C60CD00178C462400406974 /* WelcomeWindowController.xib */,
+				0C54EE0D178C4D3600235B84 /* SigninWindowController.xib */,
+				3DAF21DA172B28E900B62416 /* MainMenu.xib */,
+			);
+			name = "NIB Files";
+			sourceTree = "<group>";
+		};
+		0C54EE17178C60B100235B84 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0C60CCFE178C462400406974 /* WelcomeWindowController.h */,
+				0C60CCFF178C462400406974 /* WelcomeWindowController.m */,
+				0C54EE0B178C4D3600235B84 /* SigninWindowController.h */,
+				0C54EE0C178C4D3600235B84 /* SigninWindowController.m */,
+				0C54EE13178C5EBD00235B84 /* WebViewController.h */,
+				0C54EE14178C5EBE00235B84 /* WebViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		3D4897431778E8AC008C7B66 /* libPryvApiKitLogicTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,9 +552,8 @@
 		3DAF21CB172B28E900B62416 /* OS X example */ = {
 			isa = PBXGroup;
 			children = (
-				3DAF21D7172B28E900B62416 /* AppDelegate.h */,
-				3DAF21D8172B28E900B62416 /* AppDelegate.m */,
-				3DAF21DA172B28E900B62416 /* MainMenu.xib */,
+				0C54EE17178C60B100235B84 /* Controller */,
+				0C54EE16178C609D00235B84 /* NIB Files */,
 				3DAF21CC172B28E900B62416 /* Supporting Files */,
 			);
 			path = "OS X example";
@@ -527,6 +562,8 @@
 		3DAF21CC172B28E900B62416 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3DAF21D7172B28E900B62416 /* AppDelegate.h */,
+				3DAF21D8172B28E900B62416 /* AppDelegate.m */,
 				3DAF21CD172B28E900B62416 /* OS X example-Info.plist */,
 				3DAF21CE172B28E900B62416 /* InfoPlist.strings */,
 				3DAF21D1172B28E900B62416 /* main.m */,
@@ -821,6 +858,8 @@
 				3DAF21D0172B28E900B62416 /* InfoPlist.strings in Resources */,
 				3DAF21D6172B28E900B62416 /* Credits.rtf in Resources */,
 				3DAF21DC172B28E900B62416 /* MainMenu.xib in Resources */,
+				0C60CD02178C462400406974 /* WelcomeWindowController.xib in Resources */,
+				0C54EE0F178C4D3600235B84 /* SigninWindowController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -885,6 +924,9 @@
 			files = (
 				3DAF21D2172B28E900B62416 /* main.m in Sources */,
 				3DAF21D9172B28E900B62416 /* AppDelegate.m in Sources */,
+				0C60CD01178C462400406974 /* WelcomeWindowController.m in Sources */,
+				0C54EE0E178C4D3600235B84 /* SigninWindowController.m in Sources */,
+				0C54EE15178C5EBE00235B84 /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

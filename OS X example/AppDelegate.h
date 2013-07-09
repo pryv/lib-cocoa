@@ -8,14 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+@class WelcomeWindowController;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
-    NSWindow *window;
-    WebView *webView;
+    WelcomeWindowController *welcomeWindowController;
 }
 
 
-@property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet WebView *webView;
 
 @end

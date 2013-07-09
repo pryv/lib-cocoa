@@ -13,7 +13,7 @@
 #import "PYWebLoginViewController.h"
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-@interface PYWebLoginViewController ()
+@interface PYWebLoginViewController () <NSWindowDelegate>
 #else
 @interface PYWebLoginViewController () <UIWebViewDelegate>
 #endif
@@ -53,9 +53,9 @@ NSString *token;
 BOOL closing;
 
 + (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     withWebView:(WebView **)webView
-#endif
+    #endif
 {
     PYWebLoginViewController *login = [PYWebLoginViewController alloc];
     login.permissions = permissions;
@@ -64,22 +64,22 @@ BOOL closing;
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     login.webView = *(webView);
     #endif
+    
     [login openOn];
         
     return login;
 }
-
 
 - (PYWebLoginViewController* )openOn
 {
     [self init];
     closing = false;
     
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
-    [[webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
-    self.view = webView;
-#else
+    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
+    [self requestLoginView];
+    #else
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
     
     // -- navigation bar -- //
@@ -109,7 +109,7 @@ BOOL closing;
     [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
     
     [navigationController release];
-#endif
+    #endif
     return self;
 }
 
@@ -118,37 +118,33 @@ BOOL closing;
     if (closing) return;
     closing = true;
     [self.pollTimer invalidate];
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-#else
-    [self dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
-#endif
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    #else
+    [self dismissViewControllerAnimated:YES completion:^{ }];
+    #endif
 }
 
 - (void)dealloc
 {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-#else
+    self.pollTimer = nil;
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-#endif
-    
-    self.pollTimer = nil;
-    
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-#else
     [webView release];
     [refreshBarButtonItem release];
     [loadingActivityIndicator release];
     [loadingActivityIndicatorView release];
-#endif
+    #endif
     [super dealloc];
 }
 
 #pragma mark - UIWebViewDelegate
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+-(void) windowWillClose:(NSNotification *)notification{
+    [self close];
+}
 #else
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -176,19 +172,20 @@ BOOL closing;
 
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+- (void)viewHidden{
+    [self close];
+}
+
 #else
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
         
     // Do any additional setup after loading the view from its nib.
 }
-#endif
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"VIEW WILL APPEAR !");
    [self requestLoginView];
 
 }
@@ -214,8 +211,6 @@ BOOL closing;
 
 #pragma mark - Private
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-#else
 - (void)startLoading
 {
     refreshBarButtonItem.enabled = NO;
