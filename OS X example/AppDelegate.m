@@ -13,8 +13,8 @@
 
 @implementation AppDelegate
 
+@synthesize window;
 @synthesize webView;
-@dynamic window;
 
 - (void)dealloc
 {
@@ -38,9 +38,10 @@
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
-//    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
-//                                      andPermissions:permissions
-//                                            delegate:self];
+    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
+                                      andPermissions:permissions
+                                            delegate:self
+                                         withWebView:&webView];
     
     
 }

@@ -10,8 +10,8 @@
 #import <WebKit/WebKit.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
+    NSWindow *window;
     WebView *webView;
-    NSView *myView;
 }
 
 

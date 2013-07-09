@@ -33,18 +33,24 @@
 #else
 @interface PYWebLoginViewController : UIViewController {
 #endif
+    @private
+    NSArray *permissions;
+    NSString *appID;
+    NSTimer *pollTimer;
+    id  delegate;
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    WebView *webView;
+    #endif
 }
 
+    
 
-@property (nonatomic, assign) id  delegate;
 
 + (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID
                                       andPermissions:(NSArray *)permissions
                                             delegate:(id ) delegate
                                 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-                                           withFrame:(NSRect)frameRect
-                                           frameName:(NSString *)frameName
-                                           groupName:(NSString *)groupName
+                                           withWebView:(WebView **)webView
                                 #endif
                                             ;
 

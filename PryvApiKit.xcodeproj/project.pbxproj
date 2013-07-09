@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C2DEE94178BF79400CDBB54 /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
+		0C2DEE95178BFC8800CDBB54 /* PYWebLoginViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
+		0C60CCF8178C07F800406974 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
 		0CDAF32C178B53AD0070049C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
 		3D1F6A07170B6A6400DF893C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1F6A06170B6A6400DF893C /* CoreLocation.framework */; };
 		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
@@ -330,6 +333,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C60CCF8178C07F800406974 /* WebKit.framework in Frameworks */,
 				FBC2047E16B95B3700CB5FFB /* Cocoa.framework in Frameworks */,
 				3D2397B81733086400A72637 /* AppKit.framework in Frameworks */,
 				3D82A990173EDE4E00CB100D /* SystemConfiguration.framework in Frameworks */,
@@ -563,7 +567,6 @@
 		FBC2047016B95B3700CB5FFB = {
 			isa = PBXGroup;
 			children = (
-				0CDAF32B178B53AD0070049C /* WebKit.framework */,
 				FBC2048316B95B3800CB5FFB /* PryvApiKit */,
 				4E582DD416C25378003B59DB /* iOs Example */,
 				3DAF21CB172B28E900B62416 /* OS X example */,
@@ -590,6 +593,7 @@
 		FBC2047C16B95B3700CB5FFB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0CDAF32B178B53AD0070049C /* WebKit.framework */,
 				3D82A98E173EDE4600CB100D /* SystemConfiguration.framework */,
 				3DD28EBA17135EA900602603 /* UIKit.framework */,
 				3DAB592417175EB900F2009D /* MobileCoreServices.framework */,
@@ -676,6 +680,7 @@
 				3D61E1F01729DB9800BE1E80 /* PryvApiKit.h in Headers */,
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
 				3D82A98B173EDE2A00CB100D /* Reachability.h in Headers */,
+				0C2DEE95178BFC8800CDBB54 /* PYWebLoginViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -921,6 +926,7 @@
 				3D5B9CB81768FFC0007A107A /* PYFoldersCachingUtillity.m in Sources */,
 				3D80798E176A5DC4009ECE86 /* PYChannelFilter.m in Sources */,
 				3D807993176A6DAE009ECE86 /* PYChannelFilterUtility.m in Sources */,
+				0C2DEE94178BF79400CDBB54 /* PYWebLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
