@@ -13,7 +13,7 @@
 #import "PYWebLoginViewController.h"
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-@interface PYWebLoginViewController () <NSWindowDelegate>
+@interface PYWebLoginViewController ()
 #else
 @interface PYWebLoginViewController () <UIWebViewDelegate>
 #endif
@@ -77,6 +77,10 @@ BOOL closing;
     
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewHidden:)
+                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
+    
     [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
     [self requestLoginView];
     #else
@@ -119,6 +123,7 @@ BOOL closing;
     closing = true;
     [self.pollTimer invalidate];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    
     #else
     [self dismissViewControllerAnimated:YES completion:^{ }];
     #endif
@@ -128,6 +133,7 @@ BOOL closing;
 {
     self.pollTimer = nil;
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -139,13 +145,16 @@ BOOL closing;
     [super dealloc];
 }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+
+#pragma mark - NSViewDelegate
+
+
+
+#else
+
 #pragma mark - UIWebViewDelegate
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
--(void) windowWillClose:(NSNotification *)notification{
-    [self close];
-}
-#else
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     return YES;
@@ -172,7 +181,8 @@ BOOL closing;
 
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-- (void)viewHidden{
+- (void)viewHidden:(NSNotification *)notification{
+    NSLog(@"Notification received : %@",notification);
     [self close];
 }
 

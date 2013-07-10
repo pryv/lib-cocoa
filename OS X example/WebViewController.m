@@ -10,7 +10,7 @@
 #import "PryvApiKit.h"
 #import "PYWebLoginViewController.h"
 
-@interface WebViewController () <PYWebLoginDelegate, NSWindowDelegate>
+@interface WebViewController () <PYWebLoginDelegate>
 
 @end
 
@@ -34,8 +34,13 @@
                                          withWebView:&webView];
 }
 
-- (NSViewController *) pyWebLoginGetController {
-    return self;
+-(void)windowWillClose:(NSNotification *)notification{
+    [self pyWebLoginNotVisible:notification];
+    NSLog(@"Notification posted");
+}
+
+- (void) pyWebLoginNotVisible:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
 }
 
 - (void) pyWebLoginSuccess:(PYAccess*)pyAccess {

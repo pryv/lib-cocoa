@@ -20,7 +20,6 @@
 - (IBAction)signinButtonPressed:(id)sender {
     if(!signinWindowController)
         signinWindowController = [[SigninWindowController alloc] initWithWindowNibName:@"SigninWindowController"];
-    [signinWindowController showWindow:self];
-    
+    [signinWindowController showWindow:self];    
 }
 @end

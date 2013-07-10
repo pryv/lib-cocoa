@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
-@interface WebViewController : NSViewController {
+@interface WebViewController : NSViewController <NSWindowDelegate> {
     WebView *webView;
 }
 

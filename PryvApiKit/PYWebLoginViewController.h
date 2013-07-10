@@ -18,7 +18,7 @@
 
 @protocol PYWebLoginDelegate
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-- (NSViewController*) pyWebLoginGetController;
+- (void) pyWebLoginNotVisible:(NSNotification *)notification;
 #else
 - (UIViewController*) pyWebLoginGetController;
 #endif
