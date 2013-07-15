@@ -116,6 +116,8 @@
 		8AB2361F16FA895800B28F06 /* PYClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8AB2361D16FA895800B28F06 /* PYClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8AB2362016FA895800B28F06 /* PYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PYClient.m */; };
 		8AB2362116FA895800B28F06 /* PYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PYClient.m */; };
+		B6F1AEA0178379A1000ECD60 /* PYChannelsCachingUtillity.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D5B9CAF1768FFA2007A107A /* PYChannelsCachingUtillity.h */; };
+		B6F1AEA1178379B9000ECD60 /* PYFoldersCachingUtillity.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D5B9CB51768FFC0007A107A /* PYFoldersCachingUtillity.h */; };
 		FAD9DC741700D25F00A34AB3 /* PYChannel+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = FAD9DC721700D25F00A34AB3 /* PYChannel+JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAD9DC751700D25F00A34AB3 /* PYChannel+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD9DC731700D25F00A34AB3 /* PYChannel+JSON.m */; };
 		FAD9DC761700D25F00A34AB3 /* PYChannel+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD9DC731700D25F00A34AB3 /* PYChannel+JSON.m */; };
@@ -158,6 +160,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				B6F1AEA1178379B9000ECD60 /* PYFoldersCachingUtillity.h in CopyFiles */,
+				B6F1AEA0178379A1000ECD60 /* PYChannelsCachingUtillity.h in CopyFiles */,
 				3D6A9577175E75C900FF614E /* PYEventFilter.h in CopyFiles */,
 				3DC817121754028700A91142 /* PYEventsCachingUtillity.h in CopyFiles */,
 				3D9DCF331752C0C00010FE84 /* PYCachingController.h in CopyFiles */,
