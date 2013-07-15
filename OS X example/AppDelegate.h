@@ -7,9 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <WebKit/WebKit.h>
+@class WelcomeWindowController;
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    WelcomeWindowController *welcomeWindowController;
+}
 
-@property (assign) IBOutlet NSWindow *window;
+
 
 @end

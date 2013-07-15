@@ -20,7 +20,7 @@
 
 // Pryv Api Client
 #import <PryvApiKit/PYClient.h>
-#import <PryvApiKit/PYEventClient.h>
+//#import <PryvApiKit/PYEventClient.h>
 #import <PryvApiKit/PYCachingController.h>
 #import <PryvApiKit/PYEventsCachingUtillity.h>
 #import <PryvApiKit/PYChannelsCachingUtillity.h>

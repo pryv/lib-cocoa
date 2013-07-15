@@ -97,7 +97,7 @@
     }
     
     if (filter.limit > 0) {
-        [dic setObject:[NSString stringWithFormat:@"%i",filter.limit] forKey:kPrYvChannelEventFilterLimit];
+        [dic setObject:[NSString stringWithFormat:@"%i",(unsigned int)filter.limit] forKey:kPrYvChannelEventFilterLimit];
     }
     
     //Doesn't work when sending - error in request parameters

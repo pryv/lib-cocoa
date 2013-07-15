@@ -7,25 +7,24 @@
 //
 
 #import "AppDelegate.h"
-#import "PryvApiKit.h"
+#import "WelcomeWindowController.h"
+
 
 @implementation AppDelegate
 
+
 - (void)dealloc
 {
+    [welcomeWindowController release];
     [super dealloc];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
+    welcomeWindowController = [[WelcomeWindowController alloc] initWithWindowNibName:@"WelcomeWindowController"];
+    [welcomeWindowController showWindow:self];
     
-    [PYClient setDefaultDomainStaging];
-    
-    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-    [access getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:NULL gotOnlineChannels:^(NSArray *onlineChannelList) {
-        NSLog(@"online channels list %@",onlineChannelList);
-    } errorHandler:NULL];
 }
+
 
 @end

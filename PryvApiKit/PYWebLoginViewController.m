@@ -6,29 +6,43 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-
 #import "PYClient.h"
 #import "PYError.h"
 #import "PYErrorUtility.h"
 #import "PYConstants.h"
 #import "PYWebLoginViewController.h"
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+@interface PYWebLoginViewController ()
+#else
 @interface PYWebLoginViewController () <UIWebViewDelegate>
-
+#endif
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, retain) NSString *appID;
-
 @property (nonatomic, retain) NSTimer *pollTimer;
+@property (nonatomic, assign) id  delegate;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+@property (nonatomic, assign) WebView *webView;
+#endif
+
 
 @end
 
 
 @implementation PYWebLoginViewController
 
+@synthesize delegate;
+@synthesize pollTimer;
+@synthesize appID;
+@synthesize permissions;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+@synthesize webView;
+#else
 UIBarButtonItem *loadingActivityIndicator;
 UIWebView *webView;
 UIActivityIndicatorView *loadingActivityIndicatorView;
 UIBarButtonItem *refreshBarButtonItem;
+#endif
 
 
 NSUInteger iteration;
@@ -38,22 +52,38 @@ NSString *token;
 
 BOOL closing;
 
-+ (PYWebLoginViewController *)requesAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate {
++ (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    withWebView:(WebView **)webView
+    #endif
+{
     PYWebLoginViewController *login = [PYWebLoginViewController alloc];
     login.permissions = permissions;
     login.appID = appID;
     login.delegate = delegate;
-    [login openOn];
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    login.webView = *(webView);
+    #endif
     
+    [login openOn];
+        
     return login;
 }
-
 
 - (PYWebLoginViewController* )openOn
 {
     [self init];
     closing = false;
     
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    [self cleanURLCache];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewHidden:)
+                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
+    
+    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
+    [self requestLoginView];
+    #else
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
     
     // -- navigation bar -- //
@@ -83,7 +113,7 @@ BOOL closing;
     [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
     
     [navigationController release];
-    
+    #endif
     return self;
 }
 
@@ -92,25 +122,36 @@ BOOL closing;
     if (closing) return;
     closing = true;
     [self.pollTimer invalidate];
-    [self dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    
+    #else
+    [self dismissViewControllerAnimated:YES completion:^{ }];
+    #endif
 }
 
 - (void)dealloc
 {
+    self.pollTimer = nil;
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    
-    self.pollTimer = nil;
-    
     [webView release];
     [refreshBarButtonItem release];
     [loadingActivityIndicator release];
     [loadingActivityIndicatorView release];
+    #endif
     [super dealloc];
 }
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+
+#pragma mark - NSViewDelegate
+
+
+
+#else
 
 #pragma mark - UIWebViewDelegate
 
@@ -134,14 +175,21 @@ BOOL closing;
     [self stopLoading];
     NSLog(@"didFailLoadWithError %@", [error localizedDescription]);
 }
+#endif
 
 #pragma mark - init
 
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+- (void)viewHidden:(NSNotification *)notification{
+    NSLog(@"Notification received : %@",notification);
+    [self close];
+}
+
+#else
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
         
     // Do any additional setup after loading the view from its nib.
 }
@@ -159,7 +207,6 @@ BOOL closing;
 }
 
 #pragma mark - Target Actions
-
 
 
 - (IBAction)cancel:(id)sender
@@ -188,7 +235,7 @@ BOOL closing;
     self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
 }
 
-
+#endif
 
 // POST request to /access to obtain a login page URL and load the contents of the URL
 //      (which is a login form) to a child webView
@@ -233,7 +280,11 @@ BOOL requestedLoginView = false;
 {
     NSLog(@"[HTTPClient Error]: %@", error);
     NSString *content = [NSString stringWithFormat:@"<html><center><h1>PrYv Signup</h1></center><hr><center>error: %@ ...</center></html>",[error localizedDescription]];
+    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    [[webView mainFrame] loadHTMLString:content baseURL:nil];
+    #else
     [webView loadHTMLString:content baseURL:nil];
+    #endif
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
         [self abordedWithError:error];
@@ -247,10 +298,13 @@ BOOL requestedLoginView = false;
     //NSLog(@"create a poll request to %@ with interval: %f", pollURL, pollTimeInterval);
     NSLog(@"create a poll request with interval: %f", pollTimeInterval);
     
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#else
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         NSLog(@"stop polling if app is in background");
         return;
     }
+#endif
     
     
     // reset previous timer if one existed
@@ -297,7 +351,12 @@ BOOL requestedLoginView = false;
             NSString *loginPageUrlString = [jsonDictionary objectForKey:@"url"];
             NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
             assert(loginPageURL);
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+            [[webView mainFrame] loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+#else
             [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+#endif
+     
         }
         
         NSString *pollUrlString = [jsonDictionary objectForKey:@"poll"];
@@ -382,6 +441,8 @@ BOOL requestedLoginView = false;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#else
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -392,4 +453,5 @@ BOOL requestedLoginView = false;
 
     [super viewDidUnload];
 }
+#endif
 @end

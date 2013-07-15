@@ -34,3 +34,5 @@ NSString *const kPYUserTempTokenMladen = @"PeySaPzMsM";
 
 NSString *const kPrYvApplicationChannelId = @"position";
 NSString *const kPrYvApplicationChannelName = @"Position";
+
+NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisibleNotification";

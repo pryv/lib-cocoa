@@ -55,7 +55,7 @@
         
         NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
         [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
-        [userInfo setObject:[NSString stringWithFormat:@"Http error: API returns with status code %d",response.statusCode] forKey:NSLocalizedDescriptionKey];
+        [userInfo setObject:[NSString stringWithFormat:@"Http error: API returns with status code %d",(unsigned int)response.statusCode] forKey:NSLocalizedDescriptionKey];
         [userInfo setObject:request forKey:PryvRequestKey];
 
 
