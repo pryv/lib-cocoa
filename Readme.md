@@ -5,23 +5,21 @@ PryvApiKit is an iOS static library and OS X framework. It handles all networkin
 a framework for use in Mac OS X
 
 ## libPryvApiKit.a
-This is static library for use in iOS. Usage is pretty straightforward.  
-First of all you need to obtain access token. To achieve this you should setup permission array in which you set what channels you need and what access for those channels you ask for.
-
-Example:
+This is a static library to be used in iOS. Usage is pretty straightforward.  
+First of all, you need to obtain access token. To achieve this, you should set up a permission array in which you specify what channels you need and what access for those channels you ask for, like this :
 
 	NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
 	NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
 	    
 	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 
-After this preparation you actaully achieve access token in this method
+After this preparation, you actually request for an access token using this method :
 
-    [PYWebLoginViewController requesAccessWithAppId:@"pryv-sdk-ios-example"
+    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
                                      andPermissions:permissions
                                            delegate:self];
 
-Here you are sending `appId` and array of permissons. Instance of `UIWebView` will come out and will ask you for username and password. If everything went ok you'll get response in delegate method. See below..
+Here you are sending the `appId` and an array of permissions. An instance of `UIWebView` will pop up and will ask the user for username and password. If everything went ok, you'll get response in delegate method.
 
 	- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
 	    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
@@ -29,11 +27,11 @@ Here you are sending `appId` and array of permissons. Instance of `UIWebView` wi
 	}
 
 
-That username and token is used for creating PYAccess object.
+The user ID and the access token are used for creating PYAccess object.
 
 	PYAccess *access = [PYClient createAccessWithUsername:@"username" andAccessToken:@"accessToken"];
 
-With `PYAccess` object you can browse channels, folders and events with permissions you have in access token
+With `PYAccess` objects, you can browse channels, folders and events with the permissions you have in access token.
 
 	   [access getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:^(NSArray *cachedChannelList) {
 	       
@@ -43,13 +41,13 @@ With `PYAccess` object you can browse channels, folders and events with permissi
 	       
 	   }];
 
-This library can work offline if caching is enabled. To enable/disable caching possibility for library you set prepocessor macro `CACHE` in project file to 1/0 depending on whether or not you want caching support.
+This library can work offline if caching is enabled. To enable/disable caching possibility you set the preprocessor macro `CACHE` in project file to 1/0 depending on whether or not you want caching support.
 
-`cachedChannelList` and `onlineChannelList` contains `PYChannel` objects. Channel contains folders and events, `PYFolder` and `PYEvent` objects, respectively.
+`cachedChannelList` and `onlineChannelList` contain `PYChannel` objects. A channel contains `PYFolder` and `PYEvent` objects.
 
-You can manipulate with channels, folders and events. For example, you can create event, delete, moddify it and so on… Same rules applies for other object types. Currently only personal type of access allows creating channels and it will be added for v2 of SDK when access-rights will be covered in depth.
+You can manipulate channels, folders and events. For example, you can create, delete, modify, … events. Same rules applie for other object types. Currently only personal type of access allows creating channels and it will be added for v2 of SDK when access-rights will be covered in depth.
 
-Some of useful `PYChannel` methods:
+###Some of useful `PYChannel` methods:
 
 Example of getting all events:
 
@@ -66,7 +64,7 @@ Example of getting all events:
 Example of creating event on server:
 
     PYEvent *event = [[PYEvent alloc] init];
-    event.folderId = @"fsomeFolderId";
+    event.folderId = @"someFolderId";
     event.value = @"someEventValue";
     event.eventClass = @"note";
     event.eventFormat = @"txt";
@@ -81,7 +79,7 @@ Example of creating event on server:
         
     }];
                 
-Example of modifying event data on server. You create event object with properties you want to modify. In example below we are sending event with id "someEventId" to folder with id "someFolderId" and we are changing event `value` property.
+Example of modifying event data on server. You create an event object with the properties you want to modify. In the example below, we are sending events with id "someEventId" to folder with id "someFolderId" and we are changing event `value` property.
 
     PYEvent *event = [[PYEvent alloc] init];
     event.folderId = @"someFolderId";
@@ -97,7 +95,7 @@ Example of modifying event data on server. You create event object with properti
     }];
 
 
-Example of getting events from server with filter. This particular filter will search for events recorded in last 60 days, ones that are in specific `folderId` and tagged with `tag2`. List of events will be limited to 10 results. If caching is enabled for library it will automatically sync events with ones from cache and give you result of synchronization.
+Example of getting events from server with filter. This particular filter will search for events recorded in the last 60 days, ones that are in specific `folderId` and tagged with `tag2`. List of events will be limited to 10 results. If caching is enabled for library it will automatically sync events with ones from cache and give you result of synchronization.
 
 	   NSDate *today = [NSDate date];
 	   NSCalendar *cal = [NSCalendar currentCalendar];
@@ -122,8 +120,9 @@ Example of getting events from server with filter. This particular filter will s
 	       NSLog(@"error is %@",error);
 	   }];
 
-In simmilar way you manipulate with folders.
-Some useful `PYFolder` methods…
+In a similar way, you manipulate folders.
+
+Some useful `PYFolder` methods :
 
 Getting all folders from current channel:
 
@@ -148,7 +147,7 @@ Creating folder in current channel:
         
     }];
 
-If you want to change name of previously created folder above you do this.
+If you want to change name of previously created folder above, you do this :
 
     PYFolder *folder = [[PYFolder alloc] init];
     folder.name = @"someFolderNameChanged";
@@ -168,9 +167,9 @@ You can trash/delete folder in this way:
         
     }];
 
-Some words about caching. If caching is enabled for library when you request channels, folders or events from server thay will be cached automatically. If you want to create event and you get successful response that event will be cached automatically for you. Same rules apply for other types. If you are offline library still works. All channels, folders or events will be cached on disk with tempId and will be put in unsync list. When internet comes that unsync list will be synched with server and all events, folders or channels will be cached automatically. Developer doesn't need to care about caching, all process about it is done in backrgound. Developer should use public API methods as usual. From my pov I'll rather take out `gotCachedFolders` `gotCachedEvents` and `gotCachedChannels` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
+Some words about caching. If caching is enabled for library, channels, folders or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All channels, folders or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, folders or channels will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedFolders` `gotCachedEvents` and `gotCachedChannels` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
 
-Also, there are some testing classes that are testing wheter or not objective c public API works with web service. To perform tests start iOS example in simulator first. After this step stop the simulator and chooselibPryvApiKit.a scheme. Go on Product->Test in xCode. 
+Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode. 
 
 
 ## License
