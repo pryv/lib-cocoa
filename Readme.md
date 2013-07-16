@@ -1,12 +1,31 @@
 #PryvApiKit  
-PryvApiKit is an iOS static library and OS X framework. It handles all networking and interactions with Pryv API for your Objective-C based applications.
-
+**PryvApiKit is an OS X framework and an iOS static library. It handles all networking and interactions with Pryv API for your Objective-C based applications.**
 ## PryvApiKit.framework
-a framework for use in Mac OS X
+This framework Mac OS X lets you interact with the Pryv servers from your Mac OS X application.
+First of all, you need to create a WebView object `myWebView` that you locate in a window, a panel, a view or whatever you think will be appropriate and make one of your controller a `PYWebLoginDelegate` – typically, the WebView controller. You can then obtain your access token with your app ID using the following lines.
 
-## libPryvApiKit.a
-This is a static library to be used in iOS. Usage is pretty straightforward.  
-First of all, you need to obtain access token. To achieve this, you should set up a permission array in which you specify what channels you need and what access for those channels you ask for, like this :
+	NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
+	NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
+	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
+	
+After this preparation, you actually request an access token with this method :
+
+	[PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-osx-example"
+                                     andPermissions:permissions
+                                           delegate:self,
+                                           withWebView:&myWebView];
+        
+Notice that you pass the reference of your WebView object which will be displayed where you located it asking for username and password. If everything went good, you'll manage the response in the delegate method :
+
+	- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+	    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
+	    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
+	}
+	
+Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborded:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
+
+## LibPryvApiKit.a
+This is a static library to be used for iOS. Usage is pretty straightforward. First of all, you need to obtain access token. To achieve this, you should set up a permission array in which you specify what channels you need and what access for those channels you ask for, like this :
 
 	NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
 	NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
@@ -19,13 +38,17 @@ After this preparation, you actually request for an access token using this meth
                                      andPermissions:permissions
                                            delegate:self];
 
-Here you are sending the `appId` and an array of permissions. An instance of `UIWebView` will pop up and will ask the user for username and password. If everything went ok, you'll get response in delegate method.
+Here you are sending the `appId` and an array of permissions. An instance of `UIWebView` will pop up and will ask the user for username and password. If everything went ok, you'll get response in the delegate method.
 
 	- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
 	    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
 	    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 	}
+	
+Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborded:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
 
+##PryvApiKit : Main Methods
+*Compatible with iOS and Mac OS X.*
 
 The user ID and the access token are used for creating PYAccess object.
 
@@ -47,7 +70,7 @@ This library can work offline if caching is enabled. To enable/disable caching p
 
 You can manipulate channels, folders and events. For example, you can create, delete, modify, … events. Same rules applie for other object types. Currently only personal type of access allows creating channels and it will be added for v2 of SDK when access-rights will be covered in depth.
 
-###Some of useful `PYChannel` methods:
+###Some useful `PYChannel` methods:
 
 Example of getting all events:
 
@@ -122,7 +145,7 @@ Example of getting events from server with filter. This particular filter will s
 
 In a similar way, you manipulate folders.
 
-Some useful `PYFolder` methods :
+###Some useful `PYFolder` methods
 
 Getting all folders from current channel:
 
@@ -167,7 +190,8 @@ You can trash/delete folder in this way:
         
     }];
 
-Some words about caching. If caching is enabled for library, channels, folders or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All channels, folders or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, folders or channels will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedFolders` `gotCachedEvents` and `gotCachedChannels` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
+###Some words about caching
+If caching is enabled for library, channels, folders or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All channels, folders or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, folders or channels will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedFolders` `gotCachedEvents` and `gotCachedChannels` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
 
 Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode. 
 
