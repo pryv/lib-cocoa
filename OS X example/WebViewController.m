@@ -35,13 +35,13 @@
 }
 
 -(void)windowWillClose:(NSNotification *)notification{
-    [self pyWebLoginNotVisible:notification];
-    NSLog(@"Notification posted");
+    //[self pyWebLoginNotVisible:notification];
+    //NSLog(@"Notification posted");
 }
 
-- (void) pyWebLoginNotVisible:(NSNotification *)notification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
-}
+//- (void) pyWebLoginNotVisible:(NSNotification *)notification {
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
+//}
 
 - (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);

@@ -77,9 +77,9 @@ BOOL closing;
     
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(viewHidden:)
-                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(viewHidden:)
+//                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
     
     [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
     [self requestLoginView];
@@ -123,7 +123,6 @@ BOOL closing;
     closing = true;
     [self.pollTimer invalidate];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    
     #else
     [self dismissViewControllerAnimated:YES completion:^{ }];
     #endif
@@ -133,7 +132,7 @@ BOOL closing;
 {
     self.pollTimer = nil;
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self];
     #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
