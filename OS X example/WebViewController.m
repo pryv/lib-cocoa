@@ -8,7 +8,7 @@
 
 #import "WebViewController.h"
 #import "PryvApiKit.h"
-#import "PYWebLoginViewController.h"
+//#import "PYWebLoginViewController.h"
 
 @interface WebViewController () <PYWebLoginDelegate>
 
