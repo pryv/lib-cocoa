@@ -26,10 +26,10 @@
 #import <PryvApiKit/PYChannelsCachingUtillity.h>
 #import <PryvApiKit/PYFoldersCachingUtillity.h>
 
-#if TARGET_OS_MAC
-
-#else 
 #import <PryvApiKit/PYWebLoginViewController.h>
+
+#if TARGET_OS_MAC
+#else 
 #endif
 
 
