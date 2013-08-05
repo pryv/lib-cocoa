@@ -8,14 +8,15 @@ First of all, you need to create a WebView object `myWebView` that you locate in
 	NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
 	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 	
-After this preparation, you actually request an access token with this method :
-
+After this preparation, you actually request an access token with these two lines :
+	
+	[PYClient setDefaultDomainStaging];
 	[PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-osx-example"
                                      andPermissions:permissions
-                                           delegate:self,
+                                           delegate:self
                                            withWebView:&myWebView];
         
-Notice that you pass the reference of your WebView object which will be displayed where you located it asking for username and password. If everything went good, you'll manage the response in the delegate method :
+The first one is needed whenever you need to (re-)log a user. Notice in the second method that you pass the reference of your WebView object which will be displayed where you located it asking for username and password. If everything went good, you'll manage the response in the delegate method :
 
 	- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
 	    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
@@ -33,12 +34,13 @@ This is a static library to be used for iOS. Usage is pretty straightforward. Fi
 	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 
 After this preparation, you actually request for an access token using this method :
-
+	
+	[PYClient setDefaultDomainStaging];
     [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
                                      andPermissions:permissions
                                            delegate:self];
 
-Here you are sending the `appId` and an array of permissions. An instance of `UIWebView` will pop up and will ask the user for username and password. If everything went ok, you'll get response in the delegate method.
+The first line is needed whenever you need to (re-)log a user. Here you are sending the `appId` and an array of permissions. An instance of `UIWebView` will pop up and will ask the user for username and password. If everything went ok, you'll get response in the delegate method.
 
 	- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
 	    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
