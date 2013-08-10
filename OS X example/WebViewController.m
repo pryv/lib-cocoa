@@ -23,7 +23,7 @@
     NSLog(@"Signin Started");
     
     NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"streamId", @"level", nil];
     
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
     

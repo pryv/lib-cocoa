@@ -12,7 +12,7 @@
 
 NSString *const kPYAPIScheme = @"https";
 NSString *const kPYAPIDomain = @".pryv.io";
-NSString *const kPYAPIDomainStaging = @".rec.la";
+NSString *const kPYAPIDomainStaging = @".pryv.in";
 
 NSString *const kROUTE_CHANNELS = @"channels";
 NSString *const kROUTE_EVENTS = @"events";
