@@ -16,7 +16,8 @@ NSString *const kPYAPIDomainStaging = @".pryv.in";
 
 NSString *const kROUTE_CHANNELS = @"channels";
 NSString *const kROUTE_EVENTS = @"events";
-NSString *const kROUTE_FOLDERS =@"folders";
+NSString *const kROUTE_FOLDERS = @"folders";
+NSString *const kROUTE_STREAMS = @"streams";
 
 
 

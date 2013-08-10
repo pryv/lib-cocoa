@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 PrYv. All rights reserved.
 //
 
-@class PYFolder;
+@class PYStream;
 @class PYEvent;
 
 #import <Foundation/Foundation.h>
@@ -14,7 +14,7 @@
 
 @interface PYChannel : NSObject
 {
-    PYAccess *_access;
+    PYConnection *_connection;
     NSString *_channelId;
     NSString *_name;
     NSTimeInterval _timeCount;
@@ -24,7 +24,7 @@
 
 }
 
-@property (nonatomic, retain) PYAccess *access;
+@property (nonatomic, retain) PYConnection *connection;
 @property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic)       NSTimeInterval timeCount;
@@ -64,7 +64,7 @@
  */
 - (void)getOnlineFolderWithId:(NSString *)folderId
                   requestType:(PYRequestType)reqType
-               successHandler:(void (^) (PYFolder *folder))onlineFolder
+               successHandler:(void (^) (PYStream *folder))onlineFolder
                  errorHandler:(void (^) (NSError *error))errorHandler;
 
 /**
@@ -194,7 +194,7 @@
 //       withRequestType:(PYRequestType)reqType
 //        successHandler:(void (^)(NSString *createdFolderId))successHandler
 //          errorHandler:(void (^)(NSError *error))errorHandler;
-- (void)createFolder:(PYFolder *)folder
+- (void)createFolder:(PYStream *)folder
      withRequestType:(PYRequestType)reqType
       successHandler:(void (^)(NSString *createdFolderId))successHandler
         errorHandler:(void (^)(NSError *error))errorHandler;
@@ -209,7 +209,7 @@
  
  */
 
-- (void)setModifiedFolderAttributesObject:(PYFolder *)folderObject
+- (void)setModifiedFolderAttributesObject:(PYStream *)folderObject
                               forFolderId:(NSString *)folderId
                               requestType:(PYRequestType)reqType
                            successHandler:(void (^)())successHandler

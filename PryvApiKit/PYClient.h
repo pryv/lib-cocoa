@@ -21,7 +21,7 @@ typedef enum {
 typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON);
 typedef void(^PYClientFailureBlock)(NSError *error);
 
-@class PYAccess;
+@class PYConnection;
 
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
@@ -32,7 +32,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 + (void)setDefaultDomain:(NSString*) domain;
 + (void)setDefaultDomainStaging;
 
-+ (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
++ (PYConnection *)createConnectionWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 + (NSString *)fileMIMEType:(NSString*)file;
 

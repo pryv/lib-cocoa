@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYFolder+JSON.h"
+#import "PYStream+JSON.h"
 
-@implementation PYFolder (JSON)
+@implementation PYStream (JSON)
 
-+ (PYFolder *)folderFromJSON:(id)JSON
++ (PYStream *)folderFromJSON:(id)JSON
 {
     NSDictionary *jsonDictionary = JSON;
-    PYFolder *folder = [[PYFolder alloc] init];
-    folder.folderId = [jsonDictionary objectForKey:@"id"];
+    PYStream *folder = [[PYStream alloc] init];
+    folder.streamId = [jsonDictionary objectForKey:@"id"];
     
     [folder setValue:[jsonDictionary objectForKey:@"channelId"] forKey:@"channelId"];
     
@@ -30,7 +30,7 @@
     folder.clientData = [jsonDictionary objectForKey:@"clientData"];
         
     folder.timeCount = [[jsonDictionary objectForKey:@"timeCount"] doubleValue];
-    folder.hidden = [[jsonDictionary objectForKey:@"hidden"] boolValue];
+    folder.singleActivity = [[jsonDictionary objectForKey:@"singleActivity"] boolValue];
     folder.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
     
     NSArray *childrenArray = [jsonDictionary objectForKey:@"children"];
@@ -75,7 +75,7 @@
     return [folder autorelease];
 }
 
-+ (void)setChildrenForFolder:(PYFolder *)folder withArray:(NSArray *)children
++ (void)setChildrenForFolder:(PYStream *)folder withArray:(NSArray *)children
 {
     NSMutableArray *childrenArrayOfFolders = [[NSMutableArray alloc] init];
     for (NSDictionary *folderDic in children) {

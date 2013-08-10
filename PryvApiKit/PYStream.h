@@ -7,16 +7,16 @@
 #import <Foundation/Foundation.h>
 
 
-@interface PYFolder : NSObject
+@interface PYStream : NSObject
 {
-    NSString *_folderId;
+    NSString *_streamId;
     NSString *_channelId;
     NSString *_name;
     NSString *_parentId;
     NSDictionary *_clientData;
     NSTimeInterval _timeCount;
     NSArray *_children;
-    BOOL _hidden;
+    BOOL _singleActivity;
     BOOL _trashed;
     
     BOOL _isSyncTriedNow;
@@ -27,7 +27,7 @@
     NSDictionary *_modifiedFolderPropertiesAndValues;
 }
 
-@property (nonatomic, copy) NSString *folderId;
+@property (nonatomic, copy) NSString *streamId;
 @property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
@@ -37,7 +37,7 @@
 //@children -> array of PYFolder objects
 @property (nonatomic, retain) NSArray *children;
 
-@property (nonatomic, assign, getter = isHidden) BOOL hidden;
+@property (nonatomic, assign, getter = isSingleActivity) BOOL singleActivity;
 @property (nonatomic, assign, getter = isTrashed) BOOL trashed;
 
 /**

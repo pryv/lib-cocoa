@@ -9,7 +9,7 @@
 #import "PYFoldersCachingUtillity.h"
 #import "PYCachingController.h"
 #import "PYJSONUtility.h"
-#import "PYFolder.h"
+#import "PYStream.h"
 #import "PYChannel.h"
 
 @implementation PYFoldersCachingUtillity
@@ -22,12 +22,12 @@
     return NO;
 }
 
-+ (void)removeFolder:(PYFolder *)folder
++ (void)removeFolder:(PYStream *)folder
 {
     [self removeFolder:folder WithKey:[self getKeyForFolder:folder]];
 }
 
-+ (void)removeFolder:(PYFolder *)folder WithKey:(NSString *)key
++ (void)removeFolder:(PYStream *)folder WithKey:(NSString *)key
 {
     NSString *folderKey = [NSString stringWithFormat:@"folder_%@",key];
     [[PYCachingController sharedManager] removeFolder:folderKey];
@@ -40,7 +40,7 @@
 {
     //In this method we will ask server for folder with folder and we'll cache it
     
-    [channel getOnlineFolderWithId:folderId requestType:reqType successHandler:^(PYFolder *folder) {
+    [channel getOnlineFolderWithId:folderId requestType:reqType successHandler:^(PYStream *folder) {
         
         [PYFoldersCachingUtillity cacheFolder:folder];
         
@@ -65,16 +65,16 @@
     [[PYCachingController sharedManager] cacheData:[PYJSONUtility getDataFromJSONObject:folder] withKey:folderKey];
 }
 
-+ (void)cacheFolder:(PYFolder *)folder
++ (void)cacheFolder:(PYStream *)folder
 {
     NSDictionary *folderDic = [folder cachingDictionary];
 //    [self cacheEvent:eventDic WithKey:[self getKeyForEvent:event]];
     [self cacheFolder:folderDic WithKey:[self getKeyForFolder:folder]];
 }
 
-+ (NSString *)getKeyForFolder:(PYFolder *)folder
++ (NSString *)getKeyForFolder:(PYStream *)folder
 {    
-    return folder.folderId;
+    return folder.streamId;
 }
 
 
@@ -83,7 +83,7 @@
     return [[PYCachingController sharedManager] getAllFoldersFromCache];
 }
 
-+ (PYFolder *)getFolderFromCacheWithFolderId:(NSString *)folderId
++ (PYStream *)getFolderFromCacheWithFolderId:(NSString *)folderId
 {
     NSString *folderKey = [NSString stringWithFormat:@"folder_%@",folderId];
     return [[PYCachingController sharedManager] getFolderWithKey:folderKey];

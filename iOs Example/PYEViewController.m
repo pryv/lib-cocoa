@@ -24,7 +24,7 @@
     
     [PYClient setDefaultDomainStaging];
     
-    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
+    PYConnection *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
         
     [access getAllChannelsWithRequestType:PYRequestTypeSync
                         gotCachedChannels:^(NSArray *cachedChannelList) {
@@ -79,7 +79,7 @@
     return self;
 }
 
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+- (void) pyWebLoginSuccess:(PYConnection*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }

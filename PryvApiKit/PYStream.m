@@ -4,19 +4,19 @@
 //
 
 
-#import "PYFolder.h"
+#import "PYStream.h"
 
 
-@implementation PYFolder
+@implementation PYStream
 
-@synthesize folderId = _folderId;
+@synthesize streamId = _streamId;
 @synthesize channelId = _channelId;
 @synthesize name = _name;
 @synthesize parentId = _parentId;
 @synthesize clientData = _clientData;
 @synthesize timeCount = _timeCount;
 @synthesize children = _children;
-@synthesize hidden = _hidden;
+@synthesize singleActivity = _singleActivity;
 @synthesize trashed = _trashed;
 
 @synthesize isSyncTriedNow = _isSyncTriedNow;
@@ -28,7 +28,7 @@
 
 - (void)dealloc
 {
-    [_folderId release];
+    [_streamId release];
     [_channelId release];
     [_name release];
     [_parentId release];
@@ -40,8 +40,8 @@
 {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"id"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"id"];
     }
     
     if (_name && _name.length > 0) {
@@ -60,7 +60,7 @@
         [dic setObject:_clientData forKey:@"clientData"];
     }
 
-    [dic setObject:[NSNumber numberWithBool:_hidden] forKey:@"hidden"];
+    [dic setObject:[NSNumber numberWithBool:_singleActivity] forKey:@"singleActivity"];
     [dic setObject:[NSNumber numberWithBool:_trashed] forKey:@"trashed"];
     [dic setObject:[NSNumber numberWithBool:_hasTmpId] forKey:@"hasTmpId"];
     [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
@@ -78,8 +78,8 @@
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
             
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"id"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"id"];
     }
     
     if (_name && _name.length > 0) {
@@ -94,7 +94,7 @@
         [dic setObject:_clientData forKey:@"clientData"];
     }
     
-    [dic setObject:[NSNumber numberWithBool:_hidden] forKey:@"hidden"];
+    [dic setObject:[NSNumber numberWithBool:_singleActivity] forKey:@"singleActivity"];
     
     return [dic autorelease];
     

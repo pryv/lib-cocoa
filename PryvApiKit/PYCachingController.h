@@ -8,7 +8,7 @@
 
 @class PYEvent;
 @class PYChannel;
-@class PYFolder;
+@class PYStream;
 #import <Foundation/Foundation.h>
 
 @interface PYCachingController : NSObject
@@ -61,5 +61,5 @@
 /**
  Get single PYFolder object from disk for key
  */
-- (PYFolder *)getFolderWithKey:(NSString *)key;
+- (PYStream *)getFolderWithKey:(NSString *)key;
 @end

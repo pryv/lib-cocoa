@@ -15,7 +15,7 @@
 #import "PYConstants.h"
 #import "PYError.h"
 #import "PYErrorUtility.h"
-#import "PYAccess.h"
+#import "PYConnection.h"
 #import "PYAttachment.h"
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
@@ -37,10 +37,10 @@ static NSString *myDefaultDomain;
     [PYClient setDefaultDomain:kPYAPIDomainStaging];
 }
 
-+ (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
++ (PYConnection *)createConnectionWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 {
-    PYAccess *access = [[PYAccess alloc] initWithUsername:username andAccessToken:token];
-    return [access autorelease];
+    PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+    return [connection autorelease];
 }
 
 /**
@@ -63,13 +63,13 @@ static NSString *myDefaultDomain;
 }
 
 
-+ (NSError *)createNotReadyErrorForAccess:(PYAccess *)access
++ (NSError *)createNotReadyErrorForConnection:(PYConnection *)connection
 {
     NSError *error;
-    if (access.userID == nil || access.userID.length == 0) {
+    if (connection.userID == nil || connection.userID.length == 0) {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorUserNotSet userInfo:nil];
     }
-    else if (access.accessToken == nil || access.accessToken.length == 0) {
+    else if (connection.accessToken == nil || connection.accessToken.length == 0) {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorTokenNotSet userInfo:nil];
     }
     else {

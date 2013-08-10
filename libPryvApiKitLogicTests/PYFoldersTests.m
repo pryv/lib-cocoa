@@ -22,8 +22,8 @@
     [self testGettingChannels];
     STAssertNotNil(self.channelForTest, @"Test channel isn't created");
     
-    PYFolder *folder = [[PYFolder alloc] init];
-    folder.folderId = @"snfjsgfu6";
+    PYStream *folder = [[PYStream alloc] init];
+    folder.streamId = @"snfjsgfu6";
     folder.name = @"jskdhf738rgwjh";
     
     
@@ -37,10 +37,10 @@
     
     
     NSString *fakeFolderId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
-    PYFolder *folderFromCacheWithFakeId = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:fakeFolderId];
+    PYStream *folderFromCacheWithFakeId = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:fakeFolderId];
     STAssertNil(folderFromCacheWithFakeId, @"This must be nil. It's fake folder id");
     
-    PYFolder *folderFromCache = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:createdFolderIdFromServer];
+    PYStream *folderFromCache = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:createdFolderIdFromServer];
     STAssertNotNil(folderFromCache, @"");
     
     [self.channelForTest getAllFoldersWithRequestType:PYRequestTypeSync filterParams:nil gotCachedFolders:NULL gotOnlineFolders:^(NSArray *onlineFolderList) {

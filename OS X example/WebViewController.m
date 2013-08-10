@@ -28,7 +28,7 @@
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-macosx-example"
+    [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-macosx-example"
                                       andPermissions:permissions
                                             delegate:self
                                          withWebView:&webView];
@@ -43,7 +43,7 @@
 //    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
 //}
 
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+- (void) pyWebLoginSuccess:(PYConnection*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }

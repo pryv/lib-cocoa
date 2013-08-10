@@ -1,5 +1,5 @@
 //
-//  PYAccess.h
+//  PYConnection.h
 //  PryvApiKit
 //
 //  Created by Nenad Jelic on 3/27/13.
@@ -10,9 +10,9 @@
 #import "PYClient.h"
 #import "Reachability.h"
 @class PYEvent;
-@class PYFolder;
+@class PYStream;
 
-@interface PYAccess : NSObject
+@interface PYConnection : NSObject
 {
     NSString *_userID;
     NSString *_accessToken;
@@ -56,7 +56,7 @@
 /**
  Add folder to unsync list. If app tryed to create, modify or trash folder and it fails due to no internet access it will be added to unsync list
  */
-- (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error;
+- (void)addFolder:(PYStream *)folder toUnsyncList:(NSError *)error;
 
 /**
  Low level method for web service communication

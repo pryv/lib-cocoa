@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-@class PYFolder;
+@class PYStream;
 @class PYChannel;
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
@@ -20,7 +20,7 @@
 /**
  Remove PYFolder object from disk
  */
-+ (void)removeFolder:(PYFolder *)folder;
++ (void)removeFolder:(PYStream *)folder;
 /**
  Get all PYFolder objects from disk
  */
@@ -28,11 +28,11 @@
 /**
  Get PYFolder object from disk with key(folderId)
  */
-+ (PYFolder *)getFolderFromCacheWithFolderId:(NSString *)folderId;
++ (PYStream *)getFolderFromCacheWithFolderId:(NSString *)folderId;
 /**
  Cache PYFolder object on disk
  */
-+ (void)cacheFolder:(PYFolder *)folder;
++ (void)cacheFolder:(PYStream *)folder;
 /**
  Get folder with particular id from server and cache it on disk
  */

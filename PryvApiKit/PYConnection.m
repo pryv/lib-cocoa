@@ -1,5 +1,5 @@
 //
-//  PYAccess.m
+//  PYConnection.m
 //  PryvApiKit
 //
 //  Created by Nenad Jelic on 3/27/13.
@@ -10,7 +10,7 @@ NSString const *kUnsyncEventsEventKey       = @"pryv.unsyncevents.Event";
 NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 //NSString const *kUnsyncEventsRequestTypeKey = @"pryv.unsyncevents.RequestType";
 
-#import "PYAccess.h"
+#import "PYConnection.h"
 #import "PYClient.h"
 #import "PYConstants.h"
 #import "PYChannel+JSON.h"
@@ -18,7 +18,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYFoldersCachingUtillity.h"
 #import "PYChannelsCachingUtillity.h"
 
-@implementation PYAccess
+@implementation PYConnection
 
 @synthesize userID = _userID;
 @synthesize accessToken = _accessToken;
@@ -83,7 +83,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
-- (void)addFolder:(PYFolder *)folder toUnsyncList:(NSError *)error
+- (void)addFolder:(PYStream *)folder toUnsyncList:(NSError *)error
 {
     /*When we deserialize unsync list (when app starts) we will know what folders are not sync with these informations:
      They have one of these flags or combination of them
@@ -107,7 +107,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     NSArray *nonSyncFoldersArray = [PYFoldersCachingUtillity getFoldersFromCache];
     
-    for (PYFolder *folder in nonSyncFoldersArray) {
+    for (PYStream *folder in nonSyncFoldersArray) {
         if (folder.notSyncAdd || folder.notSyncModify) {
             [self.foldersNotSync addObject:folder];
         }
@@ -257,7 +257,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     //Return current cached channels
     NSArray *allChannelsFromCache = [PYChannelsCachingUtillity getChannelsFromCache];
-    [allChannelsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self];
+    [allChannelsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
     if (cachedChannels) {
         NSUInteger currentNumberOfChannelsInCache = [PYChannelsCachingUtillity getChannelsFromCache].count;
         if (currentNumberOfChannelsInCache > 0) {
@@ -295,7 +295,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                  NSMutableArray *channelList = [[NSMutableArray alloc] init];
                  for(NSDictionary *channelDictionary in JSON){
                      PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
-                     channelObject.access = self;
+                     channelObject.connection = self;
                      [channelList addObject:channelObject];
                  }
                  if(onlineChannelList){
@@ -364,7 +364,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
                              errorHandler:(void(^)(NSError *error))errorHandler{
     
-    [self apiRequest:@"/"
+    [self apiRequest:@"/profile/app" //TODO: handle app profiles for improved user experience
          requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil

@@ -11,7 +11,7 @@
 
 @interface PYAccessTests : SenTestCase
 
-@property (nonatomic, retain) PYAccess *access;
+@property (nonatomic, retain) PYConnection *access;
 @property (nonatomic, retain) PYChannel *channelForTest;
 
 - (void)testGettingChannels;

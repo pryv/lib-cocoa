@@ -13,8 +13,8 @@
 #import "PYChannel.h"
 #import "PYChannel+JSON.h"
 #import "PYEventFilter.h"
-#import "PYFolder.h"
-#import "PYFolder+JSON.h"
+#import "PYStream.h"
+#import "PYStream+JSON.h"
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
@@ -140,7 +140,7 @@
     NSMutableArray *arrayOFCachedFolders = [[NSMutableArray alloc] init];
     for (NSString *folderCachedName in filesWithSelectedPrefix) {
         NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:folderCachedName]];
-        [arrayOFCachedFolders addObject:[PYFolder folderFromJSON:folderDic]];
+        [arrayOFCachedFolders addObject:[PYStream folderFromJSON:folderDic]];
     }
     
     return arrayOFCachedFolders;
@@ -157,12 +157,12 @@
     return nil;
 
 }
-- (PYFolder *)getFolderWithKey:(NSString *)key
+- (PYStream *)getFolderWithKey:(NSString *)key
 {
     if ([self isDataCachedForKey:key]) {
         NSData *folderData = [self getDataForKey:key];
         NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:folderData];
-        return [PYFolder folderFromJSON:folderDic];
+        return [PYStream folderFromJSON:folderDic];
     }
     
     return nil;
