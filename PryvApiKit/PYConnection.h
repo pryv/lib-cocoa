@@ -94,6 +94,30 @@
 
 /**
  @discussion
+ Gets the accessible streams
+ 
+ GET /streams/
+ 
+ @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYChannel objects
+ @param filterParams  Query string parameters (state ...) Optional. If you don't filter put nil Example : state=all
+ @param successHandler A block object to be executed when the operation finishes successfully.
+ @param errorHandler   NSError object if some error occurs
+ */
+
+- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
+                    gotCachedChannels:(void (^) (NSArray *cachedChannelList))cachedChannels
+                    gotOnlineChannels:(void (^) (NSArray *onlineChannelList))onlineChannels
+                         errorHandler:(void (^)(NSError *error))errorHandler;
+
+
+- (void)getStreamsWithRequestType:(PYRequestType)reqType
+                            filter:(NSDictionary*)filterDic
+                    successHandler:(void (^) (NSArray *channelsList))onlineChannelList
+                      errorHandler:(void (^)(NSError *error))errorHandler;
+
+
+/**
+ @discussion
  Creates new activity channel
  
  POST /channels/

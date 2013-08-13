@@ -8,12 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
-@class WelcomeWindowController;
+@class WelcomeWindowController, User;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     WelcomeWindowController *welcomeWindowController;
+    User *_user;
 }
 
+@property (retain) User *user;
 
++ (AppDelegate*)sharedInstance;
 
 @end

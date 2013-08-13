@@ -8,6 +8,8 @@
 
 #import "WebViewController.h"
 #import "PryvApiKit.h"
+#import "User.h"
+#import "AppDelegate.h"
 //#import "PYWebLoginViewController.h"
 
 @interface WebViewController () <PYWebLoginDelegate>
@@ -50,21 +52,16 @@
 //    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
 //}
 
-- (void) pyWebLoginSuccess:(PYConnection*)pyAccess {
-    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
-    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
-    [pyAccess getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:^(NSArray *cachedChannelList) {
-            [cachedChannelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSLog(@"%@ (%@)",[obj name], [obj channelId]);
-            }];
-    } gotOnlineChannels:^(NSArray *onlineChannelList) {
-        [onlineChannelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSLog(@"%@ (%@)",[obj name], [obj channelId]);
-        }];
-    } errorHandler:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+- (void) pyWebLoginSuccess:(PYConnection*)pyConnection {
+    AppDelegate *app =[AppDelegate sharedInstance];
+    app.user = [[User alloc]
+                initWithUsername:[NSString stringWithString:pyConnection.userID]
+                andToken:[NSString stringWithString:pyConnection.accessToken]];
+  
+    NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
+    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }
+
 - (void) pyWebLoginAborded:(NSString*)reason {
     NSLog(@"Signin Aborded: %@",reason);
 }

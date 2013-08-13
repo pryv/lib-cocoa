@@ -5,10 +5,12 @@
 
 
 #import "PYStream.h"
+#import "PYConnection.h"
 
 
 @implementation PYStream
 
+@synthesize connection = _connection;
 @synthesize streamId = _streamId;
 @synthesize channelId = _channelId;
 @synthesize name = _name;

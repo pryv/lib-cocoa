@@ -6,9 +6,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class PYConnection;
+
 
 @interface PYStream : NSObject
 {
+    PYConnection *_connection;
     NSString *_streamId;
     NSString *_channelId;
     NSString *_name;
@@ -27,6 +30,7 @@
     NSDictionary *_modifiedFolderPropertiesAndValues;
 }
 
+@property (nonatomic, retain) PYConnection *connection;
 @property (nonatomic, copy) NSString *streamId;
 @property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
