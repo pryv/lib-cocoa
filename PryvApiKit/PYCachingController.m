@@ -76,12 +76,12 @@
     }
 }
 
-- (void)removeFolder:(NSString *)key
+- (void)removeStream:(NSString *)key
 {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
     if (error) {
-        NSAssert(@"Error in removing folder", @"");
+        NSAssert(@"Error in removing stream", @"");
     }
 }
 
@@ -130,20 +130,20 @@
     return arrayOFCachedChannels;
 }
 
-- (NSArray *)getAllFoldersFromCache
+- (NSArray *)getAllStreamsFromCache
 {
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'folder_'"];
+    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'stream_'"];
     if (!filesWithSelectedPrefix.count) {
         return nil;
     }
     
-    NSMutableArray *arrayOFCachedFolders = [[NSMutableArray alloc] init];
-    for (NSString *folderCachedName in filesWithSelectedPrefix) {
-        NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:folderCachedName]];
-        [arrayOFCachedFolders addObject:[PYStream folderFromJSON:folderDic]];
+    NSMutableArray *arrayOFCachedStreams = [[NSMutableArray alloc] init];
+    for (NSString *streamCachedName in filesWithSelectedPrefix) {
+        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:streamCachedName]];
+        [arrayOFCachedStreams addObject:[PYStream streamFromJSON:streamDic]];
     }
     
-    return arrayOFCachedFolders;
+    return arrayOFCachedStreams;
 }
 
 - (PYChannel *)getChannelWithKey:(NSString *)key
@@ -157,12 +157,12 @@
     return nil;
 
 }
-- (PYStream *)getFolderWithKey:(NSString *)key
+- (PYStream *)getStreamWithKey:(NSString *)key
 {
     if ([self isDataCachedForKey:key]) {
-        NSData *folderData = [self getDataForKey:key];
-        NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:folderData];
-        return [PYStream folderFromJSON:folderDic];
+        NSData *streamData = [self getDataForKey:key];
+        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:streamData];
+        return [PYStream streamFromJSON:streamDic];
     }
     
     return nil;

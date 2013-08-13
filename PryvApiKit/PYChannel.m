@@ -12,7 +12,7 @@
 #import "PYEventsCachingUtillity.h"
 #import "PYConstants.h"
 #import "PYEventFilterUtility.h"
-#import "PYFoldersCachingUtillity.h"
+#import "PYStreamsCachingUtillity.h"
 
 @implementation PYChannel
 
@@ -63,7 +63,7 @@
                             [self.connection.foldersNotSync removeObject:folder];
                             //We have success here. Folder is cached in createFolder:withRequestType: method, remove old folder with tmpId from cache
                             //He will always have tmpId here but just in case for testing (defensive programing)
-                            [PYFoldersCachingUtillity removeFolder:folder];
+                            [PYStreamsCachingUtillity removeStream:folder];
 
                         } errorHandler:^(NSError *error) {
                             folder.isSyncTriedNow = NO;
@@ -706,11 +706,11 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSMutableArray *folderList = [[NSMutableArray alloc] init];
                  for (NSDictionary *folderDictionary in JSON) {
-                     [folderList addObject:[PYStream folderFromJSON:folderDictionary]];
+                     [folderList addObject:[PYStream streamFromJSON:folderDictionary]];
                  }
                  
                  if (syncAndCache == YES) {
-                     [PYFoldersCachingUtillity cacheFolders:JSON];
+                     [PYStreamsCachingUtillity cacheStreams:JSON];
                  }
 
                  if (onlineFoldersList) {
@@ -735,7 +735,7 @@
 {
     
     //Return current cached folders
-    NSArray *allFoldersFromCache = [PYFoldersCachingUtillity getFoldersFromCache];
+    NSArray *allFoldersFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
 //    [allFoldersFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedFolders) {
         NSUInteger currentNumberOfFoldersInCache = allFoldersFromCache.count;
@@ -773,7 +773,7 @@
                              successHandler(createdFolderId);
                          }
                      
-                     [PYFoldersCachingUtillity getAndCacheFolderWithServerId:createdFolderId
+                     [PYStreamsCachingUtillity getAndCacheStreamWithServerId:createdFolderId
                                                                    inChannel:self
                                                                  requestType:reqType];
 
@@ -790,7 +790,7 @@
                                  folder.streamId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
                                  //return that created id so it can work offline. Folder will be cached when added to unsync list
                                  
-                                 [PYFoldersCachingUtillity cacheFolder:folder];
+                                 [PYStreamsCachingUtillity cacheStream:folder];
                                  [self.connection addFolder:folder toUnsyncList:error];
                                  
                                  successHandler (folder.streamId);
@@ -827,7 +827,7 @@
                  //Cache modified folder - We cache folder
                  NSLog(@"It's folder with server id because we'll never try to call this method if folder has tempId");
                  //If folderId isn't temporary cache folder (it will be overwritten in cache)
-                 [PYFoldersCachingUtillity getAndCacheFolderWithServerId:folderId
+                 [PYStreamsCachingUtillity getAndCacheStreamWithServerId:folderId
                                                                inChannel:self
                                                              requestType:reqType];
                  
@@ -842,7 +842,7 @@
                      if (folderObject.isSyncTriedNow == NO) {
                          
                          //Get current folder with id from cache
-                         PYStream *currentFolderFromCache = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:folderId];
+                         PYStream *currentFolderFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:folderId];
                          
                          currentFolderFromCache.notSyncModify = YES;
                          
@@ -854,7 +854,7 @@
                          //We have to know what properties are modified in order to make succesfull request
                          currentFolderFromCache.modifiedFolderPropertiesAndValues = [folderObject dictionary];
                          //We must have cached modified properties of folder in cache
-                         [PYFoldersCachingUtillity cacheFolder:currentFolderFromCache];
+                         [PYStreamsCachingUtillity cacheStream:currentFolderFromCache];
                          
                          if (successHandler) {
                              successHandler();

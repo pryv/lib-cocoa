@@ -10,7 +10,7 @@
 
 @implementation PYStream (JSON)
 
-+ (PYStream *)folderFromJSON:(id)JSON
++ (PYStream *)streamFromJSON:(id)JSON
 {
     NSDictionary *jsonDictionary = JSON;
     PYStream *folder = [[PYStream alloc] init];
@@ -79,7 +79,7 @@
 {
     NSMutableArray *childrenArrayOfFolders = [[NSMutableArray alloc] init];
     for (NSDictionary *folderDic in children) {
-        [childrenArrayOfFolders addObject:[self folderFromJSON:folderDic]];
+        [childrenArrayOfFolders addObject:[self streamFromJSON:folderDic]];
     }
     
     folder.children = [childrenArrayOfFolders copy];

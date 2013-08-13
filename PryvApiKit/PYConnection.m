@@ -15,7 +15,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConstants.h"
 #import "PYChannel+JSON.h"
 #import "PYEventsCachingUtillity.h"
-#import "PYFoldersCachingUtillity.h"
+#import "PYStreamsCachingUtillity.h"
 #import "PYChannelsCachingUtillity.h"
 
 @implementation PYConnection
@@ -105,7 +105,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         }
     }
     
-    NSArray *nonSyncFoldersArray = [PYFoldersCachingUtillity getFoldersFromCache];
+    NSArray *nonSyncFoldersArray = [PYStreamsCachingUtillity getStreamsFromCache];
     
     for (PYStream *folder in nonSyncFoldersArray) {
         if (folder.notSyncAdd || folder.notSyncModify) {

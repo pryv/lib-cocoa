@@ -22,4 +22,9 @@
         signinWindowController = [[SigninWindowController alloc] initWithWindowNibName:@"SigninWindowController"];
     [signinWindowController showWindow:self];    
 }
+
+- (IBAction)getStreams:(id)sender {
+    
+    
+}
 @end

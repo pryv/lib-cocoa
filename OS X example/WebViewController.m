@@ -53,6 +53,17 @@
 - (void) pyWebLoginSuccess:(PYConnection*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
+    [pyAccess getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:^(NSArray *cachedChannelList) {
+            [cachedChannelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSLog(@"%@ (%@)",[obj name], [obj channelId]);
+            }];
+    } gotOnlineChannels:^(NSArray *onlineChannelList) {
+        [onlineChannelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSLog(@"%@ (%@)",[obj name], [obj channelId]);
+        }];
+    } errorHandler:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 - (void) pyWebLoginAborded:(NSString*)reason {
     NSLog(@"Signin Aborded: %@",reason);

@@ -13,6 +13,6 @@
 /**
  Get PYFolder object from json dictionary representation (JSON representation can include additioanl helper properties for folder). It means that this method 'read' folder from disk and from server
  */
-+ (PYStream *)folderFromJSON:(id)json;
++ (PYStream *)streamFromJSON:(id)json;
 
 @end

@@ -34,9 +34,9 @@
  */
 - (void)removeEvent:(NSString *)key;
 /**
- Remove folder from disk for key
+ Remove stream from disk for key
  */
-- (void)removeFolder:(NSString *)key;
+- (void)removeStream:(NSString *)key;
 /**
  Get all PYEvent objects from disk
  */
@@ -55,11 +55,11 @@
  */
 - (PYChannel *)getChannelWithKey:(NSString *)key;
 /**
- Get all PYFolder objects from disk
+ Get all PYStream objects from disk
  */
-- (NSArray *)getAllFoldersFromCache;
+- (NSArray *)getAllStreamsFromCache;
 /**
- Get single PYFolder object from disk for key
+ Get single PYStream object from disk for key
  */
-- (PYStream *)getFolderWithKey:(NSString *)key;
+- (PYStream *)getStreamWithKey:(NSString *)key;
 @end

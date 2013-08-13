@@ -24,7 +24,7 @@
 #import <PryvApiKit/PYCachingController.h>
 #import <PryvApiKit/PYEventsCachingUtillity.h>
 #import <PryvApiKit/PYChannelsCachingUtillity.h>
-#import <PryvApiKit/PYFoldersCachingUtillity.h>
+#import <PryvApiKit/PYStreamsCachingUtillity.h>
 
 #import <PryvApiKit/PYWebLoginViewController.h>
 

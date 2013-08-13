@@ -37,10 +37,10 @@
     
     
     NSString *fakeFolderId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
-    PYStream *folderFromCacheWithFakeId = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:fakeFolderId];
+    PYStream *folderFromCacheWithFakeId = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:fakeFolderId];
     STAssertNil(folderFromCacheWithFakeId, @"This must be nil. It's fake folder id");
     
-    PYStream *folderFromCache = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:createdFolderIdFromServer];
+    PYStream *folderFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:createdFolderIdFromServer];
     STAssertNotNil(folderFromCache, @"");
     
     [self.channelForTest getAllFoldersWithRequestType:PYRequestTypeSync filterParams:nil gotCachedFolders:NULL gotOnlineFolders:^(NSArray *onlineFolderList) {
