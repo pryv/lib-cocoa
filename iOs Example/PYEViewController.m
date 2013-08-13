@@ -61,10 +61,16 @@
     
 //    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
     
-    NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"streamId", @"level", nil];
+    NSArray *keys = [NSArray arrayWithObjects:  kPYAPIConnectionRequestStreamId,
+                                                kPYAPIConnectionRequestLevel,
+                                                nil];
     
-    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
+    NSArray *objects = [NSArray arrayWithObjects:   kPYAPIConnectionRequestAllStreams,
+                                                    kPYAPIConnectionRequestManageLevel,
+                                                    nil];
+    
+    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects
+                                                                                forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
     [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-ios-example"
