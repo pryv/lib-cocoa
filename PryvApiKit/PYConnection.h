@@ -105,14 +105,14 @@
  */
 
 - (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedChannels:(void (^) (NSArray *cachedChannelList))cachedChannels
-                    gotOnlineChannels:(void (^) (NSArray *onlineChannelList))onlineChannels
+                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
+                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
                          errorHandler:(void (^)(NSError *error))errorHandler;
 
 
 - (void)getStreamsWithRequestType:(PYRequestType)reqType
                             filter:(NSDictionary*)filterDic
-                    successHandler:(void (^) (NSArray *channelsList))onlineChannelList
+                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
                       errorHandler:(void (^)(NSError *error))errorHandler;
 
 

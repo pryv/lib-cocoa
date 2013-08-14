@@ -314,28 +314,28 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 }
 
 - (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedChannels:(void (^) (NSArray *cachedStreamList))cachedStreams
-                    gotOnlineChannels:(void (^) (NSArray *onlineStreamList))onlineStreams
+                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
+                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
                          errorHandler:(void (^)(NSError *error))errorHandler;
 
 {
-    //Return current cached channels
-    NSArray *allChannelsFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
-    [allChannelsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
+    //Return current cached streams
+    NSArray *allStreamsFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
+    [allStreamsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
     if (cachedStreams) {
-        NSUInteger currentNumberOfChannelsInCache = [PYChannelsCachingUtillity getChannelsFromCache].count;
-        if (currentNumberOfChannelsInCache > 0) {
-            //if there are cached channels return it, when get response return in onlineList
-            cachedStreams(allChannelsFromCache);
+        NSUInteger currentNumberOfStreamsInCache = [PYStreamsCachingUtillity getStreamsFromCache].count;
+        if (currentNumberOfStreamsInCache > 0) {
+            //if there are cached streams return it, when get response return in onlineList
+            cachedStreams(allStreamsFromCache);
         }
     }
     
-    //This method should retrieve always online channels and channelsToAdd, channelsModified, channelsToRemove (for visual details) - not yet implemented due to web service limitations
+    //This method should retrieve always online streams and streamsToAdd, streamsModified, streamsToRemove (for visual details) - not yet implemented due to web service limitations
     [self getStreamsWithRequestType:reqType
                               filter:nil
-                      successHandler:^(NSArray *channelsList) {
+                      successHandler:^(NSArray *streamsList) {
                           if (onlineStreams) {
-                              onlineStreams(channelsList);
+                              onlineStreams(streamsList);
                           }
                       }
                         errorHandler:errorHandler];
@@ -344,10 +344,10 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)getStreamsWithRequestType:(PYRequestType)reqType
                             filter:(NSDictionary*)filterDic
-                    successHandler:(void (^) (NSArray *eventList))onlineChannelList
+                    successHandler:(void (^) (NSArray *eventList))onlineStreamList
                       errorHandler:(void (^)(NSError *error))errorHandler
 {
-    //This method should retrieve always online channels and need to cache (sync) online channels
+    //This method should retrieve always online streams and need to cache (sync) online streams
     
     [self apiRequest:[PYClient getURLPath:kROUTE_STREAMS withParams:filterDic]
          requestType:reqType
@@ -356,15 +356,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  
-                 NSMutableArray *channelList = [[NSMutableArray alloc] init];
-                 for(NSDictionary *channelDictionary in JSON){
-                     PYStream *streamObject = [PYStream streamFromJSON:channelDictionary];
+                 NSMutableArray *streamList = [[NSMutableArray alloc] init];
+                 for(NSDictionary *streamDictionary in JSON){
+                     PYStream *streamObject = [PYStream streamFromJSON:streamDictionary];
                      streamObject.connection = self;
-                     [channelList addObject:streamObject];
+                     [streamList addObject:streamObject];
                  }
-                 if(onlineChannelList){
+                 if(onlineStreamList){
                      [PYStreamsCachingUtillity cacheStreams:JSON];
-                     onlineChannelList([channelList autorelease]);
+                     onlineStreamList([streamList autorelease]);
                  }
              } failure:^(NSError *error){
                  if(errorHandler){

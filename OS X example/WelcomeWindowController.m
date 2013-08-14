@@ -35,14 +35,14 @@
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
         [connection getAllStreamsWithRequestType:PYRequestTypeAsync
-                               gotCachedChannels:^(NSArray *cachedChannelList) {
+                               gotCachedStreams:^(NSArray *cachedStreamList) {
                                    NSLog(@"CACHED STREAMS : ");
-                                   [cachedChannelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                   [cachedStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                                        NSLog(@"Cached : %@ (%@)",[obj name], [obj streamId]);
                                    }];
-                               } gotOnlineChannels:^(NSArray *onlineChannelList) {
+                               } gotOnlineStreams:^(NSArray *onlineStreamList) {
                                    NSLog(@"ONLINE STREAMS : ");
-                                   [onlineChannelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                   [onlineStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                                        NSLog(@"Online : %@ (%@)",[obj name], [obj streamId]);
                                    }];
                                } errorHandler:^(NSError *error) {
