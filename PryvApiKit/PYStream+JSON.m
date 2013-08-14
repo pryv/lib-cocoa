@@ -1,5 +1,5 @@
 //
-//  PYFolder+JSON.m
+//  PYStream+JSON.m
 //  PryvApiKit
 //
 //  Created by Nenad Jelic on 3/18/13.
@@ -13,77 +13,75 @@
 + (PYStream *)streamFromJSON:(id)JSON
 {
     NSDictionary *jsonDictionary = JSON;
-    PYStream *folder = [[PYStream alloc] init];
-    folder.streamId = [jsonDictionary objectForKey:@"id"];
+    PYStream *stream = [[PYStream alloc] init];
+    stream.streamId = [jsonDictionary objectForKey:@"id"];
     
-    [folder setValue:[jsonDictionary objectForKey:@"channelId"] forKey:@"channelId"];
-    
-    folder.name = [jsonDictionary objectForKey:@"name"];
+    stream.name = [jsonDictionary objectForKey:@"name"];
     
     NSString *parentId = [jsonDictionary objectForKey:@"parentId"];
     if ([parentId isKindOfClass:[NSNull class]]) {
-        folder.parentId = nil;
+        stream.parentId = nil;
     }else{
-        folder.parentId = parentId;
+        stream.parentId = parentId;
     }
     
-    folder.clientData = [jsonDictionary objectForKey:@"clientData"];
+    stream.clientData = [jsonDictionary objectForKey:@"clientData"];
         
-    folder.timeCount = [[jsonDictionary objectForKey:@"timeCount"] doubleValue];
-    folder.singleActivity = [[jsonDictionary objectForKey:@"singleActivity"] boolValue];
-    folder.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
+    stream.timeCount = [[jsonDictionary objectForKey:@"timeCount"] doubleValue];
+    stream.singleActivity = [[jsonDictionary objectForKey:@"singleActivity"] boolValue];
+    stream.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
     
     NSArray *childrenArray = [jsonDictionary objectForKey:@"children"];
-    [self setChildrenForFolder:folder withArray:childrenArray];
+    [self setChildrenForStream:stream withArray:childrenArray];
     
     NSNumber *hasTmpId = [jsonDictionary objectForKey:@"hasTmpId"];
     if ([hasTmpId isKindOfClass:[NSNull class]]) {
-        folder.hasTmpId = NO;
+        stream.hasTmpId = NO;
     }else{
-        folder.hasTmpId = [hasTmpId boolValue];
+        stream.hasTmpId = [hasTmpId boolValue];
     }
     
     NSNumber *notSyncAdd = [jsonDictionary objectForKey:@"notSyncAdd"];
     if ([notSyncAdd isKindOfClass:[NSNull class]]) {
-        folder.notSyncAdd = NO;
+        stream.notSyncAdd = NO;
     }else{
-        folder.notSyncAdd = [notSyncAdd boolValue];
+        stream.notSyncAdd = [notSyncAdd boolValue];
     }
     
     NSNumber *notSyncModify = [jsonDictionary objectForKey:@"notSyncModify"];
     if ([notSyncModify isKindOfClass:[NSNull class]]) {
-        folder.notSyncModify = NO;
+        stream.notSyncModify = NO;
     }else{
-        folder.notSyncModify = [notSyncModify boolValue];
+        stream.notSyncModify = [notSyncModify boolValue];
     }
     
     NSNumber *synchedAt = [jsonDictionary objectForKey:@"synchedAt"];
     if ([synchedAt isKindOfClass:[NSNull class]]) {
-        folder.synchedAt = 0;
+        stream.synchedAt = 0;
     }else{
-        folder.synchedAt = [synchedAt doubleValue];
+        stream.synchedAt = [synchedAt doubleValue];
     }
     
     NSDictionary *modifiedProperties = [jsonDictionary objectForKey:@"modifiedProperties"];
     if ([modifiedProperties isKindOfClass:[NSNull class]]) {
-        folder.modifiedFolderPropertiesAndValues = nil;
+        stream.modifiedStreamPropertiesAndValues = nil;
     }else{
-        folder.modifiedFolderPropertiesAndValues = modifiedProperties;
+        stream.modifiedStreamPropertiesAndValues = modifiedProperties;
     }
 
     
-    return [folder autorelease];
+    return [stream autorelease];
 }
 
-+ (void)setChildrenForFolder:(PYStream *)folder withArray:(NSArray *)children
++ (void)setChildrenForStream:(PYStream *)stream withArray:(NSArray *)children
 {
-    NSMutableArray *childrenArrayOfFolders = [[NSMutableArray alloc] init];
-    for (NSDictionary *folderDic in children) {
-        [childrenArrayOfFolders addObject:[self streamFromJSON:folderDic]];
+    NSMutableArray *childrenArrayOfStreams = [[NSMutableArray alloc] init];
+    for (NSDictionary *streamDic in children) {
+        [childrenArrayOfStreams addObject:[self streamFromJSON:streamDic]];
     }
     
-    folder.children = [childrenArrayOfFolders copy];
-    [childrenArrayOfFolders release];
+    stream.children = [childrenArrayOfStreams copy];
+    [childrenArrayOfStreams release];
 }
 
 @end

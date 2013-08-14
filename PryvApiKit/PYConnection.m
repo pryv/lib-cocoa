@@ -29,7 +29,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize connectionReachability = _connectionReachability;
 @synthesize eventsNotSync = _eventsNotSync;
-@synthesize foldersNotSync = _foldersNotSync;
+@synthesize streamsNotSync = _streamsNotSync;
 @synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
@@ -64,6 +64,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     _connectionReachability = nil;
     [_eventsNotSync release];
     _eventsNotSync = nil;
+    [_streamsNotSync release];
+    _streamsNotSync = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
@@ -85,14 +87,14 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
-- (void)addFolder:(PYStream *)folder toUnsyncList:(NSError *)error
+- (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
 {
     /*When we deserialize unsync list (when app starts) we will know what folders are not sync with these informations:
      They have one of these flags or combination of them
      notSyncAdd
      notSyncModify
      */
-    [self.foldersNotSync addObject:folder];
+    [self.streamsNotSync addObject:stream];
     
 }
 
@@ -107,11 +109,11 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         }
     }
     
-    NSArray *nonSyncFoldersArray = [PYStreamsCachingUtillity getStreamsFromCache];
+    NSArray *nonSyncStreamsArray = [PYStreamsCachingUtillity getStreamsFromCache];
     
-    for (PYStream *folder in nonSyncFoldersArray) {
-        if (folder.notSyncAdd || folder.notSyncModify) {
-            [self.foldersNotSync addObject:folder];
+    for (PYStream *stream in nonSyncStreamsArray) {
+        if (stream.notSyncAdd || stream.notSyncModify) {
+            [self.streamsNotSync addObject:stream];
         }
     }
 
@@ -127,13 +129,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return _eventsNotSync;
 }
 
-- (NSMutableSet *)foldersNotSync
+- (NSMutableSet *)streamsNotSync
 {
-    if (!_foldersNotSync) {
-        _foldersNotSync = [[NSMutableSet alloc] init];
+    if (!_streamsNotSync) {
+        _streamsNotSync = [[NSMutableSet alloc] init];
     }
     
-    return _foldersNotSync;
+    return _streamsNotSync;
 }
 
 #pragma mark - Reachability
@@ -313,70 +315,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 }
 
-- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
-                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
-                         errorHandler:(void (^)(NSError *error))errorHandler;
-
-{
-    //Return current cached streams
-    NSArray *allStreamsFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
-    [allStreamsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
-    if (cachedStreams) {
-        NSUInteger currentNumberOfStreamsInCache = [PYStreamsCachingUtillity getStreamsFromCache].count;
-        if (currentNumberOfStreamsInCache > 0) {
-            //if there are cached streams return it, when get response return in onlineList
-            cachedStreams(allStreamsFromCache);
-        }
-    }
-    
-    //This method should retrieve always online streams and streamsToAdd, streamsModified, streamsToRemove (for visual details) - not yet implemented due to web service limitations
-    [self getStreamsWithRequestType:reqType
-                              filter:nil
-                      successHandler:^(NSArray *streamsList) {
-                          if (onlineStreams) {
-                              onlineStreams(streamsList);
-                          }
-                      }
-                        errorHandler:errorHandler];
-    
-}
-
-- (void)getStreamsWithRequestType:(PYRequestType)reqType
-                            filter:(NSDictionary*)filterDic
-                    successHandler:(void (^) (NSArray *eventList))onlineStreamList
-                      errorHandler:(void (^)(NSError *error))errorHandler
-{
-    //This method should retrieve always online streams and need to cache (sync) online streams
-    
-    [self apiRequest:[PYClient getURLPath:kROUTE_STREAMS withParams:filterDic]
-         requestType:reqType
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 
-                 NSMutableArray *streamList = [[NSMutableArray alloc] init];
-                 for(NSDictionary *streamDictionary in JSON){
-                     PYStream *streamObject = [PYStream streamFromJSON:streamDictionary];
-                     streamObject.connection = self;
-                     [streamList addObject:streamObject];
-                 }
-                 if(onlineStreamList){
-                     [PYStreamsCachingUtillity cacheStreams:JSON];
-                     onlineStreamList([streamList autorelease]);
-                 }
-             } failure:^(NSError *error){
-                 if(errorHandler){
-                     errorHandler(error);
-                 }
-             }
-     ];
-    
-}
-
-//##########################
-
 - (void)editChannelWithRequestType:(PYRequestType)reqType
                          channelId:(NSString *)channelId
                               data:(NSDictionary *)data
@@ -436,7 +374,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSLog(@"successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
+                 NSLog(@"Successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
            if (successHandler)
                      successHandler(_serverTimeInterval);
      

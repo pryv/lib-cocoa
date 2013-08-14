@@ -10,6 +10,7 @@
 #import "SigninWindowController.h"
 #import "PryvApiKit.h"
 #import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
 #import "AppDelegate.h"
 #import "User.h"
 

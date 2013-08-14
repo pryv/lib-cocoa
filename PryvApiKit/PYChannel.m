@@ -36,10 +36,11 @@
 - (void)syncNotSynchedFoldersIfAny
 {
     NSMutableArray *nonSyncFolders = [[[NSMutableArray alloc] init] autorelease];
-    [nonSyncFolders addObjectsFromArray:[self.connection.foldersNotSync allObjects]];
+    [nonSyncFolders addObjectsFromArray:[self.connection.streamsNotSync allObjects]];
     for (PYStream *folder in nonSyncFolders) {
         
-        if ([folder.channelId compare:self.channelId] == NSOrderedSame) {
+        //the condition is not correct : set self.channelId to shut error up, should be parentId
+        if ([folder.parentId compare:self.channelId] == NSOrderedSame) {
             //We sync only events for particular channel at time
             
             //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
@@ -60,7 +61,7 @@
                             //If succedded remove from unsyncSet and add call syncFolderWithServer
                             //In that method we were search for folder with <createdFolderId> and we should done mapping between server and temp id in cache
                             folder.synchedAt = [[NSDate date] timeIntervalSince1970];
-                            [self.connection.foldersNotSync removeObject:folder];
+                            [self.connection.streamsNotSync removeObject:folder];
                             //We have success here. Folder is cached in createFolder:withRequestType: method, remove old folder with tmpId from cache
                             //He will always have tmpId here but just in case for testing (defensive programing)
                             [PYStreamsCachingUtillity removeStream:folder];
@@ -77,7 +78,7 @@
                 if (folder.notSyncModify) {
                     NSLog(@"for modifified unsync folders with serverId we have to provide only modified values, not full event object");
                     
-                    NSDictionary *modifiedPropertiesDic = folder.modifiedFolderPropertiesAndValues;
+                    NSDictionary *modifiedPropertiesDic = folder.modifiedStreamPropertiesAndValues;
                     PYStream *modifiedFolder = [[PYStream alloc] init];
                     modifiedFolder.isSyncTriedNow = YES;
                     
@@ -89,7 +90,7 @@
                         
                         //We have success here. Folder is cached in setModifiedFolderAttributesObject:forFolderId method
                         folder.synchedAt = [[NSDate date] timeIntervalSince1970];
-                        [self.connection.foldersNotSync removeObject:folder];
+                        [self.connection.streamsNotSync removeObject:folder];
                         
                     } errorHandler:^(NSError *error) {
                         modifiedFolder.isSyncTriedNow = NO;
@@ -782,16 +783,16 @@
                          if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                              if (folder.isSyncTriedNow == NO) {
                                  //If we didn't try to sync folder from unsync list that means that we have to cache that folder, otherwise leave it as is
-                                 folder.channelId = self.channelId;
+                                 //folder.channelId = self.channelId; SHOULD NOT BE COMMENTED, should use parentId
                                  folder.notSyncAdd = YES;
-                                 //When we try to create folder and we came here it have tmpId
+                                 //When we try to create folder and we came here it has tmpId
                                  folder.hasTmpId = YES;
                                  //this is random id
                                  folder.streamId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
                                  //return that created id so it can work offline. Folder will be cached when added to unsync list
                                  
                                  [PYStreamsCachingUtillity cacheStream:folder];
-                                 [self.connection addFolder:folder toUnsyncList:error];
+                                 [self.connection addStream:folder toUnsyncList:error];
                                  
                                  successHandler (folder.streamId);
                                  
@@ -852,7 +853,7 @@
                          }];
                          
                          //We have to know what properties are modified in order to make succesfull request
-                         currentFolderFromCache.modifiedFolderPropertiesAndValues = [folderObject dictionary];
+                         currentFolderFromCache.modifiedStreamPropertiesAndValues = [folderObject dictionary];
                          //We must have cached modified properties of folder in cache
                          [PYStreamsCachingUtillity cacheStream:currentFolderFromCache];
                          

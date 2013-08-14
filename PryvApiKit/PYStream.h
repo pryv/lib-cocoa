@@ -13,7 +13,6 @@
 {
     PYConnection *_connection;
     NSString *_streamId;
-    NSString *_channelId;
     NSString *_name;
     NSString *_parentId;
     NSDictionary *_clientData;
@@ -27,12 +26,11 @@
     BOOL _notSyncAdd;
     BOOL _notSyncModify;
     NSTimeInterval _synchedAt;
-    NSDictionary *_modifiedFolderPropertiesAndValues;
+    NSDictionary *_modifiedStreamPropertiesAndValues;
 }
 
 @property (nonatomic, retain) PYConnection *connection;
 @property (nonatomic, copy) NSString *streamId;
-@property (nonatomic, copy) NSString *channelId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
 @property (nonatomic, copy) NSDictionary *clientData;
@@ -66,7 +64,7 @@
 /**
  @property modifiedFolderPropertiesAndValues - NSDictionary that describes what folder properties should be modified on server during the synching
  */
-@property (nonatomic, retain) NSDictionary *modifiedFolderPropertiesAndValues;
+@property (nonatomic, retain) NSDictionary *modifiedStreamPropertiesAndValues;
 
 /**
  Convert PYFolder object to json-like NSDictionary representation for synching with server

@@ -17,6 +17,8 @@
 		0C60CD01178C462400406974 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C60CCFF178C462400406974 /* WelcomeWindowController.m */; };
 		0C60CD02178C462400406974 /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C60CD00178C462400406974 /* WelcomeWindowController.xib */; };
 		0CDAF32C178B53AD0070049C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
+		0CEB44E017BBCDB9009756E7 /* PYConnection+DataManagement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CEB44DE17BBCDB9009756E7 /* PYConnection+DataManagement.h */; };
+		0CEB44E117BBCDB9009756E7 /* PYConnection+DataManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEB44DF17BBCDB9009756E7 /* PYConnection+DataManagement.m */; };
 		3D1F6A07170B6A6400DF893C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1F6A06170B6A6400DF893C /* CoreLocation.framework */; };
 		3D2397B81733086400A72637 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2048016B95B3700CB5FFB /* AppKit.framework */; };
 		3D2397B9173308B500A72637 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB592417175EB900F2009D /* MobileCoreServices.framework */; };
@@ -206,6 +208,8 @@
 		0C60CCFF178C462400406974 /* WelcomeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeWindowController.m; sourceTree = "<group>"; };
 		0C60CD00178C462400406974 /* WelcomeWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WelcomeWindowController.xib; sourceTree = "<group>"; };
 		0CDAF32B178B53AD0070049C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		0CEB44DE17BBCDB9009756E7 /* PYConnection+DataManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYConnection+DataManagement.h"; sourceTree = "<group>"; };
+		0CEB44DF17BBCDB9009756E7 /* PYConnection+DataManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYConnection+DataManagement.m"; sourceTree = "<group>"; };
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYJSONUtility.h; sourceTree = "<group>"; };
 		3D2397BC1733109A00A72637 /* PYJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYJSONUtility.m; sourceTree = "<group>"; };
@@ -502,6 +506,8 @@
 				3D6A502E170A175600025A20 /* PYEvent */,
 				3D6C755D1703812B000B9195 /* PYConnection.h */,
 				3D6C755E1703812B000B9195 /* PYConnection.m */,
+				0CEB44DE17BBCDB9009756E7 /* PYConnection+DataManagement.h */,
+				0CEB44DF17BBCDB9009756E7 /* PYConnection+DataManagement.m */,
 				FB03E24016B982CC00DAD162 /* PYChannel.h */,
 				FB03E24116B982CC00DAD162 /* PYChannel.m */,
 				FAD9DC721700D25F00A34AB3 /* PYChannel+JSON.h */,
@@ -735,6 +741,7 @@
 				3D75F4CE173304F200380629 /* JSONKit.h in Headers */,
 				3D82A98B173EDE2A00CB100D /* Reachability.h in Headers */,
 				0C2DEE95178BFC8800CDBB54 /* PYWebLoginViewController.h in Headers */,
+				0CEB44E017BBCDB9009756E7 /* PYConnection+DataManagement.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,6 +994,7 @@
 				3D80798E176A5DC4009ECE86 /* PYChannelFilter.m in Sources */,
 				3D807993176A6DAE009ECE86 /* PYChannelFilterUtility.m in Sources */,
 				0C2DEE94178BF79400CDBB54 /* PYWebLoginViewController.m in Sources */,
+				0CEB44E117BBCDB9009756E7 /* PYConnection+DataManagement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

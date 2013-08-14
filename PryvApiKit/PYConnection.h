@@ -24,7 +24,7 @@
     Reachability *_connectionReachability;
     BOOL _online;
     NSMutableSet *_eventsNotSync;
-    NSMutableSet *_foldersNotSync;
+    NSMutableSet *_streamsNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
 }
@@ -40,7 +40,7 @@
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;
 @property (nonatomic, retain) NSMutableSet *eventsNotSync;
-@property (nonatomic, retain) NSMutableSet *foldersNotSync;
+@property (nonatomic, retain) NSMutableSet *streamsNotSync;
 @property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
 @property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
 
@@ -56,7 +56,7 @@
 /**
  Add folder to unsync list. If app tryed to create, modify or trash folder and it fails due to no internet access it will be added to unsync list
  */
-- (void)addFolder:(PYStream *)folder toUnsyncList:(NSError *)error;
+- (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error;
 
 /**
  Low level method for web service communication
@@ -91,30 +91,6 @@
                             filter:(NSDictionary*)filterDic
                     successHandler:(void (^) (NSArray *channelsList))onlineChannelList
                       errorHandler:(void (^)(NSError *error))errorHandler;
-
-/**
- @discussion
- Gets the accessible streams
- 
- GET /streams/
- 
- @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYChannel objects
- @param filterParams  Query string parameters (state ...) Optional. If you don't filter put nil Example : state=all
- @param successHandler A block object to be executed when the operation finishes successfully.
- @param errorHandler   NSError object if some error occurs
- */
-
-- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
-                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
-                         errorHandler:(void (^)(NSError *error))errorHandler;
-
-
-- (void)getStreamsWithRequestType:(PYRequestType)reqType
-                            filter:(NSDictionary*)filterDic
-                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
-                      errorHandler:(void (^)(NSError *error))errorHandler;
-
 
 /**
  @discussion

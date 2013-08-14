@@ -12,7 +12,6 @@
 
 @synthesize connection = _connection;
 @synthesize streamId = _streamId;
-@synthesize channelId = _channelId;
 @synthesize name = _name;
 @synthesize parentId = _parentId;
 @synthesize clientData = _clientData;
@@ -26,12 +25,11 @@
 @synthesize notSyncAdd = _notSyncAdd;
 @synthesize notSyncModify = _notSyncModify;
 @synthesize synchedAt = _synchedAt;
-@synthesize modifiedFolderPropertiesAndValues = _modifiedFolderPropertiesAndValues;
+@synthesize modifiedStreamPropertiesAndValues = _modifiedStreamPropertiesAndValues;
 
 - (void)dealloc
 {
     [_streamId release];
-    [_channelId release];
     [_name release];
     [_parentId release];
     [_clientData release];
@@ -53,10 +51,6 @@
     if (_parentId && _parentId.length > 0) {
         [dic setObject:_parentId forKey:@"parentId"];
     }
-
-    if (_channelId && _channelId.length > 0) {
-        [dic setObject:_channelId forKey:@"channelId"];
-    }
                 
     if (_clientData && _clientData.count > 0) {
         [dic setObject:_clientData forKey:@"clientData"];
@@ -68,8 +62,8 @@
     [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
     [dic setObject:[NSNumber numberWithBool:_notSyncModify] forKey:@"notSyncModify"];
     [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
-    if (_modifiedFolderPropertiesAndValues) {
-        [dic setObject:_modifiedFolderPropertiesAndValues forKey:@"modifiedProperties"];
+    if (_modifiedStreamPropertiesAndValues) {
+        [dic setObject:_modifiedStreamPropertiesAndValues forKey:@"modifiedProperties"];
     }
     
     return [dic autorelease];
