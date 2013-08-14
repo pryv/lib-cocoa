@@ -11,6 +11,8 @@
 #import "PYJSONUtility.h"
 #import "PYStream.h"
 #import "PYChannel.h"
+#import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
 
 @implementation PYStreamsCachingUtillity
 
@@ -34,21 +36,17 @@
     
 }
 
-+ (void)getAndCacheStreamWithServerId:(NSString *)streamId
-                            inChannel:(PYChannel *)channel
-                          requestType:(PYRequestType)reqType;
-{
-    //In this method we will ask server for stream with stream and we'll cache it
++(void)getAndCacheStream:(PYStream *)stream
+            withServerId:(NSString *)serverId
+             requestType:(PYRequestType)reqType{
     
-    [channel getOnlineStreamWithId:streamId requestType:reqType successHandler:^(PYStream *stream) {
-        
+    [stream.connection getOnlineStreamWithId:serverId requestType:reqType successHandler:^(PYStream *stream) {
         [PYStreamsCachingUtillity cacheStream:stream];
-        
     } errorHandler:^(NSError *error) {
-        NSLog(@"error");
+        NSLog(@"Error : %@",error);
     }];
+    
 }
-
 
 + (void)cacheStreams:(NSArray *)streams;
 {

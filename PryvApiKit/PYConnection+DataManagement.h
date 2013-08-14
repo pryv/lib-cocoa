@@ -33,6 +33,65 @@
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
                      errorHandler:(void (^)(NSError *error))errorHandler;
 
+/**
+ Sync all streams from list
+ */
+- (void)syncNotSynchedStreamsIfAny;
+
+
+/**
+ @discussion
+ Create a new stream
+ streams have one unique Id AND one unique name. Both must be unique
+ 
+ POST /{channel-id}/folders/
+ 
+ */
+- (void)createStream:(PYStream *)stream
+     withRequestType:(PYRequestType)reqType
+      successHandler:(void (^)(NSString *createdStreamId))successHandler
+        errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ @discussion
+ Trashes or deletes the specified stream, depending on its current state:
+ If the stream is not already in the trash, it will be moved to the trash
+ If the stream is already in the trash, it will be irreversibly deleted with its possible descendants
+ If events exist that refer to the deleted item(s), you must indicate how to handle them with the parameter mergeEventsWithParent
+ 
+ @param filterParams:
+ mergeEventsWithParent (true or false): Required if actually deleting the item and if it (or any of its descendants) has linked events, ignored otherwise. If true, the linked events will be assigned to the parent of the deleted item; if false, the linked events will be deleted
+ 
+ DELETE /{channel-id}/folders/{folder-id}
+ */
+
+- (void)trashOrDeleteStreamWithId:(NSString *)streamId
+                     filterParams:(NSDictionary *)filter
+                  withRequestType:(PYRequestType)reqType
+                   successHandler:(void (^)())successHandler
+                     errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ @discussion
+ Modify an existing stream Id
+ 
+ PUT /{channel-id}/folders/{id}
+ 
+ */
+- (void)setModifiedStreamAttributesObject:(PYStream *)stream
+                              forStreamId:(NSString *)streamId
+                              requestType:(PYRequestType)reqType
+                           successHandler:(void (^)())successHandler
+                             errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ Get online stream with id from server. This methos mustn't cache stream
+ */
+- (void)getOnlineStreamWithId:(NSString *)streamId
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^) (PYStream *stream))onlineStream
+                 errorHandler:(void (^) (NSError *error))errorHandler;
+
 
 
 @end

@@ -33,7 +33,7 @@
     [super dealloc];
 }
 
-- (void)syncNotSynchedFoldersIfAny
+- (void)syncNotSynchedStreamsIfAny
 {
     NSMutableArray *nonSyncFolders = [[[NSMutableArray alloc] init] autorelease];
     [nonSyncFolders addObjectsFromArray:[self.connection.streamsNotSync allObjects]];
@@ -46,7 +46,7 @@
             //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
             folder.isSyncTriedNow = YES;
             
-            if (folder.hasTmpId == YES) {
+            if (folder.hasTmpId) {
                 
                 if (folder.notSyncModify) {
                     NSLog(@"folder has tmpId and it's mofified -> do nothing. If folder doesn't have server id it needs to be added to server and that is all what is matter. Modified object will update PYFolder object in cache and in unsyncList");
@@ -696,7 +696,7 @@
      This method must be SYNC not ASYNC and this method sync folders with server and cache them
      */
     if (syncAndCache == YES) {
-        [self syncNotSynchedFoldersIfAny];
+        [self syncNotSynchedStreamsIfAny];
     }
     
     [self apiRequest:[PYClient getURLPath:kROUTE_FOLDERS withParams:filter]
@@ -775,7 +775,7 @@
                          }
                      
                      [PYStreamsCachingUtillity getAndCacheStreamWithServerId:createdFolderId
-                                                                   inChannel:self
+                                                                   inParent:self
                                                                  requestType:reqType];
 
                      
@@ -829,7 +829,7 @@
                  NSLog(@"It's folder with server id because we'll never try to call this method if folder has tempId");
                  //If folderId isn't temporary cache folder (it will be overwritten in cache)
                  [PYStreamsCachingUtillity getAndCacheStreamWithServerId:folderId
-                                                               inChannel:self
+                                                               inParent:self
                                                              requestType:reqType];
                  
                  if (successHandler) {

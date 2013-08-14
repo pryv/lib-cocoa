@@ -159,7 +159,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             
             //Sync ALL events and folders
             for (PYChannel *channel in onlineChannelList) {
-                [channel syncNotSynchedFoldersIfAny];
+                [channel syncNotSynchedStreamsIfAny];
                 [channel syncNotSynchedEventsIfAny];
             }
             

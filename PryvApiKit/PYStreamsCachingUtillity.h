@@ -36,8 +36,8 @@
 /**
  Get stream with particular id from server and cache it on disk
  */
-+ (void)getAndCacheStreamWithServerId:(NSString *)streamId
-                           inChannel:(PYChannel *)channel
-                         requestType:(PYRequestType)reqType;
++ (void)getAndCacheStream:(PYStream *)stream
+             withServerId:(NSString *)serverId
+              requestType:(PYRequestType)reqType;
 
 @end

@@ -39,7 +39,7 @@
 /**
  Sync all folders from list
  */
-- (void)syncNotSynchedFoldersIfAny;
+- (void)syncNotSynchedStreamsIfAny;
 
 /**
  Low level method for web service communication adapted for channles service
