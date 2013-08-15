@@ -38,14 +38,15 @@
 
 +(void)getAndCacheStream:(PYStream *)stream
             withServerId:(NSString *)serverId
-             requestType:(PYRequestType)reqType{
-    
-    [stream.connection getOnlineStreamWithId:serverId requestType:reqType successHandler:^(PYStream *stream) {
+             requestType:(PYRequestType)reqType
+{
+        [stream.connection getOnlineStreamWithId:serverId
+                                 requestType:reqType
+                              successHandler:^(PYStream *stream) {
         [PYStreamsCachingUtillity cacheStream:stream];
     } errorHandler:^(NSError *error) {
         NSLog(@"Error : %@",error);
-    }];
-    
+    }];    
 }
 
 + (void)cacheStreams:(NSArray *)streams;

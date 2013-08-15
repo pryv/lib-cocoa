@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "WelcomeWindowController.h"
 #import "User.h"
+#import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
 
 
 @implementation AppDelegate
@@ -23,6 +25,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    BOOL staging = YES;
+    if (staging) {
+        self = [AppDelegate sharedInstance];
+        self.user = [[User alloc] initWithUsername:@"perkikiki" andToken:@"Ve-U8SCASM"];
+        NSLog(@"User %@ (%@) manually connected for staging.",_user.username,self.user.token);
+    }
     welcomeWindowController = [[WelcomeWindowController alloc]
                                initWithWindowNibName:@"WelcomeWindowController"];
     [welcomeWindowController showWindow:self];

@@ -65,7 +65,7 @@
  DELETE /{channel-id}/folders/{folder-id}
  */
 
-- (void)trashOrDeleteStreamWithId:(NSString *)streamId
+- (void)trashOrDeleteStream:(PYStream *)stream
                      filterParams:(NSDictionary *)filter
                   withRequestType:(PYRequestType)reqType
                    successHandler:(void (^)())successHandler

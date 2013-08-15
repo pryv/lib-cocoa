@@ -10,6 +10,9 @@
 #import "PryvApiKit.h"
 #import "User.h"
 #import "AppDelegate.h"
+#import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
+#import "PYStream.h"
 //#import "PYWebLoginViewController.h"
 
 @interface WebViewController () <PYWebLoginDelegate>
@@ -60,6 +63,7 @@
   
     NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
     [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
+    
 }
 
 - (void) pyWebLoginAborded:(NSString*)reason {

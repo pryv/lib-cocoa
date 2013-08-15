@@ -18,5 +18,7 @@
 @property (assign) IBOutlet NSButton *signinButton;
 - (IBAction)signinButtonPressed:(id)sender;
 - (IBAction)getStreams:(id)sender;
+- (IBAction)createTestStream:(id)sender;
+- (IBAction)trashTestStream:(id)sender;
 
 @end

@@ -160,12 +160,9 @@
                  if (successHandler) {
                      successHandler(createdStreamId);
                  }
-                 
                  [PYStreamsCachingUtillity getAndCacheStream:stream
                                                 withServerId:createdStreamId
-                                                 requestType:reqType];
-                 
-                 
+                                                 requestType:reqType];                 
              } failure:^(NSError *error) {
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (stream.isSyncTriedNow == NO) {
@@ -195,19 +192,19 @@
              }];
 }
 
--(void)trashOrDeleteStreamWithId:(NSString *)streamId
+-(void)trashOrDeleteStream:(PYStream *)stream
                     filterParams:(NSDictionary *)filter
                  withRequestType:(PYRequestType)reqType
                   successHandler:(void (^)())successHandler
                     errorHandler:(void (^)(NSError *))errorHandler
 {
-    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, streamId] withParams:filter]
+    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
          requestType:reqType
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 if (successHandler) {
+            if (successHandler) {
                      successHandler();
                  }
              } failure:^(NSError *error) {
@@ -274,7 +271,6 @@
                  }
                  
              }];
-    
 }
 
 
