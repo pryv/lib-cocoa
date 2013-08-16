@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-typedef void(^PAAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
-typedef void(^PAAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON);
+typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
+typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON);
 
 
 #import <Foundation/Foundation.h>
@@ -20,8 +20,8 @@ typedef void(^PAAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *
     NSMutableData *_responseData;
     
     BOOL _running;
-    PAAsyncServiceSuccessBlock _onSuccess;
-    PAAsyncServiceFailureBlock _onFailure;
+    PYAsyncServiceSuccessBlock _onSuccess;
+    PYAsyncServiceFailureBlock _onFailure;
 
 }
 
@@ -32,8 +32,8 @@ typedef void(^PAAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *
 @property (nonatomic, retain) NSMutableData *responseData;
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
-                            success:(PAAsyncServiceSuccessBlock)success
-                            failure:(PAAsyncServiceFailureBlock)failure;
+                            success:(PYAsyncServiceSuccessBlock)success
+                            failure:(PYAsyncServiceFailureBlock)failure;
 
 - (id)initWithRequest:(NSURLRequest *)request;
 

@@ -33,7 +33,7 @@
  This method get particular event from server and cache it
 */
 + (void)getAndCacheEventWithServerId:(NSString *)eventId
-                           inChannel:(PYChannel *)channel
+                     usingConnection:(PYConnection *)connection
                          requestType:(PYRequestType)reqType;
 
 

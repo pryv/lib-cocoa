@@ -10,6 +10,8 @@
 
 @interface PYConnection (DataManagement)
 
+#pragma mark - Pryv API Streams
+
 /**
  @discussion
  Gets the accessible streams
@@ -21,7 +23,6 @@
  @param successHandler A block object to be executed when the operation finishes successfully.
  @param errorHandler   NSError object if some error occurs
  */
-
 - (void)getAllStreamsWithRequestType:(PYRequestType)reqType
                     gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
                     gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
@@ -92,6 +93,100 @@
                successHandler:(void (^) (PYStream *stream))onlineStream
                  errorHandler:(void (^) (NSError *error))errorHandler;
 
+#pragma mark - Pryv API Events
+
+/**
+ Get online event with id from server. This method mustn't cache event
+ */
+- (void)getOnlineEventWithId:(NSString *)eventId
+                 requestType:(PYRequestType)reqType
+              successHandler:(void (^) (PYEvent *event))onlineEvent
+                errorHandler:(void (^) (NSError *error))errorHandler;
+
+//This is not supposed to be called directly by client app
+/**
+ @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
+ */
+- (void)getEventsWithRequestType:(PYRequestType)reqType
+                          filter:(NSDictionary*)filterDic
+                  successHandler:(void (^) (NSArray *eventList))onlineEventsList
+                    errorHandler:(void (^) (NSError *error))errorHandler
+              shouldSyncAndCache:(BOOL)syncAndCache;
+
+- (void)getAllEventsWithRequestType:(PYRequestType)reqType
+                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                       errorHandler:(void (^)(NSError *error))errorHandler;
+
+
+/**
+ Sync all events from list
+ */
+- (void)syncNotSynchedEventsIfAny;
+
+//POST /{channel-id}/events
+/*Records a new event. Events recorded this way must be completed events, i.e. either period events with a known duration or mark events. To start a running period event, post a events/start request. In addition to the usual JSON, this request accepts standard multipart/form-data content to support the creation of event with attached files in a single request. When sending a multipart request, one content part must hold the JSON for the new event and all other content parts must be the attached files.*/
+- (void)createEvent:(PYEvent *)event
+        requestType:(PYRequestType)reqType
+     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
+       errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ @discussion
+ DELETE /{channel-id}/events/{event-id}
+ Trashes or deletes the specified event, depending on its current state:
+ If the event is not already in the trash, it will be moved to the trash (i.e. flagged as trashed)
+ If the event is already in the trash, it will be irreversibly deleted (including all its attached files, if any).
+ */
+- (void)trashOrDeleteEvent:(PYEvent *)event
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *error))errorHandler;
+
+//PUT /{channel-id}/events/{event-id}
+/*Modifies the event's attributes
+ All event fields are optional, and only modified properties must be included, for other properties put nil
+ @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set)
+ */
+- (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
+                              forEventId:(NSString *)eventId
+                             requestType:(PYRequestType)reqType
+                          successHandler:(void (^)(NSString *stoppedId))successHandler
+                            errorHandler:(void (^)(NSError *error))errorHandler;
+
+
+//POST /{channel-id}/events/start
+- (void)startPeriodEvent:(PYEvent *)event
+             requestType:(PYRequestType)reqType
+          successHandler:(void (^)(NSString *startedEventId))successHandler
+            errorHandler:(void (^)(NSError *error))errorHandler;
+
+//POST /{channel-id}/events/stop
+/*Stops a previously running period event
+ @param eventId The id of the event to stop
+ @param specifiedTime The stop time. Default: now.
+ */
+- (void)stopPeriodEventWithId:(NSString *)eventId
+                       onDate:(NSDate *)specificTime
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^)(NSString *stoppedEventId))successHandler
+                 errorHandler:(void (^)(NSError *error))errorHandler;
+
+//GET /{channel-id}/events/running
+/*An array of events containing the running period events.*/
+- (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
+                               successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
+                                 errorHandler:(void (^)(NSError *error))errorHandler;
+
+/**
+ Get attachment NSData for file name and event id
+ */
+- (void)getAttachmentDataForFileName:(NSString *)fileName
+                             eventId:(NSString *)eventId
+                         requestType:(PYRequestType)reqType
+                      successHandler:(void (^) (NSData * filedata))success
+                        errorHandler:(void (^) (NSError *error))errorHandler;
 
 
 @end

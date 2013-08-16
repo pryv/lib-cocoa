@@ -12,13 +12,12 @@
 
 @implementation PYEvent
 @synthesize eventId = _eventId;
-@synthesize channelId = _channelId;
 @synthesize time = _time;
 @synthesize duration = _duration;
 @synthesize eventClass = _eventClass;
 @synthesize eventFormat = _eventFormat;
 @synthesize value = _value;
-@synthesize folderId = _folderId;
+@synthesize streamId = _streamId;
 @synthesize tags = _tags;
 @synthesize eventDescription = _eventDescription;
 @synthesize attachments = _attachments;
@@ -41,10 +40,6 @@
         [dic setObject:_eventId forKey:@"id"];
     }
     
-    if (_channelId && _channelId.length > 0) {
-        [dic setObject:_channelId forKey:@"channelId"];
-    }
-    
     if (_time > 0) {
         [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
     }
@@ -64,8 +59,8 @@
         [dic setObject:_value forKey:@"value"];
     }
     
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"folderId"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"streamId"];
     }
     
     if (_tags && _tags.count > 0) {
@@ -124,8 +119,8 @@
         [dic setObject:_value forKey:@"value"];
     }
     
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"folderId"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"streamId"];
     }
     
     if (_tags && _tags.count > 0) {
@@ -159,10 +154,9 @@
     [description appendFormat:@", self.eventClass=%@", self.eventClass];
     [description appendFormat:@", self.eventFormat=%@", self.eventFormat];
     [description appendFormat:@", self.eventId=%@", self.eventId];
-    [description appendFormat:@", self.channelId=%@", self.channelId];
     [description appendFormat:@", self.time=%f", self.time];
     [description appendFormat:@", self.duration=%f", self.duration];
-    [description appendFormat:@", self.folderId=%@", self.folderId];
+    [description appendFormat:@", self.streamId=%@", self.streamId];
     [description appendFormat:@", self.tags=%@", self.tags];
     [description appendFormat:@", self.description=%@", self.eventDescription];
     [description appendFormat:@", self.attachments=%@", self.attachments];
@@ -179,11 +173,10 @@
 - (void)dealloc
 {
     [_eventId release];
-    [_channelId release];
     [_eventClass release];
     [_eventFormat release];
     [_value release];
-    [_folderId release];
+    [_streamId release];
     [_tags release];
     [_eventDescription release];
     [_attachments release];

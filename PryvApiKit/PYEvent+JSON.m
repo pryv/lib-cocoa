@@ -16,9 +16,15 @@
 {
     PYEvent *event = [[self alloc] init];
     event.eventId = [JSON objectForKey:@"id"];
-    event.channelId = [JSON objectForKey:@"channelId"];
-    event.time = [[JSON objectForKey:@"time"] doubleValue];
     
+    id streamId = [JSON objectForKey:@"streamId"];
+    if ([streamId isKindOfClass:[NSNull class]]) {
+        event.streamId = nil;
+    }else{
+        event.streamId = streamId;
+    }
+
+    event.time = [[JSON objectForKey:@"time"] doubleValue];
     if ([JSON objectForKey:@"duration"] == [NSNull null]) {
         event.duration = 0;
     }else{
@@ -29,14 +35,6 @@
     event.eventClass = [typeDic objectForKey:@"class"];
     event.eventFormat = [typeDic objectForKey:@"format"];
     event.value = [JSON objectForKey:@"value"];
-    
-    id folderId = [JSON objectForKey:@"folderId"];
-    if ([folderId isKindOfClass:[NSNull class]]) {
-        event.folderId = nil;
-    }else{
-        event.folderId = folderId;
-    }
-
     
     id tags = [JSON objectForKey:@"tags"];
     if ([tags isKindOfClass:[NSNull class]]) {

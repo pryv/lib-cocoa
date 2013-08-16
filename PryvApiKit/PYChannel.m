@@ -108,7 +108,7 @@
     [nonSyncEvents addObjectsFromArray:[self.connection.eventsNotSync allObjects]];
     for (PYEvent *event in nonSyncEvents) {
         
-        if ([event.channelId compare:self.channelId] == NSOrderedSame) {
+        //if ([event.channelId compare:self.channelId] == NSOrderedSame) {
             //We sync only events for particular channel at time
             
             //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
@@ -182,7 +182,7 @@
                     }];
                 }
             }
-        }        
+        // }
     }
 }
 
@@ -414,9 +414,9 @@
                      NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                      
                      //Cache particular event in cache
-                     [PYEventFilterUtility getAndCacheEventWithServerId:createdEventId
-                                                              inChannel:self
-                                                            requestType:reqType];
+//                     [PYEventFilterUtility getAndCacheEventWithServerId:createdEventId
+//                                                              inChannel:self
+//                                                            requestType:reqType];
                      
                      if (successHandler) {
                          successHandler(createdEventId, stoppedId);
@@ -427,7 +427,7 @@
                          
                          if (event.isSyncTriedNow == NO) {
                              //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
-                             event.channelId = self.channelId;
+                             //event.channelId = self.channelId;
                              event.notSyncAdd = YES;
                              event.time = [[NSDate date] timeIntervalSince1970];
                              event.modified = [NSDate date];
@@ -481,9 +481,9 @@
                  //Cache modified event - We cache event
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  //If eventId isn't temporary cache event (it will be overwritten in cache)
-                 [PYEventFilterUtility getAndCacheEventWithServerId:eventId
-                                                          inChannel:self
-                                                        requestType:reqType];
+//                 [PYEventFilterUtility getAndCacheEventWithServerId:eventId
+//                                                          inChannel:self
+//                                                        requestType:reqType];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -774,9 +774,10 @@
                              successHandler(createdFolderId);
                          }
                      
-                     [PYStreamsCachingUtillity getAndCacheStreamWithServerId:createdFolderId
-                                                                   inParent:self
-                                                                 requestType:reqType];
+//                     [PYStreamsCachingUtillity getAndCacheStreamWithServerId:createdFolderId
+//                                                                   inParent:self
+//                                                                 requestType:reqType];
+                     [PYStreamsCachingUtillity getAndCacheStream:folder withServerId:createdFolderId requestType:reqType];
 
                      
                      } failure:^(NSError *error) {
@@ -828,9 +829,9 @@
                  //Cache modified folder - We cache folder
                  NSLog(@"It's folder with server id because we'll never try to call this method if folder has tempId");
                  //If folderId isn't temporary cache folder (it will be overwritten in cache)
-                 [PYStreamsCachingUtillity getAndCacheStreamWithServerId:folderId
-                                                               inParent:self
-                                                             requestType:reqType];
+//                 [PYStreamsCachingUtillity getAndCacheStreamWithServerId:folderId
+//                                                               inParent:self
+//                                                             requestType:reqType];
                  
                  if (successHandler) {
                      successHandler();

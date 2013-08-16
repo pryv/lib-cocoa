@@ -70,11 +70,11 @@
 }
 
 + (void)getAndCacheEventWithServerId:(NSString *)eventId
-                           inChannel:(PYChannel *)channel
+                     usingConnection:(PYConnection *)connection
                          requestType:(PYRequestType)reqType
 {
     //In this method we will ask server for event with eventId and we'll cache it
-    [channel getOnlineEventWithId:eventId
+    [connection getOnlineEventWithId:eventId
                       requestType:reqType
                    successHandler:^(PYEvent *event) {
                        

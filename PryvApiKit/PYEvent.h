@@ -14,7 +14,7 @@
 @interface PYEvent : NSObject
 {
     NSString  *_eventId;
-    NSString  *_channelId;
+    NSString  *_streamId;
     
     NSTimeInterval _time;
     NSTimeInterval _duration;
@@ -23,7 +23,6 @@
     NSString *_eventFormat;
     id _value;
     
-    NSString *_folderId;
     NSArray *_tags;
     NSString  *_eventDescription;
     NSMutableArray *_attachments;
@@ -43,7 +42,7 @@
 }
 
 @property (nonatomic, retain) NSString  *eventId;
-@property (nonatomic, retain) NSString  *channelId;
+@property (nonatomic, retain) NSString  *streamId;
 
 @property (nonatomic) NSTimeInterval time;
 @property (nonatomic) NSTimeInterval duration;
@@ -53,7 +52,6 @@
 
 @property (nonatomic, retain) id value;
 
-@property (nonatomic, retain) NSString *folderId;
 @property (nonatomic, retain) NSArray *tags;
 @property (nonatomic, retain) NSString  *eventDescription;
 
