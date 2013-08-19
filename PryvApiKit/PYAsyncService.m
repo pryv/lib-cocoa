@@ -15,8 +15,8 @@
 
 @property (nonatomic) BOOL running;
 
-@property (nonatomic, copy) PAAsyncServiceSuccessBlock onSuccess;
-@property (nonatomic, copy) PAAsyncServiceFailureBlock onFailure;
+@property (nonatomic, copy) PYAsyncServiceSuccessBlock onSuccess;
+@property (nonatomic, copy) PYAsyncServiceFailureBlock onFailure;
 
 
 @end
@@ -63,8 +63,8 @@
 }
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)req
-                            success:(PAAsyncServiceSuccessBlock)success
-                            failure:(PAAsyncServiceFailureBlock)failure
+                            success:(PYAsyncServiceSuccessBlock)success
+                            failure:(PYAsyncServiceFailureBlock)failure
 {
     PYAsyncService *requestOperation = [[[self alloc] initWithRequest:req] autorelease];
     
@@ -79,8 +79,8 @@
     }];
 }
 
-- (void)setCompletionBlockWithSuccess:(PAAsyncServiceSuccessBlock)success
-                              failure:(PAAsyncServiceFailureBlock)failure
+- (void)setCompletionBlockWithSuccess:(PYAsyncServiceSuccessBlock)success
+                              failure:(PYAsyncServiceFailureBlock)failure
 {
     self.onSuccess = success;
     self.onFailure = failure;
