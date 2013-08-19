@@ -20,5 +20,8 @@
 - (IBAction)getStreams:(id)sender;
 - (IBAction)createTestStream:(id)sender;
 - (IBAction)trashTestStream:(id)sender;
+- (IBAction)createTestEvent:(id)sender;
+- (IBAction)deleteTestEvent:(id)sender;
+- (IBAction)getEvents:(id)sender;
 
 @end

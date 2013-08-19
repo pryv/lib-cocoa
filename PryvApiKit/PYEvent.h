@@ -19,9 +19,10 @@
     NSTimeInterval _time;
     NSTimeInterval _duration;
     
+    NSString *_type;
     NSString *_eventClass;
     NSString *_eventFormat;
-    id _value;
+    id _eventContent;
     
     NSArray *_tags;
     NSString  *_eventDescription;
@@ -47,10 +48,11 @@
 @property (nonatomic) NSTimeInterval time;
 @property (nonatomic) NSTimeInterval duration;
 
+@property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) NSString *eventClass;
 @property (nonatomic, retain) NSString *eventFormat;
 
-@property (nonatomic, retain) id value;
+@property (nonatomic, retain) id eventContent;
 
 @property (nonatomic, retain) NSArray *tags;
 @property (nonatomic, retain) NSString  *eventDescription;

@@ -13,10 +13,10 @@
 @implementation PYEvent (JSON)
 
 + (id)eventFromDictionary:(NSDictionary *)JSON
-{
+{    
     PYEvent *event = [[self alloc] init];
-    event.eventId = [JSON objectForKey:@"id"];
     
+    event.eventId = [JSON objectForKey:@"id"];
     id streamId = [JSON objectForKey:@"streamId"];
     if ([streamId isKindOfClass:[NSNull class]]) {
         event.streamId = nil;
@@ -30,11 +30,17 @@
     }else{
         event.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
-    
-    NSDictionary *typeDic = [JSON objectForKey:@"type"];
-    event.eventClass = [typeDic objectForKey:@"class"];
-    event.eventFormat = [typeDic objectForKey:@"format"];
-    event.value = [JSON objectForKey:@"value"];
+
+    NSString *type = [JSON objectForKey:@"type"];
+    NSArray *components = [type componentsSeparatedByString:@"/"];
+    event.eventClass = [components objectAtIndex:0];
+    event.eventFormat = [components objectAtIndex:1];
+    if ([JSON objectForKey:@"content"] == [NSNull null]) {
+        event.eventContent = nil;
+    }else{
+        event.eventContent = [JSON objectForKey:@"content"];;
+    }
+
     
     id tags = [JSON objectForKey:@"tags"];
     if ([tags isKindOfClass:[NSNull class]]) {
@@ -42,9 +48,9 @@
     }else{
         event.tags = tags;
     }
-    
+
     event.eventDescription = [JSON objectForKey:@"description"];
-    
+
     NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
     
     if (attachmentsDic) {
@@ -70,7 +76,7 @@
     event.trashed = [[JSON objectForKey:@"trashed"] boolValue];
     event.modified = [NSDate dateWithTimeIntervalSince1970:[[JSON objectForKey:@"modified"] doubleValue]];
     
-    
+
     NSNumber *hasTmpId = [JSON objectForKey:@"hasTmpId"];
     if ([hasTmpId isKindOfClass:[NSNull class]]) {
         event.hasTmpId = NO;

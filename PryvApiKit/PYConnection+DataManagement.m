@@ -348,7 +348,6 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
-                 
                  NSMutableArray *eventsCachingArray = [[NSMutableArray alloc] init];
                  [eventsCachingArray addObjectsFromArray:JSON];
                  

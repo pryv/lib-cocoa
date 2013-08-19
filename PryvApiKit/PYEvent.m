@@ -14,9 +14,10 @@
 @synthesize eventId = _eventId;
 @synthesize time = _time;
 @synthesize duration = _duration;
+@synthesize type = _type;
 @synthesize eventClass = _eventClass;
 @synthesize eventFormat = _eventFormat;
-@synthesize value = _value;
+@synthesize eventContent = _eventContent;
 @synthesize streamId = _streamId;
 @synthesize tags = _tags;
 @synthesize eventDescription = _eventDescription;
@@ -48,15 +49,19 @@
         [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
     }
     
-    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-        [dic setObject:typeDic forKey:@"type"];
+//    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
+//        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
+//        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
+//        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+//        [dic setObject:typeDic forKey:@"type"];
+//    }
+    if (_type) {
+        [dic setObject:_type forKey:@"type"];
     }
     
-    if (_value) {
-        [dic setObject:_value forKey:@"value"];
+    
+    if (_eventContent) {
+        [dic setObject:_eventContent forKey:@"content"];
     }
     
     if (_streamId && _streamId.length > 0) {
@@ -106,17 +111,21 @@
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 
-    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-        
-        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-
-        [dic setObject:typeDic forKey:@"type"];
+//    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
+//        
+//        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
+//        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
+//        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+//
+//        [dic setObject:typeDic forKey:@"type"];
+//    }
+    
+    if (_type) {
+        [dic setObject:_type forKey:@"type"];
     }
     
-    if (_value) {
-        [dic setObject:_value forKey:@"value"];
+    if (_eventContent) {
+        [dic setObject:_eventContent forKey:@"content"];
     }
     
     if (_streamId && _streamId.length > 0) {
@@ -163,7 +172,7 @@
     [description appendFormat:@", self.clientData=%@", self.clientData];
     [description appendFormat:@", self.trashed=%d", self.trashed];
     [description appendFormat:@", self.modified=%@", self.modified];
-    [description appendFormat:@", self.VALUE=%@",self.value];
+    [description appendFormat:@", self.content=%@",self.eventContent];
 
     [description appendString:@">"];
     
@@ -175,7 +184,7 @@
     [_eventId release];
     [_eventClass release];
     [_eventFormat release];
-    [_value release];
+    [_eventContent release];
     [_streamId release];
     [_tags release];
     [_eventDescription release];
