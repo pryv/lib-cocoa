@@ -119,6 +119,10 @@
 //
 //        [dic setObject:typeDic forKey:@"type"];
 //    }
+//    
+//    if (_eventId) {
+//        [dic setObject:_eventId forKey:@"id"];
+//    }
     
     if (_type) {
         [dic setObject:_type forKey:@"type"];
@@ -160,8 +164,9 @@
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@", self.eventClass=%@", self.eventClass];
-    [description appendFormat:@", self.eventFormat=%@", self.eventFormat];
+//    [description appendFormat:@", self.eventClass=%@", self.eventClass];
+//    [description appendFormat:@", self.eventFormat=%@", self.eventFormat];
+    [description appendFormat:@", self.type=%@", self.type];
     [description appendFormat:@", self.eventId=%@", self.eventId];
     [description appendFormat:@", self.time=%f", self.time];
     [description appendFormat:@", self.duration=%f", self.duration];
@@ -184,6 +189,7 @@
     [_eventId release];
     [_eventClass release];
     [_eventFormat release];
+    [_type release];
     [_eventContent release];
     [_streamId release];
     [_tags release];

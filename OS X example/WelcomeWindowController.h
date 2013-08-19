@@ -7,15 +7,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
-@class SigninWindowController;
+@class SigninWindowController,PYEvent;
 
 @interface WelcomeWindowController : NSWindowController {
     @private
     NSButton *signinButton;
+    IBOutlet NSTextField *eventID;
     SigninWindowController *signinWindowController;
+    PYEvent *event;
 }
 
 @property (assign) IBOutlet NSButton *signinButton;
+@property (assign) PYEvent *event;
 - (IBAction)signinButtonPressed:(id)sender;
 - (IBAction)getStreams:(id)sender;
 - (IBAction)createTestStream:(id)sender;
@@ -23,5 +26,6 @@
 - (IBAction)createTestEvent:(id)sender;
 - (IBAction)deleteTestEvent:(id)sender;
 - (IBAction)getEvents:(id)sender;
+- (IBAction)deleteEvent:(id)sender;
 
 @end

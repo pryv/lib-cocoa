@@ -15,12 +15,20 @@
 #import "User.h"
 #import "PYStreamsCachingUtillity.h"
 
+
 @interface WelcomeWindowController ()
 
 @end
 
 @implementation WelcomeWindowController
 @synthesize signinButton;
+@synthesize event;
+
+-(void)dealloc{
+    [event release];
+    event = nil;
+    [super dealloc];
+}
 
 - (IBAction)signinButtonPressed:(id)sender {
     if(!signinWindowController)
@@ -125,8 +133,7 @@
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
-        PYEvent *event = [[PYEvent alloc] init];
-        event.eventId = @"osx_example_test_event";
+        event = [[PYEvent alloc] init];
         event.streamId = @"*";
         event.type = @"note/txt";
         event.eventContent = @"This is a example note from the OS X Example app.";
@@ -135,14 +142,13 @@
         [connection createEvent:event
                     requestType:PYRequestTypeAsync
                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                     event.eventId = [NSString stringWithString:newEventId];
             NSLog(@"New event id : %@",newEventId);
-        }
+        } 
                    errorHandler:^(NSError *error) {
             NSLog(@"%@",error);
         }];
         
-        [event release];
-        event = nil;
         [connection release];
         connection = nil;
     }else{
@@ -153,7 +159,62 @@
 }
 
 - (IBAction)deleteTestEvent:(id)sender {
-    
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+        
+        [PYClient setDefaultDomainStaging];
+        PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+        
+        if (event) {
+            [connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:^{
+              [connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:^{
+                   NSLog(@"Event deleted.");
+                }errorHandler:^(NSError *error) {
+                    NSLog(@"Error while deleting : %@",error);
+               }];
+            } errorHandler:^(NSError *error) {
+                NSLog(@"Error while trashing : %@",error);
+            }];
+        }else{
+            NSLog(@"You must first create an event !");
+        }
+        
+        [connection release];
+        connection = nil;
+    }else{
+        NSLog(@"No user connected !");
+    }   
+}
+
+- (IBAction)deleteEvent:(id)sender {
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+        
+        [PYClient setDefaultDomainStaging];
+        PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+        
+        PYEvent *customEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:[eventID stringValue]];
+        
+        [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
+            [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
+                NSLog(@"Event deleted.");
+            }errorHandler:^(NSError *error) {
+                NSLog(@"Error while deleting : %@",error);
+            }];
+        } errorHandler:^(NSError *error) {
+            NSLog(@"Error while trashing : %@",error);
+        }];
+        
+        [connection release];
+        connection = nil;
+    }else{
+        NSLog(@"No user connected !");
+    }
+
     
 }
 
@@ -185,4 +246,6 @@
         NSLog(@"No user connected !");
     }    
 }
+
+
 @end
