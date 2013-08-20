@@ -27,6 +27,8 @@
 -(void)dealloc{
     [event release];
     event = nil;
+    [streams release];
+    streams = nil;
     [super dealloc];
 }
 
@@ -43,9 +45,8 @@
         
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-        
+        streams = [[NSMutableArray alloc] init];
         [connection getAllStreamsWithRequestType:PYRequestTypeAsync
-                                    filterParams:nil
                                gotCachedStreams:^(NSArray *cachedStreamList) {
                                    NSLog(@"CACHED STREAMS : ");
                                    [cachedStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -55,6 +56,7 @@
                                    NSLog(@"ONLINE STREAMS : ");
                                    [onlineStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                                        NSLog(@"Online : %@ (%@)",[obj name], [obj streamId]);
+                                       [streams addObject:[obj streamId]];
                                    }];
                                } errorHandler:^(NSError *error) {
                                    NSLog(@"%@",error);
@@ -229,7 +231,7 @@
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
         runningEvent = [[PYEvent alloc] init];
-        runningEvent.streamId = @"*";
+        runningEvent.streamId = @"TVWwwYo-mJ";
         runningEvent.type = @"activity/pryv";
         runningEvent.time = NSTimeIntervalSince1970;
         
@@ -281,8 +283,11 @@
         if(runningEvent){
             [PYClient setDefaultDomainStaging];
             PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-            
-            [connection getRunningPeriodEventsWithRequestType:PYRequestTypeAsync successHandler:^(NSArray *arrayOfEvents) {
+            NSArray *activityStream = [NSArray arrayWithObject:@"TVWwwYo-mJ"];
+            NSDictionary *filter = [NSDictionary dictionaryWithObject:activityStream forKey:@"streams"];
+            [connection getRunningPeriodEventsWithRequestType:PYRequestTypeAsync
+                                                   parameters:filter
+                                               successHandler:^(NSArray *arrayOfEvents) {
                 [arrayOfEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     NSLog(@"Running event : %@",[obj eventId]);
                 }];
@@ -307,7 +312,23 @@
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
-        [connection getAllEventsWithRequestType:PYRequestTypeAsync gotCachedEvents:^(NSArray *cachedEventList) {
+        NSMutableDictionary *filter = [[NSMutableDictionary alloc] init];
+        if (streams) {
+            [filter setValue:streams forKey:@"streams"];
+        }else{
+            streams = [NSArray arrayWithObjects:@"*",nil];
+            [filter setValue:streams forKey:@"streams"];
+        }
+        
+        
+//        NSNumber *skip = [NSNumber numberWithInt:10];
+//        [filter setValue:skip forKey:@"skip"];
+//        NSNumber *limit = [NSNumber numberWithInt:5];
+//        [filter setValue:limit forKey:@"limit"];
+//        [filter setValue:@"trashed" forKey:@"state"];
+
+        
+        [connection getEventsWithRequestType:PYRequestTypeAsync parameters:filter gotCachedEvents:^(NSArray *cachedEventList) {
             NSLog(@"CACHED EVENTS :");
             [cachedEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 NSLog(@"Cached : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);

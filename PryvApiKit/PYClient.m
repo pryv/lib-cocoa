@@ -154,18 +154,9 @@ static NSString *myDefaultDomain;
         id value = [params objectForKey:key];
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *valueArray = value;
-            [pathString appendFormat:@"%@=",key];
-            for (int i = 0; i < valueArray.count; i++) {
-                
-                id arrayValue = [valueArray objectAtIndex:i];
-                [pathString appendFormat:@"%@",arrayValue];
-                
-                if (i != valueArray.count - 1) {
-                    //If it's not last element add comma (,)
-                    [pathString appendString:@","];
-                }
-            }
-            [pathString appendString:@"&"];
+            [valueArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [pathString appendFormat:@"%@[]=%@&",key,obj];
+            }];
         }else{
             [pathString appendFormat:@"%@=%@&",key,[params objectForKey:key]];
             

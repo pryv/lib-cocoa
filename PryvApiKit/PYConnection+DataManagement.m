@@ -91,7 +91,7 @@
 
 - (void)getStreamsWithRequestType:(PYRequestType)reqType
                            filter:(NSDictionary*)filterDic
-                   successHandler:(void (^) (NSArray *eventList))onlineStreamList
+                   successHandler:(void (^) (NSArray *streamsList))onlineStreamList
                      errorHandler:(void (^)(NSError *error))errorHandler
 {
     //This method should retrieve always online streams and need to cache (sync) online streams
@@ -498,16 +498,8 @@
     }
     //This method should retrieve always online events
     //In this method we should synchronize events from cache with ones online and to return current online list
-    NSMutableDictionary *filterDic = [[NSMutableDictionary alloc] init];
-//    NSArray *streams = [NSArray arrayWithObject:@"diary"];
-//    [filterDic setValue:streams forKey:@"streams"];
-//    NSNumber *skip = [NSNumber numberWithInt:10];
-//    [filterDic setValue:skip forKey:@"skip"];
-//    NSNumber *limit = [NSNumber numberWithInt:5];
-//    [filterDic setValue:limit forKey:@"limit"];
-//    [filterDic setValue:@"trashed" forKey:@"state"];
     [self getEventsWithRequestType:reqType
-                            filter:filterDic
+                            filter:nil
                     successHandler:^(NSArray *onlineEventList) {
                         //Cache is updated here with online events
                         //When come here all events(onlineEventList) are already cached
@@ -536,6 +528,57 @@
                       errorHandler:errorHandler
                 shouldSyncAndCache:YES];
 }
+
+- (void)getEventsWithRequestType:(PYRequestType)reqType
+                         parameters:(NSDictionary *)filter
+                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                       errorHandler:(void (^)(NSError *error))errorHandler
+{
+    //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
+    NSArray *allEventsFromCacheBeforeCacheUpdate = [PYEventsCachingUtillity getEventsFromCache];
+    
+    if (cachedEvents) {
+        NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
+        if (currentNumberOfEventsInCache > 0) {
+            //if there are cached events return it, when get response return in onlineList
+            cachedEvents(allEventsFromCacheBeforeCacheUpdate);
+        }
+    }
+    //This method should retrieve always online events
+    //In this method we should synchronize events from cache with ones online and to return current online list
+    [self getEventsWithRequestType:reqType
+                            filter:filter
+                    successHandler:^(NSArray *onlineEventList) {
+                        //Cache is updated here with online events
+                        //When come here all events(onlineEventList) are already cached
+                        //Here some events should be removed from cache (if any)
+                        //It doesn't need to be cached because they are already cached just before successHandler is called
+                        // TODO UPDATE self.lastRefresh
+                        //                            self.lastRefresh = [[NSDate date] timeIntervalSince1970];
+                        
+                        NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+                        NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+                        NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
+                        
+                        [PYEventFilterUtility createEventsSyncDetails:onlineEventList
+                                                        offlineEvents:allEventsFromCacheBeforeCacheUpdate
+                                                          eventsToAdd:eventsToAdd
+                                                       eventsToRemove:eventsToRemove
+                                                       eventsModified:eventsModified];
+                        if (onlineEvents) {
+                            onlineEvents(onlineEventList);
+                        }
+                        
+                        if (syncDetails) {
+                            syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                        }
+                    }
+                      errorHandler:errorHandler
+                shouldSyncAndCache:YES];
+}
+
 
 - (void)syncNotSynchedEventsIfAny
 {
@@ -872,11 +915,13 @@
 
 //GET /{channel-id}/events/running
 - (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
+                                   parameters:(NSDictionary *)filter
                                successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
                                  errorHandler:(void (^)(NSError *error))errorHandler
 
 {
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"true" forKey:@"running"];    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:filter];
+    [parameters setValue:@"true" forKey:@"running"];
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:parameters]
          requestType:reqType
               method:PYRequestMethodGET

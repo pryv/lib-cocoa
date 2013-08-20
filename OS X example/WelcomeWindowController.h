@@ -16,6 +16,7 @@
     SigninWindowController *signinWindowController;
     PYEvent *event;
     PYEvent *runningEvent;
+    NSMutableArray *streams;
 }
 
 @property (assign) IBOutlet NSButton *signinButton;

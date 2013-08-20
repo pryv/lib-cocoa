@@ -153,6 +153,13 @@
                      successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                        errorHandler:(void (^)(NSError *error))errorHandler;
 
+- (void)getEventsWithRequestType:(PYRequestType)reqType
+                      parameters:(NSDictionary *)filter
+                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                       errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 /**
  Sync all events from list
@@ -210,6 +217,7 @@
 //GET /{channel-id}/events/running
 /*An array of events containing the running period events.*/
 - (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
+                                   parameters:(NSDictionary *)filter
                                successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
                                  errorHandler:(void (^)(NSError *error))errorHandler;
 
