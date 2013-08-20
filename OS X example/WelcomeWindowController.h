@@ -15,10 +15,12 @@
     IBOutlet NSTextField *eventID;
     SigninWindowController *signinWindowController;
     PYEvent *event;
+    PYEvent *runningEvent;
 }
 
 @property (assign) IBOutlet NSButton *signinButton;
 @property (assign) PYEvent *event;
+@property (assign) PYEvent *runningEvent;
 - (IBAction)signinButtonPressed:(id)sender;
 - (IBAction)getStreams:(id)sender;
 - (IBAction)createTestStream:(id)sender;
@@ -27,5 +29,8 @@
 - (IBAction)deleteTestEvent:(id)sender;
 - (IBAction)getEvents:(id)sender;
 - (IBAction)deleteEvent:(id)sender;
+- (IBAction)startRunningEvent:(id)sender;
+- (IBAction)stopRunningEvent:(id)sender;
+- (IBAction)getRunningEvent:(id)sender;
 
 @end

@@ -22,7 +22,7 @@
 
 @implementation WelcomeWindowController
 @synthesize signinButton;
-@synthesize event;
+@synthesize event, runningEvent;
 
 -(void)dealloc{
     [event release];
@@ -45,6 +45,7 @@
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
         [connection getAllStreamsWithRequestType:PYRequestTypeAsync
+                                    filterParams:nil
                                gotCachedStreams:^(NSArray *cachedStreamList) {
                                    NSLog(@"CACHED STREAMS : ");
                                    [cachedStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -198,7 +199,7 @@
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
         PYEvent *customEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:[eventID stringValue]];
-        
+        [PYEventsCachingUtillity removeEvent:customEvent];
         [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
             [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
                 NSLog(@"Event deleted.");
@@ -216,6 +217,86 @@
     }
 
     
+}
+
+- (IBAction)startRunningEvent:(id)sender {
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+        
+        [PYClient setDefaultDomainStaging];
+        PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+        
+        runningEvent = [[PYEvent alloc] init];
+        runningEvent.streamId = @"*";
+        runningEvent.type = @"activity/pryv";
+        runningEvent.time = NSTimeIntervalSince1970;
+        
+        [connection startPeriodEvent:runningEvent requestType:PYRequestTypeAsync successHandler:^(NSString *startedEventId) {
+            NSLog(@"Started event ID : %@",startedEventId);
+            runningEvent.eventId = [NSString stringWithString:startedEventId];
+        } errorHandler:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        
+        [connection release];
+        connection = nil;
+    }else{
+        NSLog(@"No user connected !");
+    }
+}
+
+- (IBAction)stopRunningEvent:(id)sender {
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+        
+        if(runningEvent){
+            [PYClient setDefaultDomainStaging];
+            PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+            
+            [connection stopPeriodEventWithId:runningEvent.eventId onDate:[NSDate date] requestType:PYRequestTypeAsync successHandler:^(NSString *stoppedEventId) {
+                NSLog(@"Stopped event ID : %@",stoppedEventId);
+            } errorHandler:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+            [connection release];
+            connection = nil;
+        }else{
+            NSLog(@"You must start a period event first.");
+        }
+    }else{
+        NSLog(@"No user connected !");
+    }
+}
+
+- (IBAction)getRunningEvent:(id)sender {
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+        
+        if(runningEvent){
+            [PYClient setDefaultDomainStaging];
+            PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+            
+            [connection getRunningPeriodEventsWithRequestType:PYRequestTypeAsync successHandler:^(NSArray *arrayOfEvents) {
+                [arrayOfEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSLog(@"Running event : %@",[obj eventId]);
+                }];
+            } errorHandler:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+            [connection release];
+            connection = nil;
+        }else{
+            NSLog(@"You must start a period event first.");
+        }
+    }else{
+        NSLog(@"No user connected !");
+    }
 }
 
 - (IBAction)getEvents:(id)sender {

@@ -17,33 +17,77 @@
 #pragma mark - Pryv API Streams
 
 - (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
+                    gotCachedStreams:(void (^) (NSArray *cachedStreamsList))cachedStreams
                     gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
-                        errorHandler:(void (^)(NSError *error))errorHandler;
-
+                        errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
     NSArray *allStreamsFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
-    [allStreamsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
+    //    [allStreamsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedStreams) {
-        NSUInteger currentNumberOfStreamsInCache = [PYStreamsCachingUtillity getStreamsFromCache].count;
+        NSUInteger currentNumberOfStreamsInCache = allStreamsFromCache.count;
         if (currentNumberOfStreamsInCache > 0) {
             //if there are cached streams return it, when get response return in onlineList
             cachedStreams(allStreamsFromCache);
         }
     }
     
-    //This method should retrieve always online streams and streamsToAdd, streamsModified, streamsToRemove (for visual details) - not yet implemented due to web service limitations
-    [self getStreamsWithRequestType:reqType
-                             filter:nil
-                     successHandler:^(NSArray *streamsList) {
-                         if (onlineStreams) {
-                             onlineStreams(streamsList);
-                         }
-                     }
-                       errorHandler:errorHandler];
-    
+    [self getStreamsWithRequestType:reqType filterParams:nil successHandler:^(NSArray *streamsList) {
+        if (onlineStreams) {
+            onlineStreams(streamsList);
+        }
+    }
+                       errorHandler:errorHandler
+                 shouldSyncAndCache:YES];
 }
+
+
+- (void)getStreamsWithRequestType:(PYRequestType)reqType
+                     filterParams:(NSDictionary *)filter
+                   successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
+                     errorHandler:(void (^) (NSError *error))errorHandler
+               shouldSyncAndCache:(BOOL)syncAndCache
+{
+    /*
+     This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
+     This method doesn't care about current cache, it's interested in online streams only
+     It should retrieve always online streams and need to cache (sync) online streams (before caching sync unsyched stream, because we don't want to lose unsync changes)
+     */
+    
+    /*if there are folders that are not synched with server, they need to be synched first and after that cached
+     This method must be SYNC not ASYNC and this method sync streams with server and cache them
+     */
+    if (syncAndCache == YES) {
+        [self syncNotSynchedStreamsIfAny];
+    }
+    
+    [self apiRequest:[PYClient getURLPath:kROUTE_STREAMS withParams:filter]
+         requestType:reqType
+              method:PYRequestMethodGET
+            postData:nil
+         attachments:nil
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 NSMutableArray *streamList = [[NSMutableArray alloc] init];
+                 for (NSDictionary *streamDictionary in JSON) {
+                     [streamList addObject:[PYStream streamFromJSON:streamDictionary]];
+                 }
+                 
+                 if (syncAndCache == YES) {
+                     [PYStreamsCachingUtillity cacheStreams:JSON];
+                 }
+                 
+                 if (onlineStreamsList) {
+                     //cacheEvents method will overwrite contents of currently cached file
+                     onlineStreamsList([streamList autorelease]);
+                 }
+                 
+             } failure:^(NSError *error) {
+                 if (errorHandler) {
+                     errorHandler (error);
+                 }
+             }];
+}
+
 
 - (void)getStreamsWithRequestType:(PYRequestType)reqType
                            filter:(NSDictionary*)filterDic
@@ -215,6 +259,52 @@
                  }
              }];
 }
+
+//- (void)trashOrDeleteStream:(PYStream *)stream
+//               filterParams:(NSDictionary *)filter
+//           withRequestType:(PYRequestType)reqType
+//            successHandler:(void (^)())successHandler
+//              errorHandler:(void (^)(NSError *error))errorHandler
+//{
+//    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
+//         requestType:reqType
+//              method:PYRequestMethodDELETE
+//            postData:nil
+//         attachments:nil
+//             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+//                 NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
+//                 if (successHandler) {
+//                     successHandler();
+//                 }
+//             } failure:^(NSError *error) {
+//                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
+//                     if (stream.isSyncTriedNow == NO) {
+//                         
+//                         //stream.notSyncTrashOrDelete = YES;
+//                         
+//                         if (stream.trashed == NO) {
+//                             stream.trashed = YES;
+//                             [PYStreamsCachingUtillity cacheStream:stream];
+//                         }else{
+//                             //if event has trashed = yes flag it needs to be deleted from cache
+//                             NSLog(@"Stream removed from cache.");
+//                             [PYStreamsCachingUtillity removeStream:stream];
+//                             [self.streamsNotSync removeObject:stream];
+//                         }
+//                         
+//                         
+//                     }else{
+//                         NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
+//                     }
+//                     
+//                 }else{
+//                     if (errorHandler) {
+//                         errorHandler (error);
+//                     }
+//                 }
+//             }];
+//}
+
 
 - (void)setModifiedStreamAttributesObject:(PYStream *)stream
                               forStreamId:(NSString *)streamId
@@ -408,8 +498,16 @@
     }
     //This method should retrieve always online events
     //In this method we should synchronize events from cache with ones online and to return current online list
+    NSMutableDictionary *filterDic = [[NSMutableDictionary alloc] init];
+//    NSArray *streams = [NSArray arrayWithObject:@"diary"];
+//    [filterDic setValue:streams forKey:@"streams"];
+//    NSNumber *skip = [NSNumber numberWithInt:10];
+//    [filterDic setValue:skip forKey:@"skip"];
+//    NSNumber *limit = [NSNumber numberWithInt:5];
+//    [filterDic setValue:limit forKey:@"limit"];
+//    [filterDic setValue:@"trashed" forKey:@"state"];
     [self getEventsWithRequestType:reqType
-                            filter:nil
+                            filter:filterDic
                     successHandler:^(NSArray *onlineEventList) {
                         //Cache is updated here with online events
                         //When come here all events(onlineEventList) are already cached
@@ -758,7 +856,7 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  
-                 NSString *stoppedEventId = [JSON objectForKey:@"id"];
+                 NSString *stoppedEventId = [JSON objectForKey:@"stoppedId"];
                  
                  if (successHandler) {
                      successHandler(stoppedEventId);
@@ -778,7 +876,8 @@
                                  errorHandler:(void (^)(NSError *error))errorHandler
 
 {
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"running"]
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:@"true" forKey:@"running"];    
+    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:parameters]
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil

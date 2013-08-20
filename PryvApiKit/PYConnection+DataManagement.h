@@ -14,25 +14,59 @@
 
 /**
  @discussion
- Gets the accessible streams
+ Get list of all streams
  
  GET /streams/
  
- @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYChannel objects
- @param filterParams  Query string parameters (state ...) Optional. If you don't filter put nil Example : state=all
- @param successHandler A block object to be executed when the operation finishes successfully.
- @param errorHandler   NSError object if some error occurs
+ @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYFolder objects
+ @param filterParams - > Query string parameters (parentId, includeHidden, state ...) They are optional. If you don't filter put nil
+ 
  */
+
 - (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
+                    gotCachedStreams:(void (^) (NSArray *cachedStreamsList))cachedStreams
                     gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
                         errorHandler:(void (^)(NSError *error))errorHandler;
-
 
 - (void)getStreamsWithRequestType:(PYRequestType)reqType
                            filter:(NSDictionary*)filterDic
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
                      errorHandler:(void (^)(NSError *error))errorHandler;
+
+//This is not supposed to be called directly by client app
+/**
+ @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
+ */
+
+- (void)getStreamsWithRequestType:(PYRequestType)reqType
+                     filterParams:(NSDictionary *)filter
+                   successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
+                     errorHandler:(void (^) (NSError *error))errorHandler
+               shouldSyncAndCache:(BOOL)syncAndCache;
+
+
+///**
+// @discussion
+// Gets the accessible streams
+// 
+// GET /streams/
+// 
+// @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYChannel objects
+// @param filterParams  Query string parameters (state ...) Optional. If you don't filter put nil Example : state=all
+// @param successHandler A block object to be executed when the operation finishes successfully.
+// @param errorHandler   NSError object if some error occurs
+// */
+//- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
+//                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
+//                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
+//                        errorHandler:(void (^)(NSError *error))errorHandler;
+//
+//
+//- (void)getStreamsWithRequestType:(PYRequestType)reqType
+//                           filter:(NSDictionary*)filterDic
+//                   successHandler:(void (^) (NSArray *streamsList))onlineStreamList
+//                     errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 /**
  Sync all streams from list
