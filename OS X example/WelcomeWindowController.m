@@ -32,6 +32,15 @@
     [super dealloc];
 }
 
+-(id)initWithWindowNibName:(NSString *)windowNibName{
+    self = [super initWithWindowNibName:windowNibName];
+    if (self){
+    
+    }
+    
+    return self;
+}
+
 - (IBAction)signinButtonPressed:(id)sender {
     if(!signinWindowController)
         signinWindowController = [[SigninWindowController alloc] initWithWindowNibName:@"SigninWindowController"];
@@ -136,10 +145,11 @@
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
+        
         event = [[PYEvent alloc] init];
         event.streamId = @"*";
         event.type = @"note/txt";
-        event.eventContent = @"This is a example note from the OS X Example app.";
+        event.eventContent = @"This is a note from the OS X Example app.";
         event.time = NSTimeIntervalSince1970;
         
         [connection createEvent:event
@@ -173,6 +183,7 @@
         if (event) {
             [connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:^{
               [connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:^{
+                  [PYEventsCachingUtillity removeEvent:event];
                    NSLog(@"Event deleted.");
                 }errorHandler:^(NSError *error) {
                     NSLog(@"Error while deleting : %@",error);
@@ -304,6 +315,54 @@
     }
 }
 
+- (IBAction)addAttachment:(id)sender {
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+
+        NSOpenPanel *openDialog = [NSOpenPanel openPanel];
+        [openDialog setCanChooseDirectories:NO];
+        [openDialog setCanChooseFiles:YES];
+        [openDialog setAllowsMultipleSelection:NO];
+        [openDialog retain]; //Mac OS X 10.6 fix
+        [openDialog beginWithCompletionHandler:^(NSInteger result){
+            NSLog(@"Result ; %ld",(long)result);
+            if (result == NSFileHandlingPanelOKButton) {
+                NSArray *files = [openDialog URLs];
+                NSString *file = [[files objectAtIndex:0] path];
+                NSString *filename = [file lastPathComponent];
+//                NSString *name = [[filename stringByDeletingPathExtension] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+                NSString *name = @"TestName";
+                NSData *fileData = [[NSData alloc] initWithContentsOfFile:file];
+                NSLog(@"Length : %lu", (unsigned long)[fileData length]);
+                PYAttachment *attachment = [[PYAttachment alloc] initWithFileData:fileData
+                                                                             name:name
+                                                                        fileName:filename];
+        
+                eventWithAttachment = [[PYEvent alloc] init];
+                eventWithAttachment.streamId = @"*";
+                eventWithAttachment.type = @"file/attached";
+                eventWithAttachment.time = NSTimeIntervalSince1970;
+                eventWithAttachment.attachments = [NSMutableArray arrayWithObject:attachment];
+                NSLog(@"Attached : %@",eventWithAttachment.attachments);
+                [PYClient setDefaultDomainStaging];
+                PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+                [connection createEvent:eventWithAttachment requestType:PYRequestTypeAsync successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                    NSLog(@"New event ID : %@",newEventId);
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"%@",error);
+                }];
+            }
+            [openDialog release];
+        }];
+    }else{
+        NSLog(@"No user connected !");
+    }
+
+    
+}
+
 - (IBAction)getEvents:(id)sender {
     if ([[[AppDelegate sharedInstance] user] username]) {
         NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user] username]];
@@ -336,7 +395,13 @@
         } gotOnlineEvents:^(NSArray *onlineEventList) {
             NSLog(@"ONLINE EVENTS : ");
             [onlineEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
+                if ([[obj attachments] count] > 0) {
+                    NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
+                    NSLog(@"With attachments :");
+                    NSLog(@"%@", [obj attachments]);
+                }else{
+                    NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
+                }
             }];
         } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
         } errorHandler:^(NSError *error) {

@@ -430,7 +430,6 @@
     if (syncAndCache == YES) {
         [self syncNotSynchedEventsIfAny];
     }
-    
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
          requestType:reqType
               method:PYRequestMethodGET
@@ -683,8 +682,8 @@
                  
                  //Cache particular event in cache
                  [PYEventsCachingUtillity getAndCacheEventWithServerId:createdEventId
-                                                          usingConnection:self
-                                                        requestType:reqType];
+                                                       usingConnection:self
+                                                           requestType:reqType];
                  
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId);
@@ -952,7 +951,9 @@
                       successHandler:(void (^) (NSData * filedata))success
                         errorHandler:(void (^) (NSError *error))errorHandler
 {
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, eventId ,fileName]
+    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, eventId ,fileName];
+    NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    [self apiRequest:urlPath
          requestType:reqType
               method:PYRequestMethodGET
             postData:nil

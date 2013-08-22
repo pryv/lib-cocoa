@@ -42,19 +42,27 @@
 - (NSDictionary *)cachingDictionary
 {
     //"attachmentData" key won't be ever available when we read attachment from cache
-    NSDictionary *attachmentObject = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:self.fileName,
-                                                                          self.mimeType,
-                                                                          self.size,
-                                                                          self.fileData,
-                                                                          nil]
-                                                                 forKeys:[NSArray arrayWithObjects:@"fileName",
-                                                                          @"type",
-                                                                          @"size",
-                                                                          @"attachmentData",
-                                                                          nil]];
-    
+    NSArray *objects = [NSArray arrayWithObjects:self.fileName, self.mimeType, self.size, self.fileData, nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"fileName",@"type",@"size", @"attachmentData", nil];
+    NSDictionary *attachmentObject = [NSDictionary dictionaryWithObjects: objects
+                                                                 forKeys: keys];
     return attachmentObject;
     
+}
+
+-(NSString *)description{
+    NSMutableString *description = [NSMutableString stringWithString:@"<"];
+    [description appendFormat:@"%@",_fileName];
+    if (_size) {
+        [description appendFormat:@" (%@ bytes)",_size];
+    }if (_name) {
+        [description appendFormat:@" - %@",_name];
+    }
+    if (_mimeType) {
+        [description appendFormat:@" - %@",_mimeType];
+    }
+    [description appendString:@">"];
+    return description;
 }
 
 @end

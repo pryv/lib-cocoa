@@ -124,7 +124,6 @@ static NSString *myDefaultDomain;
     if (!MIMEType) {
         return @"application/octet-stream";
     }
-    
     return [(NSString *)MIMEType autorelease];
 }
 

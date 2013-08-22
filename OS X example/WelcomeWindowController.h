@@ -15,6 +15,7 @@
     IBOutlet NSTextField *eventID;
     SigninWindowController *signinWindowController;
     PYEvent *event;
+    PYEvent *eventWithAttachment;
     PYEvent *runningEvent;
     NSMutableArray *streams;
 }
@@ -33,5 +34,6 @@
 - (IBAction)startRunningEvent:(id)sender;
 - (IBAction)stopRunningEvent:(id)sender;
 - (IBAction)getRunningEvent:(id)sender;
+- (IBAction)addAttachment:(id)sender;
 
 @end
