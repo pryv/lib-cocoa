@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYAccessTests.h"
+#import "PYConnectionTests.h"
 
-@interface PYEventsTests : PYAccessTests
+@interface PYEventsTests : PYConnectionTests
 
 @end

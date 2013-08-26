@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C2DEE94178BF79400CDBB54 /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
 		0C2DEE95178BFC8800CDBB54 /* PYWebLoginViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */; };
+		0C35F98517CB8B520010132B /* PYConnection+DataManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEB44DF17BBCDB9009756E7 /* PYConnection+DataManagement.m */; };
 		0C45BEBB17BA43B5005AB58E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C45BEBA17BA43B5005AB58E /* User.m */; };
 		0C54EE0E178C4D3600235B84 /* SigninWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C54EE0C178C4D3600235B84 /* SigninWindowController.m */; };
 		0C54EE0F178C4D3600235B84 /* SigninWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C54EE0D178C4D3600235B84 /* SigninWindowController.xib */; };
@@ -47,10 +48,9 @@
 		3D67412717106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
 		3D67412817106EA10050B251 /* PYEvent+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67412517106EA10050B251 /* PYEvent+JSON.m */; };
 		3D67FFA0173410B5008D437F /* PYWebLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */; };
-		3D6925E4177B73400031F624 /* PYAccessTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E3177B73400031F624 /* PYAccessTests.m */; };
+		3D6925E4177B73400031F624 /* PYConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E3177B73400031F624 /* PYConnectionTests.m */; };
 		3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E6177B79150031F624 /* PYEventsTests.m */; };
-		3D6925EA177B87DC0031F624 /* PYChannelsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E9177B87DC0031F624 /* PYChannelsTests.m */; };
-		3D6925ED177B90380031F624 /* PYFoldersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925EC177B90380031F624 /* PYFoldersTests.m */; };
+		3D6925EA177B87DC0031F624 /* PYStreamsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6925E9177B87DC0031F624 /* PYStreamsTests.m */; };
 		3D6A9577175E75C900FF614E /* PYEventFilter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; };
 		3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6BE313171C75EB0023A39C /* PYAsyncService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D6BE316171C75EB0023A39C /* PYAsyncService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6BE314171C75EB0023A39C /* PYAsyncService.m */; };
@@ -232,14 +232,12 @@
 		3D67412517106EA10050B251 /* PYEvent+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+JSON.m"; sourceTree = "<group>"; };
 		3D67FF9D173410B5008D437F /* PYWebLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYWebLoginViewController.h; sourceTree = "<group>"; };
 		3D67FF9E173410B5008D437F /* PYWebLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYWebLoginViewController.m; sourceTree = "<group>"; };
-		3D6925E2177B73400031F624 /* PYAccessTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAccessTests.h; sourceTree = "<group>"; };
-		3D6925E3177B73400031F624 /* PYAccessTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAccessTests.m; sourceTree = "<group>"; };
+		3D6925E2177B73400031F624 /* PYConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYConnectionTests.h; sourceTree = "<group>"; };
+		3D6925E3177B73400031F624 /* PYConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYConnectionTests.m; sourceTree = "<group>"; };
 		3D6925E5177B79150031F624 /* PYEventsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventsTests.h; sourceTree = "<group>"; };
 		3D6925E6177B79150031F624 /* PYEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventsTests.m; sourceTree = "<group>"; };
-		3D6925E8177B87DC0031F624 /* PYChannelsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYChannelsTests.h; sourceTree = "<group>"; };
-		3D6925E9177B87DC0031F624 /* PYChannelsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYChannelsTests.m; sourceTree = "<group>"; };
-		3D6925EB177B90380031F624 /* PYFoldersTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFoldersTests.h; sourceTree = "<group>"; };
-		3D6925EC177B90380031F624 /* PYFoldersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFoldersTests.m; sourceTree = "<group>"; };
+		3D6925E8177B87DC0031F624 /* PYStreamsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYStreamsTests.h; sourceTree = "<group>"; };
+		3D6925E9177B87DC0031F624 /* PYStreamsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYStreamsTests.m; sourceTree = "<group>"; };
 		3D6BE313171C75EB0023A39C /* PYAsyncService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYAsyncService.h; sourceTree = "<group>"; };
 		3D6BE314171C75EB0023A39C /* PYAsyncService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYAsyncService.m; sourceTree = "<group>"; };
 		3D6C755D1703812B000B9195 /* PYConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYConnection.h; sourceTree = "<group>"; };
@@ -417,12 +415,10 @@
 				3D48974A1778E8AC008C7B66 /* libPryvApiKitLogicTests.m */,
 				3D4897521778EE34008C7B66 /* PryvCachingTests.h */,
 				3D4897531778EE34008C7B66 /* PryvCachingTests.m */,
-				3D6925E2177B73400031F624 /* PYAccessTests.h */,
-				3D6925E3177B73400031F624 /* PYAccessTests.m */,
-				3D6925E8177B87DC0031F624 /* PYChannelsTests.h */,
-				3D6925E9177B87DC0031F624 /* PYChannelsTests.m */,
-				3D6925EB177B90380031F624 /* PYFoldersTests.h */,
-				3D6925EC177B90380031F624 /* PYFoldersTests.m */,
+				3D6925E2177B73400031F624 /* PYConnectionTests.h */,
+				3D6925E3177B73400031F624 /* PYConnectionTests.m */,
+				3D6925E8177B87DC0031F624 /* PYStreamsTests.h */,
+				3D6925E9177B87DC0031F624 /* PYStreamsTests.m */,
 				3D6925E5177B79150031F624 /* PYEventsTests.h */,
 				3D6925E6177B79150031F624 /* PYEventsTests.m */,
 				3D4897441778E8AC008C7B66 /* Supporting Files */,
@@ -933,12 +929,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C35F98517CB8B520010132B /* PYConnection+DataManagement.m in Sources */,
 				3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */,
 				3D4897541778EE34008C7B66 /* PryvCachingTests.m in Sources */,
-				3D6925E4177B73400031F624 /* PYAccessTests.m in Sources */,
+				3D6925E4177B73400031F624 /* PYConnectionTests.m in Sources */,
 				3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */,
-				3D6925EA177B87DC0031F624 /* PYChannelsTests.m in Sources */,
-				3D6925ED177B90380031F624 /* PYFoldersTests.m in Sources */,
+				3D6925EA177B87DC0031F624 /* PYStreamsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1110,7 +1106,9 @@
 		3D48974E1778E8AC008C7B66 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iOs Example.app/iOs Example";
+				CLANG_LINK_OBJC_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -1121,12 +1119,19 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/**",
+					"$(BUILT_PRODUCTS_DIR)/**",
+				);
 				INFOPLIST_FILE = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/**";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUNDLE_LOADER)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/** $(BUILT_PRODUCTS_DIR)/**";
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -1134,18 +1139,27 @@
 		3D48974F1778E8AC008C7B66 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/iOs Example.app/iOs Example";
+				CLANG_LINK_OBJC_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/**",
+					"$(BUILT_PRODUCTS_DIR)/**",
+				);
 				INFOPLIST_FILE = "libPryvApiKitLogicTests/libPryvApiKitLogicTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/**";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUNDLE_LOADER)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/** $(BUILT_PRODUCTS_DIR)/**";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = octest;
 			};

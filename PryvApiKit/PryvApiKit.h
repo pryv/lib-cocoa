@@ -15,6 +15,7 @@
 #import <PryvApiKit/PYEvent.h>
 #import <PryvApiKit/PYEventFilter.h>
 #import <PryvApiKit/PYConnection.h>
+#import <PYConnection+DataManagement.h>
 #import <PryvApiKit/PYStream.h>
 #import <PryvApiKit/PYAttachment.h>
 
