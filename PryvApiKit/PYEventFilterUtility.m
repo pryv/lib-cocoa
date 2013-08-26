@@ -25,7 +25,7 @@
     NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
     while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
         
-        NSLog(@"onlineEventId %@",onlineEvent.eventId);
+        //NSLog(@"onlineEventId %@",onlineEvent.eventId);
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@",onlineEvent.eventId];
         NSArray *results = [cachedEvents filteredArrayUsingPredicate:predicate];

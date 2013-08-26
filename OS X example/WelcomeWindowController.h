@@ -7,17 +7,17 @@
 //
 
 #import <Cocoa/Cocoa.h>
-@class SigninWindowController,PYEvent;
+@class SigninWindowController,PYEvent,PYStream;
 
 @interface WelcomeWindowController : NSWindowController {
     @private
     NSButton *signinButton;
     IBOutlet NSTextField *eventID;
     SigninWindowController *signinWindowController;
+    PYStream *testStream;
     PYEvent *event;
     PYEvent *eventWithAttachment;
     PYEvent *runningEvent;
-    NSMutableArray *streams;
 }
 
 @property (assign) IBOutlet NSButton *signinButton;

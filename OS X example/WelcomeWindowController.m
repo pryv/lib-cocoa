@@ -27,15 +27,13 @@
 -(void)dealloc{
     [event release];
     event = nil;
-    [streams release];
-    streams = nil;
     [super dealloc];
 }
 
 -(id)initWithWindowNibName:(NSString *)windowNibName{
     self = [super initWithWindowNibName:windowNibName];
     if (self){
-    
+        testStream = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:@"osx_example_test_stream"];
     }
     
     return self;
@@ -54,7 +52,6 @@
         
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-        streams = [[NSMutableArray alloc] init];
         [connection getAllStreamsWithRequestType:PYRequestTypeAsync
                                gotCachedStreams:^(NSArray *cachedStreamList) {
                                    NSLog(@"CACHED STREAMS : ");
@@ -65,7 +62,6 @@
                                    NSLog(@"ONLINE STREAMS : ");
                                    [onlineStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                                        NSLog(@"Online : %@ (%@)",[obj name], [obj streamId]);
-                                       [streams addObject:[obj streamId]];
                                    }];
                                } errorHandler:^(NSError *error) {
                                    NSLog(@"%@",error);
@@ -73,7 +69,7 @@
         [connection release];
         connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 }
 
@@ -86,24 +82,22 @@
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
-        PYStream *stream = [[PYStream alloc] init];
-        stream.name = @"OSX_Example_test";
-        stream.streamId = @"osx_example_test_stream";
-        stream.singleActivity = NO;
-        stream.children = @[];
-        stream.connection = connection;
-        [connection createStream:stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
+        testStream = [[PYStream alloc] init];
+        testStream.name = @"OSX_Example_test";
+        testStream.streamId = @"osx_example_test_stream";
+        testStream.singleActivity = NO;
+        testStream.children = @[];
+        testStream.connection = connection;
+        [connection createStream:testStream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
             NSLog(@"New stream ID : %@",createdStreamId);
         } errorHandler:^(NSError *error) {
             NSLog(@"%@",error);
         }];
         
-        [stream release];
-        stream = nil;
         [connection release];
         connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 }
 
@@ -113,31 +107,35 @@
                                                          username]];
         NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
         
-        [PYClient setDefaultDomainStaging];
-        PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-        
-        PYStream *stream = [PYStreamsCachingUtillity
-                            getStreamFromCacheWithStreamId:@"osx_example_test_stream"];
-        [connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
-            [connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
-                [PYStreamsCachingUtillity removeStream:stream];
-                NSLog(@"Stream deleted.");
+        if (testStream) {
+            [PYClient setDefaultDomainStaging];
+            PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+
+            [connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+                [connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+                    [PYStreamsCachingUtillity removeStream:testStream];
+                    NSLog(@"Stream deleted.");
+                    [testStream release];
+                    testStream = nil;
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"%@",error);
+                }];
             } errorHandler:^(NSError *error) {
                 NSLog(@"%@",error);
             }];
-        } errorHandler:^(NSError *error) {
-            NSLog(@"%@",error);
-        }];
-        
-        [connection release];
-        connection = nil;
+            
+            [connection release];
+            connection = nil;
+        }else{
+            NSLog(@"No test stream.");
+        }
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 }
 
 - (IBAction)createTestEvent:(id)sender {
-    if ([[[AppDelegate sharedInstance] user] username]) {
+    if (testStream) {
         NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
                                                          username]];
         NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
@@ -147,7 +145,7 @@
         
         
         event = [[PYEvent alloc] init];
-        event.streamId = @"*";
+        event.streamId = @"osx_example_test_stream";
         event.type = @"note/txt";
         event.eventContent = @"This is a note from the OS X Example app.";
         event.time = NSTimeIntervalSince1970;
@@ -165,14 +163,14 @@
         [connection release];
         connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No test stream. Create one first.");
     }
 
     
 }
 
 - (IBAction)deleteTestEvent:(id)sender {
-    if ([[[AppDelegate sharedInstance] user] username]) {
+    if (testStream) {
         NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
                                                          username]];
         NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
@@ -198,7 +196,7 @@
         [connection release];
         connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No test stream. Create one first.");
     }   
 }
 
@@ -212,21 +210,40 @@
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
         PYEvent *customEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:[eventID stringValue]];
-        [PYEventsCachingUtillity removeEvent:customEvent];
-        [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
-            [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
-                NSLog(@"Event deleted.");
-            }errorHandler:^(NSError *error) {
-                NSLog(@"Error while deleting : %@",error);
-            }];
-        } errorHandler:^(NSError *error) {
-            NSLog(@"Error while trashing : %@",error);
-        }];
         
+        //If not found in cache (removed manually, error, ...)
+        if (!customEvent) {
+            [connection getOnlineEventWithId:[eventID stringValue] requestType:PYRequestTypeAsync successHandler:^(PYEvent *customEvent) {
+                [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
+                    [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
+                        NSLog(@"Event deleted.");
+                    }errorHandler:^(NSError *error) {
+                        NSLog(@"Error while deleting : %@",error);
+                    }];
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"Error while trashing : %@",error);
+                }];
+
+            } errorHandler:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+        }else{
+            [PYEventsCachingUtillity removeEvent:customEvent];
+            [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
+                [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
+                    NSLog(@"Event deleted.");
+                }errorHandler:^(NSError *error) {
+                    NSLog(@"Error while deleting : %@",error);
+                }];
+            } errorHandler:^(NSError *error) {
+                NSLog(@"Error while trashing : %@",error);
+            }];
+        }
+    
         [connection release];
         connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 
     
@@ -242,7 +259,7 @@
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
         runningEvent = [[PYEvent alloc] init];
-        runningEvent.streamId = @"TVWwwYo-mJ";
+        runningEvent.streamId = @"osx_example_test_stream";
         runningEvent.type = @"activity/pryv";
         runningEvent.time = NSTimeIntervalSince1970;
         
@@ -256,7 +273,7 @@
         [connection release];
         connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 }
 
@@ -281,7 +298,7 @@
             NSLog(@"You must start a period event first.");
         }
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 }
 
@@ -294,14 +311,19 @@
         if(runningEvent){
             [PYClient setDefaultDomainStaging];
             PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-            NSArray *activityStream = [NSArray arrayWithObject:@"TVWwwYo-mJ"];
-            NSDictionary *filter = [NSDictionary dictionaryWithObject:activityStream forKey:@"streams"];
+            NSArray *stream = [NSArray arrayWithObject:@"osx_example_test_stream"];
+            NSDictionary *filter = [NSDictionary dictionaryWithObject:stream forKey:@"streams"];
             [connection getRunningPeriodEventsWithRequestType:PYRequestTypeAsync
                                                    parameters:filter
                                                successHandler:^(NSArray *arrayOfEvents) {
-                [arrayOfEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSLog(@"Running event : %@",[obj eventId]);
-                }];
+                                                   if ([arrayOfEvents count] > 0) {
+                                                       [arrayOfEvents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                                           NSLog(@"Running event : %@",[obj eventId]);
+                                                       }];
+                                                   }else{
+                                                       NSLog(@"No running event.");
+                                                   }
+             
             } errorHandler:^(NSError *error) {
                 NSLog(@"%@",error);
             }];
@@ -311,7 +333,7 @@
             NSLog(@"You must start a period event first.");
         }
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 }
 
@@ -327,13 +349,11 @@
         [openDialog setAllowsMultipleSelection:NO];
         [openDialog retain]; //Mac OS X 10.6 fix
         [openDialog beginWithCompletionHandler:^(NSInteger result){
-            NSLog(@"Result ; %ld",(long)result);
             if (result == NSFileHandlingPanelOKButton) {
                 NSArray *files = [openDialog URLs];
                 NSString *file = [[files objectAtIndex:0] path];
                 NSString *filename = [file lastPathComponent];
-//                NSString *name = [[filename stringByDeletingPathExtension] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-                NSString *name = @"TestName";
+                NSString *name = [filename stringByDeletingPathExtension];
                 NSData *fileData = [[NSData alloc] initWithContentsOfFile:file];
                 NSLog(@"Length : %lu", (unsigned long)[fileData length]);
                 PYAttachment *attachment = [[PYAttachment alloc] initWithFileData:fileData
@@ -341,7 +361,7 @@
                                                                         fileName:filename];
         
                 eventWithAttachment = [[PYEvent alloc] init];
-                eventWithAttachment.streamId = @"*";
+                eventWithAttachment.streamId = @"osx_example_test_stream";
                 eventWithAttachment.type = @"file/attached";
                 eventWithAttachment.time = NSTimeIntervalSince1970;
                 eventWithAttachment.attachments = [NSMutableArray arrayWithObject:attachment];
@@ -357,28 +377,22 @@
             [openDialog release];
         }];
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No user connected.");
     }
 
     
 }
 
 - (IBAction)getEvents:(id)sender {
-    if ([[[AppDelegate sharedInstance] user] username]) {
+    if (testStream) {
         NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user] username]];
         NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
         
         [PYClient setDefaultDomainStaging];
         PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
         
-        NSMutableDictionary *filter = [[NSMutableDictionary alloc] init];
-        if (streams) {
-            [filter setValue:streams forKey:@"streams"];
-        }else{
-            streams = [NSArray arrayWithObjects:@"*",nil];
-            [filter setValue:streams forKey:@"streams"];
-        }
-        
+        NSArray *streams = [NSArray arrayWithObjects:@"osx_example_test_stream", nil];
+        NSMutableDictionary *filter = [NSMutableDictionary dictionaryWithObject:streams forKey:@"streams"];
         
 //        NSNumber *skip = [NSNumber numberWithInt:10];
 //        [filter setValue:skip forKey:@"skip"];
@@ -410,7 +424,7 @@
 //        [connection release];
 //        connection = nil;
     }else{
-        NSLog(@"No user connected !");
+        NSLog(@"No test stream. Create one first.");
     }    
 }
 

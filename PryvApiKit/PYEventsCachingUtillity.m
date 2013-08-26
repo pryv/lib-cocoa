@@ -111,7 +111,6 @@
                          requestType:(PYRequestType)reqType
 {
     //In this method we will ask server for event with eventId and we'll cache it
-    NSLog(@"Event id : %@",eventId);
     [connection getOnlineEventWithId:eventId
                          requestType:reqType
                       successHandler:^(PYEvent *event) {
