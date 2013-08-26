@@ -13,6 +13,7 @@
     @private
     NSButton *signinButton;
     IBOutlet NSTextField *eventID;
+    IBOutlet NSTextField *streamID;
     SigninWindowController *signinWindowController;
     PYStream *testStream;
     PYEvent *event;
@@ -35,5 +36,6 @@
 - (IBAction)stopRunningEvent:(id)sender;
 - (IBAction)getRunningEvent:(id)sender;
 - (IBAction)addAttachment:(id)sender;
+- (IBAction)deleteStream:(id)sender;
 
 @end

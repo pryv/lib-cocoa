@@ -33,7 +33,7 @@
 -(id)initWithWindowNibName:(NSString *)windowNibName{
     self = [super initWithWindowNibName:windowNibName];
     if (self){
-        testStream = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:@"osx_example_test_stream"];
+        testStream = [[PYStreamsCachingUtillity getStreamFromCacheWithStreamId:@"osx_example_test_stream"] retain];
     }
     
     return self;
@@ -55,13 +55,13 @@
         [connection getAllStreamsWithRequestType:PYRequestTypeAsync
                                gotCachedStreams:^(NSArray *cachedStreamList) {
                                    NSLog(@"CACHED STREAMS : ");
-                                   [cachedStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                       NSLog(@"Cached : %@ (%@)",[obj name], [obj streamId]);
+                                   [cachedStreamList enumerateObjectsUsingBlock:^(PYStream *stream, NSUInteger idx, BOOL *stop) {
+                                       NSLog(@"Cached : %@ (%@)",[stream name], [stream streamId]);
                                    }];
                                } gotOnlineStreams:^(NSArray *onlineStreamList) {
                                    NSLog(@"ONLINE STREAMS : ");
-                                   [onlineStreamList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                       NSLog(@"Online : %@ (%@)",[obj name], [obj streamId]);
+                                   [onlineStreamList enumerateObjectsUsingBlock:^(PYStream *stream, NSUInteger idx, BOOL *stop) {
+                                       NSLog(@"Online : %@ (%@)",[stream name], [stream streamId]);
                                    }];
                                } errorHandler:^(NSError *error) {
                                    NSLog(@"%@",error);
@@ -106,17 +106,16 @@
         NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
                                                          username]];
         NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
-        
         if (testStream) {
             [PYClient setDefaultDomainStaging];
             PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-
+            
             [connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
                 [connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
                     [PYStreamsCachingUtillity removeStream:testStream];
-                    NSLog(@"Stream deleted.");
                     [testStream release];
                     testStream = nil;
+                    NSLog(@"Stream deleted.");
                 } errorHandler:^(NSError *error) {
                     NSLog(@"%@",error);
                 }];
@@ -245,8 +244,6 @@
     }else{
         NSLog(@"No user connected.");
     }
-
-    
 }
 
 - (IBAction)startRunningEvent:(id)sender {
@@ -379,6 +376,57 @@
     }else{
         NSLog(@"No user connected.");
     }
+
+    
+}
+
+- (IBAction)deleteStream:(id)sender {
+    if ([[[AppDelegate sharedInstance] user] username]) {
+        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
+                                                         username]];
+        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
+        
+        [PYClient setDefaultDomainStaging];
+        PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+        
+        PYStream *customStream = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:[streamID stringValue]];
+        
+        //If not found in cache (removed manually, error, ...)
+        if (!customStream) {
+                [connection getOnlineStreamWithId:customStream.streamId requestType:PYRequestTypeAsync successHandler:^(PYStream *stream) {
+                    [connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+                        [connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+                            [PYStreamsCachingUtillity removeStream:stream];
+                            NSLog(@"Stream deleted.");
+                        } errorHandler:^(NSError *error) {
+                            NSLog(@"Error while deleting stream : %@",error);
+                        }];
+                    } errorHandler:^(NSError *error) {
+                        NSLog(@"Error while trashing stream : %@",error);
+                    }];
+                } errorHandler:^(NSError *error) {
+                    NSLog(@"%@",error);
+                }];
+        }else{
+            [connection trashOrDeleteStream:customStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+                [connection trashOrDeleteStream:customStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+                    [PYStreamsCachingUtillity removeStream:customStream];
+                    NSLog(@"Stream deleted.");
+                }errorHandler:^(NSError *error) {
+                    NSLog(@"Error while deleting : %@",error);
+                }];
+            } errorHandler:^(NSError *error) {
+                NSLog(@"Error while trashing : %@",error);
+            }];
+        }
+        
+        [connection release];
+        connection = nil;
+    }else{
+        NSLog(@"No user connected.");
+    }
+    
+    
 
     
 }

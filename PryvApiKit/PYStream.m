@@ -96,4 +96,24 @@
     
 }
 
+-(NSString *)description{
+    NSMutableString *description = [NSMutableString stringWithString:@""];
+    
+    [description appendString:@"<"];
+    [description appendFormat:@"%@",_name];
+    [description appendFormat:@" (%@)",_streamId];
+    
+    if (_singleActivity) {
+        [description appendString:@" is single activity"];
+    }
+    if (_parentId) {
+        [description appendFormat:@" in %@",_parentId];
+    }
+    if ([_children count] > 0) {
+        [description appendFormat:@" with children %@",_children];
+    }
+    [description appendString:@">"];
+    return description;
+}
+
 @end

@@ -27,14 +27,15 @@
     STAssertNotNil(self.streamForTest, @"Test stream isn't created");
     
     PYStream *stream = [[PYStream alloc] init];
-    stream.streamId = @"snfjsgfujkasf";
-    stream.name = @"jskdhf738rjhadgdsf";
+    stream.streamId = @"pystreamstests";
+    stream.name = @"PYStreamsTests";
     
     
     __block NSString *createdStreamIdFromServer;
     [self.connection createStream:stream withRequestType:PYRequestTypeSync successHandler:^(NSString *createdStreamId) {
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
         createdStreamIdFromServer = [NSString stringWithString:createdStreamId];
+        NSLog(@"New stream ID : %@",createdStreamIdFromServer);
         [PYStreamsCachingUtillity cacheStream:stream];
     } errorHandler:^(NSError *error) {
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@",error);
@@ -45,7 +46,7 @@
     STAssertNil(streamFromCacheWithFakeId, @"This must be nil. It's fake stream id");
     
     PYStream *streamFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:createdStreamIdFromServer];
-    STAssertNotNil(streamFromCache, @"");
+    STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
     
     [self.connection getAllStreamsWithRequestType:PYRequestTypeSync gotCachedStreams:^(NSArray *cachedStreamsList) {
         
@@ -54,6 +55,17 @@
     } errorHandler:^(NSError *error) {
         
     }];
+    
+    [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeSync successHandler:^{
+        [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeSync successHandler:^{
+            NSLog(@"Test stream deleted.");
+        } errorHandler:^(NSError *error) {
+            STFail(@"Failed while deleting stream : %@",error);
+        }];
+    } errorHandler:^(NSError *error) {
+        STFail(@"Failed while trashing stream : %@",error);
+    }];
+    
 }
 
 - (void)tearDown
