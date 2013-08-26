@@ -31,10 +31,8 @@
         event.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
 
-    NSString *type = [JSON objectForKey:@"type"];
-    NSArray *components = [type componentsSeparatedByString:@"/"];
-    event.eventClass = [components objectAtIndex:0];
-    event.eventFormat = [components objectAtIndex:1];
+    event.type = [JSON objectForKey:@"type"];
+    
     if ([JSON objectForKey:@"content"] == [NSNull null]) {
         event.eventContent = nil;
     }else{

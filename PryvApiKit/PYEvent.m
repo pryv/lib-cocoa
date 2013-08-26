@@ -15,8 +15,6 @@
 @synthesize time = _time;
 @synthesize duration = _duration;
 @synthesize type = _type;
-@synthesize eventClass = _eventClass;
-@synthesize eventFormat = _eventFormat;
 @synthesize eventContent = _eventContent;
 @synthesize streamId = _streamId;
 @synthesize tags = _tags;
@@ -111,18 +109,9 @@
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 
-//    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-//        
-//        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-//        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-//        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-//
-//        [dic setObject:typeDic forKey:@"type"];
-//    }
-//    
-//    if (_eventId) {
-//        [dic setObject:_eventId forKey:@"id"];
-//    }
+    if (_eventId) {
+        [dic setObject:_eventId forKey:@"id"];
+    }
     
     if (_type) {
         [dic setObject:_type forKey:@"type"];
@@ -164,8 +153,6 @@
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-//    [description appendFormat:@", self.eventClass=%@", self.eventClass];
-//    [description appendFormat:@", self.eventFormat=%@", self.eventFormat];
     [description appendFormat:@", self.type=%@", self.type];
     [description appendFormat:@", self.eventId=%@", self.eventId];
     [description appendFormat:@", self.time=%f", self.time];
@@ -187,8 +174,6 @@
 - (void)dealloc
 {
     [_eventId release];
-    [_eventClass release];
-    [_eventFormat release];
     [_type release];
     [_eventContent release];
     [_streamId release];
