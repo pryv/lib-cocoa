@@ -149,6 +149,7 @@
         event.eventContent = @"This is a note from the OS X Example app.";
         event.time = NSTimeIntervalSince1970;
         
+        NSLog(@"%@",event);
         [connection createEvent:event
                     requestType:PYRequestTypeAsync
                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
@@ -393,6 +394,7 @@
         
         //If not found in cache (removed manually, error, ...)
         if (!customStream) {
+            NSLog(@"Custom stream id : %@",customStream.streamId);
                 [connection getOnlineStreamWithId:customStream.streamId requestType:PYRequestTypeAsync successHandler:^(PYStream *stream) {
                     [connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
                         [connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
@@ -408,6 +410,7 @@
                     NSLog(@"%@",error);
                 }];
         }else{
+            NSLog(@"Custom stream id : %@",customStream.streamId);
             [connection trashOrDeleteStream:customStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
                 [connection trashOrDeleteStream:customStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
                     [PYStreamsCachingUtillity removeStream:customStream];

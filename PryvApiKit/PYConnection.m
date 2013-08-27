@@ -150,20 +150,22 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         stream.isSyncTriedNow = YES;
         
         if (stream.hasTmpId) {
-            
             if (stream.notSyncModify) {
                 NSLog(@"stream has tmpId and it's mofified -> do nothing. If stream doesn't have server id it needs to be added to server and that is all what is matter. Modified object will update PYStream object in cache and in unsyncList");
                 
             }
             NSLog(@"stream has tmpId and it's added");
             if (stream.notSyncAdd) {
-                
+                NSString *tempId = [NSString stringWithString:stream.streamId];
+                stream.streamId = @"";
                 [self createStream:stream
                    withRequestType:PYRequestTypeSync
                     successHandler:^(NSString *createdStreamId) {
                         //If succedded remove from unsyncSet and add call syncStreamWithServer
                         //In that method we were search for stream with <createdStreamId> and we should done mapping between server and temp id in cache
                         stream.synchedAt = [[NSDate date] timeIntervalSince1970];
+                        stream.streamId = [NSString stringWithString:tempId];
+                        
                         [self.streamsNotSync removeObject:stream];
                         //We have success here. Stream is cached in createStream:withRequestType: method, remove old stream with tmpId from cache
                         //He will always have tmpId here but just in case for testing (defensive programing)
@@ -171,7 +173,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                         
                     } errorHandler:^(NSError *error) {
                         stream.isSyncTriedNow = NO;
-                        NSLog(@"SYNC error: creating stream failed");
+                        NSLog(@"SYNC error: creating stream failed.");
+                        NSLog(@"%@",error);
                     }];
             }
             
@@ -225,6 +228,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             }
             NSLog(@"event has tmpId and it's added");
             if (event.notSyncAdd) {
+                NSString *tempId = [NSString stringWithString:event.eventId];
+                event.eventId = nil;
+                NSLog(@"%@",event);
                 [self createEvent:event
                       requestType:PYRequestTypeSync
                    successHandler:^(NSString *newEventId, NSString *stoppedId) {
@@ -232,6 +238,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
                        //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
                        event.synchedAt = [[NSDate date] timeIntervalSince1970];
+                       event.eventId = [NSString stringWithString:tempId];
+                       
                        [self.eventsNotSync removeObject:event];
                        //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
                        //He will always have tmpId here but just in case for testing (defensive programing)
@@ -241,6 +249,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        //reset flag if fail, very IMPORTANT
                        event.isSyncTriedNow = NO;
                        NSLog(@"SYNC error: creating event failed");
+                       NSLog(@"%@",error);
                    }];
             }
             
@@ -307,7 +316,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         //HAVE Internet
         NSLog(@"HAVE internet");
         _online = YES;
-        [self syncNotSynchedStreamsIfAny];
+        //[self syncNotSynchedStreamsIfAny];
         [self syncNotSynchedEventsIfAny];
     }
 }
