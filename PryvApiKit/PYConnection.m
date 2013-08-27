@@ -13,10 +13,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConnection.h"
 #import "PYClient.h"
 #import "PYConstants.h"
-#import "PYChannel+JSON.h"
 #import "PYEventsCachingUtillity.h"
 #import "PYStreamsCachingUtillity.h"
-#import "PYChannelsCachingUtillity.h"
 #import "PYStream.h"
 #import "PYStream+JSON.h"
 
@@ -138,6 +136,160 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return _streamsNotSync;
 }
 
+- (void)syncNotSynchedStreamsIfAny
+{
+    NSMutableArray *nonSyncStreams = [[[NSMutableArray alloc] init] autorelease];
+    [nonSyncStreams addObjectsFromArray:[self.streamsNotSync allObjects]];
+    for (PYStream *stream in nonSyncStreams) {
+        
+        //the condition is not correct : set self.channelId to shut error up, should be parentId
+        //        if ([stream.parentId compare:self.channelId] == NSOrderedSame) {
+        //We sync only events for particular channel at time
+        
+        //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
+        stream.isSyncTriedNow = YES;
+        
+        if (stream.hasTmpId) {
+            
+            if (stream.notSyncModify) {
+                NSLog(@"stream has tmpId and it's mofified -> do nothing. If stream doesn't have server id it needs to be added to server and that is all what is matter. Modified object will update PYStream object in cache and in unsyncList");
+                
+            }
+            NSLog(@"stream has tmpId and it's added");
+            if (stream.notSyncAdd) {
+                
+                [self createStream:stream
+                   withRequestType:PYRequestTypeSync
+                    successHandler:^(NSString *createdStreamId) {
+                        //If succedded remove from unsyncSet and add call syncStreamWithServer
+                        //In that method we were search for stream with <createdStreamId> and we should done mapping between server and temp id in cache
+                        stream.synchedAt = [[NSDate date] timeIntervalSince1970];
+                        [self.streamsNotSync removeObject:stream];
+                        //We have success here. Stream is cached in createStream:withRequestType: method, remove old stream with tmpId from cache
+                        //He will always have tmpId here but just in case for testing (defensive programing)
+                        [PYStreamsCachingUtillity removeStream:stream];
+                        
+                    } errorHandler:^(NSError *error) {
+                        stream.isSyncTriedNow = NO;
+                        NSLog(@"SYNC error: creating stream failed");
+                    }];
+            }
+            
+        }else{
+            NSLog(@"In this case stream has server id");
+            
+            if (stream.notSyncModify) {
+                NSLog(@"for modifified unsync streams with serverId we have to provide only modified values, not full event object");
+                
+                NSDictionary *modifiedPropertiesDic = stream.modifiedStreamPropertiesAndValues;
+                PYStream *modifiedStream = [[PYStream alloc] init];
+                modifiedStream.isSyncTriedNow = YES;
+                
+                [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
+                    [modifiedStream setValue:value forKey:property];
+                }];
+                
+                [self setModifiedStreamAttributesObject:modifiedStream forStreamId:stream.streamId requestType:PYRequestTypeSync successHandler:^{
+                    
+                    //We have success here. Stream is cached in setModifiedStreamAttributesObject:forStreamId method
+                    stream.synchedAt = [[NSDate date] timeIntervalSince1970];
+                    [self.streamsNotSync removeObject:stream];
+                    
+                } errorHandler:^(NSError *error) {
+                    modifiedStream.isSyncTriedNow = NO;
+                    stream.isSyncTriedNow = NO;
+                }];
+            }
+        }
+    }
+    // }
+}
+
+- (void)syncNotSynchedEventsIfAny
+{
+    NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
+    [nonSyncEvents addObjectsFromArray:[self.eventsNotSync allObjects]];
+    for (PYEvent *event in nonSyncEvents) {
+        
+        //if ([event.channelId compare:self.channelId] == NSOrderedSame) {
+        //We sync only events for particular channel at time
+        
+        //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
+        event.isSyncTriedNow = YES;
+        
+        if (event.hasTmpId == YES) {
+            
+            if (event.notSyncModify || event.notSyncTrashOrDelete) {
+                NSLog(@"event has tmpId and it's mofified or trashed do nothing. If event doesn't have server id it needs to be added to server and that is all what is matter. Modified or trashed or deleted object will update PYEvent object in cache and in unsyncList");
+                
+            }
+            NSLog(@"event has tmpId and it's added");
+            if (event.notSyncAdd) {
+                [self createEvent:event
+                      requestType:PYRequestTypeSync
+                   successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                       
+                       //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
+                       //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
+                       event.synchedAt = [[NSDate date] timeIntervalSince1970];
+                       [self.eventsNotSync removeObject:event];
+                       //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
+                       //He will always have tmpId here but just in case for testing (defensive programing)
+                       [PYEventsCachingUtillity removeEvent:event];
+                       
+                   } errorHandler:^(NSError *error) {
+                       //reset flag if fail, very IMPORTANT
+                       event.isSyncTriedNow = NO;
+                       NSLog(@"SYNC error: creating event failed");
+                   }];
+            }
+            
+        }else{
+            NSLog(@"In this case event has server id");
+            
+            if (event.notSyncModify) {
+                NSLog(@"for modifified unsync events with serverId we have to provide only modified values, not full event object");
+                
+                NSDictionary *modifiedPropertiesDic = event.modifiedEventPropertiesAndValues;
+                PYEvent *modifiedEvent = [[PYEvent alloc] init];
+                modifiedEvent.isSyncTriedNow = YES;
+                
+                [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
+                    [modifiedEvent setValue:value forKey:property];
+                }];
+                
+                [self setModifiedEventAttributesObject:modifiedEvent
+                                            forEventId:event.eventId
+                                           requestType:PYRequestTypeSync
+                                        successHandler:^(NSString *stoppedId) {
+                                            
+                                            //We have success here. Event is cached in setModifiedEventAttributesObject:forEventId method
+                                            
+                                            event.synchedAt = [[NSDate date] timeIntervalSince1970];
+                                            [self.eventsNotSync removeObject:event];
+                                            
+                                        } errorHandler:^(NSError *error) {
+                                            modifiedEvent.isSyncTriedNow = NO;
+                                            event.isSyncTriedNow = NO;
+                                            
+                                        }];
+            }
+            
+            if (event.notSyncTrashOrDelete) {
+                [self trashOrDeleteEvent:event
+                         withRequestType:PYRequestTypeSync
+                          successHandler:^{
+                              
+                          } errorHandler:^(NSError *error) {
+                              event.isSyncTriedNow = NO;
+                          }];
+            }
+        }
+        //}
+    }
+}
+
+
 #pragma mark - Reachability
 
 //Called by Reachability whenever status changes.
@@ -155,17 +307,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         //HAVE Internet
         NSLog(@"HAVE internet");
         _online = YES;
-        [self getAllChannelsWithRequestType:PYRequestTypeAsync gotCachedChannels:NULL gotOnlineChannels:^(NSArray *onlineChannelList) {
-            
-            //Sync ALL events and folders
-            for (PYChannel *channel in onlineChannelList) {
-                [channel syncNotSynchedStreamsIfAny];
-                [channel syncNotSynchedEventsIfAny];
-            }
-            
-        } errorHandler:^(NSError *error) {
-            
-        }];
+        [self syncNotSynchedStreamsIfAny];
+        [self syncNotSynchedEventsIfAny];
     }
 }
 
@@ -249,115 +392,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                     
                  }
                  failure:failureHandler];
-}
-
-#pragma mark - PrYv API Channel get all (GET /channnels)
-
-- (void)getAllChannelsWithRequestType:(PYRequestType)reqType
-                    gotCachedChannels:(void (^) (NSArray *cachedChannelList))cachedChannels
-                    gotOnlineChannels:(void (^) (NSArray *onlineChannelList))onlineChannels
-                         errorHandler:(void (^)(NSError *error))errorHandler;
-
-{
-    //Return current cached channels
-    NSArray *allChannelsFromCache = [PYChannelsCachingUtillity getChannelsFromCache];
-    [allChannelsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
-    if (cachedChannels) {
-        NSUInteger currentNumberOfChannelsInCache = [PYChannelsCachingUtillity getChannelsFromCache].count;
-        if (currentNumberOfChannelsInCache > 0) {
-            //if there are cached channels return it, when get response return in onlineList
-            cachedChannels(allChannelsFromCache);
-        }
-    }
-
-    //This method should retrieve always online channels and channelsToAdd, channelsModified, channelsToRemove (for visual details) - not yet implemented due to web service limitations
-    [self getChannelsWithRequestType:reqType
-                              filter:nil
-                      successHandler:^(NSArray *channelsList) {
-                            if (onlineChannels) {
-                                onlineChannels(channelsList);
-                            }
-                      }
-                        errorHandler:errorHandler];
-
-}
-
-- (void)getChannelsWithRequestType:(PYRequestType)reqType
-                            filter:(NSDictionary*)filterDic
-                    successHandler:(void (^) (NSArray *eventList))onlineChannelList
-                      errorHandler:(void (^)(NSError *error))errorHandler
-{
-    //This method should retrieve always online channels and need to cache (sync) online channels
-
-    [self apiRequest:[PYClient getURLPath:kROUTE_CHANNELS withParams:filterDic]
-         requestType:reqType
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 
-                 NSMutableArray *channelList = [[NSMutableArray alloc] init];
-                 for(NSDictionary *channelDictionary in JSON){
-                     PYChannel *channelObject = [PYChannel channelFromJson:channelDictionary];
-                     channelObject.connection = self;
-                     [channelList addObject:channelObject];
-                 }
-                 if(onlineChannelList){
-                     [PYChannelsCachingUtillity cacheChannels:JSON];
-                     onlineChannelList([channelList autorelease]);
-                 }
-             } failure:^(NSError *error){
-                 if(errorHandler){
-                     errorHandler(error);
-                 }
-             }
-     ];
-
-}
-
-- (void)editChannelWithRequestType:(PYRequestType)reqType
-                         channelId:(NSString *)channelId
-                              data:(NSDictionary *)data
-                    successHandler:(void (^)())successHandler
-                      errorHandler:(void (^)(NSError *error))errorHandler
-{
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_CHANNELS, channelId]
-         requestType:reqType
-              method:PYRequestMethodPUT
-            postData:data
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 if(successHandler){
-                     successHandler();
-                 }
-             } failure:^(NSError *error){
-                 if(errorHandler){
-                     errorHandler(error);
-                 }
-             }];
-}
-
-- (void)deleteChannelWithRequestType:(PYRequestType)reqType
-                           channelId:(NSString *)channelId
-                      successHandler:(void (^)())successHandler
-                        errorHandler:(void (^)(NSError *error))errorHandler
-{
-    
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_CHANNELS, channelId]
-             requestType:reqType
-                  method:PYRequestMethodDELETE
-                postData:nil
-             attachments:nil
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     if(successHandler){
-                         successHandler();
-                     }
-                 } failure:^(NSError *error){
-                     if(errorHandler){
-                         errorHandler(error);
-                     }
-                 }];
-    
 }
 
 #pragma mark - PrYv API authorize and get server time (GET /)

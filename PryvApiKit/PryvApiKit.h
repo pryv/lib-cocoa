@@ -11,7 +11,6 @@
 #import <PryvApiKit/PYErrorUtility.h>
 
 // Model
-#import <PryvApiKit/PYChannel.h>
 #import <PryvApiKit/PYEvent.h>
 #import <PryvApiKit/PYEventFilter.h>
 #import <PryvApiKit/PYConnection.h>
@@ -24,7 +23,6 @@
 //#import <PryvApiKit/PYEventClient.h>
 #import <PryvApiKit/PYCachingController.h>
 #import <PryvApiKit/PYEventsCachingUtillity.h>
-#import <PryvApiKit/PYChannelsCachingUtillity.h>
 #import <PryvApiKit/PYStreamsCachingUtillity.h>
 
 #import <PryvApiKit/PYWebLoginViewController.h>

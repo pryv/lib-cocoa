@@ -69,12 +69,6 @@
 
 
 /**
- Sync all streams from list
- */
-- (void)syncNotSynchedStreamsIfAny;
-
-
-/**
  @discussion
  Create a new stream
  streams have one unique Id AND one unique name. Both must be unique
@@ -160,11 +154,6 @@
                      successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                        errorHandler:(void (^)(NSError *error))errorHandler;
 
-
-/**
- Sync all events from list
- */
-- (void)syncNotSynchedEventsIfAny;
 
 //POST /{channel-id}/events
 /*Records a new event. Events recorded this way must be completed events, i.e. either period events with a known duration or mark events. To start a running period event, post a events/start request. In addition to the usual JSON, this request accepts standard multipart/form-data content to support the creation of event with attached files in a single request. When sending a multipart request, one content part must hold the JSON for the new event and all other content parts must be the attached files.*/

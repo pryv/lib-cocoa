@@ -6,6 +6,7 @@
 
 #import "PYStream.h"
 #import "PYConnection.h"
+#import "PYClient.h"
 
 
 @implementation PYStream

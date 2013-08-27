@@ -7,7 +7,6 @@
 //
 
 @class PYEvent;
-@class PYChannel;
 @class PYStream;
 #import <Foundation/Foundation.h>
 
@@ -45,15 +44,6 @@
  Get single PYEvent object from disk for key
  */
 - (PYEvent *)getEventWithKey:(NSString *)key;
-
-/**
- Get all PYChannel objects fro disk
- */
-- (NSArray *)getAllChannelsFromCache;
-/**
- Get single PYChannel object from disk for key
- */
-- (PYChannel *)getChannelWithKey:(NSString *)key;
 /**
  Get all PYStream objects from disk
  */

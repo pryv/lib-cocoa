@@ -10,8 +10,6 @@
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
-#import "PYChannel.h"
-#import "PYChannel+JSON.h"
 #import "PYEventFilter.h"
 #import "PYStream.h"
 #import "PYStream+JSON.h"
@@ -113,23 +111,6 @@
     return nil;
 }
 
-
-- (NSArray *)getAllChannelsFromCache
-{
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'channel_'"];
-    if (!filesWithSelectedPrefix.count) {
-        return nil;
-    }
-    
-    NSMutableArray *arrayOFCachedChannels = [[NSMutableArray alloc] init];
-    for (NSString *channelCachedName in filesWithSelectedPrefix) {
-        NSDictionary *channelDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:channelCachedName]];
-        [arrayOFCachedChannels addObject:[PYChannel channelFromJson:channelDic]];
-    }
-    
-    return arrayOFCachedChannels;
-}
-
 - (NSArray *)getAllStreamsFromCache
 {
     NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'stream_'"];
@@ -146,17 +127,6 @@
     return arrayOFCachedStreams;
 }
 
-- (PYChannel *)getChannelWithKey:(NSString *)key
-{
-    if ([self isDataCachedForKey:key]) {
-        NSData *channelData = [self getDataForKey:key];
-        NSDictionary *channelDic = [PYJSONUtility getJSONObjectFromData:channelData];
-        return [PYChannel channelFromJson:channelDic];
-    }
-    
-    return nil;
-
-}
 - (PYStream *)getStreamWithKey:(NSString *)key
 {
     if ([self isDataCachedForKey:key]) {

@@ -7,7 +7,6 @@
 //
 
 @class PYStream;
-@class PYChannel;
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
