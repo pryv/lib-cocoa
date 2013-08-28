@@ -344,25 +344,29 @@
         NSOpenPanel *openDialog = [NSOpenPanel openPanel];
         [openDialog setCanChooseDirectories:NO];
         [openDialog setCanChooseFiles:YES];
-        [openDialog setAllowsMultipleSelection:NO];
+        [openDialog setAllowsMultipleSelection:YES];
         [openDialog retain]; //Mac OS X 10.6 fix
         [openDialog beginWithCompletionHandler:^(NSInteger result){
             if (result == NSFileHandlingPanelOKButton) {
                 NSArray *files = [openDialog URLs];
-                NSString *file = [[files objectAtIndex:0] path];
-                NSString *filename = [file lastPathComponent];
-                NSString *name = [filename stringByDeletingPathExtension];
-                NSData *fileData = [[NSData alloc] initWithContentsOfFile:file];
-                NSLog(@"Length : %lu", (unsigned long)[fileData length]);
-                PYAttachment *attachment = [[PYAttachment alloc] initWithFileData:fileData
-                                                                             name:name
-                                                                        fileName:filename];
-        
+                NSMutableArray *attachments = [[NSMutableArray alloc] init];
+                for(NSURL *f in files){
+                    NSString *file = [f path];
+                    NSString *filename = [file lastPathComponent];
+                    NSString *name = [filename stringByDeletingPathExtension];
+                    NSData *fileData = [[NSData alloc] initWithContentsOfFile:file];
+                    NSLog(@"Length : %lu", (unsigned long)[fileData length]);
+                    PYAttachment *attachment = [[PYAttachment alloc] initWithFileData:fileData
+                                                                   name:name
+                                                               fileName:filename];
+                    [attachments addObject:attachment];
+                }
+                
                 eventWithAttachment = [[PYEvent alloc] init];
                 eventWithAttachment.streamId = @"osx_example_test_stream";
-                eventWithAttachment.type = @"file/attached";
+                eventWithAttachment.type = @"file/attached-multiple";
                 eventWithAttachment.time = NSTimeIntervalSince1970;
-                eventWithAttachment.attachments = [NSMutableArray arrayWithObject:attachment];
+                eventWithAttachment.attachments = [NSMutableArray arrayWithArray:attachments];
                 NSLog(@"Attached : %@",eventWithAttachment.attachments);
                 [PYClient setDefaultDomainStaging];
                 PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
@@ -370,6 +374,7 @@
                     NSLog(@"New event ID : %@",newEventId);
                 } errorHandler:^(NSError *error) {
                     NSLog(@"%@",error);
+                    NSLog(@"UserInfo: %@",[error userInfo]);
                 }];
             }
             [openDialog release];
@@ -458,16 +463,21 @@
                 NSLog(@"Cached : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
             }];
         } gotOnlineEvents:^(NSArray *onlineEventList) {
-            NSLog(@"ONLINE EVENTS : ");
-            [onlineEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if ([[obj attachments] count] > 0) {
-                    NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
-                    NSLog(@"With attachments :");
-                    NSLog(@"%@", [obj attachments]);
-                }else{
-                    NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
-                }
-            }];
+            if ([onlineEventList count] > 0) {
+                NSLog(@"ONLINE EVENTS : ");
+                [onlineEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if ([[obj attachments] count] > 0) {
+                        NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
+                        NSLog(@"With attachments :");
+                        NSLog(@"%@", [obj attachments]);
+                    }else{
+                        NSLog(@"Online : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
+                    }
+                }];
+
+            }else{
+                NSLog(@"No online events.");
+            }
         } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
         } errorHandler:^(NSError *error) {
             NSLog(@"%@",error);
