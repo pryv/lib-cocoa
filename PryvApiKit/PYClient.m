@@ -242,6 +242,8 @@ static NSString *myDefaultDomain;
         // end
         [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding]];
         [request setHTTPBody:bodyData];
+        //NSString *bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
+        //NSLog(@"Request : %@\n%@",[request allHTTPHeaderFields],bodyString);
         [bodyData release];
         
     }else{
@@ -260,7 +262,6 @@ static NSString *myDefaultDomain;
         
 
     }
-    
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
 }
 
