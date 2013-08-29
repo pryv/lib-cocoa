@@ -242,8 +242,11 @@ static NSString *myDefaultDomain;
         // end
         [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding]];
         [request setHTTPBody:bodyData];
-        //NSString *bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
-        //NSLog(@"Request : %@\n%@",[request allHTTPHeaderFields],bodyString);
+        
+        //####### DISPLAY SENT REQUEST (use with plain text attachment(s) only)#########
+        
+//        NSString *bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
+//        NSLog(@"Request : %@\n%@",[request allHTTPHeaderFields],bodyString);
         [bodyData release];
         
     }else{
@@ -259,9 +262,7 @@ static NSString *myDefaultDomain;
         if (postDataa) {
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
-        
-
-    }
+    }    
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
 }
 
