@@ -432,11 +432,7 @@
         connection = nil;
     }else{
         NSLog(@"No user connected.");
-    }
-    
-    
-
-    
+    }    
 }
 
 - (IBAction)getEvents:(id)sender {
@@ -459,9 +455,9 @@
         
         [connection getEventsWithRequestType:PYRequestTypeAsync parameters:filter gotCachedEvents:^(NSArray *cachedEventList) {
             NSLog(@"CACHED EVENTS :");
-            [cachedEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSLog(@"Cached : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
-            }];
+//            [cachedEventList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                NSLog(@"Cached : %@ => %@ in stream %@",[obj eventId],[obj eventContent],[obj streamId]);
+//            }];
         } gotOnlineEvents:^(NSArray *onlineEventList) {
             if ([onlineEventList count] > 0) {
                 NSLog(@"ONLINE EVENTS : ");

@@ -322,7 +322,7 @@
               successHandler:(void (^) (PYEvent *event))onlineEvent
                 errorHandler:(void (^) (NSError *error))errorHandler
 {
-    //Method below automatically cache (overwrite) all events from this channel, so this is bad
+    //Method below automatically cache (overwrite) all events, so this is bad
     //When API support separate method of getting only one event by its id this will be implemneted here
     
     //This method should get particular event and return it, not to cache it
@@ -378,8 +378,8 @@
                      PYEvent *event = [PYEvent getEventFromDictionary:eventDic];
                      [eventsArray addObject:event];
                      if (event.attachments.count > 0) {
-                         for (int i = 0; i < event.attachments.count; i++) {
-                             PYAttachment *attachment = [event.attachments objectAtIndex:i];
+                         for (int j = 0; j < event.attachments.count; j++) {
+                             PYAttachment *attachment = [event.attachments objectAtIndex:j];
                              NSString *fileName = attachment.fileName;
                              [self getAttachmentDataForFileName:fileName
                                                         eventId:event.eventId
@@ -388,7 +388,6 @@
                                                      
                                                      attachment.fileData = filedata;
                                                      [eventsCachingArray replaceObjectAtIndex:i withObject:[event cachingDictionary]];
-                                                     
                                                      
                                                  } errorHandler:errorHandler];
                          }

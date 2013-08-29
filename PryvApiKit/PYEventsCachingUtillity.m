@@ -28,11 +28,9 @@
     NSMutableDictionary *eventForCache = [event mutableCopy];
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
     NSMutableDictionary *attachmentsDic = [[eventForCache objectForKey:@"attachments"] mutableCopy];
-    
     if (attachmentsDic && attachmentsDic.count > 0) {
         
-        
-        [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
+        [[eventForCache objectForKey:@"attachments"] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
             
             NSMutableDictionary *mutableAttachmentDataDic = [attachmentDataDic mutableCopy];
             
