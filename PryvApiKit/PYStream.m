@@ -111,7 +111,10 @@
         [description appendFormat:@" in %@",_parentId];
     }
     if ([_children count] > 0) {
-        [description appendFormat:@" with children %@",_children];
+        [description appendString:@" with children : "];
+        for (PYStream *child in _children) {
+            [description appendFormat:@" %@,", child.name];
+        }
     }
     [description appendString:@">"];
     return description;
