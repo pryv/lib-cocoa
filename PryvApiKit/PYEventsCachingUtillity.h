@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-@class PYEvent, PYConnection;
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+
+@class PYEvent, PYConnection;
 
 @interface PYEventsCachingUtillity : NSObject
 

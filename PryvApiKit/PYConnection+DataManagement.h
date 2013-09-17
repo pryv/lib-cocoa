@@ -6,7 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <PryvApiKit/PryvApiKit.h>
+#import "PYClient.h"
+#import "PYConnection.h"
 
 @interface PYConnection (DataManagement)
 

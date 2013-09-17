@@ -10,7 +10,10 @@
 #import "PYStream+JSON.h"
 #import "PYStreamsCachingUtillity.h"
 #import "PYEventFilterUtility.h"
-
+#import "PYConstants.h"
+#import "PYEvent.h"
+#import "PYAttachment.h"
+#import "PYEventsCachingUtillity.h"
 
 @implementation PYConnection (DataManagement)
 
