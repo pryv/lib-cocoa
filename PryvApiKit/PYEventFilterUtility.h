@@ -5,10 +5,12 @@
 //  Created by Nenad Jelic on 6/8/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
-@class PYEventFilter;
-@class PYChannel;
+
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+
+@class PYEventFilter;
+@class PYChannel;
 
 @interface PYEventFilterUtility : NSObject
 

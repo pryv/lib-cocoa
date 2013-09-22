@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
-#import "Reachability.h"
+
+@class Reachability;
 @class PYEvent;
 @class PYStream;
 

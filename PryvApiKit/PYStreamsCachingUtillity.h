@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-@class PYStream;
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+
+@class PYStream;
 
 @interface PYStreamsCachingUtillity : NSObject
 

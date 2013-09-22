@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <PryvApiKit/PryvApiKit.h>
+#import "PYStream.h"
 
 @interface PYStream (JSON)
 

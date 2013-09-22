@@ -10,13 +10,16 @@ NSString const *kUnsyncEventsEventKey       = @"pryv.unsyncevents.Event";
 NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 //NSString const *kUnsyncEventsRequestTypeKey = @"pryv.unsyncevents.RequestType";
 
-#import "PYConnection.h"
-#import "PYClient.h"
 #import "PYConstants.h"
+#import "PYConnection.h"
+#import "Reachability.h"
 #import "PYEventsCachingUtillity.h"
 #import "PYStreamsCachingUtillity.h"
-#import "PYStream.h"
 #import "PYStream+JSON.h"
+#import "PYEvent.h"
+#import "PYAttachment.h"
+#import "PYError.h"
+#import "PYConnection+DataManagement.h"
 
 @implementation PYConnection
 
