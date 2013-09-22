@@ -837,7 +837,7 @@
 		FBC2047116B95B3700CB5FFB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Pryv;
 			};
 			buildConfigurationList = FBC2047416B95B3700CB5FFB /* Build configuration list for PBXProject "PryvApiKit" */;
