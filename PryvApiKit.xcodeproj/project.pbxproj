@@ -117,6 +117,7 @@
 		8A92AE7616FB8E09005AE251 /* PYErrorUtility.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PYErrorUtility.h */; };
 		8AB2361C16FA6C6900B28F06 /* PYConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D6D3BBA16F8BBDE0072F480 /* PYConstants.h */; };
 		8AB2362016FA895800B28F06 /* PYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PYClient.m */; };
+		B61D55BA17ECA44E0016D0C4 /* PYClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B62A9C6B17E5E071006CADFB /* PYClient.h */; };
 		B62A9C6A17E5DF4F006CADFB /* PYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2361E16FA895800B28F06 /* PYClient.m */; };
 		B62A9C6C17E5E071006CADFB /* PYClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B62A9C6B17E5E071006CADFB /* PYClient.h */; };
 		B62A9C6E17E5E083006CADFB /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = B62A9C6D17E5E083006CADFB /* Reachability.h */; };
@@ -162,6 +163,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				B61D55BA17ECA44E0016D0C4 /* PYClient.h in CopyFiles */,
 				B62A9C7817E5EA80006CADFB /* PYConnection+DataManagement.h in CopyFiles */,
 				B6F1AEA1178379B9000ECD60 /* PYStreamsCachingUtillity.h in CopyFiles */,
 				B6F1AEA0178379A1000ECD60 /* PYChannelsCachingUtillity.h in CopyFiles */,

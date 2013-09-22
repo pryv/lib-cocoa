@@ -21,11 +21,21 @@
               fileName:(NSString *)fileName
 {
     if (self = [super init]) {
-        _fileData = fileData;
-        _name = name;
-        _fileName = fileName;
+        self.fileData = fileData;
+        self.name = name;
+        self.fileName = fileName;
     }
     return self;
+}
+
+- (void)dealloc
+{
+    self.fileData = nil;
+    self.name = nil;
+    self.fileName = nil;
+    self.size = nil;
+    self.mimeType = nil;
+    [super dealloc];
 }
 
 + (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
