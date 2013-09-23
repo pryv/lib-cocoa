@@ -15,8 +15,8 @@
 
 @property (nonatomic) BOOL running;
 
-@property (nonatomic, copy) PAAsyncServiceSuccessBlock onSuccess;
-@property (nonatomic, copy) PAAsyncServiceFailureBlock onFailure;
+@property (nonatomic, copy) PYAsyncServiceSuccessBlock onSuccess;
+@property (nonatomic, copy) PYAsyncServiceFailureBlock onFailure;
 
 
 @end
@@ -63,8 +63,8 @@
 }
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)req
-                            success:(PAAsyncServiceSuccessBlock)success
-                            failure:(PAAsyncServiceFailureBlock)failure
+                            success:(PYAsyncServiceSuccessBlock)success
+                            failure:(PYAsyncServiceFailureBlock)failure
 {
     PYAsyncService *requestOperation = [[[self alloc] initWithRequest:req] autorelease];
     
@@ -79,8 +79,8 @@
     }];
 }
 
-- (void)setCompletionBlockWithSuccess:(PAAsyncServiceSuccessBlock)success
-                              failure:(PAAsyncServiceFailureBlock)failure
+- (void)setCompletionBlockWithSuccess:(PYAsyncServiceSuccessBlock)success
+                              failure:(PYAsyncServiceFailureBlock)failure
 {
     self.onSuccess = success;
     self.onFailure = failure;
@@ -156,12 +156,12 @@
 {
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-//    NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
+    //NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
     _running = NO;
-
     id JSON = [PYJSONUtility getJSONObjectFromData:self.responseData];
     
     BOOL isUnacceptableStatusCode = [PYClient isUnacceptableStatusCode:self.response.statusCode];
+    
     if (isUnacceptableStatusCode)
 	{
         if (self.onFailure){
@@ -173,12 +173,12 @@
 
         return;
 	}
-
+    
     if (JSON == nil) {
         //This is not valid JSON object, this means that this is attached file (NSData)
         JSON = self.responseData;
     }
-
+    
     if (self.onSuccess)
     {
         self.onSuccess(self.request, self.response, JSON);

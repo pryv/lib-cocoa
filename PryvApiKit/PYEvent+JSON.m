@@ -13,28 +13,30 @@
 @implementation PYEvent (JSON)
 
 + (id)eventFromDictionary:(NSDictionary *)JSON
-{
+{    
     PYEvent *event = [[self alloc] init];
-    event.eventId = [JSON objectForKey:@"id"];
-    event.channelId = [JSON objectForKey:@"channelId"];
-    event.time = [[JSON objectForKey:@"time"] doubleValue];
     
+    event.eventId = [JSON objectForKey:@"id"];
+    id streamId = [JSON objectForKey:@"streamId"];
+    if ([streamId isKindOfClass:[NSNull class]]) {
+        event.streamId = nil;
+    }else{
+        event.streamId = streamId;
+    }
+
+    event.time = [[JSON objectForKey:@"time"] doubleValue];
     if ([JSON objectForKey:@"duration"] == [NSNull null]) {
         event.duration = 0;
     }else{
         event.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
+
+    event.type = [JSON objectForKey:@"type"];
     
-    NSDictionary *typeDic = [JSON objectForKey:@"type"];
-    event.eventClass = [typeDic objectForKey:@"class"];
-    event.eventFormat = [typeDic objectForKey:@"format"];
-    event.value = [JSON objectForKey:@"value"];
-    
-    id folderId = [JSON objectForKey:@"folderId"];
-    if ([folderId isKindOfClass:[NSNull class]]) {
-        event.folderId = nil;
+    if ([JSON objectForKey:@"content"] == [NSNull null]) {
+        event.eventContent = nil;
     }else{
-        event.folderId = folderId;
+        event.eventContent = [JSON objectForKey:@"content"];;
     }
 
     
@@ -44,9 +46,9 @@
     }else{
         event.tags = tags;
     }
-    
+
     event.eventDescription = [JSON objectForKey:@"description"];
-    
+
     NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
     
     if (attachmentsDic) {
@@ -72,7 +74,7 @@
     event.trashed = [[JSON objectForKey:@"trashed"] boolValue];
     event.modified = [NSDate dateWithTimeIntervalSince1970:[[JSON objectForKey:@"modified"] doubleValue]];
     
-    
+
     NSNumber *hasTmpId = [JSON objectForKey:@"hasTmpId"];
     if ([hasTmpId isKindOfClass:[NSNull class]]) {
         event.hasTmpId = NO;

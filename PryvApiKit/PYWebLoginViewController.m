@@ -52,7 +52,7 @@ NSString *token;
 
 BOOL closing;
 
-+ (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate
++ (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     withWebView:(WebView **)webView
     #endif
@@ -418,7 +418,7 @@ BOOL requestedLoginView = false;
 
 -  (void)successfullLoginWithUsername:(NSString *)username token:(NSString *)token
 {
-    [self.delegate pyWebLoginSuccess:[PYClient createAccessWithUsername:username andAccessToken:token]];
+    [self.delegate pyWebLoginSuccess:[PYClient createConnectionWithUsername:username andAccessToken:token]];
     [self close];
 }
 

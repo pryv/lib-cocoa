@@ -4,19 +4,21 @@
 //
 
 
-#import "PYFolder.h"
+#import "PYStream.h"
+#import "PYConnection.h"
+#import "PYClient.h"
 
 
-@implementation PYFolder
+@implementation PYStream
 
-@synthesize folderId = _folderId;
-@synthesize channelId = _channelId;
+@synthesize connection = _connection;
+@synthesize streamId = _streamId;
 @synthesize name = _name;
 @synthesize parentId = _parentId;
 @synthesize clientData = _clientData;
 @synthesize timeCount = _timeCount;
 @synthesize children = _children;
-@synthesize hidden = _hidden;
+@synthesize singleActivity = _singleActivity;
 @synthesize trashed = _trashed;
 
 @synthesize isSyncTriedNow = _isSyncTriedNow;
@@ -24,12 +26,11 @@
 @synthesize notSyncAdd = _notSyncAdd;
 @synthesize notSyncModify = _notSyncModify;
 @synthesize synchedAt = _synchedAt;
-@synthesize modifiedFolderPropertiesAndValues = _modifiedFolderPropertiesAndValues;
+@synthesize modifiedStreamPropertiesAndValues = _modifiedStreamPropertiesAndValues;
 
 - (void)dealloc
 {
-    [_folderId release];
-    [_channelId release];
+    [_streamId release];
     [_name release];
     [_parentId release];
     [_clientData release];
@@ -40,8 +41,8 @@
 {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"id"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"id"];
     }
     
     if (_name && _name.length > 0) {
@@ -51,23 +52,19 @@
     if (_parentId && _parentId.length > 0) {
         [dic setObject:_parentId forKey:@"parentId"];
     }
-
-    if (_channelId && _channelId.length > 0) {
-        [dic setObject:_channelId forKey:@"channelId"];
-    }
                 
     if (_clientData && _clientData.count > 0) {
         [dic setObject:_clientData forKey:@"clientData"];
     }
 
-    [dic setObject:[NSNumber numberWithBool:_hidden] forKey:@"hidden"];
+    [dic setObject:[NSNumber numberWithBool:_singleActivity] forKey:@"singleActivity"];
     [dic setObject:[NSNumber numberWithBool:_trashed] forKey:@"trashed"];
     [dic setObject:[NSNumber numberWithBool:_hasTmpId] forKey:@"hasTmpId"];
     [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
     [dic setObject:[NSNumber numberWithBool:_notSyncModify] forKey:@"notSyncModify"];
     [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
-    if (_modifiedFolderPropertiesAndValues) {
-        [dic setObject:_modifiedFolderPropertiesAndValues forKey:@"modifiedProperties"];
+    if (_modifiedStreamPropertiesAndValues) {
+        [dic setObject:_modifiedStreamPropertiesAndValues forKey:@"modifiedProperties"];
     }
     
     return [dic autorelease];
@@ -78,8 +75,8 @@
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
             
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"id"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"id"];
     }
     
     if (_name && _name.length > 0) {
@@ -94,10 +91,33 @@
         [dic setObject:_clientData forKey:@"clientData"];
     }
     
-    [dic setObject:[NSNumber numberWithBool:_hidden] forKey:@"hidden"];
+    [dic setObject:[NSNumber numberWithBool:_singleActivity] forKey:@"singleActivity"];
     
     return [dic autorelease];
     
+}
+
+-(NSString *)description{
+    NSMutableString *description = [NSMutableString stringWithString:@""];
+    
+    [description appendString:@"<"];
+    [description appendFormat:@"%@",_name];
+    [description appendFormat:@" (%@)",_streamId];
+    
+    if (_singleActivity) {
+        [description appendString:@" is single activity"];
+    }
+    if (_parentId) {
+        [description appendFormat:@" in %@",_parentId];
+    }
+    if ([_children count] > 0) {
+        [description appendString:@" with children : "];
+        for (PYStream *child in _children) {
+            [description appendFormat:@" %@,", child.name];
+        }
+    }
+    [description appendString:@">"];
+    return description;
 }
 
 @end

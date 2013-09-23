@@ -15,7 +15,7 @@
 #import "PYConstants.h"
 #import "PYError.h"
 #import "PYErrorUtility.h"
-#import "PYAccess.h"
+#import "PYConnection.h"
 #import "PYAttachment.h"
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
@@ -37,10 +37,10 @@ static NSString *myDefaultDomain;
     [PYClient setDefaultDomain:kPYAPIDomainStaging];
 }
 
-+ (PYAccess *)createAccessWithUsername:(NSString *)username andAccessToken:(NSString *)token;
++ (PYConnection *)createConnectionWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 {
-    PYAccess *access = [[PYAccess alloc] initWithUsername:username andAccessToken:token];
-    return [access autorelease];
+    PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
+    return [connection autorelease];
 }
 
 /**
@@ -63,13 +63,13 @@ static NSString *myDefaultDomain;
 }
 
 
-+ (NSError *)createNotReadyErrorForAccess:(PYAccess *)access
++ (NSError *)createNotReadyErrorForConnection:(PYConnection *)connection
 {
     NSError *error;
-    if (access.userID == nil || access.userID.length == 0) {
+    if (connection.userID == nil || connection.userID.length == 0) {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorUserNotSet userInfo:nil];
     }
-    else if (access.accessToken == nil || access.accessToken.length == 0) {
+    else if (connection.accessToken == nil || connection.accessToken.length == 0) {
         error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorTokenNotSet userInfo:nil];
     }
     else {
@@ -124,7 +124,6 @@ static NSString *myDefaultDomain;
     if (!MIMEType) {
         return @"application/octet-stream";
     }
-    
     return [(NSString *)MIMEType autorelease];
 }
 
@@ -154,18 +153,9 @@ static NSString *myDefaultDomain;
         id value = [params objectForKey:key];
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *valueArray = value;
-            [pathString appendFormat:@"%@=",key];
-            for (int i = 0; i < valueArray.count; i++) {
-                
-                id arrayValue = [valueArray objectAtIndex:i];
-                [pathString appendFormat:@"%@",arrayValue];
-                
-                if (i != valueArray.count - 1) {
-                    //If it's not last element add comma (,)
-                    [pathString appendString:@","];
-                }
-            }
-            [pathString appendString:@"&"];
+            [valueArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [pathString appendFormat:@"%@[]=%@&",key,obj];
+            }];
         }else{
             [pathString appendFormat:@"%@=%@&",key,[params objectForKey:key]];
             
@@ -252,6 +242,11 @@ static NSString *myDefaultDomain;
         // end
         [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding]];
         [request setHTTPBody:bodyData];
+        
+        //####### DISPLAY SENT REQUEST (use with plain text attachment(s) only)#########
+        
+//        NSString *bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
+//        NSLog(@"Request : %@\n%@",[request allHTTPHeaderFields],bodyString);
         [bodyData release];
         
     }else{
@@ -267,10 +262,7 @@ static NSString *myDefaultDomain;
         if (postDataa) {
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
-        
-
-    }
-    
+    }    
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
 }
 

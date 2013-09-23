@@ -12,17 +12,17 @@
 
 @implementation PYChannelFilter
 
-@synthesize access = _access;
+@synthesize connection = _connection;
 @synthesize channelState = _channelState;
 @synthesize limit = _limit;
 @synthesize lastRefresh = _lastRefresh;
 
-- (id)initWithAccess:(PYAccess *)access
+- (id)initWithAccess:(PYConnection *)access
             andState:(PYChannelState)channelState
                limit:(NSUInteger)limit
 {
     if (self = [super init]) {
-        _access = access;
+        _connection = access;
         _channelState = channelState;
         _limit = limit;
     }
@@ -42,7 +42,7 @@
     NSArray* filteredChannelsFromCache = [PYChannelFilterUtility filterCachedChannels:allChannelsFromCache withFilter:self];
     cachedChannels(filteredChannelsFromCache);
     
-    [_access getChannelsWithRequestType:reqType
+    [_connection getChannelsWithRequestType:reqType
                                  filter:[PYChannelFilterUtility filteredChannels:self]
                          successHandler:^(NSArray *onlineChannelList) {
                              self.lastRefresh = [[NSDate date] timeIntervalSince1970];

@@ -25,7 +25,7 @@
     NSEnumerator *onlineEventsEnumerator = [onlineEventList objectEnumerator];
     while ((onlineEvent = [onlineEventsEnumerator nextObject]) != nil) {
         
-        NSLog(@"onlineEventId %@",onlineEvent.eventId);
+        //NSLog(@"onlineEventId %@",onlineEvent.eventId);
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@",onlineEvent.eventId];
         NSArray *results = [cachedEvents filteredArrayUsingPredicate:predicate];
@@ -70,11 +70,11 @@
 }
 
 + (void)getAndCacheEventWithServerId:(NSString *)eventId
-                           inChannel:(PYChannel *)channel
+                     usingConnection:(PYConnection *)connection
                          requestType:(PYRequestType)reqType
 {
     //In this method we will ask server for event with eventId and we'll cache it
-    [channel getOnlineEventWithId:eventId
+    [connection getOnlineEventWithId:eventId
                       requestType:reqType
                    successHandler:^(PYEvent *event) {
                        

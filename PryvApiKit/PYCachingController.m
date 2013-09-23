@@ -10,11 +10,9 @@
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
-#import "PYChannel.h"
-#import "PYChannel+JSON.h"
 #import "PYEventFilter.h"
-#import "PYFolder.h"
-#import "PYFolder+JSON.h"
+#import "PYStream.h"
+#import "PYStream+JSON.h"
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
@@ -76,12 +74,12 @@
     }
 }
 
-- (void)removeFolder:(NSString *)key
+- (void)removeStream:(NSString *)key
 {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
     if (error) {
-        NSAssert(@"Error in removing folder", @"");
+        NSAssert(@"Error in removing stream", @"");
     }
 }
 
@@ -113,56 +111,28 @@
     return nil;
 }
 
-
-- (NSArray *)getAllChannelsFromCache
+- (NSArray *)getAllStreamsFromCache
 {
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'channel_'"];
+    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'stream_'"];
     if (!filesWithSelectedPrefix.count) {
         return nil;
     }
     
-    NSMutableArray *arrayOFCachedChannels = [[NSMutableArray alloc] init];
-    for (NSString *channelCachedName in filesWithSelectedPrefix) {
-        NSDictionary *channelDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:channelCachedName]];
-        [arrayOFCachedChannels addObject:[PYChannel channelFromJson:channelDic]];
+    NSMutableArray *arrayOFCachedStreams = [[NSMutableArray alloc] init];
+    for (NSString *streamCachedName in filesWithSelectedPrefix) {
+        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:streamCachedName]];
+        [arrayOFCachedStreams addObject:[PYStream streamFromJSON:streamDic]];
     }
     
-    return arrayOFCachedChannels;
+    return arrayOFCachedStreams;
 }
 
-- (NSArray *)getAllFoldersFromCache
-{
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'folder_'"];
-    if (!filesWithSelectedPrefix.count) {
-        return nil;
-    }
-    
-    NSMutableArray *arrayOFCachedFolders = [[NSMutableArray alloc] init];
-    for (NSString *folderCachedName in filesWithSelectedPrefix) {
-        NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:folderCachedName]];
-        [arrayOFCachedFolders addObject:[PYFolder folderFromJSON:folderDic]];
-    }
-    
-    return arrayOFCachedFolders;
-}
-
-- (PYChannel *)getChannelWithKey:(NSString *)key
+- (PYStream *)getStreamWithKey:(NSString *)key
 {
     if ([self isDataCachedForKey:key]) {
-        NSData *channelData = [self getDataForKey:key];
-        NSDictionary *channelDic = [PYJSONUtility getJSONObjectFromData:channelData];
-        return [PYChannel channelFromJson:channelDic];
-    }
-    
-    return nil;
-
-}
-- (PYFolder *)getFolderWithKey:(NSString *)key
-{
-    if ([self isDataCachedForKey:key]) {
-        NSData *folderData = [self getDataForKey:key];
-        NSDictionary *folderDic = [PYJSONUtility getJSONObjectFromData:folderData];
-        return [PYFolder folderFromJSON:folderDic];
+        NSData *streamData = [self getDataForKey:key];
+        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:streamData];
+        return [PYStream streamFromJSON:streamDic];
     }
     
     return nil;

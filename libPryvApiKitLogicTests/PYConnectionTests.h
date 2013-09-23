@@ -9,11 +9,11 @@
 #import "PryvApiKit.h"
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface PYAccessTests : SenTestCase
+@interface PYConnectionTests : SenTestCase
 
-@property (nonatomic, retain) PYAccess *access;
-@property (nonatomic, retain) PYChannel *channelForTest;
+@property (nonatomic, retain) PYConnection *connection;
+@property (nonatomic, retain) PYStream *streamForTest;
 
-- (void)testGettingChannels;
+- (void)testGettingStreams;
 
 @end

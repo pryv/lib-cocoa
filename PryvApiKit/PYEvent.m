@@ -12,13 +12,11 @@
 
 @implementation PYEvent
 @synthesize eventId = _eventId;
-@synthesize channelId = _channelId;
 @synthesize time = _time;
 @synthesize duration = _duration;
-@synthesize eventClass = _eventClass;
-@synthesize eventFormat = _eventFormat;
-@synthesize value = _value;
-@synthesize folderId = _folderId;
+@synthesize type = _type;
+@synthesize eventContent = _eventContent;
+@synthesize streamId = _streamId;
 @synthesize tags = _tags;
 @synthesize eventDescription = _eventDescription;
 @synthesize attachments = _attachments;
@@ -41,10 +39,6 @@
         [dic setObject:_eventId forKey:@"id"];
     }
     
-    if (_channelId && _channelId.length > 0) {
-        [dic setObject:_channelId forKey:@"channelId"];
-    }
-    
     if (_time > 0) {
         [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
     }
@@ -53,19 +47,23 @@
         [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
     }
     
-    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-        [dic setObject:typeDic forKey:@"type"];
+//    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
+//        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
+//        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
+//        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+//        [dic setObject:typeDic forKey:@"type"];
+//    }
+    if (_type) {
+        [dic setObject:_type forKey:@"type"];
     }
     
-    if (_value) {
-        [dic setObject:_value forKey:@"value"];
+    
+    if (_eventContent) {
+        [dic setObject:_eventContent forKey:@"content"];
     }
     
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"folderId"];
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"streamId"];
     }
     
     if (_tags && _tags.count > 0) {
@@ -111,21 +109,20 @@
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 
-    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-        
-        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-
-        [dic setObject:typeDic forKey:@"type"];
+    if (_eventId) {
+        [dic setObject:_eventId forKey:@"id"];
     }
     
-    if (_value) {
-        [dic setObject:_value forKey:@"value"];
+    if (_type) {
+        [dic setObject:_type forKey:@"type"];
     }
     
-    if (_folderId && _folderId.length > 0) {
-        [dic setObject:_folderId forKey:@"folderId"];
+    if (_eventContent) {
+        [dic setObject:_eventContent forKey:@"content"];
+    }
+    
+    if (_streamId && _streamId.length > 0) {
+        [dic setObject:_streamId forKey:@"streamId"];
     }
     
     if (_tags && _tags.count > 0) {
@@ -156,20 +153,18 @@
 - (NSString *)description
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@", self.eventClass=%@", self.eventClass];
-    [description appendFormat:@", self.eventFormat=%@", self.eventFormat];
+    [description appendFormat:@", self.type=%@", self.type];
     [description appendFormat:@", self.eventId=%@", self.eventId];
-    [description appendFormat:@", self.channelId=%@", self.channelId];
     [description appendFormat:@", self.time=%f", self.time];
     [description appendFormat:@", self.duration=%f", self.duration];
-    [description appendFormat:@", self.folderId=%@", self.folderId];
+    [description appendFormat:@", self.streamId=%@", self.streamId];
     [description appendFormat:@", self.tags=%@", self.tags];
     [description appendFormat:@", self.description=%@", self.eventDescription];
     [description appendFormat:@", self.attachments=%@", self.attachments];
     [description appendFormat:@", self.clientData=%@", self.clientData];
     [description appendFormat:@", self.trashed=%d", self.trashed];
     [description appendFormat:@", self.modified=%@", self.modified];
-    [description appendFormat:@", self.VALUE=%@",self.value];
+    [description appendFormat:@", self.content=%@",self.eventContent];
 
     [description appendString:@">"];
     
@@ -179,11 +174,9 @@
 - (void)dealloc
 {
     [_eventId release];
-    [_channelId release];
-    [_eventClass release];
-    [_eventFormat release];
-    [_value release];
-    [_folderId release];
+    [_type release];
+    [_eventContent release];
+    [_streamId release];
     [_tags release];
     [_eventDescription release];
     [_attachments release];

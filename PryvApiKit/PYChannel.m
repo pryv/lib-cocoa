@@ -7,16 +7,16 @@
 //
 
 #import "PYChannel.h"
-#import "PYFolder+JSON.h"
+#import "PYStream+JSON.h"
 #import "PYEvent.h"
 #import "PYEventsCachingUtillity.h"
 #import "PYConstants.h"
 #import "PYEventFilterUtility.h"
-#import "PYFoldersCachingUtillity.h"
+#import "PYStreamsCachingUtillity.h"
 
 @implementation PYChannel
 
-@synthesize access = _access;
+@synthesize connection = _connection;
 @synthesize channelId = _channelId;
 @synthesize name = _name;
 @synthesize timeCount = _timeCount;
@@ -26,26 +26,27 @@
 
 - (void)dealloc
 {
-    [_access release];
+    [_connection release];
     [_channelId release];
     [_name release];
     [_clientData release];
     [super dealloc];
 }
 
-- (void)syncNotSynchedFoldersIfAny
+- (void)syncNotSynchedStreamsIfAny
 {
     NSMutableArray *nonSyncFolders = [[[NSMutableArray alloc] init] autorelease];
-    [nonSyncFolders addObjectsFromArray:[self.access.foldersNotSync allObjects]];
-    for (PYFolder *folder in nonSyncFolders) {
+    [nonSyncFolders addObjectsFromArray:[self.connection.streamsNotSync allObjects]];
+    for (PYStream *folder in nonSyncFolders) {
         
-        if ([folder.channelId compare:self.channelId] == NSOrderedSame) {
+        //the condition is not correct : set self.channelId to shut error up, should be parentId
+        if ([folder.parentId compare:self.channelId] == NSOrderedSame) {
             //We sync only events for particular channel at time
             
             //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
             folder.isSyncTriedNow = YES;
             
-            if (folder.hasTmpId == YES) {
+            if (folder.hasTmpId) {
                 
                 if (folder.notSyncModify) {
                     NSLog(@"folder has tmpId and it's mofified -> do nothing. If folder doesn't have server id it needs to be added to server and that is all what is matter. Modified object will update PYFolder object in cache and in unsyncList");
@@ -60,10 +61,10 @@
                             //If succedded remove from unsyncSet and add call syncFolderWithServer
                             //In that method we were search for folder with <createdFolderId> and we should done mapping between server and temp id in cache
                             folder.synchedAt = [[NSDate date] timeIntervalSince1970];
-                            [self.access.foldersNotSync removeObject:folder];
+                            [self.connection.streamsNotSync removeObject:folder];
                             //We have success here. Folder is cached in createFolder:withRequestType: method, remove old folder with tmpId from cache
                             //He will always have tmpId here but just in case for testing (defensive programing)
-                            [PYFoldersCachingUtillity removeFolder:folder];
+                            [PYStreamsCachingUtillity removeStream:folder];
 
                         } errorHandler:^(NSError *error) {
                             folder.isSyncTriedNow = NO;
@@ -77,19 +78,19 @@
                 if (folder.notSyncModify) {
                     NSLog(@"for modifified unsync folders with serverId we have to provide only modified values, not full event object");
                     
-                    NSDictionary *modifiedPropertiesDic = folder.modifiedFolderPropertiesAndValues;
-                    PYFolder *modifiedFolder = [[PYFolder alloc] init];
+                    NSDictionary *modifiedPropertiesDic = folder.modifiedStreamPropertiesAndValues;
+                    PYStream *modifiedFolder = [[PYStream alloc] init];
                     modifiedFolder.isSyncTriedNow = YES;
                     
                     [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
                         [modifiedFolder setValue:value forKey:property];
                     }];
                     
-                    [self setModifiedFolderAttributesObject:modifiedFolder forFolderId:folder.folderId requestType:PYRequestTypeSync successHandler:^{
+                    [self setModifiedFolderAttributesObject:modifiedFolder forFolderId:folder.streamId requestType:PYRequestTypeSync successHandler:^{
                         
                         //We have success here. Folder is cached in setModifiedFolderAttributesObject:forFolderId method
                         folder.synchedAt = [[NSDate date] timeIntervalSince1970];
-                        [self.access.foldersNotSync removeObject:folder];
+                        [self.connection.streamsNotSync removeObject:folder];
                         
                     } errorHandler:^(NSError *error) {
                         modifiedFolder.isSyncTriedNow = NO;
@@ -104,10 +105,10 @@
 - (void)syncNotSynchedEventsIfAny
 {
     NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
-    [nonSyncEvents addObjectsFromArray:[self.access.eventsNotSync allObjects]];
+    [nonSyncEvents addObjectsFromArray:[self.connection.eventsNotSync allObjects]];
     for (PYEvent *event in nonSyncEvents) {
         
-        if ([event.channelId compare:self.channelId] == NSOrderedSame) {
+        //if ([event.channelId compare:self.channelId] == NSOrderedSame) {
             //We sync only events for particular channel at time
             
             //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
@@ -128,7 +129,7 @@
                            //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
                            //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
                            event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                           [self.access.eventsNotSync removeObject:event];
+                           [self.connection.eventsNotSync removeObject:event];
                            //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
                             //He will always have tmpId here but just in case for testing (defensive programing)
                             [PYEventsCachingUtillity removeEvent:event];
@@ -162,7 +163,7 @@
                         //We have success here. Event is cached in setModifiedEventAttributesObject:forEventId method
 
                         event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                        [self.access.eventsNotSync removeObject:event];
+                        [self.connection.eventsNotSync removeObject:event];
                         
                     } errorHandler:^(NSError *error) {
                         modifiedEvent.isSyncTriedNow = NO;
@@ -181,7 +182,7 @@
                     }];
                 }
             }
-        }        
+        // }
     }
 }
 
@@ -195,7 +196,7 @@
     
     if (path == nil) path = @"";
     NSString* newPath = [NSString stringWithFormat:@"%@/%@", self.channelId, path];
-    [self.access apiRequest:newPath requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
+    [self.connection apiRequest:newPath requestType:reqType method:method postData:postData attachments:attachments success:successHandler failure:failureHandler];
 }
 
 #pragma mark - Events manipulation
@@ -227,7 +228,7 @@
 
 - (void)getOnlineFolderWithId:(NSString *)folderId
                  requestType:(PYRequestType)reqType
-              successHandler:(void (^) (PYFolder *folder))onlineFolder
+              successHandler:(void (^) (PYStream *folder))onlineFolder
                 errorHandler:(void (^) (NSError *error))errorHandler
 {
     //Method below automatically cache (overwrite) all folders from this channel, so this is bad
@@ -238,8 +239,8 @@
     [self getFoldersWithRequestType:reqType
                        filterParams:nil
                      successHandler:^(NSArray *foldersList) {
-                         for (PYFolder *currentFolder in foldersList) {
-                             if ([currentFolder.folderId compare:folderId] == NSOrderedSame) {
+                         for (PYStream *currentFolder in foldersList) {
+                             if ([currentFolder.streamId compare:folderId] == NSOrderedSame) {
                                  onlineFolder(currentFolder);
                                  break;
                              }
@@ -413,9 +414,9 @@
                      NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                      
                      //Cache particular event in cache
-                     [PYEventFilterUtility getAndCacheEventWithServerId:createdEventId
-                                                              inChannel:self
-                                                            requestType:reqType];
+//                     [PYEventFilterUtility getAndCacheEventWithServerId:createdEventId
+//                                                              inChannel:self
+//                                                            requestType:reqType];
                      
                      if (successHandler) {
                          successHandler(createdEventId, stoppedId);
@@ -426,7 +427,7 @@
                          
                          if (event.isSyncTriedNow == NO) {
                              //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
-                             event.channelId = self.channelId;
+                             //event.channelId = self.channelId;
                              event.notSyncAdd = YES;
                              event.time = [[NSDate date] timeIntervalSince1970];
                              event.modified = [NSDate date];
@@ -442,7 +443,7 @@
                                  }
                              }
                              [PYEventsCachingUtillity cacheEvent:event];
-                             [self.access addEvent:event toUnsyncList:error];
+                             [self.connection addEvent:event toUnsyncList:error];
 
                              successHandler (event.eventId, @"");
 
@@ -480,9 +481,9 @@
                  //Cache modified event - We cache event
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  //If eventId isn't temporary cache event (it will be overwritten in cache)
-                 [PYEventFilterUtility getAndCacheEventWithServerId:eventId
-                                                          inChannel:self
-                                                        requestType:reqType];
+//                 [PYEventFilterUtility getAndCacheEventWithServerId:eventId
+//                                                          inChannel:self
+//                                                        requestType:reqType];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -564,7 +565,7 @@
                          }else{
                              //if event has trashed = yes flag it needs to be deleted from cache
                              [PYEventsCachingUtillity removeEvent:event];
-                             [self.access.eventsNotSync removeObject:event];
+                             [self.connection.eventsNotSync removeObject:event];
                          }
 
 
@@ -695,7 +696,7 @@
      This method must be SYNC not ASYNC and this method sync folders with server and cache them
      */
     if (syncAndCache == YES) {
-        [self syncNotSynchedFoldersIfAny];
+        [self syncNotSynchedStreamsIfAny];
     }
     
     [self apiRequest:[PYClient getURLPath:kROUTE_FOLDERS withParams:filter]
@@ -706,11 +707,11 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSMutableArray *folderList = [[NSMutableArray alloc] init];
                  for (NSDictionary *folderDictionary in JSON) {
-                     [folderList addObject:[PYFolder folderFromJSON:folderDictionary]];
+                     [folderList addObject:[PYStream streamFromJSON:folderDictionary]];
                  }
                  
                  if (syncAndCache == YES) {
-                     [PYFoldersCachingUtillity cacheFolders:JSON];
+                     [PYStreamsCachingUtillity cacheStreams:JSON];
                  }
 
                  if (onlineFoldersList) {
@@ -735,7 +736,7 @@
 {
     
     //Return current cached folders
-    NSArray *allFoldersFromCache = [PYFoldersCachingUtillity getFoldersFromCache];
+    NSArray *allFoldersFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
 //    [allFoldersFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedFolders) {
         NSUInteger currentNumberOfFoldersInCache = allFoldersFromCache.count;
@@ -757,7 +758,7 @@
 
 #pragma mark - PrYv API Folder create (POST /{channel-id}/folders/)
 
-- (void)createFolder:(PYFolder *)folder
+- (void)createFolder:(PYStream *)folder
      withRequestType:(PYRequestType)reqType
       successHandler:(void (^)(NSString *createdFolderId))successHandler
         errorHandler:(void (^)(NSError *error))errorHandler;
@@ -773,27 +774,28 @@
                              successHandler(createdFolderId);
                          }
                      
-                     [PYFoldersCachingUtillity getAndCacheFolderWithServerId:createdFolderId
-                                                                   inChannel:self
-                                                                 requestType:reqType];
+//                     [PYStreamsCachingUtillity getAndCacheStreamWithServerId:createdFolderId
+//                                                                   inParent:self
+//                                                                 requestType:reqType];
+                     [PYStreamsCachingUtillity getAndCacheStream:folder withServerId:createdFolderId requestType:reqType];
 
                      
                      } failure:^(NSError *error) {
                          if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                              if (folder.isSyncTriedNow == NO) {
                                  //If we didn't try to sync folder from unsync list that means that we have to cache that folder, otherwise leave it as is
-                                 folder.channelId = self.channelId;
+                                 //folder.channelId = self.channelId; SHOULD NOT BE COMMENTED, should use parentId
                                  folder.notSyncAdd = YES;
-                                 //When we try to create folder and we came here it have tmpId
+                                 //When we try to create folder and we came here it has tmpId
                                  folder.hasTmpId = YES;
                                  //this is random id
-                                 folder.folderId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+                                 folder.streamId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
                                  //return that created id so it can work offline. Folder will be cached when added to unsync list
                                  
-                                 [PYFoldersCachingUtillity cacheFolder:folder];
-                                 [self.access addFolder:folder toUnsyncList:error];
+                                 [PYStreamsCachingUtillity cacheStream:folder];
+                                 [self.connection addStream:folder toUnsyncList:error];
                                  
-                                 successHandler (folder.folderId);
+                                 successHandler (folder.streamId);
                                  
                              }else{
                                  NSLog(@"Folder wants to be synchronized on server from unsync list but there is no internet");
@@ -811,7 +813,7 @@
 
 #pragma mark - PrYv API Folder modify (PUT /{channel-id}/folders/{folder-id})
 
-- (void)setModifiedFolderAttributesObject:(PYFolder *)folderObject
+- (void)setModifiedFolderAttributesObject:(PYStream *)folderObject
                               forFolderId:(NSString *)folderId
                               requestType:(PYRequestType)reqType
                            successHandler:(void (^)())successHandler
@@ -827,9 +829,9 @@
                  //Cache modified folder - We cache folder
                  NSLog(@"It's folder with server id because we'll never try to call this method if folder has tempId");
                  //If folderId isn't temporary cache folder (it will be overwritten in cache)
-                 [PYFoldersCachingUtillity getAndCacheFolderWithServerId:folderId
-                                                               inChannel:self
-                                                             requestType:reqType];
+//                 [PYStreamsCachingUtillity getAndCacheStreamWithServerId:folderId
+//                                                               inParent:self
+//                                                             requestType:reqType];
                  
                  if (successHandler) {
                      successHandler();
@@ -842,7 +844,7 @@
                      if (folderObject.isSyncTriedNow == NO) {
                          
                          //Get current folder with id from cache
-                         PYFolder *currentFolderFromCache = [PYFoldersCachingUtillity getFolderFromCacheWithFolderId:folderId];
+                         PYStream *currentFolderFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:folderId];
                          
                          currentFolderFromCache.notSyncModify = YES;
                          
@@ -852,9 +854,9 @@
                          }];
                          
                          //We have to know what properties are modified in order to make succesfull request
-                         currentFolderFromCache.modifiedFolderPropertiesAndValues = [folderObject dictionary];
+                         currentFolderFromCache.modifiedStreamPropertiesAndValues = [folderObject dictionary];
                          //We must have cached modified properties of folder in cache
-                         [PYFoldersCachingUtillity cacheFolder:currentFolderFromCache];
+                         [PYStreamsCachingUtillity cacheStream:currentFolderFromCache];
                          
                          if (successHandler) {
                              successHandler();

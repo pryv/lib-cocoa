@@ -8,6 +8,11 @@
 
 #import "WebViewController.h"
 #import "PryvApiKit.h"
+#import "User.h"
+#import "AppDelegate.h"
+#import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
+#import "PYStream.h"
 //#import "PYWebLoginViewController.h"
 
 @interface WebViewController () <PYWebLoginDelegate>
@@ -22,13 +27,20 @@
     
     NSLog(@"Signin Started");
     
-    NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
+    NSArray *keys = [NSArray arrayWithObjects:  kPYAPIConnectionRequestStreamId,
+                     kPYAPIConnectionRequestLevel,
+                     nil];
     
-    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
+    NSArray *objects = [NSArray arrayWithObjects:   kPYAPIConnectionRequestAllStreams,
+                        kPYAPIConnectionRequestManageLevel,
+                        nil];
+
+    
+    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects
+                                                                                forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-macosx-example"
+    [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-macosx-example"
                                       andPermissions:permissions
                                             delegate:self
                                          withWebView:&webView];
@@ -43,10 +55,17 @@
 //    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
 //}
 
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
-    NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
-    [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
+- (void) pyWebLoginSuccess:(PYConnection*)pyConnection {
+    AppDelegate *app =[AppDelegate sharedInstance];
+    app.user = [[User alloc]
+                initWithUsername:[NSString stringWithString:pyConnection.userID]
+                andToken:[NSString stringWithString:pyConnection.accessToken]];
+  
+    NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
+    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
+    
 }
+
 - (void) pyWebLoginAborded:(NSString*)reason {
     NSLog(@"Signin Aborded: %@",reason);
 }

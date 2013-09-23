@@ -9,6 +9,8 @@
 #import "PYEventsCachingUtillity.h"
 #import "PYCachingController.h"
 #import "PYEvent.h"
+#import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
 #import "PYJSONUtility.h"
 
 @implementation PYEventsCachingUtillity
@@ -26,11 +28,9 @@
     NSMutableDictionary *eventForCache = [event mutableCopy];
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
     NSMutableDictionary *attachmentsDic = [[eventForCache objectForKey:@"attachments"] mutableCopy];
-    
     if (attachmentsDic && attachmentsDic.count > 0) {
         
-        
-        [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
+        [[eventForCache objectForKey:@"attachments"] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
             
             NSMutableDictionary *mutableAttachmentDataDic = [attachmentDataDic mutableCopy];
             
@@ -103,5 +103,22 @@
     return [[PYCachingController sharedManager] getEventWithKey:eventKey];
 
 }
+
++ (void)getAndCacheEventWithServerId:(NSString *)eventId
+                     usingConnection:(PYConnection *)connection
+                         requestType:(PYRequestType)reqType
+{
+    //In this method we will ask server for event with eventId and we'll cache it
+    [connection getOnlineEventWithId:eventId
+                         requestType:reqType
+                      successHandler:^(PYEvent *event) {
+                          
+                          [PYEventsCachingUtillity cacheEvent:event];
+                          
+                      } errorHandler:^(NSError *error) {
+                          NSLog(@"error");
+                      }];
+}
+
 
 @end

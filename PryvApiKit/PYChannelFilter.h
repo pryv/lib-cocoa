@@ -19,22 +19,22 @@ typedef enum {
 } PYChannelState;
 
 #import <Foundation/Foundation.h>
-#import "PYAccess.h"
+#import "PYConnection.h"
 
 @interface PYChannelFilter : NSObject
 {
-    PYAccess *_access;
+    PYConnection *_connection;
     PYChannelState _channelState;
     NSUInteger _limit;
     NSTimeInterval _lastRefresh;
 }
 
-@property (readonly, nonatomic, retain) PYAccess *access;
+@property (readonly, nonatomic, retain) PYConnection *connection;
 @property (nonatomic) PYChannelState channelState;
 @property (nonatomic) NSUInteger limit;
 @property (nonatomic) NSTimeInterval lastRefresh;
 
-- (id)initWithAccess:(PYAccess *)access
+- (id)initWithAccess:(PYConnection *)connection
             andState:(PYChannelState)channelState
                limit:(NSUInteger)limit;
 

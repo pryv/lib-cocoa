@@ -21,11 +21,21 @@
               fileName:(NSString *)fileName
 {
     if (self = [super init]) {
-        _fileData = fileData;
-        _name = name;
-        _fileName = fileName;
+        self.fileData = fileData;
+        self.name = name;
+        self.fileName = fileName;
     }
     return self;
+}
+
+- (void)dealloc
+{
+    self.fileData = nil;
+    self.name = nil;
+    self.fileName = nil;
+    self.size = nil;
+    self.mimeType = nil;
+    [super dealloc];
 }
 
 + (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
@@ -42,19 +52,35 @@
 - (NSDictionary *)cachingDictionary
 {
     //"attachmentData" key won't be ever available when we read attachment from cache
-    NSDictionary *attachmentObject = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:self.fileName,
-                                                                          self.mimeType,
-                                                                          self.size,
-                                                                          self.fileData,
-                                                                          nil]
-                                                                 forKeys:[NSArray arrayWithObjects:@"fileName",
-                                                                          @"type",
-                                                                          @"size",
-                                                                          @"attachmentData",
-                                                                          nil]];
+    NSArray *objects;
+    NSArray *keys;
+    if (self.fileData) {
+        objects = [NSArray arrayWithObjects:self.fileName, self.mimeType, self.size, self.fileData, nil];
+        keys = [NSArray arrayWithObjects:@"fileName",@"type",@"size", @"attachmentData", nil];
+    }else{
+        objects = [NSArray arrayWithObjects:self.fileName, self.mimeType, self.size, nil];
+        keys = [NSArray arrayWithObjects:@"fileName",@"type",@"size", nil];
+    }
     
+    NSDictionary *attachmentObject = [NSDictionary dictionaryWithObjects: objects
+                                                                 forKeys: keys];
     return attachmentObject;
     
+}
+
+-(NSString *)description{
+    NSMutableString *description = [NSMutableString stringWithString:@"<"];
+    [description appendFormat:@"%@",_fileName];
+    if (_size) {
+        [description appendFormat:@" (%@ bytes)",_size];
+    }if (_name) {
+        [description appendFormat:@" - %@",_name];
+    }
+    if (_mimeType) {
+        [description appendFormat:@" - %@",_mimeType];
+    }
+    [description appendString:@">"];
+    return description;
 }
 
 @end

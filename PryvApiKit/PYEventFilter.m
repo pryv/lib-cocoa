@@ -20,6 +20,7 @@
 #import "PYClient.h"
 #import "PYEventsCachingUtillity.h"
 #import "PYEventFilterUtility.h"
+#import "PYChannel.h"
 
 @implementation PYEventFilter
 

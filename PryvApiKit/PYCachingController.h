@@ -7,8 +7,7 @@
 //
 
 @class PYEvent;
-@class PYChannel;
-@class PYFolder;
+@class PYStream;
 #import <Foundation/Foundation.h>
 
 @interface PYCachingController : NSObject
@@ -34,9 +33,9 @@
  */
 - (void)removeEvent:(NSString *)key;
 /**
- Remove folder from disk for key
+ Remove stream from disk for key
  */
-- (void)removeFolder:(NSString *)key;
+- (void)removeStream:(NSString *)key;
 /**
  Get all PYEvent objects from disk
  */
@@ -45,21 +44,12 @@
  Get single PYEvent object from disk for key
  */
 - (PYEvent *)getEventWithKey:(NSString *)key;
-
 /**
- Get all PYChannel objects fro disk
+ Get all PYStream objects from disk
  */
-- (NSArray *)getAllChannelsFromCache;
+- (NSArray *)getAllStreamsFromCache;
 /**
- Get single PYChannel object from disk for key
+ Get single PYStream object from disk for key
  */
-- (PYChannel *)getChannelWithKey:(NSString *)key;
-/**
- Get all PYFolder objects from disk
- */
-- (NSArray *)getAllFoldersFromCache;
-/**
- Get single PYFolder object from disk for key
- */
-- (PYFolder *)getFolderWithKey:(NSString *)key;
+- (PYStream *)getStreamWithKey:(NSString *)key;
 @end

@@ -12,12 +12,18 @@
 
 NSString *const kPYAPIScheme = @"https";
 NSString *const kPYAPIDomain = @".pryv.io";
-NSString *const kPYAPIDomainStaging = @".rec.la";
+NSString *const kPYAPIDomainStaging = @".pryv.in";
 
-NSString *const kROUTE_CHANNELS = @"channels";
 NSString *const kROUTE_EVENTS = @"events";
-NSString *const kROUTE_FOLDERS =@"folders";
+NSString *const kROUTE_FOLDERS = @"folders";
+NSString *const kROUTE_STREAMS = @"streams";
 
+NSString *const kPYAPIConnectionRequestStreamId = @"streamId";
+NSString *const kPYAPIConnectionRequestAllStreams = @"*";
+NSString *const kPYAPIConnectionRequestLevel = @"level";
+NSString *const kPYAPIConnectionRequestReadLevel = @"read";
+NSString *const kPYAPIConnectionRequestManageLevel = @"manage";
+NSString *const kPYAPIConnectionRequestContributeLevel = @"contribute";
 
 
 
@@ -35,4 +41,5 @@ NSString *const kPYUserTempTokenMladen = @"PeySaPzMsM";
 NSString *const kPrYvApplicationChannelId = @"position";
 NSString *const kPrYvApplicationChannelName = @"Position";
 
+//Notifications
 NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisibleNotification";

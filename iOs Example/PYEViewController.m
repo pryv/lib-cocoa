@@ -22,37 +22,37 @@
 {
     [super viewDidLoad];
     
-    [PYClient setDefaultDomainStaging];
-    
-    PYAccess *access = [PYClient createAccessWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-        
-    [access getAllChannelsWithRequestType:PYRequestTypeSync
-                        gotCachedChannels:^(NSArray *cachedChannelList) {
-        NSLog(@"cachedChannelList %@",cachedChannelList);
-        
-        for (PYChannel *channel in cachedChannelList) {
-            //Nenad_test channel
-            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
-                
-            }
-        }
-    
-    
-            
-    } gotOnlineChannels:^(NSArray *onlineChannelList) {
-        
-
-        for (PYChannel *channel in onlineChannelList) {
-            
-            //Nenad_test channel
-            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
-                
-            }
-        }
-        
-    } errorHandler:^(NSError *error) {
-        NSLog(@"isOnline %d",access.isOnline);
-    }];
+//    [PYClient setDefaultDomainStaging];
+//    
+//    PYConnection *access = [PYClient createConnectionWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
+//        
+//    [access getAllChannelsWithRequestType:PYRequestTypeSync
+//                        gotCachedChannels:^(NSArray *cachedChannelList) {
+//        NSLog(@"cachedChannelList %@",cachedChannelList);
+//        
+//        for (PYChannel *channel in cachedChannelList) {
+//            //Nenad_test channel
+//            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
+//                
+//            }
+//        }
+//    
+//    
+//            
+//    } gotOnlineChannels:^(NSArray *onlineChannelList) {
+//        
+//
+//        for (PYChannel *channel in onlineChannelList) {
+//            
+//            //Nenad_test channel
+//            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
+//                
+//            }
+//        }
+//        
+//    } errorHandler:^(NSError *error) {
+//        NSLog(@"isOnline %d",access.isOnline);
+//    }];
     
 }
 
@@ -61,13 +61,19 @@
     
 //    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
     
-    NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"channelId", @"level", nil];
+    NSArray *keys = [NSArray arrayWithObjects:  kPYAPIConnectionRequestStreamId,
+                                                kPYAPIConnectionRequestLevel,
+                                                nil];
     
-    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
+    NSArray *objects = [NSArray arrayWithObjects:   kPYAPIConnectionRequestAllStreams,
+                                                    kPYAPIConnectionRequestManageLevel,
+                                                    nil];
+    
+    NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects
+                                                                                forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requestAccessWithAppId:@"pryv-sdk-ios-example"
+    [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-ios-example"
                                      andPermissions:permissions
                                            delegate:self];
 
@@ -79,7 +85,7 @@
     return self;
 }
 
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess {
+- (void) pyWebLoginSuccess:(PYConnection*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }

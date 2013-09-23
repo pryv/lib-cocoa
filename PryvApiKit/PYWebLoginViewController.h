@@ -12,7 +12,7 @@
 #else
 #import <UIKit/UIKit.h>
 #endif
-#import "PYAccess.h"
+#import "PYConnection.h"
 
 @class PYWebLoginViewController;
 
@@ -22,7 +22,7 @@
 #else
 - (UIViewController*) pyWebLoginGetController;
 #endif
-- (void) pyWebLoginSuccess:(PYAccess*)pyAccess;
+- (void) pyWebLoginSuccess:(PYConnection*)pyConnection;
 - (void) pyWebLoginAborded:(NSString*)reason;
 - (void) pyWebLoginError:(NSError*)error;
 @end
@@ -46,7 +46,7 @@
     
 
 
-+ (PYWebLoginViewController *)requestAccessWithAppId:(NSString *)appID
++ (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID
                                       andPermissions:(NSArray *)permissions
                                             delegate:(id ) delegate
                                 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060

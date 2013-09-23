@@ -8,8 +8,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PYChannel.h"
 #import "PYConstants.h"
+#import "PYClient.h"
+
+
+@class PYChannel;
 
 #define PYEventFilter_UNDEFINED_FROMTIME DBL_MIN
 #define PYEventFilter_UNDEFINED_TOTIME DBL_MAX

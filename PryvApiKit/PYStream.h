@@ -6,17 +6,19 @@
 
 #import <Foundation/Foundation.h>
 
+@class PYConnection;
 
-@interface PYFolder : NSObject
+
+@interface PYStream : NSObject
 {
-    NSString *_folderId;
-    NSString *_channelId;
+    PYConnection *_connection;
+    NSString *_streamId;
     NSString *_name;
     NSString *_parentId;
     NSDictionary *_clientData;
     NSTimeInterval _timeCount;
     NSArray *_children;
-    BOOL _hidden;
+    BOOL _singleActivity;
     BOOL _trashed;
     
     BOOL _isSyncTriedNow;
@@ -24,11 +26,11 @@
     BOOL _notSyncAdd;
     BOOL _notSyncModify;
     NSTimeInterval _synchedAt;
-    NSDictionary *_modifiedFolderPropertiesAndValues;
+    NSDictionary *_modifiedStreamPropertiesAndValues;
 }
 
-@property (nonatomic, copy) NSString *folderId;
-@property (nonatomic, copy) NSString *channelId;
+@property (nonatomic, retain) PYConnection *connection;
+@property (nonatomic, copy) NSString *streamId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
 @property (nonatomic, copy) NSDictionary *clientData;
@@ -37,7 +39,7 @@
 //@children -> array of PYFolder objects
 @property (nonatomic, retain) NSArray *children;
 
-@property (nonatomic, assign, getter = isHidden) BOOL hidden;
+@property (nonatomic, assign, getter = isSingleActivity) BOOL singleActivity;
 @property (nonatomic, assign, getter = isTrashed) BOOL trashed;
 
 /**
@@ -62,7 +64,7 @@
 /**
  @property modifiedFolderPropertiesAndValues - NSDictionary that describes what folder properties should be modified on server during the synching
  */
-@property (nonatomic, retain) NSDictionary *modifiedFolderPropertiesAndValues;
+@property (nonatomic, retain) NSDictionary *modifiedStreamPropertiesAndValues;
 
 /**
  Convert PYFolder object to json-like NSDictionary representation for synching with server

@@ -6,8 +6,10 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-@class PYEvent;
 #import <Foundation/Foundation.h>
+#import "PYClient.h"
+
+@class PYEvent, PYConnection;
 
 @interface PYEventsCachingUtillity : NSObject
 
@@ -36,5 +38,13 @@
  Utility method - Get key for event
  */
 + (NSString *)getKeyForEvent:(PYEvent *)event;
+
+/**
+ This method get particular event from server and cache it
+ */
++ (void)getAndCacheEventWithServerId:(NSString *)eventId
+                     usingConnection:(PYConnection *)connection
+                         requestType:(PYRequestType)reqType;
+
 
 @end
