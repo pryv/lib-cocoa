@@ -31,7 +31,17 @@
         event.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
 
-    event.type = [JSON objectForKey:@"type"];
+    id eventType = [JSON objectForKey:@"type"];
+    
+    if([[eventType class] isSubclassOfClass:[NSDictionary class]])
+    {
+        NSDictionary *eventTypeDic = (NSDictionary*)eventType;
+        event.type = [NSString stringWithFormat:@"%@/%@",[eventTypeDic objectForKey:@"class"],[eventTypeDic objectForKey:@"type"]];
+    }
+    else
+    {
+        event.type = eventType;
+    }
     
     if ([JSON objectForKey:@"content"] == [NSNull null]) {
         event.eventContent = nil;

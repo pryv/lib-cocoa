@@ -231,7 +231,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             }
             NSLog(@"event has tmpId and it's added");
             if (event.notSyncAdd) {
-                NSString *tempId = [NSString stringWithString:event.eventId];
+                NSString *tempId = [event.eventId copy];
                 event.eventId = nil;
                 NSLog(@"%@",event);
                 [self createEvent:event
@@ -241,7 +241,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
                        //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
                        event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                       event.eventId = [NSString stringWithString:tempId];
+                       event.eventId = [tempId copy];
                        
                        [self.eventsNotSync removeObject:event];
                        //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
