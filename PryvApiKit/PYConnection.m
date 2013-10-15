@@ -215,6 +215,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
     [nonSyncEvents addObjectsFromArray:[self.eventsNotSync allObjects]];
+    NSLog(@"%@",nonSyncEvents);
     for (PYEvent *event in nonSyncEvents) {
         
         //if ([event.channelId compare:self.channelId] == NSOrderedSame) {
