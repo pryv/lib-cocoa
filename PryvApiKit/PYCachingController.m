@@ -67,6 +67,10 @@
 
 - (void)removeEvent:(NSString *)key
 {
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]])
+    {
+        NSLog(@"WANT TO REMOVE BAD EVENT: %@",key);
+    }
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
     if (error) {
