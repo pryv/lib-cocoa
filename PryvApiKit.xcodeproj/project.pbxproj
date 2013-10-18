@@ -1331,6 +1331,7 @@
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "PryvApiKit/PryvApiKit-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = PryvApiKit;
@@ -1355,6 +1356,7 @@
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "PryvApiKit/PryvApiKit-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = PryvApiKit;
