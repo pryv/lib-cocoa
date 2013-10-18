@@ -548,7 +548,7 @@
                          //When we try to create event and we came here it have tmpId
                          event.hasTmpId = YES;
                          //this is random id
-                         event.eventId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+                         event.eventId = [[NSString stringWithFormat:@"%f",event.time] stringByReplacingOccurrencesOfString:@"." withString:@""];
                          //return that created id so it can work offline. Event will be cached when added to unsync list
                          if (event.attachments.count > 0) {
                              for (PYAttachment *attachment in event.attachments) {

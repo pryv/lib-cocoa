@@ -62,6 +62,9 @@
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
     [[PYCachingController sharedManager] removeEvent:eventKey];
+    //second try
+    eventKey = [[NSString stringWithFormat:@"event_%f",event.time] stringByReplacingOccurrencesOfString:@"." withString:@""];
+    [[PYCachingController sharedManager] removeEvent:eventKey];
 
 }
 

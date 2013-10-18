@@ -215,6 +215,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
     [nonSyncEvents addObjectsFromArray:[self.eventsNotSync allObjects]];
+    NSLog(@"Not syncEvents: %@",nonSyncEvents);
     for (PYEvent *event in nonSyncEvents) {
         
         //if ([event.channelId compare:self.channelId] == NSOrderedSame) {
@@ -231,7 +232,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             }
             NSLog(@"event has tmpId and it's added");
             if (event.notSyncAdd) {
-                NSString *tempId = [NSString stringWithString:event.eventId];
+                NSString *tempId = [event.eventId copy];
                 event.eventId = nil;
                 NSLog(@"%@",event);
                 [self createEvent:event
@@ -241,9 +242,18 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
                        //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
                        event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                       event.eventId = [NSString stringWithString:tempId];
+                       event.eventId = [tempId copy];
+                       event.notSyncAdd = NO;
+                       event.hasTmpId = NO;
                        
-                       [self.eventsNotSync removeObject:event];
+                       [self.eventsNotSync enumerateObjectsUsingBlock:^(PYEvent *obj, BOOL *stop) {
+                           if([obj.eventId isEqualToString:event.eventId] || obj.time == event.time)
+                           {
+                               [self.eventsNotSync removeObject:obj];
+                               *stop = YES;
+                           }
+                       }];
+                       
                        //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
                        //He will always have tmpId here but just in case for testing (defensive programing)
                        [PYEventsCachingUtillity removeEvent:event];
@@ -251,6 +261,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                    } errorHandler:^(NSError *error) {
                        //reset flag if fail, very IMPORTANT
                        event.isSyncTriedNow = NO;
+                       event.eventId = [tempId copy];
                        NSLog(@"SYNC error: creating event failed");
                        NSLog(@"%@",error);
                    }];
