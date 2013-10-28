@@ -386,7 +386,7 @@
                              NSString *fileName = attachment.fileName;
                              [self getAttachmentDataForFileName:fileName
                                                         eventId:event.eventId
-                                                    requestType:PYRequestTypeSync
+                                                    requestType:PYRequestTypeAsync
                                                  successHandler:^(NSData *filedata) {
                                                      
                                                      attachment.fileData = filedata;
@@ -799,7 +799,9 @@
                       successHandler:(void (^) (NSData * filedata))success
                         errorHandler:(void (^) (NSError *error))errorHandler
 {
-    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, eventId ,fileName];
+    NSString *oldApiDomain = [self.apiDomain copy];
+    self.apiDomain = [NSString stringWithFormat:@"%@:3443",self.apiDomain];
+    NSString *path = [NSString stringWithFormat:@"%@/%@.jpg",kROUTE_EVENTS, eventId];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     [self apiRequest:urlPath
          requestType:reqType
@@ -815,7 +817,7 @@
                      errorHandler (error);
                  }
              }];
-    
+    self.apiDomain = oldApiDomain;
 }
 
 @end
