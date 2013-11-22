@@ -528,10 +528,15 @@
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
+                 //The following method only cached the event with id gotten from server. Let's try
+                 //to cache it directly here and see what happens.
                  //Cache particular event in cache
-                 [PYEventsCachingUtillity getAndCacheEventWithServerId:createdEventId
-                                                       usingConnection:self
-                                                           requestType:reqType];
+//                 [PYEventsCachingUtillity getAndCacheEventWithServerId:createdEventId
+//                                                       usingConnection:self
+//                                                           requestType:reqType];
+                 //Fix maybe ?
+                 event.eventId = [createdEventId copy];
+                 [PYEventsCachingUtillity cacheEvent:event];
                  
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId);
