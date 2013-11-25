@@ -115,6 +115,10 @@ static NSString *myDefaultDomain;
     }
 }
 
+/**
+ * Utility to retrieve the mimetype of a file
+ * TODO move to utils
+ */
 + (NSString *)fileMIMEType:(NSString*)file
 {
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)[file pathExtension], NULL);
@@ -127,26 +131,16 @@ static NSString *myDefaultDomain;
     return [(NSString *)MIMEType autorelease];
 }
 
-+ (NSString *)urlPath:(NSString *)path withParams:(NSDictionary *)params
-{
-    if (path == nil) path = @"";
-    NSMutableString *pathString = [NSMutableString stringWithString:path];
-    if (params) {
-        [pathString appendString:@"?"];
-        for (NSString *key in [params allKeys])
-        {
-            [pathString appendFormat:@"%@=%@&",key,[params valueForKey:key]];
-        }
-        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
-    }
-    return [pathString copy];
-}
 
+/** 
+ * Create add parameters to this url path
+ * TODO move to utils
+ */
 + (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params
 {
     if (path == nil) path = @"";
     NSMutableString *pathString = [NSMutableString stringWithString:path];
-
+    
     [pathString appendString:@"?"];
     for (NSString *key in [params allKeys])
     {
@@ -163,9 +157,12 @@ static NSString *myDefaultDomain;
     }
     [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
     return pathString;
-
+    
 }
 
+/**
+ * Prepare the request for the API
+ */
 + (void) apiRequest:(NSString *)fullURL
             headers:(NSDictionary *)headers
         requestType:(PYRequestType)reqType
@@ -179,7 +176,7 @@ static NSString *myDefaultDomain;
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
     
     NSURL *url;
-
+    
     
     // -- headers
     if (headers != nil) {
@@ -191,18 +188,18 @@ static NSString *myDefaultDomain;
             [request setValue:v forHTTPHeaderField:k];
         }
     }
-
+    
     if (!fullURL) {
-        [NSException raise:@"There is no path string" format:@"Path can't be nil"];
+        [NSException raise:@"There is no fullURL string" format:@"fullURL can't be nil"];
         return;
     }
     
     url = [NSURL URLWithString:fullURL];
     
     
-    [request setURL:url];    
+    [request setURL:url];
     NSDictionary *postDataa = postData;
-        
+    
     if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )
     {
         [NSException raise:NSInvalidArgumentException format:@"postData must be nil for GET method or DELETE method"];
@@ -219,7 +216,7 @@ static NSString *myDefaultDomain;
         
         // start
         [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundaryIdentifier] forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPMethod:@"POST"];        
+        [request setHTTPMethod:@"POST"];
         
         // param: JSON
         [bodyData appendData:boundaryData];
@@ -229,7 +226,7 @@ static NSString *myDefaultDomain;
         
         // param: attachment
         for (PYAttachment *attachment in attachments) {
-        
+            
             [bodyData appendData:boundaryData];
             [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", attachment.name, attachment.fileName] dataUsingEncoding:NSUTF8StringEncoding]];
             
@@ -238,18 +235,18 @@ static NSString *myDefaultDomain;
             [bodyData appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
             
         }
-    
+        
         // end
         [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding]];
         [request setHTTPBody:bodyData];
         
         //####### DISPLAY SENT REQUEST (use with plain text attachment(s) only)#########
         
-//        NSString *bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
-//        NSLog(@"Request : %@\n%@",[request allHTTPHeaderFields],bodyString);
+        //        NSString *bodyString = [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding];
+        //        NSLog(@"Request : %@\n%@",[request allHTTPHeaderFields],bodyString);
         [bodyData release];
         
-    }else{
+    }else{ //--- no attachements --
         
         if (method == PYRequestMethodPOST || method == PYRequestMethodPUT) {
             [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -262,10 +259,13 @@ static NSString *myDefaultDomain;
         if (postDataa) {
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
-    }    
+    }
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
 }
 
+/**
+ *
+ */
 + (void)sendRequest:(NSURLRequest *)request
         withReqType:(PYRequestType)reqType
             success:(PYClientSuccessBlock)successHandler
@@ -279,8 +279,10 @@ static NSString *myDefaultDomain;
                     successHandler(req,resp,JSON);
                 }
             } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
+                
                 if (failureHandler) {
                     NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
+                    NSLog(@"** PYClient.sendRequest Async ** : %@", errorToReturn);
                     failureHandler(errorToReturn);
                 }
             }];
@@ -294,10 +296,14 @@ static NSString *myDefaultDomain;
             NSHTTPURLResponse *urlResponse = nil;
             
             NSData *responseData = nil;
-            NSLog(@"started sync request with url: %@",[[request URL] absoluteString]);
+            id stringReply;
+            //NSLog(@"started sync request with url: %@",[[request URL] absoluteString]);
             responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+            stringReply = (NSString *)[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            //NSLog(@"*41** request \n %@ \n *** response: \n %@ ", [request allHTTPHeaderFields], stringReply);
             if (error && failureHandler) {
                 NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:nil error:error withResponse:urlResponse andRequest:request];
+                NSLog(@"** PYClient.sendRequest Sync ** : %@ \n %@ \n  *** response:  %@", errorToReturn, errorToReturn.userInfo, stringReply);
                 failureHandler(errorToReturn);
                 return;
             }
@@ -316,9 +322,10 @@ static NSString *myDefaultDomain;
             if ( isUnacceptableStatusCode && failureHandler ) {
                 
                 NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:nil withResponse:httpURLResponse andRequest:request];
+                NSLog(@"** PYClient.sendRequest isUnacceptableStatusCode ** : %@", errorToReturn);
                 failureHandler (errorToReturn);
                 
-            }else if (successHandler) {
+            } else if (successHandler) {
                 successHandler (request, httpURLResponse, JSON);
             }
         }
@@ -327,7 +334,7 @@ static NSString *myDefaultDomain;
         default:
             break;
     }
-
+    
 }
 
 @end

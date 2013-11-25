@@ -12,7 +12,6 @@
 @interface PYConnectionTests : SenTestCase
 
 @property (nonatomic, retain) PYConnection *connection;
-@property (nonatomic, retain) PYStream *streamForTest;
 
 - (void)testGettingStreams;
 

@@ -77,7 +77,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 }
 
 - (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error
-{    
+{
     /*When we deserialize unsync list (when app starts) we will know what events are not sync with these informations:
      They have one of these flags or combination of them
      notSyncAdd
@@ -117,7 +117,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [self.streamsNotSync addObject:stream];
         }
     }
-
+    
     
 }
 
@@ -389,21 +389,21 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     if (path == nil) path = @"";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
-//    NSDictionary* headers = @{@"Authorization": self.accessToken};
+    //    NSDictionary* headers = @{@"Authorization": self.accessToken};
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
-
+    
     [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      if (serverTime == nil) {
-                          NSLog(@"Error cannot find Server-Time in headers");
+                         NSLog(@"Error cannot find Server-Time in headers");
                          
                          NSDictionary *errorInfoDic = [NSDictionary dictionaryWithObject:@"Error cannot find Server-Time in headers"
                                                                                   forKey:@"message"];
                          NSError *errorToReturn =
                          [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
                          failureHandler(errorToReturn);
-
+                         
                      } else {
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
@@ -412,7 +412,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                              successHandler(request,response,JSON);
                          }
                      }
-                    
+                     
                  }
                  failure:failureHandler];
 }
@@ -432,9 +432,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSLog(@"Successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
-           if (successHandler)
+                 if (successHandler)
                      successHandler(_serverTimeInterval);
-     
+                 
              } failure:^(NSError *error) {
                  if (errorHandler)
                      errorHandler(error);

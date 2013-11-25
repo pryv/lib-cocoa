@@ -142,7 +142,7 @@
                  }
                  [PYStreamsCachingUtillity getAndCacheStream:stream
                                                 withServerId:createdStreamId
-                                                 requestType:reqType];                 
+                                                 requestType:reqType];
              } failure:^(NSError *error) {
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (stream.isSyncTriedNow == NO) {
@@ -173,10 +173,10 @@
 }
 
 -(void)trashOrDeleteStream:(PYStream *)stream
-                    filterParams:(NSDictionary *)filter
-                 withRequestType:(PYRequestType)reqType
-                  successHandler:(void (^)())successHandler
-                    errorHandler:(void (^)(NSError *))errorHandler
+              filterParams:(NSDictionary *)filter
+           withRequestType:(PYRequestType)reqType
+            successHandler:(void (^)())successHandler
+              errorHandler:(void (^)(NSError *))errorHandler
 {
     [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
          requestType:reqType
@@ -184,7 +184,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-            if (successHandler) {
+                 if (successHandler) {
                      successHandler();
                  }
              } failure:^(NSError *error) {
@@ -213,9 +213,9 @@
 //             } failure:^(NSError *error) {
 //                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
 //                     if (stream.isSyncTriedNow == NO) {
-//                         
+//
 //                         //stream.notSyncTrashOrDelete = YES;
-//                         
+//
 //                         if (stream.trashed == NO) {
 //                             stream.trashed = YES;
 //                             [PYStreamsCachingUtillity cacheStream:stream];
@@ -225,12 +225,12 @@
 //                             [PYStreamsCachingUtillity removeStream:stream];
 //                             [self.streamsNotSync removeObject:stream];
 //                         }
-//                         
-//                         
+//
+//
 //                     }else{
 //                         NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
 //                     }
-//                     
+//
 //                 }else{
 //                     if (errorHandler) {
 //                         errorHandler (error);
@@ -462,11 +462,11 @@
 }
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                         parameters:(NSDictionary *)filter
-                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
-                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                       errorHandler:(void (^)(NSError *error))errorHandler
+                      parameters:(NSDictionary *)filter
+                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                 gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                  successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                    errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
     NSArray *allEventsFromCacheBeforeCacheUpdate = [PYEventsCachingUtillity getEventsFromCache];
@@ -531,9 +531,9 @@
                  //The following method only cached the event with id gotten from server. Let's try
                  //to cache it directly here and see what happens.
                  //Cache particular event in cache
-//                 [PYEventsCachingUtillity getAndCacheEventWithServerId:createdEventId
-//                                                       usingConnection:self
-//                                                           requestType:reqType];
+                 //                 [PYEventsCachingUtillity getAndCacheEventWithServerId:createdEventId
+                 //                                                       usingConnection:self
+                 //                                                           requestType:reqType];
                  //Fix maybe ?
                  event.eventId = [createdEventId copy];
                  [PYEventsCachingUtillity cacheEvent:event];

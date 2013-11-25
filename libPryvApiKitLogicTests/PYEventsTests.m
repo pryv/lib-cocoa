@@ -23,7 +23,6 @@
     
     [self testGettingStreams];
     
-    STAssertNotNil(self.streamForTest, @"Test stream isn't created");
     
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";

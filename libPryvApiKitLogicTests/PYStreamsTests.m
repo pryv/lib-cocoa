@@ -24,10 +24,9 @@
     
     [self testGettingStreams];
     
-    STAssertNotNil(self.streamForTest, @"Test stream isn't created");
     
     PYStream *stream = [[PYStream alloc] init];
-    stream.streamId = @"pystreamstests";
+    stream.streamId = @"pystreamstest";
     stream.name = @"PYStreamsTests";
     
     
@@ -38,7 +37,9 @@
         NSLog(@"New stream ID : %@",createdStreamIdFromServer);
         [PYStreamsCachingUtillity cacheStream:stream];
     } errorHandler:^(NSError *error) {
-        STFail(@"Change stream name or stream id to run this test correctly see error from server : %@",error);
+        
+        NSLog(@"*43** : %@",error);
+        STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
     }];
     
     NSString *fakeStreamId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";

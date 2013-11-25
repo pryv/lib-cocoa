@@ -97,6 +97,7 @@
 		3DC817111754021D00A91142 /* PYEventsCachingUtillity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC8170E1754021D00A91142 /* PYEventsCachingUtillity.m */; };
 		3DC817121754028700A91142 /* PYEventsCachingUtillity.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DC8170D1754021D00A91142 /* PYEventsCachingUtillity.h */; };
 		3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */; };
+		4E3D3AF1184388140080AD4F /* PYTestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3D3AF0184388140080AD4F /* PYTestConstants.m */; };
 		4E582DD116C25378003B59DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC2049716B95F1C00CB5FFB /* Foundation.framework */; };
 		4E582DD916C25378003B59DB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4E582DD716C25378003B59DB /* InfoPlist.strings */; };
 		4E582DDB16C25378003B59DB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E582DDA16C25378003B59DB /* main.m */; };
@@ -265,6 +266,8 @@
 		3DC8170E1754021D00A91142 /* PYEventsCachingUtillity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventsCachingUtillity.m; sourceTree = "<group>"; };
 		3DD28EBA17135EA900602603 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = "<group>"; };
+		4E3D3AEF184388140080AD4F /* PYTestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYTestConstants.h; sourceTree = "<group>"; };
+		4E3D3AF0184388140080AD4F /* PYTestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYTestConstants.m; sourceTree = "<group>"; };
 		4E582DCE16C25378003B59DB /* iOs Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOs Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E582DD616C25378003B59DB /* iOs Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iOs Example-Info.plist"; sourceTree = "<group>"; };
 		4E582DD816C25378003B59DB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -451,6 +454,8 @@
 				3D6925E5177B79150031F624 /* PYEventsTests.h */,
 				3D6925E6177B79150031F624 /* PYEventsTests.m */,
 				3D4897441778E8AC008C7B66 /* Supporting Files */,
+				4E3D3AEF184388140080AD4F /* PYTestConstants.h */,
+				4E3D3AF0184388140080AD4F /* PYTestConstants.m */,
 			);
 			path = libPryvApiKitLogicTests;
 			sourceTree = "<group>";
@@ -947,6 +952,7 @@
 			files = (
 				0C35F98517CB8B520010132B /* PYConnection+DataManagement.m in Sources */,
 				3D48974B1778E8AC008C7B66 /* libPryvApiKitLogicTests.m in Sources */,
+				4E3D3AF1184388140080AD4F /* PYTestConstants.m in Sources */,
 				3D4897541778EE34008C7B66 /* PryvCachingTests.m in Sources */,
 				3D6925E4177B73400031F624 /* PYConnectionTests.m in Sources */,
 				3D6925E7177B79150031F624 /* PYEventsTests.m in Sources */,
