@@ -26,7 +26,10 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
-@interface PYClient : NSObject 
+@interface PYClient : NSObject
+
++ (NSString *)languageCodePrefered;
++ (void)setLanguageCodePrefered:(NSString*) languageCode;
 
 + (NSString *)defaultDomain;
 + (void)setDefaultDomain:(NSString*) domain;

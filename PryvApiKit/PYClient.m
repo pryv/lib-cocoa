@@ -23,6 +23,18 @@
 @implementation PYClient
 
 static NSString *myDefaultDomain;
+static NSString *myLanguageCodePrefered;
+
+
+
++ (NSString *)languageCodePrefered {
+    if (myLanguageCodePrefered == nil) myLanguageCodePrefered = kLanguageCodeDefault;
+    return myLanguageCodePrefered;
+}
+
++ (void)setLanguageCodePrefered:(NSString*) languageCode {
+     myLanguageCodePrefered = languageCode;
+}
 
 + (NSString *)defaultDomain {
     if (myDefaultDomain == nil) myDefaultDomain = kPYAPIDomain;

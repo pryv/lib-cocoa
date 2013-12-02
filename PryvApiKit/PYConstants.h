@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NSString *const kLanguageCodeDefault;
+
 #pragma mark - API
 
 FOUNDATION_EXPORT NSString *const kPYAPIScheme;

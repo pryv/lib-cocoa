@@ -8,6 +8,8 @@
 
 #import "PYConstants.h"
 
+NSString *const kLanguageCodeDefault = @"en";
+
 #pragma mark - API
 
 NSString *const kPYAPIScheme = @"https";
