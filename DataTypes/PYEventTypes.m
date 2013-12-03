@@ -23,6 +23,7 @@
 
 @implementation PYEventTypes {
     NSDictionary* _hierarchical;
+    NSMutableDictionary* _flat;
     NSDictionary* _extras;
 }
 
@@ -41,10 +42,31 @@
 
 - (void)initObject
 {
+    _flat = [[NSMutableDictionary alloc] init];
     _hierarchical = [[NSDictionary alloc] init];
     [self changeNSDictionary:&_hierarchical withContentOfJSONString:PYEventTypesPackagedData.hierarchical];
     _extras = [[NSDictionary alloc] init];
+    [self updateFlat];
     [self changeNSDictionary:&_extras withContentOfJSONString:PYEventTypesPackagedData.extras];
+}
+
+/**
+ * Update _flat reference table from hierachical data
+ */
+- (void)updateFlat
+{
+    [_flat removeAllObjects];
+    
+    NSDictionary *classes = [_hierarchical objectForKey:@"classes"];
+    for(NSString *classKey in [classes allKeys])
+    {
+        NSDictionary *formats = [[classes objectForKey:classKey] objectForKey:@"formats"];
+        for(NSString *formatKey in [formats allKeys])
+        {
+            [_flat setObject:[formats objectForKey:formatKey]
+                      forKey:[NSString stringWithFormat:@"%@/%@", classKey, formatKey]];
+        }
+    }
 }
 
 -(void) changeNSDictionary:(NSDictionary**) dict withContentOfJSONString:(id) jsonString
@@ -90,6 +112,22 @@
 {
     return _extras;
 }
+
+
+- (NSDictionary*) definitionForPYEvent:(PYEvent*)event
+{
+    //TODO either generate an error if unkown or return an "uknown event structure"
+    return [_flat objectForKey:event.type];
+}
+
+- (BOOL)isNumerical:(PYEvent*)event
+{
+    NSDictionary* def = [self definitionForPYEvent:event];
+    return [@"number" isEqualToString:[def objectForKey:@"type"]];
+}
+
+
+
 
 
 - (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError *)error

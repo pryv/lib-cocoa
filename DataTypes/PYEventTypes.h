@@ -6,8 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
+#import "PYEvent.h"
 
 typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
@@ -20,5 +19,10 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 - (NSDictionary*)hierarchical;
 
 - (NSDictionary*)extras;
+
+- (NSDictionary*) definitionForPYEvent:(PYEvent*)event;
+
+- (BOOL)isNumerical:(PYEvent*)event;
+
 
 @end
