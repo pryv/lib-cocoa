@@ -8,6 +8,7 @@
 
 #import "PYEventTypesTests.h"
 #import "PYEventTypes.h"
+#import "PYEvent.h"
 
 @implementation PYEventTypesTests
 
@@ -42,13 +43,9 @@
     event.type = @"note/txt";
     
     NSDictionary* eventDef = [[PYEventTypes sharedInstance] definitionForPYEvent:event];
-    if (! [eventDef objectForKey:@"type"]) {
-        STFail(@"Cannot find classes in dictionary");
-        
-    } else {
-        NSLog(@"*21 %@", [eventDef objectForKey:@"type"]);
+    if (! [@"string" isEqualToString:[eventDef objectForKey:@"type"]]) {
+        STFail(@"Cannot find classes in dictionary, or note/txt is not of type 'string'");
     }
-
 }
 
 

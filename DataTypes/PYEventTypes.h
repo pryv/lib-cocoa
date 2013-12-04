@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEvent.h"
+@class PYEvent;
 
 typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 

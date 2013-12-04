@@ -8,6 +8,7 @@
 
 #import "PYEventTypes.h"
 #import "PYEventTypesPackagedData.h"
+#import "PYEvent.h"
 
 
 #define kMeasurementSetsUrl @"http://pryv.github.io/event-types/extras.json"
