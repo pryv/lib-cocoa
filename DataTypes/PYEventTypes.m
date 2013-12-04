@@ -9,23 +9,27 @@
 #import "PYEventTypes.h"
 #import "PYEventTypesPackagedData.h"
 #import "PYEvent.h"
+#import "PYMeasurementSet.h"
 
 
 #define kMeasurementSetsUrl @"http://pryv.github.io/event-types/extras.json"
 
 @interface PYEventTypes ()
 
-
 - (void)initObject;
+- (void)updateFlat;
+- (void)changeNSDictionary:(NSDictionary**) dict withContentOfJSONString:(id) jsonString;
 - (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError*)error;
 
 @end
+
 
 
 @implementation PYEventTypes {
     NSDictionary* _hierarchical;
     NSMutableDictionary* _flat;
     NSDictionary* _extras;
+    NSMutableArray* _measurementSets;
 }
 
 
@@ -43,12 +47,18 @@
 
 - (void)initObject
 {
-    _flat = [[NSMutableDictionary alloc] init];
+    
     _hierarchical = [[NSDictionary alloc] init];
+    
     [self changeNSDictionary:&_hierarchical withContentOfJSONString:PYEventTypesPackagedData.hierarchical];
     _extras = [[NSDictionary alloc] init];
+    _flat = [[NSMutableDictionary alloc] init];
     [self updateFlat];
+    
     [self changeNSDictionary:&_extras withContentOfJSONString:PYEventTypesPackagedData.extras];
+    
+    _measurementSets = [NSMutableArray array];
+    [self updateMeasurementSets];
 }
 
 /**
@@ -69,6 +79,24 @@
         }
     }
 }
+
+/**
+ * Update _measurementSets reference table from extras data
+ */
+- (void)updateMeasurementSets
+{
+    [_measurementSets removeAllObjects];
+
+    NSDictionary *setsJSON = [_extras objectForKey:@"sets"];
+    for(NSString *setKey in [setsJSON allKeys])
+    {
+        NSDictionary *setDic = [setsJSON objectForKey:setKey];
+        PYMeasurementSet *set = [[PYMeasurementSet alloc] initWithKey:setKey andDictionary:setDic];
+        [_measurementSets addObject:set];
+    }
+}
+
+
 
 -(void) changeNSDictionary:(NSDictionary**) dict withContentOfJSONString:(id) jsonString
 {
@@ -128,7 +156,10 @@
 }
 
 
-
+- (NSArray*)measurementSets
+{
+    return _measurementSets;
+}
 
 
 - (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError *)error

@@ -39,12 +39,37 @@
 - (void)testEvent
 {
     
-    PYEvent *event = [[PYEvent alloc] init];
-    event.type = @"note/txt";
+    PYEvent *eventNoteTxt = [[PYEvent alloc] init];
+    eventNoteTxt.type = @"note/txt";
     
-    NSDictionary* eventDef = [[PYEventTypes sharedInstance] definitionForPYEvent:event];
-    if (! [@"string" isEqualToString:[eventDef objectForKey:@"type"]]) {
+    NSDictionary* eventNoteTxtDef = [[PYEventTypes sharedInstance] definitionForPYEvent:eventNoteTxt];
+    if (! [@"string" isEqualToString:[eventNoteTxtDef objectForKey:@"type"]]) {
         STFail(@"Cannot find classes in dictionary, or note/txt is not of type 'string'");
+    }
+    
+    
+    
+}
+
+- (void)testIsNumerical
+{
+    
+    PYEvent *eventMassKg = [[PYEvent alloc] init];
+    eventMassKg.type = @"mass/kg";
+    
+    if (! [[PYEventTypes sharedInstance] isNumerical:eventMassKg]) {
+        STFail(@"Failed testing if mass/kg event is numerical");
+    }
+}
+
+- (void)testSymbol
+{
+    
+    PYEvent *eventMassKg = [[PYEvent alloc] init];
+    eventMassKg.type = @"mass/kg";
+    
+    if (! [[PYEventTypes sharedInstance] isNumerical:eventMassKg]) {
+        STFail(@"Failed testing if mass/kg event is numerical");
     }
 }
 

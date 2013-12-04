@@ -20,9 +20,13 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 - (NSDictionary*)extras;
 
+- (NSArray*)measurementSets;
+
 - (NSDictionary*) definitionForPYEvent:(PYEvent*)event;
 
 - (BOOL)isNumerical:(PYEvent*)event;
+
+
 
 
 @end
