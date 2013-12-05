@@ -18,9 +18,6 @@
 #import <PryvApiKit/PYAttachment.h>
 #import <PryvApiKit/PYConnection+DataManagement.h>
 
-// DataTypes
-#import <PryvApiKit/PYEventTypes.h>
-#import <PryvApiKit/PYMeasurementSet.h>
 
 // Pryv Api Client
 #import <PryvApiKit/PYClient.h>
@@ -33,6 +30,9 @@
 
 #if TARGET_OS_MAC
 #else 
+    // DataTypes
+    #import <PryvApiKit/PYEventTypes.h>
+    #import <PryvApiKit/PYMeasurementSet.h>
 #endif
 
 

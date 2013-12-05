@@ -12,13 +12,23 @@
 
 @interface PYEventType ()
 
-@property (nonatomic, copy) NSDictionary *names;
-@property (nonatomic, copy) NSDictionary *descriptions;
-
 @end
 
 
 @implementation PYEventType
+
+@synthesize classKey = _classKey;
+@synthesize formatKey = _formatKey;
+@synthesize definition = _definition;
+@synthesize extras = _extras;
+@synthesize key = _key;
+@synthesize symbol = _symbol;
+@synthesize type = _type;
+@synthesize isNumerical = _isNumerical;
+@synthesize localizedName = _localizedName;
+@synthesize localizedDescription = _localizedDescription;
+@synthesize names = _names;
+@synthesize descriptions = _descriptions;
 
 
 - (id)initWithClassKey:(NSString *)classKey andFormatKey:(NSString*)formatKey

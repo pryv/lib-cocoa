@@ -12,6 +12,13 @@
 typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 @interface PYEventTypes : NSObject
+{
+    NSDictionary* _hierarchical;
+    NSMutableDictionary* _flat;
+    NSDictionary* _extras;
+    NSMutableArray* _measurementSets;
+}
+
 
 + (PYEventTypes*)sharedInstance;
 

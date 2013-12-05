@@ -14,6 +14,9 @@
 
 @implementation PYMeasurementGroup
 
+@synthesize name = _name;
+@synthesize types = _types;
+
 - (id)initWithName:(NSString *)name andListOfTypes:(NSArray *)listOfTypes
 {
     self = [super init];

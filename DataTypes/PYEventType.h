@@ -9,6 +9,23 @@
 #import <Foundation/Foundation.h>
 
 @interface PYEventType : NSObject
+{
+    NSString *_classKey;
+    NSString *_formatKey;
+    NSDictionary *_definition;
+    NSDictionary *_extras;
+    
+    NSString *_key;
+    NSString *_symbol;
+    NSString *_type;
+    BOOL _isNumerical;
+    NSString *_localizedName;
+    NSString *_localizedDescription;
+    
+    @private
+    NSDictionary *_names;
+    NSDictionary *_descriptions;
+}
 
 - (id)initWithClassKey:(NSString*)classKey
           andFormatKey:(NSString*)formatKey
@@ -27,6 +44,10 @@ andDefinitionDictionary:(NSDictionary*)dictionary;
 @property (nonatomic, readonly) BOOL isNumerical;
 @property (nonatomic, readonly) NSString *localizedName;
 @property (nonatomic, readonly) NSString *localizedDescription;
+
+//Private variables
+@property (nonatomic, copy) NSDictionary *names;
+@property (nonatomic, copy) NSDictionary *descriptions;
 
 
 @end
