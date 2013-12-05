@@ -27,8 +27,8 @@
     
     PYStream *stream = [[PYStream alloc] init];
     stream.streamId = @"pystreamstest";
-    stream.name = @"PYStreamsTests";
-    
+    stream.name = @"PYStreamsTests123";
+   
     
     __block NSString *createdStreamIdFromServer;
     [self.connection createStream:stream withRequestType:PYRequestTypeSync successHandler:^(NSString *createdStreamId) {
@@ -38,7 +38,6 @@
         [PYStreamsCachingUtillity cacheStream:stream];
     } errorHandler:^(NSError *error) {
         
-        NSLog(@"*43** : %@",error);
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
     }];
     
@@ -56,6 +55,7 @@
     } errorHandler:^(NSError *error) {
         
     }];
+     
     
     [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeSync successHandler:^{
         [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeSync successHandler:^{

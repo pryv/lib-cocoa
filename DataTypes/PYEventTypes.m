@@ -7,6 +7,7 @@
 //
 
 #import "PYEventTypes.h"
+#import "PYEventType.h"
 #import "PYEventTypesPackagedData.h"
 #import "PYEvent.h"
 #import "PYMeasurementSet.h"
@@ -49,13 +50,15 @@
 {
     
     _hierarchical = [[NSDictionary alloc] init];
-    
     [self changeNSDictionary:&_hierarchical withContentOfJSONString:PYEventTypesPackagedData.hierarchical];
+    
+    
     _extras = [[NSDictionary alloc] init];
+    [self changeNSDictionary:&_extras withContentOfJSONString:PYEventTypesPackagedData.extras];
+    
     _flat = [[NSMutableDictionary alloc] init];
     [self updateFlat];
     
-    [self changeNSDictionary:&_extras withContentOfJSONString:PYEventTypesPackagedData.extras];
     
     _measurementSets = [NSMutableArray array];
     [self updateMeasurementSets];
@@ -74,10 +77,31 @@
         NSDictionary *formats = [[classes objectForKey:classKey] objectForKey:@"formats"];
         for(NSString *formatKey in [formats allKeys])
         {
-            [_flat setObject:[formats objectForKey:formatKey]
-                      forKey:[NSString stringWithFormat:@"%@/%@", classKey, formatKey]];
+            PYEventType* eventType = [[PYEventType alloc] initWithClassKey:classKey
+                                                              andFormatKey:formatKey
+                                                   andDefinitionDictionary:[formats objectForKey:formatKey]];
+            
+            [_flat setObject:eventType forKey:eventType.key];
         }
     }
+    
+    // --- add extras
+    NSDictionary *extras = [_extras objectForKey:@"extras"];
+    for(NSString *classKey in [extras allKeys])
+    {
+        NSDictionary *formats = [[extras objectForKey:classKey] objectForKey:@"formats"];
+        for(NSString *formatKey in [formats allKeys])
+        {
+            PYEventType* eventType = [_flat objectForKey:[NSString stringWithFormat:@"%@/%@", classKey, formatKey]];
+            if (! eventType) {
+                NSLog(@"WARNING .. PYEventTypes.updateFlat+extras cannot find %@ in _flat",
+                      [NSString stringWithFormat:@"%@/%@", classKey, formatKey]);
+            } else {
+                [eventType addExtrasDefinitionsFromDictionary:[formats objectForKey:formatKey]];
+            }
+        }
+    }
+    
 }
 
 /**
@@ -143,17 +167,17 @@
 }
 
 
-- (NSDictionary*) definitionForPYEvent:(PYEvent*)event
+- (PYEventType*) pyTypeForEvent:(PYEvent*)event
 {
-    //TODO either generate an error if unkown or return an "uknown event structure"
-    return [_flat objectForKey:event.type];
+    return [self pyTypeForString:event.type];
 }
 
-- (BOOL)isNumerical:(PYEvent*)event
+- (PYEventType*) pyTypeForString:(NSString *)eventTypeStr
 {
-    NSDictionary* def = [self definitionForPYEvent:event];
-    return [@"number" isEqualToString:[def objectForKey:@"type"]];
+    //TODO either generate an error if unkown or return an "uknown event structure"
+    return [_flat objectForKey:eventTypeStr];
 }
+
 
 
 - (NSArray*)measurementSets

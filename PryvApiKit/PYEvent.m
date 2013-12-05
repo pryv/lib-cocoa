@@ -10,6 +10,8 @@
 #import "PYEvent+JSON.h"
 #import "PYAttachment.h"
 
+#import "PYEventTypes.h"
+
 @implementation PYEvent
 @synthesize eventId = _eventId;
 @synthesize time = _time;
@@ -209,6 +211,11 @@
     PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON];
     return [generalEvent autorelease];
     
+}
+
+- (PYEventType*) pyType
+{
+    return [[PYEventTypes sharedInstance] pyTypeForEvent:self];
 }
 
 

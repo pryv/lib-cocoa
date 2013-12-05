@@ -107,4 +107,9 @@
  */
 - (NSDictionary *)cachingDictionary;
 
+/**
+ Sugar to get the corresponding PYEventType of this event
+ */
+@property (nonatomic, readonly) PYEventType *pyType;
+
 @end

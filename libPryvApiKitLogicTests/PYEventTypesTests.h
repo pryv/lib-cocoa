@@ -11,6 +11,4 @@
 @interface PYEventTypesTests : SenTestCase
 
 
-- (void)testGettingResources;
-
 @end

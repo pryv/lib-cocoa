@@ -8,7 +8,9 @@
 
 #import "PYEventTypesTests.h"
 #import "PYEventTypes.h"
+#import "PYEventType.h"
 #import "PYEvent.h"
+#import "PYMeasurementSet.h"
 
 @implementation PYEventTypesTests
 
@@ -41,23 +43,20 @@
     
     PYEvent *eventNoteTxt = [[PYEvent alloc] init];
     eventNoteTxt.type = @"note/txt";
-    
-    NSDictionary* eventNoteTxtDef = [[PYEventTypes sharedInstance] definitionForPYEvent:eventNoteTxt];
-    if (! [@"string" isEqualToString:[eventNoteTxtDef objectForKey:@"type"]]) {
+    PYEventType *eventType = [eventNoteTxt pyType];
+ 
+    if (! [@"string" isEqualToString:[eventType type]]) {
         STFail(@"Cannot find classes in dictionary, or note/txt is not of type 'string'");
     }
-    
-    
     
 }
 
 - (void)testIsNumerical
 {
-    
     PYEvent *eventMassKg = [[PYEvent alloc] init];
     eventMassKg.type = @"mass/kg";
     
-    if (! [[PYEventTypes sharedInstance] isNumerical:eventMassKg]) {
+    if (! [eventMassKg.pyType isNumerical]) {
         STFail(@"Failed testing if mass/kg event is numerical");
     }
 }
@@ -66,11 +65,20 @@
 {
     
     PYEvent *eventMassKg = [[PYEvent alloc] init];
-    eventMassKg.type = @"mass/kg";
+    eventMassKg.type = @"money/usd";
     
-    if (! [[PYEventTypes sharedInstance] isNumerical:eventMassKg]) {
-        STFail(@"Failed testing if mass/kg event is numerical");
+    if (! [@"$" isEqualToString:[eventMassKg.pyType symbol]]) {
+        STFail(@"Failed testing if mass/kg event symbol as '$'");
     }
+}
+
+- (void)testMeasurementSets
+{
+    
+  /*  NSArray *measurementSets = [[PYEventTypes sharedInstance] measurementSets];
+    if (! [[measurementSets objectAtIndex:0] isKindOfClass:[PYMeasurementSet class]]) {
+        STFail(@"measurementSets does not return PYMeasurementSet but ");
+    } */
 }
 
 

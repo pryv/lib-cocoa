@@ -7,6 +7,7 @@
 //
 
 @class PYEvent;
+@class PYEventType;
 
 typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
@@ -22,11 +23,9 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 - (NSArray*)measurementSets;
 
-- (NSDictionary*) definitionForPYEvent:(PYEvent*)event;
+- (PYEventType*) pyTypeForEvent:(PYEvent*)event;
 
-- (BOOL)isNumerical:(PYEvent*)event;
-
-
+- (PYEventType*) pyTypeForString:(NSString*)eventTypeStr;
 
 
 @end
