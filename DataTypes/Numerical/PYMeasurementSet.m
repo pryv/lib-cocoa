@@ -14,14 +14,18 @@
 
 @interface PYMeasurementSet ()
 
-@property (nonatomic, copy) NSDictionary *names;
-@property (nonatomic, copy) NSDictionary *descriptions;
-
 - (void)initMeasurementTypesWithTypesDic:(NSDictionary*)types;
 
 @end
 
 @implementation PYMeasurementSet
+
+@synthesize key = _key;
+@synthesize localizedName = _localizedName;
+@synthesize localizedDescription = _localizedDescription;
+@synthesize measurementGroups = _measurementGroups;
+@synthesize names = _names;
+@synthesize descriptions = _descriptions;
 
 - (id)initWithKey:(NSString *)key andDictionary:(NSDictionary *)dictionary
 {

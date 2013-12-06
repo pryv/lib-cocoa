@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface PYMeasurementGroup : NSObject
+{
+    NSString *_name;
+    NSArray *_types;
+}
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSArray *types;

@@ -24,15 +24,7 @@
 
 @end
 
-
-
-@implementation PYEventTypes {
-    NSDictionary* _hierarchical;
-    NSMutableDictionary* _flat;
-    NSDictionary* _extras;
-    NSMutableArray* _measurementSets;
-}
-
+@implementation PYEventTypes
 
 + (PYEventTypes*)sharedInstance
 {
