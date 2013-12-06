@@ -10,6 +10,7 @@
 #import "PYEventTypes.h"
 #import "PYEventType.h"
 #import "PYEvent.h"
+#import "PYClient.h"
 #import "PYMeasurementSet.h"
 
 @implementation PYEventTypesTests
@@ -64,21 +65,59 @@
 - (void)testSymbol
 {
     
-    PYEvent *eventMassKg = [[PYEvent alloc] init];
-    eventMassKg.type = @"money/usd";
+    PYEvent *moneyUSD = [[PYEvent alloc] init];
+    moneyUSD.type = @"money/usd";
     
-    if (! [@"$" isEqualToString:[eventMassKg.pyType symbol]]) {
+    if (! [@"$" isEqualToString:[moneyUSD.pyType symbol]]) {
         STFail(@"Failed testing if mass/kg event symbol as '$'");
+    }
+    
+    
+    PYEvent *pryvActivity = [[PYEvent alloc] init];
+    pryvActivity.type = @"activity/pryv";
+    
+    if ([pryvActivity.pyType symbol] != nil) {
+        STFail(@"Failed testing if activity/pryv event symbol as nil value");
     }
 }
 
-- (void)testMeasurementSets
+- (void)testLocalizedNames
 {
     
-  /*  NSArray *measurementSets = [[PYEventTypes sharedInstance] measurementSets];
+    PYEvent *lengthM = [[PYEvent alloc] init];
+    lengthM.type = @"length/km";
+    
+    [PYClient setLanguageCodePrefered:@"en"];
+
+    if (! [@"Kilometers" isEqualToString:lengthM.pyType.localizedName]) {
+        STFail(@"Failed testing if length/km event localizedName in english is Kilometer : %@",
+               lengthM.pyType.localizedName);
+    }
+    
+    [PYClient setLanguageCodePrefered:@"fr"];
+    
+    if (! [@"Kilomètres" isEqualToString:[lengthM.pyType localizedName]]) {
+        STFail(@"Failed testing if length/km event localizedName in french is Kilomètre: %@",
+               [lengthM.pyType localizedName]);
+    }
+    
+    PYEvent *activity = [[PYEvent alloc] init];
+    activity.type = @"activity/pryv";
+    if (! [activity.pyType.formatKey isEqualToString:activity.pyType.localizedName]) {
+        STFail(@"Failed testing if activity/pryv event localizedName is : %@",
+               activity.pyType.localizedName);
+    }
+}
+
+
+
+- (void)testMeasurementSets
+{
+ /**
+  NSArray *measurementSets = [[PYEventTypes sharedInstance] measurementSets];
     if (! [[measurementSets objectAtIndex:0] isKindOfClass:[PYMeasurementSet class]]) {
         STFail(@"measurementSets does not return PYMeasurementSet but ");
-    } */
+    }**/
 }
 
 

@@ -26,7 +26,6 @@ andDefinitionDictionary:(NSDictionary*)dictionary;
 @property (nonatomic, readonly) NSString *type;
 @property (nonatomic, readonly) BOOL isNumerical;
 @property (nonatomic, readonly) NSString *localizedName;
-@property (nonatomic, readonly) NSString *localizedDescription;
 
 
 @end
