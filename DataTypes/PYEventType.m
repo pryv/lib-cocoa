@@ -26,7 +26,6 @@
 @synthesize type = _type;
 @synthesize isNumerical = _isNumerical;
 @synthesize localizedName = _localizedName;
-@synthesize localizedDescription = _localizedDescription;
 @synthesize names = _names;
 @synthesize descriptions = _descriptions;
 

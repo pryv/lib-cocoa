@@ -10,4 +10,9 @@
 
 @implementation PYEventClass
 
+
+- (id)initWithClassKey:(NSString*)classKey {
+    
+}
+
 @end
