@@ -12,7 +12,14 @@
 
 
 - (id)initWithClassKey:(NSString*)classKey {
-    
+    self = [super init];
+    if(self)
+    {
+
+        
+    }
+    return self;
+
 }
 
 @end
