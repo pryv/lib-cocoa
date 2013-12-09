@@ -26,6 +26,12 @@
 
 @implementation PYEventTypes
 
+@synthesize hierarchical = _hierarchical;
+@synthesize flat = _flat;
+@synthesize extras = _extras;
+@synthesize measurementSets = _measurementSets;
+
+
 + (PYEventTypes*)sharedInstance
 {
     static PYEventTypes *_sharedInstance;
@@ -101,14 +107,14 @@
  */
 - (void)updateMeasurementSets
 {
-    [_measurementSets removeAllObjects];
+    [self.measurementSets removeAllObjects];
 
     NSDictionary *setsJSON = [_extras objectForKey:@"sets"];
     for(NSString *setKey in [setsJSON allKeys])
     {
         NSDictionary *setDic = [setsJSON objectForKey:setKey];
         PYMeasurementSet *set = [[PYMeasurementSet alloc] initWithKey:setKey andDictionary:setDic];
-        [_measurementSets addObject:set];
+        [self.measurementSets addObject:set];
     }
 }
 
@@ -148,15 +154,6 @@
 }
 
 
-- (NSDictionary*) hierarchical
-{
-    return _hierarchical;
-}
-
-- (NSDictionary*) extras
-{
-    return _extras;
-}
 
 
 - (PYEventType*) pyTypeForEvent:(PYEvent*)event
@@ -168,13 +165,6 @@
 {
     //TODO either generate an error if unkown or return an "uknown event structure"
     return [_flat objectForKey:eventTypeStr];
-}
-
-
-
-- (NSArray*)measurementSets
-{
-    return _measurementSets;
 }
 
 

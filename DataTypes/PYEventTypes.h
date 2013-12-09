@@ -20,15 +20,14 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 }
 
 
+@property (nonatomic, strong) NSDictionary *hierarchical;
+@property (nonatomic, strong) NSMutableDictionary *flat;
+@property (nonatomic, strong) NSDictionary *extras;
+@property (nonatomic, strong) NSMutableArray *measurementSets;
+
 + (PYEventTypes*)sharedInstance;
 
 - (void)reloadWithCompletionBlock:(PYEventTypesCompletionBlock)completionBlock;
-
-- (NSDictionary*)hierarchical;
-
-- (NSDictionary*)extras;
-
-- (NSArray*)measurementSets;
 
 - (PYEventType*) pyTypeForEvent:(PYEvent*)event;
 
