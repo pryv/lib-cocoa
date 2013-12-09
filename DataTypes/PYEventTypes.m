@@ -58,7 +58,7 @@
     [self updateFlat];
     
     
-    _measurementSets = [NSMutableArray array];
+    _measurementSets = [[NSMutableArray alloc] init];
     [self updateMeasurementSets];
 }
 
