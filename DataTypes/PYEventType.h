@@ -21,10 +21,6 @@
     BOOL _isNumerical;
     NSString *_localizedName;
     NSString *_localizedDescription;
-    
-    @private
-    NSDictionary *_names;
-    NSDictionary *_descriptions;
 }
 
 - (id)initWithClassKey:(NSString*)classKey
@@ -44,9 +40,6 @@ andDefinitionDictionary:(NSDictionary*)dictionary;
 @property (nonatomic, readonly) BOOL isNumerical;
 @property (nonatomic, readonly) NSString *localizedName;
 
-//Private variables
-@property (nonatomic, copy) NSDictionary *names;
-@property (nonatomic, copy) NSDictionary *descriptions;
 
 
 @end

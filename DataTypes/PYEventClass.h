@@ -15,6 +15,5 @@
 
 @property (nonatomic, readonly) NSArray *eventTypes;
 @property (nonatomic, readonly) NSString *localizedName;
-@property (nonatomic, readonly) NSString *localizedDescription;
 
 @end

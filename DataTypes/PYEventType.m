@@ -26,8 +26,6 @@
 @synthesize type = _type;
 @synthesize isNumerical = _isNumerical;
 @synthesize localizedName = _localizedName;
-@synthesize names = _names;
-@synthesize descriptions = _descriptions;
 
 
 - (id)initWithClassKey:(NSString *)classKey andFormatKey:(NSString*)formatKey

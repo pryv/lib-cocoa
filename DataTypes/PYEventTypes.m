@@ -80,6 +80,7 @@
                                                    andDefinitionDictionary:[formats objectForKey:formatKey]];
             
             [_flat setObject:eventType forKey:eventType.key];
+            [eventType release];
         }
     }
     
@@ -112,9 +113,9 @@
     NSDictionary *setsJSON = [_extras objectForKey:@"sets"];
     for(NSString *setKey in [setsJSON allKeys])
     {
-        NSDictionary *setDic = [setsJSON objectForKey:setKey];
-        PYMeasurementSet *set = [[PYMeasurementSet alloc] initWithKey:setKey andDictionary:setDic];
-        [self.measurementSets addObject:set];
+        [self.measurementSets addObject:[[PYMeasurementSet alloc]
+                                         initWithKey:setKey
+                                         andDictionary:[setsJSON objectForKey:setKey]]];
     }
 }
 
