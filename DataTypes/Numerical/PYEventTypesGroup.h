@@ -14,12 +14,12 @@
 @interface PYEventTypesGroup : NSObject
 {
     PYEventClass *_klass;
-    NSArray *_types;
+    NSMutableArray *_types;
 }
 
 
 @property (nonatomic, strong) PYEventClass *klass;
-@property (nonatomic, copy) NSArray *types;
+@property (nonatomic, strong) NSMutableArray *types;
 
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *classKey;

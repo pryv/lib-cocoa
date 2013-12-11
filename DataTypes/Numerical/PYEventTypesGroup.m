@@ -21,11 +21,16 @@
 
 - (id)initWithClassKey:(NSString *)classKey andListOfTypes:(NSArray *)listOfTypes andPYEventsTypes:(PYEventTypes *) pyTypes
 {
+  
     self = [super init];
     if(self)
     {
+        if (! pyTypes) {
+            pyTypes = [PYEventTypes sharedInstance];
+        }
         self.klass = [pyTypes pyClassForString:classKey];
-        self.types = listOfTypes;
+       
+        self.types = [NSMutableArray arrayWithArray:listOfTypes];
     }
     return self;
 }

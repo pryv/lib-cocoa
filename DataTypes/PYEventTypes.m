@@ -194,7 +194,12 @@
 - (PYEventClass*) pyClassForString:(NSString *)classKey
 {
     //TODO either generate an error if unkown or return an "uknown event structure"
-    return [_klasses objectForKey:classKey];
+    PYEventClass* result = [_klasses objectForKey:classKey];
+    if (! result) {
+        NSLog(@"WARNING: pyClassForString cannot find class with key %@", classKey);
+    }
+    
+    return result;
 }
 
 
