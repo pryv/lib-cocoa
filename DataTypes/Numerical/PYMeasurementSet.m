@@ -10,11 +10,12 @@
 
 #import "PYConstants.h"
 #import "PYClient.h"
+#import "PYEventTypes.h"
 #import "PYUtilsLocalization.h"
 
 @interface PYMeasurementSet ()
 
-- (void)initMeasurementTypesWithTypesDic:(NSDictionary*)types;
+- (void)initMeasurementTypesWithTypesDic:(NSDictionary*)types andPYEventsTypes:(PYEventTypes*) pyTypes;
 
 @end
 
@@ -27,7 +28,7 @@
 @synthesize names = _names;
 @synthesize descriptions = _descriptions;
 
-- (id)initWithKey:(NSString *)key andDictionary:(NSDictionary *)dictionary
+- (id)initWithKey:(NSString *)key andDictionary:(NSDictionary *)dictionary andPYEventsTypes:(PYEventTypes*) pyTypes;
 {
     self = [super init];
     if(self)
@@ -36,16 +37,20 @@
         self.names = [dictionary objectForKey:@"name"];
         self.descriptions = [dictionary objectForKey:@"description"];
         self.measurementGroups = [NSMutableArray array];
-        [self initMeasurementTypesWithTypesDic:[dictionary objectForKey:@"types"]];
+        [self initMeasurementTypesWithTypesDic:[dictionary objectForKey:@"types"] andPYEventsTypes:pyTypes];
     }
     return self;
 }
 
-- (void)initMeasurementTypesWithTypesDic:(NSDictionary *)types
+- (void)initMeasurementTypesWithTypesDic:(NSDictionary *)types andPYEventsTypes:(PYEventTypes*) pyTypes
 {
-    for(NSString *groupName in [types allKeys])
+    
+    for(NSString *classKey in [types allKeys])
     {
-        PYMeasurementGroup *group = [[PYMeasurementGroup alloc] initWithName:groupName andListOfTypes:[types objectForKey:groupName]];
+        PYEventTypesGroup *group = [[PYEventTypesGroup alloc]
+                                    initWithClassKey:classKey
+                                    andListOfTypes:[types objectForKey:classKey]
+                                    andPYEventsTypes:pyTypes];
         [self.measurementGroups addObject:group];
     }
 }

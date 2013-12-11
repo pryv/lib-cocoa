@@ -8,6 +8,7 @@
 
 #import "PYEventTypes.h"
 #import "PYEventType.h"
+#import "PYEventClass.h"
 #import "PYEventTypesPackagedData.h"
 #import "PYEvent.h"
 #import "PYMeasurementSet.h"
@@ -18,7 +19,7 @@
 @interface PYEventTypes ()
 
 - (void)initObject;
-- (void)updateFlat;
+- (void)updateFlatAndKlasses;
 - (void)changeNSDictionary:(NSDictionary**) dict withContentOfJSONString:(id) jsonString;
 - (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError*)error;
 
@@ -27,8 +28,10 @@
 @implementation PYEventTypes
 
 @synthesize hierarchical = _hierarchical;
-@synthesize flat = _flat;
 @synthesize extras = _extras;
+
+@synthesize flat = _flat;
+@synthesize klasses = _klasses;
 @synthesize measurementSets = _measurementSets;
 
 
@@ -55,7 +58,8 @@
     [self changeNSDictionary:&_extras withContentOfJSONString:PYEventTypesPackagedData.extras];
     
     _flat = [[NSMutableDictionary alloc] init];
-    [self updateFlat];
+    _klasses = [[NSMutableDictionary alloc] init];
+    [self updateFlatAndKlasses];
     
     
     _measurementSets = [[NSMutableArray alloc] init];
@@ -65,36 +69,54 @@
 /**
  * Update _flat reference table from hierachical data
  */
-- (void)updateFlat
+- (void)updateFlatAndKlasses
 {
     [_flat removeAllObjects];
+    [_klasses removeAllObjects];
     
     NSDictionary *classes = [_hierarchical objectForKey:@"classes"];
     for(NSString *classKey in [classes allKeys])
     {
+        
+        PYEventClass *klass = [[PYEventClass alloc] initWithClassKey:classKey
+                                             andDefinitionDictionary:[classes objectForKey:classKey]];
+        [_klasses setObject:klass forKey:classKey];
+        
         NSDictionary *formats = [[classes objectForKey:classKey] objectForKey:@"formats"];
         for(NSString *formatKey in [formats allKeys])
         {
-            PYEventType* eventType = [[PYEventType alloc] initWithClassKey:classKey
-                                                              andFormatKey:formatKey
-                                                   andDefinitionDictionary:[formats objectForKey:formatKey]];
+            PYEventType* eventType = [[PYEventType alloc] initWithClass:klass
+                                                           andFormatKey:formatKey
+                                                andDefinitionDictionary:[formats objectForKey:formatKey]];
             
             [_flat setObject:eventType forKey:eventType.key];
             [eventType release];
         }
+        
+        [klass release];
     }
     
     // --- add extras
     NSDictionary *extras = [_extras objectForKey:@"extras"];
     for(NSString *classKey in [extras allKeys])
     {
-        NSDictionary *formats = [[extras objectForKey:classKey] objectForKey:@"formats"];
+        NSDictionary *klassExtras = [extras objectForKey:classKey];
+        
+        PYEventClass *klass = [_klasses objectForKey:classKey];
+        if (! klass) {
+            NSLog(@"WARNING .. PYEventTypes.updateFlat+extras cannot find %@ in _klasses", classKey);
+        } else {
+            [klass addExtrasDefinitionsFromDictionary:klassExtras];
+        }
+        
+        NSDictionary *formats = [klassExtras objectForKey:@"formats"];
         for(NSString *formatKey in [formats allKeys])
         {
-            PYEventType* eventType = [_flat objectForKey:[NSString stringWithFormat:@"%@/%@", classKey, formatKey]];
+            PYEventType* eventType = [_flat objectForKey:[NSString stringWithFormat:@"%@/%@",
+                                                          classKey, formatKey]];
             if (! eventType) {
-                NSLog(@"WARNING .. PYEventTypes.updateFlat+extras cannot find %@ in _flat",
-                      [NSString stringWithFormat:@"%@/%@", classKey, formatKey]);
+                NSLog(@"WARNING .. PYEventTypes.updateFlat+extras cannot find %@/%@ in _flat",
+                      classKey, formatKey);
             } else {
                 [eventType addExtrasDefinitionsFromDictionary:[formats objectForKey:formatKey]];
             }
@@ -115,7 +137,8 @@
     {
         [self.measurementSets addObject:[[PYMeasurementSet alloc]
                                          initWithKey:setKey
-                                         andDictionary:[setsJSON objectForKey:setKey]]];
+                                         andDictionary:[setsJSON objectForKey:setKey]
+                                         andPYEventsTypes:self]];
     }
 }
 
@@ -162,10 +185,16 @@
     return [self pyTypeForString:event.type];
 }
 
-- (PYEventType*) pyTypeForString:(NSString *)eventTypeStr
+- (PYEventType*) pyTypeForString:(NSString *)typeKey
 {
     //TODO either generate an error if unkown or return an "uknown event structure"
-    return [_flat objectForKey:eventTypeStr];
+    return [_flat objectForKey:typeKey];
+}
+
+- (PYEventClass*) pyClassForString:(NSString *)classKey
+{
+    //TODO either generate an error if unkown or return an "uknown event structure"
+    return [_klasses objectForKey:classKey];
 }
 
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PYMeasurementGroup.h"
+#import "PYEventTypesGroup.h"
 
 @interface PYMeasurementSet : NSObject
 {
@@ -21,7 +21,7 @@
     NSDictionary *_descriptions;
 }
 
-- (id)initWithKey:(NSString*)key andDictionary:(NSDictionary*)dictionary;
+- (id)initWithKey:(NSString*)key andDictionary:(NSDictionary*)dictionary andPYEventsTypes:(PYEventTypes*) pyTypes;
 
 @property (nonatomic, strong) NSString *key;
 @property (nonatomic, readonly) NSString *localizedName;

@@ -8,21 +8,28 @@
 
 @class PYEvent;
 @class PYEventType;
+@class PYEventClass;
 
 typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 @interface PYEventTypes : NSObject
 {
+    // RAW
     NSDictionary* _hierarchical;
-    NSMutableDictionary* _flat;
     NSDictionary* _extras;
+    
+    // Computed
+    NSMutableDictionary* _flat;
+    NSMutableDictionary* _klasses;
     NSMutableArray* _measurementSets;
 }
 
 
 @property (nonatomic, strong) NSDictionary *hierarchical;
-@property (nonatomic, strong) NSMutableDictionary *flat;
 @property (nonatomic, strong) NSDictionary *extras;
+
+@property (nonatomic, strong) NSMutableDictionary *flat;
+@property (nonatomic, strong) NSMutableDictionary *klasses;
 @property (nonatomic, strong) NSMutableArray *measurementSets;
 
 + (PYEventTypes*)sharedInstance;
@@ -31,7 +38,9 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 - (PYEventType*) pyTypeForEvent:(PYEvent*)event;
 
-- (PYEventType*) pyTypeForString:(NSString*)eventTypeStr;
+- (PYEventType*) pyTypeForString:(NSString*)typeKey;
+
+- (PYEventClass*) pyClassForString:(NSString*)classKey;
 
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PYEventType.h"
+#import "PYEventClass.h"
 #import "PYUtilsLocalization.h"
 
 
@@ -17,7 +18,7 @@
 
 @implementation PYEventType
 
-@synthesize classKey = _classKey;
+@synthesize klass = _klass;
 @synthesize formatKey = _formatKey;
 @synthesize definition = _definition;
 @synthesize extras = _extras;
@@ -28,13 +29,13 @@
 @synthesize localizedName = _localizedName;
 
 
-- (id)initWithClassKey:(NSString *)classKey andFormatKey:(NSString*)formatKey
+- (id)initWithClass:(PYEventClass *)klass andFormatKey:(NSString*)formatKey
                                  andDefinitionDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
     if(self)
     {
-        self.classKey = classKey;
+        self.klass = klass;
         self.formatKey = formatKey;
         self.definition = dictionary;
         
@@ -45,6 +46,10 @@
 - (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras
 {
     self.extras = extras;
+}
+
+-(NSString*) classKey {
+    return self.klass.classKey;
 }
 
 -(NSString*) key {
@@ -73,6 +78,10 @@
     }
     return self.formatKey;
 }
+
+
+
+
 
 
 

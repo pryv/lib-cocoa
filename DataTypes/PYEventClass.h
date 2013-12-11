@@ -9,11 +9,20 @@
 #import <Foundation/Foundation.h>
 
 @interface PYEventClass : NSObject
+{
+    NSString *_classKey;
+    NSString *_description;
+    NSDictionary *_extrasName;
+}
 
-- (id)initWithClassKey:(NSString*)classKey;
+- (id)initWithClassKey:(NSString*)classKey andDefinitionDictionary:(NSDictionary*)dict;
+- (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras;
+
+@property (nonatomic, strong) NSString *classKey;
+@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSDictionary *extrasName;
 
 
-@property (nonatomic, readonly) NSArray *eventTypes;
 @property (nonatomic, readonly) NSString *localizedName;
 
 @end
