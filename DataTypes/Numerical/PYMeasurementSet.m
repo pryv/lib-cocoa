@@ -49,7 +49,7 @@
     {
         PYEventTypesGroup *group = [[PYEventTypesGroup alloc]
                                     initWithClassKey:classKey
-                                    andListOfTypes:[types objectForKey:classKey]
+                                    andListOfFormats:[types objectForKey:classKey]
                                     andPYEventsTypes:pyTypes];
         [self.measurementGroups addObject:group];
     }
