@@ -139,6 +139,10 @@
         [dic setObject:_clientData forKey:@"clientData"];
     }
     
+    if (_time > 0) {
+        [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
+    }
+    
     return [dic autorelease];
     
 }
