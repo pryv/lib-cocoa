@@ -16,13 +16,6 @@
     NSString *_formatKey;
     NSDictionary *_definition;
     NSDictionary *_extras;
-    
-    NSString *_key;
-    NSString *_symbol;
-    NSString *_type;
-    BOOL _isNumerical;
-    NSString *_localizedName;
-    NSString *_localizedDescription;
 }
 
 - (id)initWithClass:(PYEventClass*)klass

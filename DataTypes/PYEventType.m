@@ -22,12 +22,6 @@
 @synthesize formatKey = _formatKey;
 @synthesize definition = _definition;
 @synthesize extras = _extras;
-@synthesize key = _key;
-@synthesize symbol = _symbol;
-@synthesize type = _type;
-@synthesize isNumerical = _isNumerical;
-@synthesize localizedName = _localizedName;
-
 
 - (id)initWithClass:(PYEventClass *)klass andFormatKey:(NSString*)formatKey
                                  andDefinitionDictionary:(NSDictionary *)dictionary
