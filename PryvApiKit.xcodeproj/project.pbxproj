@@ -235,8 +235,8 @@
 		0CEB44DE17BBCDB9009756E7 /* PYConnection+DataManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYConnection+DataManagement.h"; sourceTree = "<group>"; };
 		0CEB44DF17BBCDB9009756E7 /* PYConnection+DataManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYConnection+DataManagement.m"; sourceTree = "<group>"; };
 		3D1F6A06170B6A6400DF893C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
-		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYJSONUtility.h; sourceTree = "<group>"; };
-		3D2397BC1733109A00A72637 /* PYJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYJSONUtility.m; sourceTree = "<group>"; };
+		3D2397BB1733109900A72637 /* PYJSONUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYJSONUtility.h; path = ../PYJSONUtility.h; sourceTree = "<group>"; };
+		3D2397BC1733109A00A72637 /* PYJSONUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYJSONUtility.m; path = ../PYJSONUtility.m; sourceTree = "<group>"; };
 		3D48973F1778E8AC008C7B66 /* libPryvApiKitLogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libPryvApiKitLogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D4897451778E8AC008C7B66 /* libPryvApiKitLogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libPryvApiKitLogicTests-Info.plist"; sourceTree = "<group>"; };
 		3D4897471778E8AC008C7B66 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -494,13 +494,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3D5B9CB41768FFA7007A107A /* CachingStreams */ = {
+		3D5B9CB41768FFA7007A107A /* Caching */ = {
 			isa = PBXGroup;
 			children = (
+				3D9DCF2E1752BEE20010FE84 /* PYCachingController.h */,
+				3D9DCF2F1752BEE20010FE84 /* PYCachingController.m */,
+				3DC8170D1754021D00A91142 /* PYEventsCachingUtillity.h */,
+				3DC8170E1754021D00A91142 /* PYEventsCachingUtillity.m */,
 				3D5B9CB51768FFC0007A107A /* PYStreamsCachingUtillity.h */,
 				3D5B9CB61768FFC0007A107A /* PYStreamsCachingUtillity.m */,
 			);
-			name = CachingStreams;
+			name = Caching;
 			sourceTree = "<group>";
 		};
 		3D67FF9C17340E57008D437F /* Login */ = {
@@ -515,12 +519,12 @@
 		3D6A502E170A175600025A20 /* PYEvent */ = {
 			isa = PBXGroup;
 			children = (
-				FB03E24816B982CC00DAD162 /* PYAttachment.h */,
-				FB03E24916B982CC00DAD162 /* PYAttachment.m */,
 				FB03E24416B982CC00DAD162 /* PYEvent.h */,
 				FB03E24516B982CC00DAD162 /* PYEvent.m */,
 				3D67412417106EA10050B251 /* PYEvent+JSON.h */,
 				3D67412517106EA10050B251 /* PYEvent+JSON.m */,
+				FB03E24816B982CC00DAD162 /* PYAttachment.h */,
+				FB03E24916B982CC00DAD162 /* PYAttachment.m */,
 			);
 			name = PYEvent;
 			sourceTree = "<group>";
@@ -559,21 +563,19 @@
 			isa = PBXGroup;
 			children = (
 				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
+				B62A9C6B17E5E071006CADFB /* PYClient.h */,
+				8AB2361E16FA895800B28F06 /* PYClient.m */,
 				4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */,
 				4E6DFE0F1757417F000DFF7A /* PYEventFilter.m */,
 				3D64493717639F070042C14C /* PYEventFilterUtility.h */,
 				3D64493817639F070042C14C /* PYEventFilterUtility.m */,
 				3D6BE313171C75EB0023A39C /* PYAsyncService.h */,
 				3D6BE314171C75EB0023A39C /* PYAsyncService.m */,
-				B62A9C6B17E5E071006CADFB /* PYClient.h */,
-				8AB2361E16FA895800B28F06 /* PYClient.m */,
-				3D2397BB1733109900A72637 /* PYJSONUtility.h */,
-				3D2397BC1733109A00A72637 /* PYJSONUtility.m */,
 			);
 			name = Clients;
 			sourceTree = "<group>";
 		};
-		3D75F4C8173304CF00380629 /* Submodule */ = {
+		3D75F4C8173304CF00380629 /* JSONKIT */ = {
 			isa = PBXGroup;
 			children = (
 				3D75F4C9173304F200380629 /* CHANGELOG.md */,
@@ -581,7 +583,7 @@
 				3D75F4CB173304F200380629 /* JSONKit.m */,
 				3D75F4CC173304F200380629 /* README.md */,
 			);
-			name = Submodule;
+			name = JSONKIT;
 			sourceTree = "<group>";
 		};
 		3D82A988173EDE0600CB100D /* Reachability */ = {
@@ -591,15 +593,6 @@
 				3D82A98A173EDE2A00CB100D /* Reachability.m */,
 			);
 			name = Reachability;
-			sourceTree = "<group>";
-		};
-		3D9DCF2D1752BEB80010FE84 /* CachingEvents */ = {
-			isa = PBXGroup;
-			children = (
-				3DC8170D1754021D00A91142 /* PYEventsCachingUtillity.h */,
-				3DC8170E1754021D00A91142 /* PYEventsCachingUtillity.m */,
-			);
-			name = CachingEvents;
 			sourceTree = "<group>";
 		};
 		3DAF21CB172B28E900B62416 /* OS X example */ = {
@@ -640,8 +633,17 @@
 				4E16DED31847739500934F6C /* PYEventTypesPackagedData.h */,
 				4E16DED41847739500934F6C /* PYEventTypesPackagedData.m */,
 			);
-			name = DataTypes;
-			path = ../DataTypes;
+			path = DataTypes;
+			sourceTree = "<group>";
+		};
+		4E2AF479185B5FE100A88661 /* Vendors */ = {
+			isa = PBXGroup;
+			children = (
+				3D82A988173EDE0600CB100D /* Reachability */,
+				3D75F4C8173304CF00380629 /* JSONKIT */,
+				3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */,
+			);
+			name = Vendors;
 			sourceTree = "<group>";
 		};
 		4E582DD416C25378003B59DB /* iOs Example */ = {
@@ -686,6 +688,8 @@
 		4E7318BE184CE3E400CC474B /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3D2397BB1733109900A72637 /* PYJSONUtility.h */,
+				3D2397BC1733109A00A72637 /* PYJSONUtility.m */,
 				4E7318BF184CE41D00CC474B /* PYUtilsLocalization.h */,
 				4E7318C0184CE41D00CC474B /* PYUtilsLocalization.m */,
 			);
@@ -747,20 +751,15 @@
 		FBC2048316B95B3800CB5FFB /* PryvApiKit */ = {
 			isa = PBXGroup;
 			children = (
-				4E7318BE184CE3E400CC474B /* Utils */,
-				3D9DCF2E1752BEE20010FE84 /* PYCachingController.h */,
-				3D9DCF2F1752BEE20010FE84 /* PYCachingController.m */,
-				4E16DECC184755B400934F6C /* DataTypes */,
-				3D5B9CB41768FFA7007A107A /* CachingStreams */,
-				3D9DCF2D1752BEB80010FE84 /* CachingEvents */,
-				3D82A988173EDE0600CB100D /* Reachability */,
-				3D67FF9C17340E57008D437F /* Login */,
-				3D75F4C8173304CF00380629 /* Submodule */,
-				3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */,
-				3D6D3BBF16F8BD3C0072F480 /* Error */,
-				3D6D3BB916F8BB9D0072F480 /* Constants */,
 				3D6FCEA616F7C2FF0003D970 /* Model */,
 				3D6FCEAF16F7C3B60003D970 /* Clients */,
+				4E16DECC184755B400934F6C /* DataTypes */,
+				3D5B9CB41768FFA7007A107A /* Caching */,
+				3D67FF9C17340E57008D437F /* Login */,
+				3D6D3BBF16F8BD3C0072F480 /* Error */,
+				3D6D3BB916F8BB9D0072F480 /* Constants */,
+				4E7318BE184CE3E400CC474B /* Utils */,
+				4E2AF479185B5FE100A88661 /* Vendors */,
 				FBC2048416B95B3800CB5FFB /* Supporting Files */,
 			);
 			path = PryvApiKit;
