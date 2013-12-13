@@ -38,11 +38,13 @@
 
 @property (nonatomic) NSTimeInterval lastRefresh;
 
+
 /**
  * @param fromTime use PYEventFilter_UNDEFINED_FROMTIME when undefined
  * @param toTime use PYEventFilter_UNDEFINED_TOTIME when undefined
- * @param onlyStreamsIDs array of strings with StreamsIDs, null for no match
- * @param limit number of events may be 2x > to the limit if cached events are totally differents than online events
+ * @param onlyStreamsIDs array of strings with StreamsIDs, nil for no match
+ * @param tags array of strings with tags, nil for no match
+ * @param limit number of events may be 2x > to the limit if cached events are totally differents than online events, 0 or negative for ALL
  */
 - (id)initWithConnection:(PYConnection*)connection
              fromTime:(NSTimeInterval)fromTime

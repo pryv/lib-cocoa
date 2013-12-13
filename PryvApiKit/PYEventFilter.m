@@ -11,7 +11,7 @@
 //
 //  Usage: An app create a Filter then call refresh() to get new events
 //
-//  In the future we should add a Filter.listen(delegate) 
+//  In the future we should add a Filter.listen(delegate)
 //
 //
 
@@ -35,11 +35,11 @@
 
 
 - (id)initWithConnection:(PYConnection*)connection
-             fromTime:(NSTimeInterval)fromTime
+                fromTime:(NSTimeInterval)fromTime
                   toTime:(NSTimeInterval)toTime
-                limit:(NSUInteger)limit
-           onlyStreamsIDs:(NSArray *)onlyStreamsIDs
-                  tags:(NSArray *)tags
+                   limit:(NSUInteger)limit
+          onlyStreamsIDs:(NSArray *)onlyStreamsIDs
+                    tags:(NSArray *)tags
 {
     if (self = [super init]) {
         _connection = connection;
@@ -81,32 +81,32 @@
     if (gotCachedEvents) {
         gotCachedEvents(filteredEventsFromCache);
     }
-    // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)    
+    // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)
     // get ALL online events matching this request .. This can be optimized if the API provides journaling
     [_connection getS:reqType
-                                filter:[PYEventFilterUtility filteredEvents:self]
-                         successHandler:^(NSArray *onlineEventList)
-                             {
-                             //When come here all events(onlineEventList) are already cached
-                             //Here some events should be removed from cache (if any)
-                             //It doesn't need to be cached because they are already cached just before successHandler is called
-                             self.lastRefresh = [[NSDate date] timeIntervalSince1970];
-                             
-                             NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
-                             NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
-                             NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
-                             
-                             [PYEventFilterUtility createEventsSyncDetails:onlineEventList
-                                                             offlineEvents:filteredEventsFromCache
-                                                               eventsToAdd:eventsToAdd
-                                                            eventsToRemove:eventsToRemove
-                                                            eventsModified:eventsModified];
-                             
-                             if (syncDetails) {
-                                 syncDetails(eventsToAdd, eventsToRemove, eventsModified);
-                             }
-                         }
-                        errorHandler:errorHandler shouldSyncAndCache:YES];
+               filter:[PYEventFilterUtility filteredEvents:self]
+       successHandler:^(NSArray *onlineEventList)
+     {
+         //When come here all events(onlineEventList) are already cached
+         //Here some events should be removed from cache (if any)
+         //It doesn't need to be cached because they are already cached just before successHandler is called
+         self.lastRefresh = [[NSDate date] timeIntervalSince1970];
+         
+         NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+         NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+         NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
+         
+         [PYEventFilterUtility createEventsSyncDetails:onlineEventList
+                                         offlineEvents:filteredEventsFromCache
+                                           eventsToAdd:eventsToAdd
+                                        eventsToRemove:eventsToRemove
+                                        eventsModified:eventsModified];
+         
+         if (syncDetails) {
+             syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+         }
+     }
+         errorHandler:errorHandler shouldSyncAndCache:YES];
 }
 
 + (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
