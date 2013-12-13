@@ -584,6 +584,7 @@
 				3D75F4CC173304F200380629 /* README.md */,
 			);
 			name = JSONKIT;
+			path = JSONKit;
 			sourceTree = "<group>";
 		};
 		3D82A988173EDE0600CB100D /* Reachability */ = {
@@ -592,7 +593,7 @@
 				B62A9C6D17E5E083006CADFB /* Reachability.h */,
 				3D82A98A173EDE2A00CB100D /* Reachability.m */,
 			);
-			name = Reachability;
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 		3DAF21CB172B28E900B62416 /* OS X example */ = {
@@ -644,6 +645,7 @@
 				3DD608EB1702543F00905533 /* CWLSynthesizeSingleton.h */,
 			);
 			name = Vendors;
+			path = ../Vendors;
 			sourceTree = "<group>";
 		};
 		4E582DD416C25378003B59DB /* iOs Example */ = {
