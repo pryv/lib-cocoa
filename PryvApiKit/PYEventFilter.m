@@ -16,37 +16,37 @@
 //
 
 #import "PYEventFilter.h"
+#import "PYConnection.h"
 #import "PYEvent.h"
 #import "PYClient.h"
 #import "PYEventsCachingUtillity.h"
 #import "PYEventFilterUtility.h"
-#import "PYChannel.h"
 
 @implementation PYEventFilter
 
-@synthesize channel = _channel;
+@synthesize connection = _connection;
 @synthesize fromTime = _fromTime;
 @synthesize toTime = _toTime;
 @synthesize limit = _limit;
-@synthesize onlyFoldersIDs = _onlyFoldersIDs;
+@synthesize onlyStreamsIDs = _onlyStreamsIDs;
 @synthesize tags = _tags;
 
 @synthesize lastRefresh = _lastRefresh;
 
 
-- (id)initWithChannel:(PYChannel*)channel
+- (id)initWithConnection:(PYConnection*)connection
              fromTime:(NSTimeInterval)fromTime
                   toTime:(NSTimeInterval)toTime
                 limit:(NSUInteger)limit
-           onlyFoldersIDs:(NSArray *)onlyFoldersIDs
+           onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                   tags:(NSArray *)tags
 {
     if (self = [super init]) {
-        _channel = channel;
+        _connection = connection;
         [self changeFilterFromTime:fromTime
                             toTime:toTime
                              limit:limit
-                    onlyFoldersIDs:onlyFoldersIDs
+                    onlyStreamsIDs:onlyStreamsIDs
                               tags:tags];
         _lastRefresh = PYEventFilter_UNDEFINED_FROMTIME;
     }
@@ -56,12 +56,12 @@
 - (void)changeFilterFromTime:(NSTimeInterval)fromTime
                       toTime:(NSTimeInterval)toTime
                        limit:(NSUInteger)limit
-              onlyFoldersIDs:(NSArray *)onlyFoldersIDs
+              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                         tags:(NSArray *)tags
 {
     _fromTime = fromTime; // time question ?? shouldn't we align time with the server?
     _toTime = toTime;
-    _onlyFoldersIDs = onlyFoldersIDs;
+    _onlyStreamsIDs = onlyStreamsIDs;
     _tags = tags;
     _limit = limit;
 }
@@ -83,9 +83,10 @@
     }
     // TODO convert cachedEvents into a Dictionary where we can find events by their id (or make a PYEventsCachingUtillity return a NSDictonary)    
     // get ALL online events matching this request .. This can be optimized if the API provides journaling
-    [_channel getEventsWithRequestType:reqType
+    [_connection getS:reqType
                                 filter:[PYEventFilterUtility filteredEvents:self]
-                         successHandler:^(NSArray *onlineEventList) {
+                         successHandler:^(NSArray *onlineEventList)
+                             {
                              //When come here all events(onlineEventList) are already cached
                              //Here some events should be removed from cache (if any)
                              //It doesn't need to be cached because they are already cached just before successHandler is called

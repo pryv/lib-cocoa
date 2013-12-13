@@ -19,7 +19,7 @@
  
  GET /streams/
  
- @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYFolder objects
+ @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYstream objects
  @param filterParams - > Query string parameters (parentId, includeHidden, state ...) They are optional. If you don't filter put nil
  
  */
@@ -45,36 +45,12 @@
                      errorHandler:(void (^) (NSError *error))errorHandler
                shouldSyncAndCache:(BOOL)syncAndCache;
 
-
-///**
-// @discussion
-// Gets the accessible streams
-// 
-// GET /streams/
-// 
-// @param successHandler A block object to be executed when the operation finishes successfully. This block has no return value and takes one argument NSArray of PYChannel objects
-// @param filterParams  Query string parameters (state ...) Optional. If you don't filter put nil Example : state=all
-// @param successHandler A block object to be executed when the operation finishes successfully.
-// @param errorHandler   NSError object if some error occurs
-// */
-//- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-//                    gotCachedStreams:(void (^) (NSArray *cachedStreamList))cachedStreams
-//                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
-//                        errorHandler:(void (^)(NSError *error))errorHandler;
-//
-//
-//- (void)getStreamsWithRequestType:(PYRequestType)reqType
-//                           filter:(NSDictionary*)filterDic
-//                   successHandler:(void (^) (NSArray *streamsList))onlineStreamList
-//                     errorHandler:(void (^)(NSError *error))errorHandler;
-
-
 /**
  @discussion
  Create a new stream
  streams have one unique Id AND one unique name. Both must be unique
  
- POST /{channel-id}/folders/
+ POST /streams/
  
  */
 - (void)createStream:(PYStream *)stream
@@ -92,7 +68,7 @@
  @param filterParams:
  mergeEventsWithParent (true or false): Required if actually deleting the item and if it (or any of its descendants) has linked events, ignored otherwise. If true, the linked events will be assigned to the parent of the deleted item; if false, the linked events will be deleted
  
- DELETE /{channel-id}/folders/{folder-id}
+ DELETE /streams/{stream-id}
  */
 
 - (void)trashOrDeleteStream:(PYStream *)stream
@@ -105,7 +81,7 @@
  @discussion
  Modify an existing stream Id
  
- PUT /{channel-id}/folders/{id}
+ PUT /streams/{id}
  
  */
 - (void)setModifiedStreamAttributesObject:(PYStream *)stream
@@ -156,7 +132,7 @@
                        errorHandler:(void (^)(NSError *error))errorHandler;
 
 
-//POST /{channel-id}/events
+//POST /events
 /*Records a new event. Events recorded this way must be completed events, i.e. either period events with a known duration or mark events. To start a running period event, post a events/start request. In addition to the usual JSON, this request accepts standard multipart/form-data content to support the creation of event with attached files in a single request. When sending a multipart request, one content part must hold the JSON for the new event and all other content parts must be the attached files.*/
 - (void)createEvent:(PYEvent *)event
         requestType:(PYRequestType)reqType
@@ -165,7 +141,7 @@
 
 /**
  @discussion
- DELETE /{channel-id}/events/{event-id}
+ DELETE /events/{event-id}
  Trashes or deletes the specified event, depending on its current state:
  If the event is not already in the trash, it will be moved to the trash (i.e. flagged as trashed)
  If the event is already in the trash, it will be irreversibly deleted (including all its attached files, if any).
@@ -175,7 +151,7 @@
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *error))errorHandler;
 
-//PUT /{channel-id}/events/{event-id}
+//PUT /events/{event-id}
 /*Modifies the event's attributes
  All event fields are optional, and only modified properties must be included, for other properties put nil
  @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set)
@@ -187,13 +163,13 @@
                             errorHandler:(void (^)(NSError *error))errorHandler;
 
 
-//POST /{channel-id}/events/start
+//POST /events/start
 - (void)startPeriodEvent:(PYEvent *)event
              requestType:(PYRequestType)reqType
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler;
 
-//POST /{channel-id}/events/stop
+//POST /events/stop
 /*Stops a previously running period event
  @param eventId The id of the event to stop
  @param specifiedTime The stop time. Default: now.
@@ -204,7 +180,7 @@
                successHandler:(void (^)(NSString *stoppedEventId))successHandler
                  errorHandler:(void (^)(NSError *error))errorHandler;
 
-//GET /{channel-id}/events/running
+//GET /events/running
 /*An array of events containing the running period events.*/
 - (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
                                    parameters:(NSDictionary *)filter

@@ -10,7 +10,6 @@
 #import "PYClient.h"
 
 @class PYEventFilter;
-@class PYChannel;
 
 @interface PYEventFilterUtility : NSObject
 

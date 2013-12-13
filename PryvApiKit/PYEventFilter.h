@@ -12,28 +12,28 @@
 #import "PYClient.h"
 
 
-@class PYChannel;
+@class PYConnection;
 
 #define PYEventFilter_UNDEFINED_FROMTIME DBL_MIN
 #define PYEventFilter_UNDEFINED_TOTIME DBL_MAX
 
 @interface PYEventFilter : NSObject
 {
-    PYChannel *_channel;
+    PYConnection *_connection;
     NSTimeInterval _fromTime;
     NSTimeInterval _toTime;
     NSUInteger _limit;
-    NSArray *_onlyFoldersIDs; // of strings
+    NSArray *_onlyStreamsIDs; // of strings
     NSArray *_tags;
     
     NSTimeInterval _lastRefresh;
 }
 
-@property (readonly, nonatomic, retain) PYChannel *channel;
+@property (readonly, nonatomic, retain) PYConnection *connection;
 @property (nonatomic) NSTimeInterval fromTime;
 @property (nonatomic) NSTimeInterval toTime;
 @property (nonatomic) NSUInteger limit;
-@property (nonatomic, retain) NSArray *onlyFoldersIDs;
+@property (nonatomic, retain) NSArray *onlyStreamsIDs;
 @property (nonatomic, retain) NSArray *tags;
 
 @property (nonatomic) NSTimeInterval lastRefresh;
@@ -41,20 +41,20 @@
 /**
  * @param fromTime use PYEventFilter_UNDEFINED_FROMTIME when undefined
  * @param toTime use PYEventFilter_UNDEFINED_TOTIME when undefined
- * @param onlyFoldersIDs array of strings with foldersIDs, null for no match
+ * @param onlyStreamsIDs array of strings with StreamsIDs, null for no match
  * @param limit number of events may be 2x > to the limit if cached events are totally differents than online events
  */
-- (id)initWithChannel:(PYChannel*)channel
+- (id)initWithConnection:(PYConnection*)connection
              fromTime:(NSTimeInterval)fromTime
                toTime:(NSTimeInterval)toTime
                 limit:(NSUInteger)limit
-       onlyFoldersIDs:(NSArray *)onlyFoldersIDs
+       onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                  tags:(NSArray *)tags;
 
 - (void)changeFilterFromTime:(NSTimeInterval)fromTime
                       toTime:(NSTimeInterval)toTime
                        limit:(NSUInteger)limit
-              onlyFoldersIDs:(NSArray *)onlyFoldersIDs
+              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                         tags:(NSArray *)tags;
 /**
  This method gets sync details for event filter

@@ -49,23 +49,6 @@
         
     }];
     
-    //    [self.connection getAllStreamsWithRequestType:PYRequestTypeSync gotCachedStreams:^(NSArray *cachedStreamList) {
-    //
-    //    } gotOnlineStreams:^(NSArray *onlineStreamList) {
-    //        STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we ned to have some online channels");
-    //
-    //        for (PYStream *stream in onlineStreamList) {
-    //            //Nenad_test channel
-    //            if ([stream.streamId isEqualToString:@"TVKoK036of"]) {
-    //                STAssertNotNil(stream, @"Error with creating channel object");
-    //                self.streamForTest = stream;
-    //            }
-    //        }
-    //
-    //    } errorHandler:^(NSError *error) {
-    //
-    //    }];
-    
 }
 
 - (void)tearDown

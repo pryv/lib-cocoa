@@ -57,7 +57,7 @@
      It should retrieve always online streams and need to cache (sync) online streams (before caching sync unsyched stream, because we don't want to lose unsync changes)
      */
     
-    /*if there are folders that are not synched with server, they need to be synched first and after that cached
+    /*if there are streams that are not synched with server, they need to be synched first and after that cached
      This method must be SYNC not ASYNC and this method sync streams with server and cache them
      */
     if (syncAndCache == YES) {
@@ -147,7 +147,7 @@
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (stream.isSyncTriedNow == NO) {
                          //If we didn't try to sync stream from unsync list that means that we have to cache that stream, otherwise leave it as is
-                         //stream.channelId = self.channelId; SHOULD NOT BE COMMENTED, should use parentId ?
+                         //stream.Id = self.Id; SHOULD NOT BE COMMENTED, should use parentId ?
                          stream.notSyncAdd = YES;
                          //When we try to create stream and we came here it has tmpId
                          stream.hasTmpId = YES;
@@ -344,7 +344,7 @@
                 shouldSyncAndCache:NO];
 }
 
-//GET /{channel-id}/events
+//GET /events
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                           filter:(NSDictionary*)filterDic
@@ -355,7 +355,7 @@
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
      This method doesn't care about current cache, it's interested in online events only
-     It should retrieve always online events for this channel and need to cache (sync) online events (before caching sync unsyched, because we don't want to loose unsuc changes)
+     It should retrieve always online events and need to cache (sync) online events (before caching sync unsyched, because we don't want to loose unsuc changes)
      */
     
     /*if there are events that are not synched with server, they need to be synched first and after that cached
@@ -511,7 +511,7 @@
                 shouldSyncAndCache:YES];
 }
 
-//POST /{channel-id}/events
+//POST /events
 - (void)createEvent:(PYEvent *)event
         requestType:(PYRequestType)reqType
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
@@ -626,7 +626,7 @@
              }];
 }
 
-//PUT /{channel-id}/events/{event-id}
+//PUT /events/{event-id}
 - (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
                               forEventId:(NSString *)eventId
                              requestType:(PYRequestType)reqType
@@ -700,7 +700,7 @@
              }];
 }
 
-//POST /{channel-id}/events/start
+//POST /events/start
 - (void)startPeriodEvent:(PYEvent *)event
              requestType:(PYRequestType)reqType
           successHandler:(void (^)(NSString *startedEventId))successHandler
@@ -727,7 +727,7 @@
     
 }
 
-//POST /{channel-id}/events/stop
+//POST /events/stop
 - (void)stopPeriodEventWithId:(NSString *)eventId
                        onDate:(NSDate *)specificTime
                   requestType:(PYRequestType)reqType
@@ -765,7 +765,7 @@
     
 }
 
-//GET /{channel-id}/events/running
+//GET /events/running
 - (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
                                    parameters:(NSDictionary *)filter
                                successHandler:(void (^)(NSArray *arrayOfEvents))successHandler

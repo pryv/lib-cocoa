@@ -24,7 +24,7 @@
 @synthesize extras = _extras;
 
 - (id)initWithClass:(PYEventClass *)klass andFormatKey:(NSString*)formatKey
-                                 andDefinitionDictionary:(NSDictionary *)dictionary
+                               andDefinitionDictionary:(NSDictionary *)dictionary
 {
     self = [super init];
     if(self)
@@ -74,7 +74,9 @@
 }
 
 
-
+- (NSString *)description {
+    return self.key;
+}
 
 
 

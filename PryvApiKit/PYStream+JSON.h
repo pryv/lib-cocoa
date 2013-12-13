@@ -1,5 +1,5 @@
 //
-//  PYFolder+JSON.h
+//  PYStream+JSON.h
 //  PryvApiKit
 //
 //  Created by Nenad Jelic on 3/18/13.
@@ -11,7 +11,7 @@
 @interface PYStream (JSON)
 
 /**
- Get PYFolder object from json dictionary representation (JSON representation can include additioanl helper properties for folder). It means that this method 'read' folder from disk and from server
+ Get PYStream object from json dictionary representation (JSON representation can include additioanl helper properties for stream). It means that this method 'read' stream from disk and from server
  */
 + (PYStream *)streamFromJSON:(id)json;
 

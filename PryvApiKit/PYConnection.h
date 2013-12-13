@@ -55,7 +55,7 @@
  */
 - (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error;
 /**
- Add folder to unsync list. If app tryed to create, modify or trash folder and it fails due to no internet access it will be added to unsync list
+ Add stream to unsync list. If app tryed to create, modify or trash stream and it fails due to no internet access it will be added to unsync list
  */
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error;
 

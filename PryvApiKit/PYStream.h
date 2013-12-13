@@ -36,42 +36,42 @@
 @property (nonatomic, copy) NSDictionary *clientData;
 @property (nonatomic) NSTimeInterval timeCount;
 
-//@children -> array of PYFolder objects
+//@children -> array of PYStream objects
 @property (nonatomic, retain) NSArray *children;
 
 @property (nonatomic, assign, getter = isSingleActivity) BOOL singleActivity;
 @property (nonatomic, assign, getter = isTrashed) BOOL trashed;
 
 /**
- @property isSyncTriedNow - Flag for non sync folder. If app tries to sync folder a few times this is used to determine what flags should be added to folder
+ @property isSyncTriedNow - Flag for non sync stream. If app tries to sync stream a few times this is used to determine what flags should be added to stream
  */
 @property (nonatomic) BOOL isSyncTriedNow;
 /**
- @property hasTmpId - Check if folder from cache has tmpId. If folder has it it means that isn't sync from server (created offline)
+ @property hasTmpId - Check if stream from cache has tmpId. If stream has it it means that isn't sync from server (created offline)
  */
 @property (nonatomic) BOOL hasTmpId;
 /**
- @property notSyncAdd - Flag for non sync folder. It describes that user tried to create folder but it failed due to offline status of library
- When library goes online this flag is used to sync folder
+ @property notSyncAdd - Flag for non sync stream. It describes that user tried to create stream but it failed due to offline status of library
+ When library goes online this flag is used to sync stream
  */
 @property (nonatomic) BOOL notSyncAdd;
 /**
- @property notSyncModify - Flag for non sync folder. It describes that user tried to modify folder but it failed due to offline status of library
- When library goes online this flag is used to sync folder
+ @property notSyncModify - Flag for non sync stream. It describes that user tried to modify stream but it failed due to offline status of library
+ When library goes online this flag is used to sync stream
  */
 @property (nonatomic) BOOL notSyncModify;
 @property (nonatomic) NSTimeInterval synchedAt;
 /**
- @property modifiedFolderPropertiesAndValues - NSDictionary that describes what folder properties should be modified on server during the synching
+ @property modifiedStreamPropertiesAndValues - NSDictionary that describes what stream properties should be modified on server during the synching
  */
 @property (nonatomic, retain) NSDictionary *modifiedStreamPropertiesAndValues;
 
 /**
- Convert PYFolder object to json-like NSDictionary representation for synching with server
+ Convert PYStream object to json-like NSDictionary representation for synching with server
  */
 - (NSDictionary *)dictionary;
 /**
- Convert PYFolder object to json-like NSDictionary representation for caching on disk
+ Convert PYStream object to json-like NSDictionary representation for caching on disk
  */
 - (NSDictionary *)cachingDictionary;
 

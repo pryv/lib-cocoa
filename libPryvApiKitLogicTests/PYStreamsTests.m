@@ -1,5 +1,5 @@
 //
-//  PYChannelsTests.m
+//  PYStreamsTests.m
 //  PryvApiKit
 //
 //  Created by Nenad Jelic on 6/26/13.

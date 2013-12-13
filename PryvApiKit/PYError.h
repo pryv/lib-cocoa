@@ -28,8 +28,6 @@ typedef enum PYErrorCode {
     
     PYErrorTokenNotSet,
     
-    PYErrorChannelNotSet,
-    
     PYErrorUnknown,
     
 } PYErrorCode;

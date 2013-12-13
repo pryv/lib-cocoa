@@ -10,7 +10,6 @@
 #import "PYEventFilter.h"
 #import "PYEvent.h"
 #import "PYEventsCachingUtillity.h"
-#import "PYChannel.h"
 
 @implementation PYEventFilterUtility
 
@@ -74,6 +73,7 @@
                          requestType:(PYRequestType)reqType
 {
     //In this method we will ask server for event with eventId and we'll cache it
+    /**
     [connection getOnlineEventWithId:eventId
                       requestType:reqType
                    successHandler:^(PYEvent *event) {
@@ -82,32 +82,32 @@
         
                 } errorHandler:^(NSError *error) {
                     NSLog(@"error");
-                }];
+                }];**/
 }
 
 + (NSDictionary *)filteredEvents:(PYEventFilter *)filter
 {
     NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
     if (filter.fromTime != PYEventFilter_UNDEFINED_FROMTIME) {
-        [dic setObject:[NSString stringWithFormat:@"%f",filter.fromTime] forKey:kPrYvChannelEventFilterFromTime];
+        [dic setObject:[NSString stringWithFormat:@"%f",filter.fromTime] forKey:kPYAPIEventFilterFromTime];
     }
     
     if (filter.toTime != PYEventFilter_UNDEFINED_TOTIME) {
-        [dic setObject:[NSString stringWithFormat:@"%f",filter.toTime] forKey:kPrYvChannelEventFilterToTime];
+        [dic setObject:[NSString stringWithFormat:@"%f",filter.toTime] forKey:kPYAPIEventFilterToTime];
     }
     
     if (filter.limit > 0) {
-        [dic setObject:[NSString stringWithFormat:@"%i",(unsigned int)filter.limit] forKey:kPrYvChannelEventFilterLimit];
+        [dic setObject:[NSString stringWithFormat:@"%i",(unsigned int)filter.limit] forKey:kPYAPIEventFilterLimit];
     }
     
     //Doesn't work when sending - error in request parameters
-    if (filter.onlyFoldersIDs != nil) {
-        [dic setObject:filter.onlyFoldersIDs forKey:kPrYvChannelEventFilterOnlyFolders];
+    if (filter.onlyStreamsIDs != nil) {
+        [dic setObject:filter.onlyStreamsIDs forKey:kPYAPIEventFilterOnlyStreams];
     }
     
     //Not implemeted in web service
     if (filter.tags != nil) {
-        [dic setObject:filter.tags forKey:kPrYvChannelEventFilterTags];
+        [dic setObject:filter.tags forKey:kPYAPIEventFilterTags];
 //        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
     }
     
@@ -139,10 +139,10 @@
         toTimePredicate = [NSPredicate predicateWithFormat:@"time <= %f",filter.toTime];
         [predicates addObject:toTimePredicate];
     }
-    NSPredicate *onlyFoldersPredicate = nil;
-    if (filter.onlyFoldersIDs != nil) {
-        onlyFoldersPredicate = [NSPredicate predicateWithFormat:@"folderId IN %@",filter.onlyFoldersIDs];
-        [predicates addObject:onlyFoldersPredicate];
+    NSPredicate *onlyStreamsPredicate = nil;
+    if (filter.onlyStreamsIDs != nil) {
+        onlyStreamsPredicate = [NSPredicate predicateWithFormat:@"StreamId IN %@",filter.onlyStreamsIDs];
+        [predicates addObject:onlyStreamsPredicate];
     }
     NSPredicate *onlyTagsPredicate = nil;
     if (filter.tags != nil) {

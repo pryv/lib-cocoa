@@ -90,7 +90,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
 {
-    /*When we deserialize unsync list (when app starts) we will know what folders are not sync with these informations:
+    /*When we deserialize unsync list (when app starts) we will know what streams are not sync with these informations:
      They have one of these flags or combination of them
      notSyncAdd
      notSyncModify
@@ -145,9 +145,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     [nonSyncStreams addObjectsFromArray:[self.streamsNotSync allObjects]];
     for (PYStream *stream in nonSyncStreams) {
         
-        //the condition is not correct : set self.channelId to shut error up, should be parentId
-        //        if ([stream.parentId compare:self.channelId] == NSOrderedSame) {
-        //We sync only events for particular channel at time
+        //the condition is not correct : set self.Id to shut error up, should be parentId
+        //        if ([stream.parentId compare:self.Id] == NSOrderedSame) {
+        
         
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         stream.isSyncTriedNow = YES;
@@ -218,8 +218,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     NSLog(@"Not syncEvents: %@",nonSyncEvents);
     for (PYEvent *event in nonSyncEvents) {
         
-        //if ([event.channelId compare:self.channelId] == NSOrderedSame) {
-        //We sync only events for particular channel at time
+   
         
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;

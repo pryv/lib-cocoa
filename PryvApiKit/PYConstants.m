@@ -17,7 +17,6 @@ NSString *const kPYAPIDomain = @".pryv.io";
 NSString *const kPYAPIDomainStaging = @".pryv.in";
 
 NSString *const kROUTE_EVENTS = @"events";
-NSString *const kROUTE_FOLDERS = @"folders";
 NSString *const kROUTE_STREAMS = @"streams";
 
 NSString *const kPYAPIConnectionRequestStreamId = @"streamId";
@@ -28,20 +27,12 @@ NSString *const kPYAPIConnectionRequestManageLevel = @"manage";
 NSString *const kPYAPIConnectionRequestContributeLevel = @"contribute";
 
 
+NSString *const kPYAPIEventFilterLimit = @"limit";
+NSString *const kPYAPIEventFilterFromTime = @"fromTime";
+NSString *const kPYAPIEventFilterToTime = @"toTime";
+NSString *const kPYAPIEventFilterOnlyStreams = @"onlyStreams[]";
+NSString *const kPYAPIEventFilterTags = @"tags[]";
 
-NSString *const kPrYvChannelEventFilterLimit = @"limit";
-NSString *const kPrYvChannelEventFilterFromTime = @"fromTime";
-NSString *const kPrYvChannelEventFilterToTime = @"toTime";
-NSString *const kPrYvChannelEventFilterOnlyFolders = @"onlyFolders[]";
-NSString *const kPrYvChannelEventFilterTags = @"tags[]";
-
-
-// the following should not be set as constants
-NSString *const kPYUserTempToken = @"Ve69mGqqX5";
-NSString *const kPYUserTempTokenMladen = @"PeySaPzMsM";
-
-NSString *const kPrYvApplicationChannelId = @"position";
-NSString *const kPrYvApplicationChannelName = @"Position";
 
 //Notifications
 NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisibleNotification";

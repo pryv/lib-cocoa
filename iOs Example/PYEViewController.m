@@ -22,44 +22,11 @@
 {
     [super viewDidLoad];
     
-//    [PYClient setDefaultDomainStaging];
-//    
-//    PYConnection *access = [PYClient createConnectionWithUsername:@"perkikiki" andAccessToken:kPYUserTempToken];
-//        
-//    [access getAllChannelsWithRequestType:PYRequestTypeSync
-//                        gotCachedChannels:^(NSArray *cachedChannelList) {
-//        NSLog(@"cachedChannelList %@",cachedChannelList);
-//        
-//        for (PYChannel *channel in cachedChannelList) {
-//            //Nenad_test channel
-//            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
-//                
-//            }
-//        }
-//    
-//    
-//            
-//    } gotOnlineChannels:^(NSArray *onlineChannelList) {
-//        
-//
-//        for (PYChannel *channel in onlineChannelList) {
-//            
-//            //Nenad_test channel
-//            if ([channel.channelId isEqualToString:@"TVKoK036of"]) {
-//                
-//            }
-//        }
-//        
-//    } errorHandler:^(NSError *error) {
-//        NSLog(@"isOnline %d",access.isOnline);
-//    }];
-    
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
     
-//    NSArray *permissions = @[ @{ @"channelId": @"*", @"level": @"manage"}];
     
     NSArray *keys = [NSArray arrayWithObjects:  kPYAPIConnectionRequestStreamId,
                                                 kPYAPIConnectionRequestLevel,
