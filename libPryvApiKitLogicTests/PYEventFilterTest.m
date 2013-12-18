@@ -36,8 +36,9 @@
                                                                    tags:nil];
     STAssertNotNil(pyFilter, @"PYEventFilter isn't created");
     
-
-     __block BOOL finished = NO;
+    
+    __block BOOL finished1 = NO;
+    __block BOOL finished2 = NO;
     [[NSNotificationCenter defaultCenter] addObserverForName:@"EVENTS"
                                                       object:nil
                                                        queue:nil
@@ -45,9 +46,20 @@
      {
          NSDictionary *message = (NSDictionary*) note.userInfo;
          NSArray* toAdd = [message objectForKey:@"ADD"];
-         if (toAdd) {
-           NSLog(@"*62 ADD %i", toAdd.count);
-             finished = YES;
+         if (toAdd && toAdd.count > 0) {
+             NSLog(@"*62 ADD %i", toAdd.count);
+             
+             if (! finished1) {
+                 STAssertEquals(20u, toAdd.count, @"Got wrong number of events");
+                 finished1 = YES;
+                 pyFilter.limit = 30;
+                 [pyFilter update];
+                 
+             } else {
+                 STAssertEquals(10u, toAdd.count, @"Got wrong number of events");
+                 finished2 = YES;
+             }
+             
          }
          NSArray* toRemove = [message objectForKey:@"REMOVE"];
          if (toRemove) {
@@ -64,8 +76,7 @@
      }];
     [pyFilter update];
     
-    pyFilter.limit = 30;
-    [pyFilter update];
+    
     
     
     
@@ -73,7 +84,7 @@
     
     [PYTestsUtils execute:^{
         STFail(@"Failed after waiting 10 seconds");
-    } ifNotTrue:&finished afterSeconds:10];
+    } ifNotTrue:&finished2 afterSeconds:10];
     
     
 }
