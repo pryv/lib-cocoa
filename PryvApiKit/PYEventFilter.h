@@ -62,9 +62,10 @@
  This method gets sync details for event filter
  */
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                 gotCachedEvents:(void (^) (NSArray *eventList))gotCachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                    errorHandler:(void (^) (NSError *error))errorHandler;
+                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                 gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                  successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                    errorHandler:(void (^)(NSError *error))errorHandler;
 
 
 

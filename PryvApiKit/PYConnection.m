@@ -46,7 +46,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         [self pyAccessStatus:self.connectionReachability];
-        [self deserializeNonSyncList];
+        [self initDeserializeNonSyncList];
     }
     return self;
 }
@@ -100,7 +100,10 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 }
 
 
-- (void)deserializeNonSyncList
+/**
+ * Load event form cache.. Part of this init
+ */
+- (void)initDeserializeNonSyncList
 {
     NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
     
@@ -388,10 +391,14 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     if (path == nil) path = @"";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
-    //    NSDictionary* headers = @{@"Authorization": self.accessToken};
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
-    [PYClient apiRequest:fullPath headers:headers requestType:reqType method:method postData:postData attachments:attachments
+    [PYClient apiRequest:fullPath
+                 headers:headers
+             requestType:reqType
+                  method:method
+                postData:postData
+             attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      if (serverTime == nil) {
@@ -406,7 +413,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                      } else {
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
-                         
+                        
                          if (successHandler) {
                              successHandler(request,response,JSON);
                          }

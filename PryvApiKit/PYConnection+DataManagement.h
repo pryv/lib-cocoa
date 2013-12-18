@@ -112,17 +112,12 @@
 /**
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
-- (void)getEventsWithRequestType:(PYRequestType)reqType
+- (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
                           filter:(NSDictionary*)filterDic
                   successHandler:(void (^) (NSArray *eventList))onlineEventsList
                     errorHandler:(void (^) (NSError *error))errorHandler
               shouldSyncAndCache:(BOOL)syncAndCache;
 
-- (void)getAllEventsWithRequestType:(PYRequestType)reqType
-                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
-                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                       errorHandler:(void (^)(NSError *error))errorHandler;
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                       parameters:(NSDictionary *)filter

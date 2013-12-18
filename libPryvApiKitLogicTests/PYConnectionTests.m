@@ -10,6 +10,7 @@
 #import "PYConnectionTests.h"
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
+#import "PYTestsUtils.h"
 
 @implementation PYConnectionTests
 
@@ -50,6 +51,25 @@
     }];
     
 }
+
+- (void)testSynchronizeTime
+{
+    __block BOOL finished = NO;
+    [self.connection synchronizeTimeWithSuccessHandler:^(NSTimeInterval serverTime) {
+        NSLog(@"ServerTime %f", serverTime);
+        finished = YES;
+    } errorHandler:^(NSError *error) {
+        STFail(@"Cannot get ServerTime %@", error);
+        finished = YES;
+    }];
+    
+    [PYTestsUtils execute:^{
+        STFail(@"Cannot get ServerTime within 10 seconds");
+    } ifNotTrue:&finished afterSeconds:10];
+    
+}
+
+
 
 - (void)tearDown
 {

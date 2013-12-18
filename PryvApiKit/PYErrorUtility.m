@@ -87,4 +87,21 @@
     return [[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:userInfo] autorelease];
 }
 
++ (NSError *)getErrorFromStringResponse:(NSString*)content error:(NSError *)error
+                           withResponse:(NSHTTPURLResponse *)response
+                             andRequest:(NSURLRequest *)request;
+{
+  
+    
+    NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
+    
+    if (content != nil) [userInfo setObject:content forKey:@"content"];
+    [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
+    if (error != nil) [userInfo setObject:error forKey:@"error"];
+    
+    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:userInfo] autorelease];
+}
+
+
+
 @end
