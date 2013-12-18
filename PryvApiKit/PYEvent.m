@@ -127,11 +127,11 @@
         [dic setObject:_streamId forKey:@"streamId"];
     }
     
-    if (_tags && _tags.count > 0) {
+    if (_tags) {
         [dic setObject:_tags forKey:@"tags"];
     }
     
-    if (_eventDescription && _eventDescription.length > 0) {
+    if (_eventDescription) {
         [dic setObject:_eventDescription forKey:@"description"];
     }
     
