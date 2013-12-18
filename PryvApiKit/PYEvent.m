@@ -13,6 +13,7 @@
 #import "PYEventTypes.h"
 
 @implementation PYEvent
+@synthesize clientId = _clientId;
 @synthesize eventId = _eventId;
 @synthesize time = _time;
 @synthesize duration = _duration;
@@ -33,9 +34,21 @@
 @synthesize isSyncTriedNow = _isSyncTriedNow;
 @synthesize modifiedEventPropertiesAndValues = _modifiedEventPropertiesAndValues;
 
++ (NSString *)newClientId
+{
+    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+    CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+    CFRelease(uuidRef);
+    return [(NSString *)uuidStringRef autorelease];
+}
+
 - (NSDictionary *)cachingDictionary
 {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    
+    if (_clientId && _clientId.length > 0) {
+        [dic setObject:_clientId forKey:@"clientId"];
+    }
     
     if (_eventId && _eventId.length > 0) {
         [dic setObject:_eventId forKey:@"id"];
@@ -160,6 +173,7 @@
 {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@", self.type=%@", self.type];
+    [description appendFormat:@", self.clientId=%@", self.clientId];
     [description appendFormat:@", self.eventId=%@", self.eventId];
     [description appendFormat:@", self.time=%f", self.time];
     [description appendFormat:@", self.duration=%f", self.duration];
@@ -195,6 +209,7 @@
 {
     self = [super init];
     if (self) {
+        self.clientId = [PYEvent newClientId];
     }
     
     return self;

@@ -62,7 +62,7 @@
                                          }
                                          STAssertTrue(foundEventOnServer, @"Event hasn't found on server");
                                          
-                                     } successHandler:NULL errorHandler:^(NSError *error) {
+                                     } onlineDiffWithCached:NULL errorHandler:^(NSError *error) {
                                      }];
     
     [self.connection trashOrDeleteEvent:event withRequestType:PYRequestTypeSync successHandler:NULL errorHandler:^(NSError *error) {

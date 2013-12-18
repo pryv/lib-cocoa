@@ -25,6 +25,7 @@
 
 @implementation PYEventFilter
 
+
 @synthesize connection = _connection;
 @synthesize fromTime = _fromTime;
 @synthesize toTime = _toTime;
@@ -34,8 +35,17 @@
 
 @synthesize lastRefresh = _lastRefresh;
 
-@synthesize notificationCenterName = _notificationCenterName;
+@synthesize currentEventsDic = _currentEventsDic;
 
+
+
+- (void)dealloc
+{
+    //TODO check that it's necessary
+    [_currentEventsDic release];
+    _currentEventsDic = nil;
+    [super dealloc];
+}
 
 - (id)initWithConnection:(PYConnection*)connection
                 fromTime:(NSTimeInterval)fromTime
@@ -52,11 +62,10 @@
                     onlyStreamsIDs:onlyStreamsIDs
                               tags:tags];
         _lastRefresh = PYEventFilter_UNDEFINED_FROMTIME;
+        _currentEventsDic = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
-
-
 
 
 - (void)changeFilterFromTime:(NSTimeInterval)fromTime
@@ -72,30 +81,67 @@
     _limit = limit;
 }
 
+- (void)notifyEventsToAdd:(NSArray*)toAdd toRemove:(NSArray*)toRemove modified:(NSArray*)modified
+{
+    
+    NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
+    PYEvent* event;
+    if (toAdd != nil) {
+        [userInfo setObject:toAdd forKey:@"ADD"];
+        NSEnumerator *toAddEnumerator = [toAdd objectEnumerator];
+        while ((event = [toAddEnumerator nextObject]) != nil) {
+            [self.currentEventsDic setValue:event forKey:event.clientId];
+        }
+    }
+    if (toRemove != nil) {
+        [userInfo setObject:toRemove forKey:@"REMOVE"];
+        NSEnumerator *toRemoveEnumerator = [toRemove objectEnumerator];
+        while ((event = [toRemoveEnumerator nextObject]) != nil) {
+            [self.currentEventsDic removeObjectForKey:event.clientId];
+        }
+        
+    }
+    if (modified != nil) [userInfo setObject:modified forKey:@"MODIFY"];
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"EVENTS"
+     object:self
+     userInfo:userInfo];
+}
+
+- (NSArray*)currentEventsSet
+{
+    return [_currentEventsDic allValues];
+}
+
+
 - (void)update
 {
-    
+    [self.connection getEventsWithRequestType:PYRequestTypeAsync
+                                       filter:self
+                              gotCachedEvents:^(NSArray *cachedEventList) {
+                                  
+                          
+                                  
+                                  NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+                                  NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+                                  NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
+                                  
+                                  [PYEventFilterUtility createEventsSyncDetails:cachedEventList
+                                                                    knownEvents:self.currentEventsSet
+                                                                    eventsToAdd:eventsToAdd
+                                                                 eventsToRemove:eventsToRemove
+                                                                 eventsModified:eventsModified];
+
+                                  [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
+                              } gotOnlineEvents:^(NSArray *onlineEventList) {
+                                  
+                              } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+                                  [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventModified];
+                              } errorHandler:^(NSError *error) {
+                                  
+                              }];
 }
 
-/**
- * process can be considered as finished when both lists has been received
- */
-- (void)getEventsWithRequestType:(PYRequestType)reqType
-                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
-                  successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                    errorHandler:(void (^)(NSError *error))errorHandler
-{
-    
-    [self.connection getEventsWithRequestType:reqType
-                                   parameters:[PYEventFilterUtility filteredEvents:self]
-                              gotCachedEvents:cachedEvents
-                              gotOnlineEvents:onlineEvents
-                               successHandler:syncDetails
-                                 errorHandler:errorHandler];
-
-
-}
 
 + (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
     /** Sort untested **/
@@ -135,5 +181,10 @@ NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* igno
     else
         return NSOrderedSame;
 }
+
+
+
+
+
 
 @end

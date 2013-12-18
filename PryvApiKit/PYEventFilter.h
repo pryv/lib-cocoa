@@ -37,7 +37,9 @@
 @property (nonatomic, retain) NSArray *onlyStreamsIDs;
 @property (nonatomic, retain) NSArray *tags;
 
-@property (nonatomic, retain) NSString *notificationCenterName;
+
+@property (nonatomic, readonly) NSMutableDictionary *currentEventsDic;
+
 
 @property (nonatomic) NSTimeInterval lastRefresh;
 
@@ -62,16 +64,16 @@
               onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                         tags:(NSArray *)tags;
 
-- (void)update;
+/**
+ * get all events in this dictionary
+ */
+- (NSArray*)currentEventsSet;
 
 /**
- This method gets sync details for event filter
+ * trigger an update of this filter. Result to be monitored on Notification Center
  */
-- (void)getEventsWithRequestType:(PYRequestType)reqType
-                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
-                  successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                    errorHandler:(void (^)(NSError *error))errorHandler;
+- (void)update;
+
 
 
 

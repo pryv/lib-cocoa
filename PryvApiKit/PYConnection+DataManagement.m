@@ -331,26 +331,26 @@
     //This method should get particular event and return it, not to cache it
     
     [self getOnlineEventsWithRequestType:reqType
-                            filter:nil
-                    successHandler:^(NSArray *eventList) {
-                        for (PYEvent *currentEvent in eventList) {
-                            if ([currentEvent.eventId compare:eventId] == NSOrderedSame) {
-                                onlineEvent(currentEvent);
-                                break;
-                            }
-                        }
-                    }
-                      errorHandler:errorHandler
-                shouldSyncAndCache:NO];
+                              parameters:nil
+                          successHandler:^(NSArray *eventList) {
+                              for (PYEvent *currentEvent in eventList) {
+                                  if ([currentEvent.eventId compare:eventId] == NSOrderedSame) {
+                                      onlineEvent(currentEvent);
+                                      break;
+                                  }
+                              }
+                          }
+                            errorHandler:errorHandler
+                      shouldSyncAndCache:NO];
 }
 
 //GET /events
 
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
-                          filter:(NSDictionary*)filterDic
-                  successHandler:(void (^) (NSArray *eventList))onlineEventsList
-                    errorHandler:(void (^) (NSError *error))errorHandler
-              shouldSyncAndCache:(BOOL)syncAndCache
+                            parameters:(NSDictionary*)filterDic
+                        successHandler:(void (^) (NSArray *eventList))onlineEventsList
+                          errorHandler:(void (^) (NSError *error))errorHandler
+                    shouldSyncAndCache:(BOOL)syncAndCache
 {
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
@@ -414,53 +414,55 @@
 
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                      parameters:(NSDictionary *)filter
+                      filter:(PYEventFilter *)filter
                  gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
                  gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
-                  successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                  onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
-    NSArray *allEventsFromCacheBeforeCacheUpdate = [PYEventsCachingUtillity getEventsFromCache];
+    
+    NSArray* filteredCachedEventList = [PYEventFilterUtility
+                                        filterEventsList:[PYEventsCachingUtillity getEventsFromCache]
+                                                                   withFilter:filter];
     
     if (cachedEvents) {
+        
+       
         NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
         if (currentNumberOfEventsInCache > 0) {
             //if there are cached events return it, when get response return in onlineList
-            cachedEvents(allEventsFromCacheBeforeCacheUpdate);
+            cachedEvents(filteredCachedEventList);
         }
     }
     //This method should retrieve always online events
     //In this method we should synchronize events from cache with ones online and to return current online list
     [self getOnlineEventsWithRequestType:reqType
-                            filter:filter
-                    successHandler:^(NSArray *onlineEventList) {
-                        //Cache is updated here with online events
-                        //When come here all events(onlineEventList) are already cached
-                        //Here some events should be removed from cache (if any)
-                        //It doesn't need to be cached because they are already cached just before successHandler is called
-                        // TODO UPDATE self.lastRefresh
-                        //                            self.lastRefresh = [[NSDate date] timeIntervalSince1970];
-                        
-                        NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
-                        NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
-                        NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
-                        
-                        [PYEventFilterUtility createEventsSyncDetails:onlineEventList
-                                                        offlineEvents:allEventsFromCacheBeforeCacheUpdate
-                                                          eventsToAdd:eventsToAdd
-                                                       eventsToRemove:eventsToRemove
-                                                       eventsModified:eventsModified];
-                        if (onlineEvents) {
-                            onlineEvents(onlineEventList);
-                        }
-                        
-                        if (syncDetails) {
-                            syncDetails(eventsToAdd, eventsToRemove, eventsModified);
-                        }
-                    }
-                      errorHandler:errorHandler
-                shouldSyncAndCache:YES];
+                              parameters:[PYEventFilterUtility filteredEvents:filter]
+                          successHandler:^(NSArray *onlineEventList) {
+                              if (onlineEvents) {
+                                  onlineEvents(onlineEventList);
+                              }
+                              if (syncDetails) {
+                                  // give differences between cachedEvents and received events
+                                  
+                                  NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+                                  NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+                                  NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
+                                  
+                                  [PYEventFilterUtility createEventsSyncDetails:onlineEventList
+                                                                    knownEvents:filteredCachedEventList
+                                                                    eventsToAdd:eventsToAdd
+                                                                 eventsToRemove:eventsToRemove
+                                                                 eventsModified:eventsModified];
+                                  
+                                  
+                                  
+                                  syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                              }
+                          }
+                            errorHandler:errorHandler
+                      shouldSyncAndCache:YES];
 }
 
 //POST /events

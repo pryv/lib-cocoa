@@ -8,6 +8,7 @@
 
 #import "PYClient.h"
 #import "PYConnection.h"
+#import "PYEventFilter.h"
 
 @interface PYConnection (DataManagement)
 
@@ -113,17 +114,17 @@
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
-                          filter:(NSDictionary*)filterDic
+                          parameters:(NSDictionary*)filterDic
                   successHandler:(void (^) (NSArray *eventList))onlineEventsList
                     errorHandler:(void (^) (NSError *error))errorHandler
               shouldSyncAndCache:(BOOL)syncAndCache;
 
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                      parameters:(NSDictionary *)filter
+                      filter:(PYEventFilter *)filter
                     gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
                     gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
-                     successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                     onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                        errorHandler:(void (^)(NSError *error))errorHandler;
 
 

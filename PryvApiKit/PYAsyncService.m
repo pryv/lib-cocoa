@@ -47,7 +47,7 @@
     if (self) {
         // create the connection with the request
         // and start loading the data asynchronously
-        self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+        self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
         if (_connection) {
             // Create the NSMutableData to hold the received data.
             // receivedData is an instance variable declared elsewhere.
@@ -77,6 +77,8 @@
             failure (req, resp, error, JSON);
         }
     }];
+    
+    
 }
 
 - (void)setCompletionBlockWithSuccess:(PYAsyncServiceSuccessBlock)success
@@ -84,6 +86,7 @@
 {
     self.onSuccess = success;
     self.onFailure = failure;
+    [self.connection start];
 }
 
 - (void)stop

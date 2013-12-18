@@ -474,7 +474,7 @@
             }else{
                 NSLog(@"No online events.");
             }
-        } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+        } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
         } errorHandler:^(NSError *error) {
             NSLog(@"%@",error);
         }];

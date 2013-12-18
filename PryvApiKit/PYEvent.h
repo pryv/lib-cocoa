@@ -13,6 +13,7 @@
 
 @interface PYEvent : NSObject
 {
+    NSString  *_clientId;
     NSString  *_eventId;
     NSString  *_streamId;
     
@@ -39,7 +40,8 @@
     NSDictionary *_modifiedEventPropertiesAndValues;
 
 }
-
+/** client side id only.. remain the same before and after synching **/
+@property (nonatomic, retain) NSString  *clientId;
 @property (nonatomic, retain) NSString  *eventId;
 @property (nonatomic, retain) NSString  *streamId;
 
@@ -111,5 +113,7 @@
  Sugar to get the corresponding PYEventType of this event
  */
 @property (nonatomic, readonly) PYEventType *pyType;
+
++ (NSString *)newClientId;
 
 @end

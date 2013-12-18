@@ -20,12 +20,12 @@
 /**
  Get array of PYEvent objects from cache that are filtered 
  */
-+ (NSArray *)filterCachedEvents:(NSArray *)cachedEventsArray withFilter:(PYEventFilter *)filter;
++ (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYEventFilter *)filter;
 /**
  This method creates event sync details for visual presentation on client app
  */
 + (void)createEventsSyncDetails:(NSArray *)onlineEventList
-                  offlineEvents:(NSArray *)cachedEvents
+                  knownEvents:(NSArray *)knownEvents
                     eventsToAdd:(NSMutableArray *)eventsToAdd
                  eventsToRemove:(NSMutableArray *)eventsToRemove
                  eventsModified:(NSMutableArray *)eventsModified;
