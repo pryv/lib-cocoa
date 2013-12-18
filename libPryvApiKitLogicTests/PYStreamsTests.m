@@ -36,17 +36,19 @@
         createdStreamIdFromServer = [NSString stringWithString:createdStreamId];
         NSLog(@"New stream ID : %@",createdStreamIdFromServer);
         [PYStreamsCachingUtillity cacheStream:stream];
+   
+    
+        NSString *fakeStreamId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
+        PYStream *streamFromCacheWithFakeId = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:fakeStreamId];
+        STAssertNil(streamFromCacheWithFakeId, @"This must be nil. It's fake stream id");
+        
+        PYStream *streamFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:createdStreamIdFromServer];
+        STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
+        
     } errorHandler:^(NSError *error) {
         
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
     }];
-    
-    NSString *fakeStreamId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
-    PYStream *streamFromCacheWithFakeId = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:fakeStreamId];
-    STAssertNil(streamFromCacheWithFakeId, @"This must be nil. It's fake stream id");
-    
-    PYStream *streamFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:createdStreamIdFromServer];
-    STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
     
     [self.connection getAllStreamsWithRequestType:PYRequestTypeSync gotCachedStreams:^(NSArray *cachedStreamsList) {
         

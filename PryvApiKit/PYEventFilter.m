@@ -34,6 +34,8 @@
 
 @synthesize lastRefresh = _lastRefresh;
 
+@synthesize notificationCenterName = _notificationCenterName;
+
 
 - (id)initWithConnection:(PYConnection*)connection
                 fromTime:(NSTimeInterval)fromTime
@@ -54,6 +56,9 @@
     return self;
 }
 
+
+
+
 - (void)changeFilterFromTime:(NSTimeInterval)fromTime
                       toTime:(NSTimeInterval)toTime
                        limit:(NSUInteger)limit
@@ -67,6 +72,11 @@
     _limit = limit;
 }
 
+- (void)update
+{
+    
+}
+
 /**
  * process can be considered as finished when both lists has been received
  */
@@ -76,8 +86,9 @@
                   successHandler:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^)(NSError *error))errorHandler
 {
+    
     [self.connection getEventsWithRequestType:reqType
-                                   parameters:nil
+                                   parameters:[PYEventFilterUtility filteredEvents:self]
                               gotCachedEvents:cachedEvents
                               gotOnlineEvents:onlineEvents
                                successHandler:syncDetails

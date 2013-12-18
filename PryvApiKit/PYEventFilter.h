@@ -27,6 +27,7 @@
     NSArray *_tags;
     
     NSTimeInterval _lastRefresh;
+    NSString *_notificationCenterName;
 }
 
 @property (readonly, nonatomic, retain) PYConnection *connection;
@@ -35,6 +36,8 @@
 @property (nonatomic) NSUInteger limit;
 @property (nonatomic, retain) NSArray *onlyStreamsIDs;
 @property (nonatomic, retain) NSArray *tags;
+
+@property (nonatomic, retain) NSString *notificationCenterName;
 
 @property (nonatomic) NSTimeInterval lastRefresh;
 
@@ -58,6 +61,9 @@
                        limit:(NSUInteger)limit
               onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                         tags:(NSArray *)tags;
+
+- (void)update;
+
 /**
  This method gets sync details for event filter
  */

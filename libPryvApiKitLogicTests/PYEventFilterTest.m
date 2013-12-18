@@ -31,7 +31,7 @@
     PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
                                                                fromTime:PYEventFilter_UNDEFINED_FROMTIME
                                                                  toTime:PYEventFilter_UNDEFINED_TOTIME
-                                                                  limit:0
+                                                                  limit:2000
                                                          onlyStreamsIDs:nil
                                                                    tags:nil];
     STAssertNotNil(pyFilter, @"PYEventFilter isn't created");

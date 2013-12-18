@@ -284,7 +284,8 @@ static NSString *myLanguageCodePrefered;
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler
 {
-    switch (reqType) {
+    //
+    switch (PYRequestTypeAsync) {
         case PYRequestTypeAsync:{
             NSLog(@"started async request with url: %@",[[request URL] absoluteString]);
             [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
