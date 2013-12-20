@@ -48,6 +48,9 @@
             NSLog(@"event is cached and not modified");
         }
     }
+    [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToAdd sortAscending:YES];
+    [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToRemove sortAscending:YES];
+    [PYEventFilter sortNSMutableArrayOfPYEvents:eventsModified sortAscending:YES];
 }
 
 + (void)getAndCacheEventWithServerId:(NSString *)eventId
@@ -100,13 +103,15 @@
 + (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYEventFilter *)filter
 {
     //    Would be nice to use  result = [eventErray filteredArrayUsingPredicate:[self predicate]];
-    NSArray *result = [events filteredArrayUsingPredicate:[self cachedEventsPredicateWithFilter:filter]];
+    NSMutableArray *result = [[NSMutableArray alloc]
+                              initWithArray:[events filteredArrayUsingPredicate:[self cachedEventsPredicateWithFilter:filter]]];
+    [PYEventFilter sortNSMutableArrayOfPYEvents:result sortAscending:YES];
     if (result.count > filter.limit)
     {
         NSArray *limitedArray = [result subarrayWithRange:NSMakeRange(0, filter.limit)];
         return  limitedArray;
     }
-    return result;
+    return [result autorelease];
 }
 
 + (NSPredicate *)cachedEventsPredicateWithFilter:(PYEventFilter *)filter

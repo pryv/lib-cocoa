@@ -84,6 +84,10 @@
 - (void)notifyEventsToAdd:(NSArray*)toAdd toRemove:(NSArray*)toRemove modified:(NSArray*)modified
 {
     
+    ///  /!\ AT WORK - Proof of concept
+    ///
+    ///  Missing: just add what's not present .. and remove that need to removed
+    
     NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
     PYEvent* event;
     if (toAdd != nil) {
@@ -101,7 +105,9 @@
         }
         
     }
-    if (modified != nil) [userInfo setObject:modified forKey:@"MODIFY"];
+    if (modified != nil) {
+       [userInfo setObject:modified forKey:@"MODIFY"];
+    }
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"EVENTS"
      object:self
@@ -110,6 +116,7 @@
 
 - (NSArray*)currentEventsSet
 {
+    // TODO check order
     return [_currentEventsDic allValues];
 }
 
@@ -134,10 +141,20 @@
 
                                   [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
                               } gotOnlineEvents:^(NSArray *onlineEventList) {
+                                  NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+                                  NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+                                  NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
                                   
-                              } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-                                  [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventModified];
-                              } errorHandler:^(NSError *error) {
+                                  [PYEventFilterUtility createEventsSyncDetails:onlineEventList
+                                                                    knownEvents:self.currentEventsSet
+                                                                    eventsToAdd:eventsToAdd
+                                                                 eventsToRemove:eventsToRemove
+                                                                 eventsModified:eventsModified];
+                                  
+                                  [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
+                                  
+                              } onlineDiffWithCached:nil
+                                 errorHandler:^(NSError *error) {
                                   
                               }];
 }

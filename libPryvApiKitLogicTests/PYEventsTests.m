@@ -49,7 +49,7 @@
     
     __block BOOL foundEventOnServer;
     [self.connection getEventsWithRequestType:PYRequestTypeSync
-                                       parameters:nil
+                                       filter:nil
                                      gotCachedEvents:NULL
                                      gotOnlineEvents:^(NSArray *onlineEventList) {
                                          STAssertTrue(onlineEventList.count > 0, @"Some events are already created before running this test, error in geting online events list");

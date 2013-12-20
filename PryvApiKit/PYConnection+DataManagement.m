@@ -379,7 +379,9 @@
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
                      
                      PYEvent *event = [PYEvent getEventFromDictionary:eventDic];
+                     
                      [eventsArray addObject:event];
+                     
                      if (event.attachments.count > 0) {
                          for (int j = 0; j < event.attachments.count; j++) {
                              PYAttachment *attachment = [event.attachments objectAtIndex:j];
@@ -402,6 +404,7 @@
                  }
                  if (onlineEventsList) {
                      //cacheEvents method will overwrite contents of currently cached file
+                     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                      onlineEventsList([eventsArray autorelease]);
                  }
                  
@@ -427,10 +430,7 @@
                                                                    withFilter:filter];
     
     if (cachedEvents) {
-        
-       
-        NSUInteger currentNumberOfEventsInCache = [PYEventsCachingUtillity getEventsFromCache].count;
-        if (currentNumberOfEventsInCache > 0) {
+        if ([PYEventsCachingUtillity getEventsFromCache].count > 0) {
             //if there are cached events return it, when get response return in onlineList
             cachedEvents(filteredCachedEventList);
         }
