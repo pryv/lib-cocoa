@@ -28,6 +28,9 @@
     
     NSTimeInterval _lastRefresh;
     NSString *_notificationCenterName;
+    
+    NSMutableDictionary *_currentEventsDic;
+
 }
 
 @property (readonly, nonatomic, retain) PYConnection *connection;
