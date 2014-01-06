@@ -20,6 +20,7 @@
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
 #import "PYError.h"
+#import "PYRequest.h"
 
 @implementation PYClient
 
@@ -176,7 +177,7 @@ static NSString *myLanguageCodePrefered;
 /**
  * Prepare the request for the API
  */
-+ (void) apiRequest:(NSString *)fullURL
++ (PYRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary *)headers
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -185,8 +186,15 @@ static NSString *myLanguageCodePrefered;
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 {
+    PYRequest *request = [[[PYRequest alloc] initWithfullURL:fullURL
+                                                     headers:headers
+                                                 requestType:reqType
+                                                      method:method
+                                                    postData:postData
+                                                 attachments:attachments
+                                                     success:successHandler
+                                                     failure:failureHandler] autorelease];
     
-    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
     
     NSURL *url;
     
@@ -203,8 +211,9 @@ static NSString *myLanguageCodePrefered;
     }
     
     if (!fullURL) {
+        
         [NSException raise:@"There is no fullURL string" format:@"fullURL can't be nil"];
-        return;
+        return request;
     }
     
     url = [NSURL URLWithString:fullURL];
@@ -215,9 +224,10 @@ static NSString *myLanguageCodePrefered;
     
     if ( (method == PYRequestMethodGET  && postDataa != nil) || (method == PYRequestMethodDELETE && postDataa != nil) )
     {
-        [NSException raise:NSInvalidArgumentException format:@"postData must be nil for GET method or DELETE method"];
-        return;
-        
+        [NSException raise:NSInvalidArgumentException
+                    format:@"postData must be nil for GET method or DELETE method" ];
+
+        return request;
     }
     
     if (attachments && attachments.count) {
@@ -274,6 +284,7 @@ static NSString *myLanguageCodePrefered;
         }
     }
     [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
+    return request;
 }
 
 /**

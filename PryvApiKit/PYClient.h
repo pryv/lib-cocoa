@@ -22,6 +22,7 @@ typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *re
 typedef void(^PYClientFailureBlock)(NSError *error);
 
 @class PYConnection;
+@class PYRequest;
 
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
@@ -48,7 +49,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
-+ (void) apiRequest:(NSString *)fullURL
++ (PYRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary*)headers
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
