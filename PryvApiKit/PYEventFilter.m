@@ -114,6 +114,27 @@
      userInfo:userInfo];
 }
 
+
+/**
+ * The list represent 
+ * @param eventList complete list of events that should match the filter
+ */
+- (void)synchWithList:(NSArray*) eventList {
+    
+    
+    NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
+    
+    [PYEventFilterUtility createEventsSyncDetails:eventList
+                                      knownEvents:self.currentEventsSet
+                                      eventsToAdd:eventsToAdd
+                                   eventsToRemove:eventsToRemove
+                                   eventsModified:eventsModified];
+    
+    [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
+}
+
 - (NSArray*)currentEventsSet
 {
     // TODO check order
@@ -126,32 +147,10 @@
     [self.connection getEventsWithRequestType:PYRequestTypeAsync
                                        filter:self
                               gotCachedEvents:^(NSArray *cachedEventList) {
-                                  
+                                  [self synchWithList:cachedEventList];
                           
-                                  
-                                  NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
-                                  NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
-                                  NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
-                                  
-                                  [PYEventFilterUtility createEventsSyncDetails:cachedEventList
-                                                                    knownEvents:self.currentEventsSet
-                                                                    eventsToAdd:eventsToAdd
-                                                                 eventsToRemove:eventsToRemove
-                                                                 eventsModified:eventsModified];
-
-                                  [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
                               } gotOnlineEvents:^(NSArray *onlineEventList) {
-                                  NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
-                                  NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
-                                  NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
-                                  
-                                  [PYEventFilterUtility createEventsSyncDetails:onlineEventList
-                                                                    knownEvents:self.currentEventsSet
-                                                                    eventsToAdd:eventsToAdd
-                                                                 eventsToRemove:eventsToRemove
-                                                                 eventsModified:eventsModified];
-                                  
-                                  [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
+                                  [self synchWithList:onlineEventList];
                                   
                               } onlineDiffWithCached:nil
                                  errorHandler:^(NSError *error) {
