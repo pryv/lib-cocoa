@@ -17,6 +17,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYStreamsCachingUtillity.h"
 #import "PYStream+JSON.h"
 #import "PYEvent.h"
+#import "PYRequest.h"
 #import "PYAttachment.h"
 #import "PYError.h"
 #import "PYConnection+DataManagement.h"
@@ -381,7 +382,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return [NSString stringWithFormat:@"%@://%@%@", self.apiScheme, self.userID, self.apiDomain];
 }
 
-- (NSMutableDictionary*) apiRequest:(NSString *)path
+- (PYRequest*) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
@@ -393,7 +394,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
-    __block NSMutableDictionary* responseInfos = [PYClient apiRequest:fullPath
+    __block PYRequest* responseInfos = [PYClient apiRequest:fullPath
                  headers:headers
              requestType:reqType
                   method:method
@@ -411,7 +412,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                          failureHandler(errorToReturn);
                          
                      } else {
-                         [responseInfos setObject:serverTime forKey:@"serverTime"];
+                         responseInfos.serverTime = serverTime;
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
                         
