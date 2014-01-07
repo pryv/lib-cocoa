@@ -17,7 +17,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYStreamsCachingUtillity.h"
 #import "PYStream+JSON.h"
 #import "PYEvent.h"
-#import "PYRequest.h"
 #import "PYAttachment.h"
 #import "PYError.h"
 #import "PYConnection+DataManagement.h"
@@ -382,7 +381,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return [NSString stringWithFormat:@"%@://%@%@", self.apiScheme, self.userID, self.apiDomain];
 }
 
-- (PYRequest*) apiRequest:(NSString *)path
+- (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
@@ -394,7 +393,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
-    __block PYRequest* responseInfos = [PYClient apiRequest:fullPath
+   [PYClient apiRequest:fullPath
                  headers:headers
              requestType:reqType
                   method:method
@@ -412,10 +411,12 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                          failureHandler(errorToReturn);
                          
                      } else {
-                         responseInfos.serverTime = serverTime;
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
                         
+                         // anticipation of upcomming API responses
+                         
+                         
                          if (successHandler) {
                              successHandler(request,response,JSON);
                          }
@@ -424,7 +425,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                  }
                  failure:failureHandler];
     
-    return responseInfos;
 }
 
 #pragma mark - PrYv API authorize and get server time (GET /)

@@ -20,7 +20,6 @@
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
 #import "PYError.h"
-#import "PYRequest.h"
 
 @implementation PYClient
 
@@ -177,7 +176,7 @@ static NSString *myLanguageCodePrefered;
 /**
  * Prepare the request for the API
  */
-+ (PYRequest*) apiRequest:(NSString *)fullURL
++ (NSMutableURLRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary *)headers
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -186,14 +185,7 @@ static NSString *myLanguageCodePrefered;
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 {
-    PYRequest *request = [[[PYRequest alloc] initWithfullURL:fullURL
-                                                     headers:headers
-                                                 requestType:reqType
-                                                      method:method
-                                                    postData:postData
-                                                 attachments:attachments
-                                                     success:successHandler
-                                                     failure:failureHandler] autorelease];
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
     
     
     NSURL *url;

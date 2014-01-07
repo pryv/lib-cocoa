@@ -12,7 +12,6 @@
 @class Reachability;
 @class PYEvent;
 @class PYStream;
-@class PYRequest;
 
 @interface PYConnection : NSObject
 {
@@ -73,7 +72,7 @@
 /**
  Low level method for web service communication
  */
-- (PYRequest*) apiRequest:(NSString *)path
+- (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
