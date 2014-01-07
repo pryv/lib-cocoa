@@ -12,7 +12,6 @@
 
 // Model
 #import <PryvApiKit/PYEvent.h>
-#import <PryvApiKit/PYEventType.h>
 #import <PryvApiKit/PYEventFilter.h>
 #import <PryvApiKit/PYConnection.h>
 #import <PryvApiKit/PYStream.h>
@@ -31,7 +30,8 @@
 
 #if TARGET_OS_MAC
 #else 
-    // DataTypes
+// DataTypes
+    #import <PryvApiKit/PYEventType.h>
     #import <PryvApiKit/PYEventTypes.h>
     #import <PryvApiKit/PYMeasurementSet.h>
 #endif
