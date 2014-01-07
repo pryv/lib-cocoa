@@ -17,12 +17,11 @@
 		0C60CCF8178C07F800406974 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
 		0C60CD01178C462400406974 /* WelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C60CCFF178C462400406974 /* WelcomeWindowController.m */; };
 		0C60CD02178C462400406974 /* WelcomeWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C60CD00178C462400406974 /* WelcomeWindowController.xib */; };
+		0C96BFEA18510731007155E2 /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C83D418507209001E4F05 /* PYEventType.m */; };
 		0C96BFEC18510731007155E2 /* PYEventTypesPackagedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E16DED41847739500934F6C /* PYEventTypesPackagedData.m */; };
 		0C96BFED18510911007155E2 /* PYMeasurementSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7318AA184CDC7900CC474B /* PYMeasurementSet.m */; };
 		0C96BFEE18510911007155E2 /* PYEventTypesGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7318AC184CDC7900CC474B /* PYEventTypesGroup.m */; };
 		0C96BFEF18510B70007155E2 /* PYEventTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E16DECE1847571F00934F6C /* PYEventTypes.m */; };
-		0C9EB824187759F2006B019A /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C83D418507209001E4F05 /* PYEventType.m */; };
-		0C9EB82518775B5E006B019A /* PYEventType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E8C83D318507209001E4F05 /* PYEventType.h */; };
 		0CDAF32C178B53AD0070049C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDAF32B178B53AD0070049C /* WebKit.framework */; };
 		0CEB44E017BBCDB9009756E7 /* PYConnection+DataManagement.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CEB44DE17BBCDB9009756E7 /* PYConnection+DataManagement.h */; };
 		0CEB44E117BBCDB9009756E7 /* PYConnection+DataManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEB44DF17BBCDB9009756E7 /* PYConnection+DataManagement.m */; };
@@ -140,6 +139,7 @@
 		4E7318C5184CE5C900CC474B /* PYUtilsLocalization.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E7318BF184CE41D00CC474B /* PYUtilsLocalization.h */; };
 		4E7318D7184E48E100CC474B /* PYEventTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7318D6184E48E100CC474B /* PYEventTypesTests.m */; };
 		4E8AAFE41858C7880083DE8C /* PYEventClass.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6891A61850EA8C00099B26 /* PYEventClass.h */; };
+		4E8C83D518507209001E4F05 /* PYEventType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E8C83D318507209001E4F05 /* PYEventType.h */; };
 		4E8C83D7185096CE001E4F05 /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C83D418507209001E4F05 /* PYEventType.m */; };
 		4E8C83D8185096CF001E4F05 /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C83D418507209001E4F05 /* PYEventType.m */; };
 		4EA29C54174B7AAA00233897 /* JSONKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D75F4CA173304F200380629 /* JSONKit.h */; };
@@ -801,7 +801,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C9EB82518775B5E006B019A /* PYEventType.h in Headers */,
 				3D64493917639F070042C14C /* PYEventFilterUtility.h in Headers */,
 				3D5B9CB71768FFC0007A107A /* PYStreamsCachingUtillity.h in Headers */,
 				4E7318C1184CE41D00CC474B /* PYUtilsLocalization.h in Headers */,
@@ -814,6 +813,7 @@
 				3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */,
 				4E16DED51847739500934F6C /* PYEventTypesPackagedData.h in Headers */,
 				3D6C755F1703812B000B9195 /* PYConnection.h in Headers */,
+				4E8C83D518507209001E4F05 /* PYEventType.h in Headers */,
 				8A6D9E7616FB79A1008F2B2C /* PYErrorUtility.h in Headers */,
 				3D6D3BC216F8BD5C0072F480 /* PYError.h in Headers */,
 				3D6FCEBD16F7CB460003D970 /* PYStream+JSON.h in Headers */,
@@ -1069,10 +1069,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C9EB824187759F2006B019A /* PYEventType.m in Sources */,
 				0C96BFEF18510B70007155E2 /* PYEventTypes.m in Sources */,
 				0C96BFED18510911007155E2 /* PYMeasurementSet.m in Sources */,
 				0C96BFEE18510911007155E2 /* PYEventTypesGroup.m in Sources */,
+				0C96BFEA18510731007155E2 /* PYEventType.m in Sources */,
 				0C96BFEC18510731007155E2 /* PYEventTypesPackagedData.m in Sources */,
 				4E7318C2184CE41D00CC474B /* PYUtilsLocalization.m in Sources */,
 				FB03E25B16B982CD00DAD162 /* PYEvent.m in Sources */,
@@ -1447,10 +1447,9 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/**";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "PryvApiKit/PryvApiKit-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = PryvApiKit;
@@ -1473,10 +1472,9 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PryvApiKit/PryvApiKit-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/**";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "PryvApiKit/PryvApiKit-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = PryvApiKit;

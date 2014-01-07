@@ -18,7 +18,6 @@
 
 @synthesize classKey = _classKey;
 @synthesize formatKeys = _formatKeys;
-@synthesize klass = _klass;
 
 - (id)initWithClassKey:(NSString *)classKey andListOfFormats:(NSArray *)listOfFormats andPYEventsTypes:(PYEventTypes *) pyTypes
 {

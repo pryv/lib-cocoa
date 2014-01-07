@@ -15,8 +15,6 @@
 {
     PYEventClass *_klass;
     NSMutableArray *_types;
-    NSString *_classKey;
-    NSMutableArray *_formatKeys;
 }
 
 
