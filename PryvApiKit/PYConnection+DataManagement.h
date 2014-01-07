@@ -115,7 +115,7 @@
  */
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
                           parameters:(NSDictionary*)filterDic
-                  successHandler:(void (^) (NSArray *eventList))onlineEventsList
+                  successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime))onlineEventsList
                     errorHandler:(void (^) (NSError *error))errorHandler
               shouldSyncAndCache:(BOOL)syncAndCache;
 
@@ -123,7 +123,7 @@
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                       filter:(PYEventFilter *)filter
                     gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                    gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                    gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
                      onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                        errorHandler:(void (^)(NSError *error))errorHandler;
 

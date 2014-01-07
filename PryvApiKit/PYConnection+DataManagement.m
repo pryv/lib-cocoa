@@ -332,7 +332,7 @@
     
     [self getOnlineEventsWithRequestType:reqType
                               parameters:nil
-                          successHandler:^(NSArray *eventList) {
+                          successHandler:^(NSArray *eventList, NSNumber *serverTime) {
                               for (PYEvent *currentEvent in eventList) {
                                   if ([currentEvent.eventId compare:eventId] == NSOrderedSame) {
                                       onlineEvent(currentEvent);
@@ -348,7 +348,7 @@
 
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
                             parameters:(NSDictionary*)filterDic
-                        successHandler:(void (^) (NSArray *eventList))onlineEventsList
+                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime))onlineEventsList
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache
 {
@@ -405,7 +405,8 @@
                  if (onlineEventsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
-                     onlineEventsList([eventsArray autorelease]);
+                     NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
+                     onlineEventsList([eventsArray autorelease], serverTime);
                  }
                  
              } failure:^(NSError *error) {
@@ -419,7 +420,7 @@
 - (void)getEventsWithRequestType:(PYRequestType)reqType
                       filter:(PYEventFilter *)filter
                  gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *onlineEventList))onlineEvents
+                 gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
                   onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^)(NSError *error))errorHandler
 {
@@ -439,9 +440,9 @@
     //In this method we should synchronize events from cache with ones online and to return current online list
     [self getOnlineEventsWithRequestType:reqType
                               parameters:[PYEventFilterUtility filteredEvents:filter]
-                          successHandler:^(NSArray *onlineEventList) {
+                          successHandler:^(NSArray *onlineEventList, NSNumber *serverTime) {
                               if (onlineEvents) {
-                                  onlineEvents(onlineEventList);
+                                  onlineEvents(onlineEventList, serverTime);
                               }
                               if (syncDetails) {
                                   // give differences between cachedEvents and received events

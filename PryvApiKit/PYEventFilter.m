@@ -149,7 +149,7 @@
                               gotCachedEvents:^(NSArray *cachedEventList) {
                                   [self synchWithList:cachedEventList];
                           
-                              } gotOnlineEvents:^(NSArray *onlineEventList) {
+                              } gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
                                   [self synchWithList:onlineEventList];
                                   
                               } onlineDiffWithCached:nil

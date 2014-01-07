@@ -51,7 +51,7 @@
     [self.connection getEventsWithRequestType:PYRequestTypeSync
                                        filter:nil
                                      gotCachedEvents:NULL
-                                     gotOnlineEvents:^(NSArray *onlineEventList) {
+                                     gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
                                          STAssertTrue(onlineEventList.count > 0, @"Some events are already created before running this test, error in geting online events list");
                                          
                                          for (PYEvent *event in onlineEventList) {
