@@ -43,7 +43,7 @@
 
 @property (nonatomic, readonly) NSMutableDictionary *currentEventsDic;
 
-
+/** double value serverTime **/
 @property (nonatomic) NSTimeInterval lastRefresh;
 
 

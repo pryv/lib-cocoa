@@ -137,6 +137,7 @@
         onlyTagsPredicate = [NSPredicate predicateWithFormat:@"ANY tags IN %@",filter.tags];
         [predicates addObject:onlyTagsPredicate];
     }
+    // Perki 8.jan 2014 what's for?
     NSCompoundPredicate *testPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
     NSLog(@"subpredicates %@",testPredicate.subpredicates);
     [testPredicate release];

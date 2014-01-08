@@ -94,7 +94,11 @@
         [userInfo setObject:toAdd forKey:@"ADD"];
         NSEnumerator *toAddEnumerator = [toAdd objectEnumerator];
         while ((event = [toAddEnumerator nextObject]) != nil) {
-            [self.currentEventsDic setValue:event forKey:event.clientId];
+            if ([self.currentEventsDic objectForKey:event.clientId] == nil) {
+                [self.currentEventsDic setValue:event forKey:event.clientId];
+            } else {
+                NSLog(@"<Warning>: PYEventFilter.notifyEventsToAdd event to ADD already known %@", event);
+            }
         }
     }
     if (toRemove != nil) {
@@ -150,6 +154,7 @@
                                   [self synchWithList:cachedEventList];
                           
                               } gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                                  //self.lastRefresh = [serverTime doubleValue];
                                   [self synchWithList:onlineEventList];
                                   
                               } onlineDiffWithCached:nil

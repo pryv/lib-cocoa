@@ -47,7 +47,7 @@
          NSDictionary *message = (NSDictionary*) note.userInfo;
          NSArray* toAdd = [message objectForKey:@"ADD"];
          if (toAdd && toAdd.count > 0) {
-             NSLog(@"*62 ADD %i", toAdd.count);
+             NSLog(@"*162 ADD %i", toAdd.count);
              
              if (! finished1) {
                  STAssertEquals(20u, toAdd.count, @"Got wrong number of events");
@@ -63,15 +63,15 @@
          }
          NSArray* toRemove = [message objectForKey:@"REMOVE"];
          if (toRemove) {
-             NSLog(@"*62 REMOVE %i", toRemove.count);
+             NSLog(@"*162 REMOVE %i", toRemove.count);
          }
          NSArray* modify = [message objectForKey:@"MODIFY"];
          if (modify) {
-             NSLog(@"*62 MODIFY %i", modify.count);
+             NSLog(@"*162 MODIFY %i", modify.count);
          }
          
          
-         NSLog(@"*61");
+         NSLog(@"*162");
          
      }];
     [pyFilter update];
