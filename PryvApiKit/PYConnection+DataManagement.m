@@ -35,7 +35,7 @@
         }
     }
     
-    [self getStreamsWithRequestType:reqType filterParams:nil successHandler:^(NSArray *streamsList) {
+    [self getOnlineStreamsWithRequestType:reqType filterParams:nil successHandler:^(NSArray *streamsList) {
         if (onlineStreams) {
             onlineStreams(streamsList);
         }
@@ -45,7 +45,7 @@
 }
 
 
-- (void)getStreamsWithRequestType:(PYRequestType)reqType
+- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                      filterParams:(NSDictionary *)filter
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
                      errorHandler:(void (^) (NSError *error))errorHandler
@@ -92,7 +92,7 @@
 }
 
 
-- (void)getStreamsWithRequestType:(PYRequestType)reqType
+- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                            filter:(NSDictionary*)filterDic
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
                      errorHandler:(void (^)(NSError *error))errorHandler
@@ -308,7 +308,7 @@
     //When API support separate method of getting only one stream by its id this will be implemneted here
     
     //This method should get particular stream and return it, not to cache it
-    [self getStreamsWithRequestType:reqType filter:nil successHandler:^(NSArray *streamsList) {
+    [self getOnlineStreamsWithRequestType:reqType filter:nil successHandler:^(NSArray *streamsList) {
         for (PYStream *currentStream in streamsList) {
             if ([currentStream.streamId compare:streamId] == NSOrderedSame) {
                 onlineStream(currentStream);
@@ -439,7 +439,7 @@
     //This method should retrieve always online events
     //In this method we should synchronize events from cache with ones online and to return current online list
     [self getOnlineEventsWithRequestType:reqType
-                              parameters:[PYEventFilterUtility filteredEvents:filter]
+                              parameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
                           successHandler:^(NSArray *onlineEventList, NSNumber *serverTime) {
                               if (onlineEvents) {
                                   onlineEvents(onlineEventList, serverTime);

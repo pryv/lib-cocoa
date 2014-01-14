@@ -16,7 +16,7 @@
 /**
  This method gets NSDictionary json-like representation of PYEventFilter
  */
-+ (NSDictionary *)filteredEvents:(PYEventFilter *)filter;
++ (NSDictionary *)apiParametersForEventsRequestFromFilter:(PYEventFilter *)filter;
 /**
  Get array of PYEvent objects from cache that are filtered 
  */

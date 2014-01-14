@@ -125,7 +125,6 @@
  */
 - (void)synchWithList:(NSArray*) eventList {
     
-    
     NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
     NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
     NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
@@ -163,6 +162,7 @@
                               }];
 }
 
+#pragma mark - Utilities sort
 
 + (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
     /** Sort untested **/

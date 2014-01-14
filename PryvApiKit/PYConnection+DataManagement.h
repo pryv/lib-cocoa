@@ -30,7 +30,7 @@
                     gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
                         errorHandler:(void (^)(NSError *error))errorHandler;
 
-- (void)getStreamsWithRequestType:(PYRequestType)reqType
+- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                            filter:(NSDictionary*)filterDic
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
                      errorHandler:(void (^)(NSError *error))errorHandler;
@@ -40,7 +40,7 @@
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
 
-- (void)getStreamsWithRequestType:(PYRequestType)reqType
+- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                      filterParams:(NSDictionary *)filter
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
                      errorHandler:(void (^) (NSError *error))errorHandler

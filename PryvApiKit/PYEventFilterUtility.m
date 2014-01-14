@@ -70,7 +70,7 @@
      }];**/
 }
 
-+ (NSDictionary *)filteredEvents:(PYEventFilter *)filter
++ (NSDictionary *)apiParametersForEventsRequestFromFilter:(PYEventFilter *)filter
 {
     NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
     if (filter == nil) return dic;
@@ -104,7 +104,7 @@
 {
     //    Would be nice to use  result = [eventErray filteredArrayUsingPredicate:[self predicate]];
     NSMutableArray *result = [[NSMutableArray alloc]
-                              initWithArray:[events filteredArrayUsingPredicate:[self cachedEventsPredicateWithFilter:filter]]];
+                              initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
     [PYEventFilter sortNSMutableArrayOfPYEvents:result sortAscending:YES];
     if (result.count > filter.limit)
     {
@@ -114,7 +114,7 @@
     return [result autorelease];
 }
 
-+ (NSPredicate *)cachedEventsPredicateWithFilter:(PYEventFilter *)filter
++ (NSPredicate *)predicateFromFilter:(PYEventFilter *)filter
 {
     NSMutableArray *predicates = [[NSMutableArray alloc] init];
     NSPredicate *fromTimePredicate = nil;
