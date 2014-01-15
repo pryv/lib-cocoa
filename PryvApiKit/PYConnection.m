@@ -165,7 +165,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 NSString *tempId = [NSString stringWithString:stream.streamId];
                 stream.streamId = @"";
                 [self createStream:stream
-                   withRequestType:PYRequestTypeSync
+                   withRequestType:PYRequestTypeAsync
                     successHandler:^(NSString *createdStreamId) {
                         //If succedded remove from unsyncSet and add call syncStreamWithServer
                         //In that method we were search for stream with <createdStreamId> and we should done mapping between server and temp id in cache
@@ -198,7 +198,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                     [modifiedStream setValue:value forKey:property];
                 }];
                 
-                [self setModifiedStreamAttributesObject:modifiedStream forStreamId:stream.streamId requestType:PYRequestTypeSync successHandler:^{
+                [self setModifiedStreamAttributesObject:modifiedStream forStreamId:stream.streamId requestType:PYRequestTypeAsync successHandler:^{
                     
                     //We have success here. Stream is cached in setModifiedStreamAttributesObject:forStreamId method
                     stream.synchedAt = [[NSDate date] timeIntervalSince1970];
@@ -238,7 +238,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 event.eventId = nil;
                 NSLog(@"%@",event);
                 [self createEvent:event
-                      requestType:PYRequestTypeSync
+                      requestType:PYRequestTypeAsync
                    successHandler:^(NSString *newEventId, NSString *stoppedId) {
                        
                        //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
@@ -285,7 +285,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 
                 [self setModifiedEventAttributesObject:modifiedEvent
                                             forEventId:event.eventId
-                                           requestType:PYRequestTypeSync
+                                           requestType:PYRequestTypeAsync
                                         successHandler:^(NSString *stoppedId) {
                                             
                                             //We have success here. Event is cached in setModifiedEventAttributesObject:forEventId method
@@ -302,7 +302,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             
             if (event.notSyncTrashOrDelete) {
                 [self trashOrDeleteEvent:event
-                         withRequestType:PYRequestTypeSync
+                         withRequestType:PYRequestTypeAsync
                           successHandler:^{
                               
                           } errorHandler:^(NSError *error) {

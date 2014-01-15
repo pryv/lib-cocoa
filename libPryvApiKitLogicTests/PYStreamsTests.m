@@ -31,7 +31,7 @@
    
     
     __block NSString *createdStreamIdFromServer;
-    [self.connection createStream:stream withRequestType:PYRequestTypeSync successHandler:^(NSString *createdStreamId) {
+    [self.connection createStream:stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
         createdStreamIdFromServer = [NSString stringWithString:createdStreamId];
         NSLog(@"New stream ID : %@",createdStreamIdFromServer);
@@ -50,7 +50,7 @@
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
     }];
     
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeSync gotCachedStreams:^(NSArray *cachedStreamsList) {
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamsList) {
         
     } gotOnlineStreams:^(NSArray *onlineStreamList) {
         STAssertTrue(onlineStreamList.count > 0, @"Didn't retrieve any stream online.");
@@ -59,8 +59,8 @@
     }];
      
     
-    [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeSync successHandler:^{
-        [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeSync successHandler:^{
+    [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+        [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
             NSLog(@"Test stream deleted.");
         } errorHandler:^(NSError *error) {
             STFail(@"Failed while deleting stream : %@",error);

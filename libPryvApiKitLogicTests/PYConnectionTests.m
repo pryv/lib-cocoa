@@ -29,7 +29,7 @@
 - (void)testGettingStreams
 {
     
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeSync
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
      
       gotCachedStreams:^(NSArray *cachedStreamsList) {
         

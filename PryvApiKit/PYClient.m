@@ -307,7 +307,7 @@ static NSString *myLanguageCodePrefered;
         }
             break;
         case PYRequestTypeSync:{
-            
+            [NSException raise:@"deprecated usage " format:@"deprecated"];
             NSError *error = nil;
             NSHTTPURLResponse *httpURLResponse = nil;
             

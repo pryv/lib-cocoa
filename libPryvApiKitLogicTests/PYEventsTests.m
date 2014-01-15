@@ -38,7 +38,7 @@
     __block NSString *createdEventId;
 
     [self.connection createEvent:event
-             requestType:PYRequestTypeSync
+             requestType:PYRequestTypeAsync
           successHandler:^(NSString *newEventId, NSString *stoppedId) {
               STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");
               createdEventId = [NSString stringWithString:newEventId];
@@ -48,7 +48,7 @@
           }];
     
     __block BOOL foundEventOnServer;
-    [self.connection getEventsWithRequestType:PYRequestTypeSync
+    [self.connection getEventsWithRequestType:PYRequestTypeAsync
                                        filter:nil
                                      gotCachedEvents:NULL
                                      gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
@@ -65,7 +65,7 @@
                                      } onlineDiffWithCached:NULL errorHandler:^(NSError *error) {
                                      }];
     
-    [self.connection trashOrDeleteEvent:event withRequestType:PYRequestTypeSync successHandler:NULL errorHandler:^(NSError *error) {
+    [self.connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:NULL errorHandler:^(NSError *error) {
         STFail(@"Error occured when deleting.");
     }];
         
