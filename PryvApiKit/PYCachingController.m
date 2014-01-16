@@ -16,13 +16,15 @@
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
+@property (nonatomic, retain) PYConnection *connection;
 @end
 
 @implementation PYCachingController
 
 @synthesize localDataPath = _localDataPath;
+@synthesize connection = _connection;
 
-- init
+- initWithConnection:(PYConnection*)connection
 {
     self = [super init];
 	if (self) {
@@ -65,7 +67,7 @@
 
 }
 
-- (void)removeEvent:(NSString *)key
+- (void)removeEventWithKey:(NSString *)key
 {
     if(![[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]])
     {
@@ -78,7 +80,7 @@
     }
 }
 
-- (void)removeStream:(NSString *)key
+- (void)removeStreamWithKey:(NSString *)key
 {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
@@ -98,7 +100,8 @@
     for (NSString *eventCachedName in filesWithSelectedPrefix) {
         NSData *eventData = [self getDataForKey:eventCachedName];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic]];
+        [arrayOFCachedEvents
+         addObject:[PYEvent eventFromDictionary:eventDic onConnection:self.connection]];
     }
     
     return arrayOFCachedEvents;
@@ -109,7 +112,7 @@
     if ([self isDataCachedForKey:key]) {
         NSData *eventData = [self getDataForKey:key];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        return [PYEvent eventFromDictionary:eventDic];
+        return [PYEvent eventFromDictionary:eventDic onConnection:self.connection];
     }
     
     return nil;
@@ -142,13 +145,10 @@
     return nil;
 }
 
-+ (id)sharedManager {
-    static PYCachingController *sharedMyManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedMyManager = [[self alloc] init];
-    });
-    return sharedMyManager;
+- (void) dealloc {
+    [_connection release];
+    _connection = nil;
+    [super dealloc];
 }
 
 @end

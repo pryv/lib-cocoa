@@ -8,35 +8,36 @@
 
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+#import "PYCachingController.h"
 
 @class PYStream;
 
-@interface PYStreamsCachingUtillity : NSObject
+@interface PYCachingController (Stream)
 
 /**
  Cache stream json objects on disk
  */
-+ (void)cacheStreams:(NSArray *)streams;
+- (void)cacheStreams:(NSArray *)streams;
 /**
  Remove PYStream object from disk
  */
-+ (void)removeStream:(PYStream *)stream;
+- (void)removeStream:(PYStream *)stream;
 /**
  Get all PYStream objects from disk
  */
-+ (NSArray *)getStreamsFromCache;
+- (NSArray *)getStreamsFromCache;
 /**
  Get PYStream object from disk with key(streamId)
  */
-+ (PYStream *)getStreamFromCacheWithStreamId:(NSString *)streamId;
+- (PYStream *)getStreamFromCacheWithStreamId:(NSString *)streamId;
 /**
  Cache PYStream object on disk
  */
-+ (void)cacheStream:(PYStream *)stream;
+- (void)cacheStream:(PYStream *)stream;
 /**
  Get stream with particular id from server and cache it on disk
  */
-+ (void)getAndCacheStream:(PYStream *)stream
+- (void)getAndCacheStream:(PYStream *)stream
              withServerId:(NSString *)serverId
               requestType:(PYRequestType)reqType;
 

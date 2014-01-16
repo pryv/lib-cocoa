@@ -6,16 +6,16 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventsCachingUtillity.h"
+#import "PYCachingController+Event.h"
 #import "PYCachingController.h"
 #import "PYEvent.h"
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYJSONUtility.h"
 
-@implementation PYEventsCachingUtillity
+@implementation PYCachingController (Event)
 
-+ (BOOL)cachingEnabled
+- (BOOL)cachingEnabled
 {
 #if CACHE
     return YES;
@@ -23,7 +23,7 @@
     return NO;
 }
 
-+ (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
+- (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
 {
     NSMutableDictionary *eventForCache = [event mutableCopy];
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
@@ -42,7 +42,7 @@
             
             NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", eventId, fileName];
             NSData *attachmentData = [mutableAttachmentDataDic objectForKey:@"attachmentData"];
-            [[PYCachingController sharedManager] cacheData:attachmentData
+            [self cacheData:attachmentData
                                                    withKey:attachmentDataKey];
             
             [mutableAttachmentDataDic removeObjectForKey:@"attachmentData"];
@@ -54,21 +54,21 @@
     }
     
     NSData *eventData = [PYJSONUtility getDataFromJSONObject:eventForCache];
-    [[PYCachingController sharedManager] cacheData:eventData withKey:eventKey];
+    [self cacheData:eventData withKey:eventKey];
     
 }
 
-+ (void)removeEvent:(PYEvent *)event WithKey:(NSString *)key
+- (void)removeEvent:(PYEvent *)event WithKey:(NSString *)key
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
-    [[PYCachingController sharedManager] removeEvent:eventKey];
+    [self removeEventWithKey:eventKey];
     //second try
     eventKey = [[NSString stringWithFormat:@"event_%f",event.time] stringByReplacingOccurrencesOfString:@"." withString:@""];
-    [[PYCachingController sharedManager] removeEvent:eventKey];
+    [self removeEventWithKey:eventKey];
 
 }
 
-+ (void)cacheEvents:(NSArray *)events
+- (void)cacheEvents:(NSArray *)events
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *eventDic in events) {
@@ -78,36 +78,36 @@
     }
 }
 
-+ (void)cacheEvent:(PYEvent *)event
+- (void)cacheEvent:(PYEvent *)event
 {
     NSDictionary *eventDic = [event cachingDictionary];
     [self cacheEvent:eventDic WithKey:[self getKeyForEvent:event]];
 }
 
-+ (void)removeEvent:(PYEvent *)event
+- (void)removeEvent:(PYEvent *)event
 {
     [self removeEvent:event WithKey:[self getKeyForEvent:event]];
 }
 
-+ (NSString *)getKeyForEvent:(PYEvent *)event
+- (NSString *)getKeyForEvent:(PYEvent *)event
 {    
     return event.eventId;
 }
 
 
-+ (NSArray *)getEventsFromCache
+- (NSArray *)getEventsFromCache
 {
-    return [[PYCachingController sharedManager] getAllEventsFromCache];
+    return [self getAllEventsFromCache];
 }
 
-+ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId
+- (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",eventId];
-    return [[PYCachingController sharedManager] getEventWithKey:eventKey];
+    return [self getEventWithKey:eventKey];
 
 }
 
-+ (void)getAndCacheEventWithServerId:(NSString *)eventId
+- (void)getAndCacheEventWithServerId:(NSString *)eventId
                      usingConnection:(PYConnection *)connection
                          requestType:(PYRequestType)reqType
 {
@@ -116,7 +116,7 @@
                          requestType:reqType
                       successHandler:^(PYEvent *event) {
                           
-                          [PYEventsCachingUtillity cacheEvent:event];
+                          [self cacheEvent:event];
                           
                       } errorHandler:^(NSError *error) {
                           NSLog(@"error");

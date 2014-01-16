@@ -8,12 +8,12 @@
 
 #import "PYConnection+DataManagement.h"
 #import "PYStream+JSON.h"
-#import "PYStreamsCachingUtillity.h"
 #import "PYEventFilterUtility.h"
 #import "PYConstants.h"
 #import "PYEvent.h"
 #import "PYAttachment.h"
-#import "PYEventsCachingUtillity.h"
+#import "PYCachingController+Event.h"
+#import "PYCachingController+Stream.h"
 
 @implementation PYConnection (DataManagement)
 
@@ -25,7 +25,7 @@
                         errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
-    NSArray *allStreamsFromCache = [PYStreamsCachingUtillity getStreamsFromCache];
+    NSArray *allStreamsFromCache = [self.cache getStreamsFromCache];
     //    [allStreamsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedStreams) {
         NSUInteger currentNumberOfStreamsInCache = allStreamsFromCache.count;
@@ -76,7 +76,7 @@
                  }
                  
                  if (syncAndCache == YES) {
-                     [PYStreamsCachingUtillity cacheStreams:JSON];
+                     [self.cache cacheStreams:JSON];
                  }
                  
                  if (onlineStreamsList) {
@@ -113,7 +113,7 @@
                      [streamList addObject:streamObject];
                  }
                  if(onlineStreamList){
-                     [PYStreamsCachingUtillity cacheStreams:JSON];
+                     [self.cache cacheStreams:JSON];
                      onlineStreamList([streamList autorelease]);
                  }
              } failure:^(NSError *error){
@@ -140,7 +140,7 @@
                  if (successHandler) {
                      successHandler(createdStreamId);
                  }
-                 [PYStreamsCachingUtillity getAndCacheStream:stream
+                 [self.cache getAndCacheStream:stream
                                                 withServerId:createdStreamId
                                                  requestType:reqType];
              } failure:^(NSError *error) {
@@ -155,7 +155,7 @@
                          stream.streamId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
                          //return that created id so it can work offline. Stream will be cached when added to unsync list
                          
-                         [PYStreamsCachingUtillity cacheStream:stream];
+                         [self.cache cacheStream:stream];
                          [self addStream:stream toUnsyncList:error];
                          
                          successHandler (stream.streamId);
@@ -218,11 +218,11 @@
 //
 //                         if (stream.trashed == NO) {
 //                             stream.trashed = YES;
-//                             [PYStreamsCachingUtillity cacheStream:stream];
+//                             [self.cache cacheStream:stream];
 //                         }else{
 //                             //if event has trashed = yes flag it needs to be deleted from cache
 //                             NSLog(@"Stream removed from cache.");
-//                             [PYStreamsCachingUtillity removeStream:stream];
+//                             [self.cache removeStream:stream];
 //                             [self.streamsNotSync removeObject:stream];
 //                         }
 //
@@ -256,7 +256,7 @@
                  //Cache modified stream - We cache stream
                  NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
                  //If streamId isn't temporary cache stream (it will be overwritten in cache)
-                 [PYStreamsCachingUtillity getAndCacheStream:stream withServerId:streamId requestType:reqType];
+                 [self.cache getAndCacheStream:stream withServerId:streamId requestType:reqType];
                  
                  if (successHandler) {
                      successHandler();
@@ -269,7 +269,7 @@
                      if (stream.isSyncTriedNow == NO) {
                          
                          //Get current stream with id from cache
-                         PYStream *currentStreamFromCache = [PYStreamsCachingUtillity getStreamFromCacheWithStreamId:streamId];
+                         PYStream *currentStreamFromCache = [self.cache getStreamFromCacheWithStreamId:streamId];
                          
                          currentStreamFromCache.notSyncModify = YES;
                          
@@ -281,7 +281,7 @@
                          //We have to know what properties are modified in order to make succesfull request
                          currentStreamFromCache.modifiedStreamPropertiesAndValues = [stream dictionary];
                          //We must have cached modified properties of stream in cache
-                         [PYStreamsCachingUtillity cacheStream:currentStreamFromCache];
+                         [self.cache cacheStream:currentStreamFromCache];
                          
                          if (successHandler) {
                              successHandler();
@@ -378,7 +378,7 @@
                      
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
                      
-                     PYEvent *event = [PYEvent getEventFromDictionary:eventDic];
+                     PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
                      
                      [eventsArray addObject:event];
                      
@@ -400,7 +400,7 @@
                  }
                  
                  if (syncAndCache == YES) {
-                     [PYEventsCachingUtillity cacheEvents:eventsCachingArray];
+                     [self.cache cacheEvents:eventsCachingArray];
                  }
                  if (onlineEventsList) {
                      //cacheEvents method will overwrite contents of currently cached file
@@ -427,11 +427,11 @@
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
     
     NSArray* filteredCachedEventList = [PYEventFilterUtility
-                                        filterEventsList:[PYEventsCachingUtillity getEventsFromCache]
+                                        filterEventsList:[self.cache getEventsFromCache]
                                                                    withFilter:filter];
     
     if (cachedEvents) {
-        if ([PYEventsCachingUtillity getEventsFromCache].count > 0) {
+        if ([self.cache getEventsFromCache].count > 0) {
             //if there are cached events return it, when get response return in onlineList
             cachedEvents(filteredCachedEventList);
         }
@@ -486,12 +486,12 @@
                  //The following method only cached the event with id gotten from server. Let's try
                  //to cache it directly here and see what happens.
                  //Cache particular event in cache
-                 //                 [PYEventsCachingUtillity getAndCacheEventWithServerId:createdEventId
+                 //                 [self.cache getAndCacheEventWithServerId:createdEventId
                  //                                                       usingConnection:self
                  //                                                           requestType:reqType];
                  //Fix maybe ?
                  event.eventId = [createdEventId copy];
-                 [PYEventsCachingUtillity cacheEvent:event];
+                 [self.cache cacheEvent:event];
                  
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId);
@@ -516,7 +516,7 @@
                                  attachment.size = [NSNumber numberWithInt:attachment.fileData.length];
                              }
                          }
-                         [PYEventsCachingUtillity cacheEvent:event];
+                         [self.cache cacheEvent:event];
                          [self addEvent:event toUnsyncList:error];
                          
                          successHandler (event.eventId, @"");
@@ -561,10 +561,10 @@
                          
                          if (event.trashed == NO) {
                              event.trashed = YES;
-                             [PYEventsCachingUtillity cacheEvent:event];
+                             [self.cache cacheEvent:event];
                          }else{
                              //if event has trashed = yes flag it needs to be deleted from cache
-                             [PYEventsCachingUtillity removeEvent:event];
+                             [self.cache removeEvent:event];
                              [self.eventsNotSync removeObject:event];
                          }
                          
@@ -601,7 +601,7 @@
                  //Cache modified event - We cache event
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  //If eventId isn't temporary cache event (it will be overwritten in cache)
-                 [PYEventsCachingUtillity getAndCacheEventWithServerId:eventId
+                 [self.cache getAndCacheEventWithServerId:eventId
                                                        usingConnection:self
                                                            requestType:reqType];
                  
@@ -622,7 +622,7 @@
                      if (eventObject.isSyncTriedNow == NO) {
                          
                          //Get current event with id from cache
-                         PYEvent *currentEventFromCache = [PYEventsCachingUtillity getEventFromCacheWithEventId:eventId];
+                         PYEvent *currentEventFromCache = [self.cache getEventFromCacheWithEventId:eventId];
                          
                          NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                          currentEventFromCache.notSyncModify = YES;
@@ -636,7 +636,7 @@
                          //We have to know what properties are modified in order to make succesfull request
                          currentEventFromCache.modifiedEventPropertiesAndValues = [eventObject dictionary];
                          //We must have cached modified properties of event in cache
-                         [PYEventsCachingUtillity cacheEvent:currentEventFromCache];
+                         [self.cache cacheEvent:currentEventFromCache];
                          
                          if (successHandler) {
                              NSString *stoppedIdToReturn = @"";
@@ -738,7 +738,7 @@
                  
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                  for (NSDictionary *eventDic in JSON) {
-                     [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic]];
+                     [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic onConnection:self]];
                  }
                  if (successHandler) {
                      successHandler([eventsArray autorelease]);

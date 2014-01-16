@@ -8,6 +8,7 @@
 
 @class PYEventType;
 @class PYAttachment;
+@class PYConnection;
 
 #import <Foundation/Foundation.h>
 
@@ -99,7 +100,7 @@
 /**
  Get PYEvent object from json dictionary representation (JSON representation can include additioanl helper properties for event). It means that this method 'read' event from disk and from server
  */
-+ (id)getEventFromDictionary:(NSDictionary *)JSON;
++ (id)getEventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
 /**
  Convert PYEvent object to json-like NSDictionary representation for synching with server
  */

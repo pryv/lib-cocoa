@@ -7,6 +7,7 @@
 //
 
 #import "PYStream+JSON.h"
+#import "PYConnection.h"
 
 @implementation PYStream (JSON)
 
@@ -24,7 +25,6 @@
     }else{
         stream.parentId = parentId;
     }
-    
     stream.clientData = [jsonDictionary objectForKey:@"clientData"];
         
     stream.timeCount = [[jsonDictionary objectForKey:@"timeCount"] doubleValue];

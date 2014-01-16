@@ -20,7 +20,6 @@
 #import "PYConnection+DataManagement.h"
 #import "PYEvent.h"
 #import "PYClient.h"
-#import "PYEventsCachingUtillity.h"
 #import "PYEventFilterUtility.h"
 
 @implementation PYEventFilter

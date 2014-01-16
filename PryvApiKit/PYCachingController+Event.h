@@ -8,41 +8,42 @@
 
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
+#import "PYCachingController.h"
 
 @class PYEvent, PYConnection;
 
-@interface PYEventsCachingUtillity : NSObject
+@interface PYCachingController (Event)
 
 /**
  Cache PYEvent object on disk
  */
-+ (void)cacheEvent:(PYEvent *)event;
+- (void)cacheEvent:(PYEvent *)event;
 /**
  Remove PYEvent object from disk
  */
-+ (void)removeEvent:(PYEvent *)event;
+- (void)removeEvent:(PYEvent *)event;
 /**
  Cache event json objects on disk
  */
-+ (void)cacheEvents:(NSArray *)events;
+- (void)cacheEvents:(NSArray *)events;
 /**
  Get all PYEvent objects from disk
  */
-+ (NSArray *)getEventsFromCache;
+- (NSArray *)getEventsFromCache;
 /**
  Get PYEvent object from disk with key(eventId)
  */
-+ (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId;
+- (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId;
 
 /**
  Utility method - Get key for event
  */
-+ (NSString *)getKeyForEvent:(PYEvent *)event;
+- (NSString *)getKeyForEvent:(PYEvent *)event;
 
 /**
  This method get particular event from server and cache it
  */
-+ (void)getAndCacheEventWithServerId:(NSString *)eventId
+- (void)getAndCacheEventWithServerId:(NSString *)eventId
                      usingConnection:(PYConnection *)connection
                          requestType:(PYRequestType)reqType;
 

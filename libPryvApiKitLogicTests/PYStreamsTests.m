@@ -54,6 +54,12 @@
         
     } gotOnlineStreams:^(NSArray *onlineStreamList) {
         STAssertTrue(onlineStreamList.count > 0, @"Didn't retrieve any stream online.");
+        
+        //TODO test stream structure
+        
+        
+        
+        
     } errorHandler:^(NSError *error) {
         
     }];

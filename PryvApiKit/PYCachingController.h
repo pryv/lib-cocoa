@@ -8,14 +8,15 @@
 
 @class PYEvent;
 @class PYStream;
+@class PYConnection;
 #import <Foundation/Foundation.h>
 
 @interface PYCachingController : NSObject
 {
     NSString *_localDataPath;
+    PYConnection *_connection;
 }
-
-+ (id)sharedManager;
+- (PYCachingController*) initWithConnection:(PYConnection*)connection;
 /**
  Check if data is cached for key
 */
@@ -31,11 +32,11 @@
 /**
  Remove event from disk for key
  */
-- (void)removeEvent:(NSString *)key;
+- (void)removeEventWithKey:(NSString *)key;
 /**
  Remove stream from disk for key
  */
-- (void)removeStream:(NSString *)key;
+- (void)removeStreamWithKey:(NSString *)key;
 /**
  Get all PYEvent objects from disk
  */

@@ -9,10 +9,11 @@
 #import "PYEvent+JSON.h"
 #import "PYAttachment.h"
 #import "PYCachingController.h"
+#import "PYConnection.h"
 
 @implementation PYEvent (JSON)
 
-+ (id)eventFromDictionary:(NSDictionary *)JSON
++ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
 {    
     PYEvent *event = [[self alloc] init];
     
@@ -68,8 +69,8 @@
             PYAttachment *attachment = [PYAttachment attachmentFromDictionary:obj];
             NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", event.eventId, attachment.fileName];
             
-            if ([[PYCachingController sharedManager] isDataCachedForKey:attachmentDataKey]) {
-                NSData *fileDataFromCache = [[PYCachingController sharedManager] getDataForKey:attachmentDataKey];
+            if ([connection.cache isDataCachedForKey:attachmentDataKey]) {
+                NSData *fileDataFromCache = [connection.cache getDataForKey:attachmentDataKey];
                 attachment.fileData = fileDataFromCache;
             }
             [attachmentObjects addObject:attachment];

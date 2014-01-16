@@ -9,6 +9,7 @@
 #import "PryvCachingTests.h"
 #import "PYCachingController.h"
 #import "PryvApiKit.h"
+#import "PYConnection.h"
 
 @interface PryvCachingTests ()
 @property (nonatomic, retain) NSData *imageData;
@@ -35,9 +36,12 @@
 
 - (void)testCachingOnDisk
 {
+    
+    STAssertNotNil(self.connection, @"Connection isn't created");
+    
     NSString *key = @"ImageDataKey";
-    [[PYCachingController sharedManager] cacheData:self.imageData withKey:key];
-    STAssertTrue([[PYCachingController sharedManager] isDataCachedForKey:@"ImageDataKey"], @"Data isn't cached for key %@",key);
+    [self.connection.cache cacheData:self.imageData withKey:key];
+    STAssertTrue([self.connection.cache isDataCachedForKey:@"ImageDataKey"], @"Data isn't cached for key %@",key);
 }
 
 @end

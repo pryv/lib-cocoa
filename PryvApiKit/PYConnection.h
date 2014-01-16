@@ -12,6 +12,7 @@
 @class Reachability;
 @class PYEvent;
 @class PYStream;
+@class PYCachingController;
 
 @interface PYConnection : NSObject
 {
@@ -28,6 +29,8 @@
     NSMutableSet *_streamsNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
+    
+    PYCachingController *_cache;
 }
 
 @property (nonatomic, copy) NSString *userID;
@@ -37,6 +40,7 @@
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 @property (nonatomic, retain) Reachability *connectionReachability;
+@property (nonatomic, retain) PYCachingController *cache;
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;

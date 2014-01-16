@@ -12,14 +12,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 #import "PYConstants.h"
 #import "PYConnection.h"
-#import "Reachability.h"
-#import "PYEventsCachingUtillity.h"
-#import "PYStreamsCachingUtillity.h"
 #import "PYStream+JSON.h"
 #import "PYEvent.h"
 #import "PYAttachment.h"
 #import "PYError.h"
 #import "PYConnection+DataManagement.h"
+#import "PYCachingController.h"
+#import "Reachability.h"
+#import "PYCachingController+Event.h"
+#import "PYCachingController+Stream.h"
 
 @implementation PYConnection
 
@@ -34,6 +35,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
+@synthesize cache = _cache;
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
@@ -45,6 +47,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
+        self.cache = [[PYCachingController alloc] initWithConnection:self];
         [self pyAccessStatus:self.connectionReachability];
         [self initDeserializeNonSyncList];
     }
@@ -67,6 +70,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     _eventsNotSync = nil;
     [_streamsNotSync release];
     _streamsNotSync = nil;
+    [_cache release];
+    _cache = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
@@ -105,7 +110,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
  */
 - (void)initDeserializeNonSyncList
 {
-    NSArray *allEventsFromCache = [PYEventsCachingUtillity getEventsFromCache];
+    NSArray *allEventsFromCache = [self.cache getEventsFromCache];
     
     for (PYEvent *event in allEventsFromCache) {
         if (event.notSyncAdd || event.notSyncModify || event.notSyncTrashOrDelete) {
@@ -113,7 +118,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         }
     }
     
-    NSArray *nonSyncStreamsArray = [PYStreamsCachingUtillity getStreamsFromCache];
+    NSArray *nonSyncStreamsArray = [self.cache getStreamsFromCache];
     
     for (PYStream *stream in nonSyncStreamsArray) {
         if (stream.notSyncAdd || stream.notSyncModify) {
@@ -175,7 +180,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                         [self.streamsNotSync removeObject:stream];
                         //We have success here. Stream is cached in createStream:withRequestType: method, remove old stream with tmpId from cache
                         //He will always have tmpId here but just in case for testing (defensive programing)
-                        [PYStreamsCachingUtillity removeStream:stream];
+                        [self.cache removeStream:stream];
                         
                     } errorHandler:^(NSError *error) {
                         stream.isSyncTriedNow = NO;
@@ -258,7 +263,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        
                        //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
                        //He will always have tmpId here but just in case for testing (defensive programing)
-                       [PYEventsCachingUtillity removeEvent:event];
+                       [self.cache removeEvent:event];
                        
                    } errorHandler:^(NSError *error) {
                        //reset flag if fail, very IMPORTANT

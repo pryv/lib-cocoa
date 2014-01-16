@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import "PYConnectionTests.h"
 
-@interface PryvCachingTests : SenTestCase
+@interface PryvCachingTests : PYConnectionTests
 
 @end
