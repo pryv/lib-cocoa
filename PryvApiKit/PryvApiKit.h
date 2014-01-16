@@ -23,8 +23,8 @@
 #import <PryvApiKit/PYClient.h>
 //#import <PryvApiKit/PYEventClient.h>
 #import <PryvApiKit/PYCachingController.h>
-#import <PryvApiKit/PYEventsCachingUtillity.h>
-#import <PryvApiKit/PYStreamsCachingUtillity.h>
+#import <PryvApiKit/PYCachingController+Event.h>
+#import <PryvApiKit/PYCachingController+Stream.h>
 
 #import <PryvApiKit/PYWebLoginViewController.h>
 

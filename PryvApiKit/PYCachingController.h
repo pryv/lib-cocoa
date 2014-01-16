@@ -9,7 +9,6 @@
 @class PYEvent;
 @class PYStream;
 @class PYConnection;
-#import <Foundation/Foundation.h>
 
 @interface PYCachingController : NSObject
 {

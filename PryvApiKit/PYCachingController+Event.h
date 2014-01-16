@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "PYClient.h"
 #import "PYCachingController.h"
 
