@@ -12,6 +12,7 @@
 #import "PYEvent+JSON.h"
 #import "PYEventFilter.h"
 #import "PYStream.h"
+#import "PYConnection.h"
 #import "PYStream+JSON.h"
 
 @interface PYCachingController ()
@@ -30,14 +31,25 @@
 	if (self) {
 		NSError *error = nil;
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"PYCachingController"];
-        NSLog(@"self.localDataPath %@",self.localDataPath);
+		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:
+                              [NSString
+                                stringWithFormat:@"cache_%@", connection.idCaching]];
+                              
+        NSLog(@"self.localDataPath %@", self.localDataPath);
 		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:_localDataPath])
 			[[NSFileManager defaultManager] createDirectoryAtPath:_localDataPath withIntermediateDirectories:NO attributes:nil error:&error];
 		
 	}
 	return self;
+}
+
+- (BOOL)cachingEnabled
+{
+#if CACHE
+    return YES;
+#endif
+    return NO;
 }
 
 - (BOOL)isDataCachedForKey:(NSString *)key

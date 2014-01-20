@@ -16,6 +16,10 @@
     PYConnection *_connection;
 }
 - (PYCachingController*) initWithConnection:(PYConnection*)connection;
+
+/** return true is caching is enbaled (at compile time) **/
+- (BOOL)cachingEnabled;
+
 /**
  Check if data is cached for key
 */

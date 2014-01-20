@@ -20,6 +20,8 @@
     NSString *_accessToken;
     NSString *_apiScheme;
     NSString *_apiDomain;
+    NSUInteger _apiPort;
+    NSString *_apiExtraPath;
     NSTimeInterval _serverTimeInterval;
     NSTimeInterval _lastTimeServerContact;
     
@@ -37,6 +39,8 @@
 @property (nonatomic, copy) NSString *accessToken;
 @property (nonatomic, copy) NSString *apiScheme;
 @property (nonatomic, copy) NSString *apiDomain;
+@property (nonatomic) NSUInteger apiPort;
+@property (nonatomic, copy) NSString *apiExtraPath;
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 @property (nonatomic, retain) Reachability *connectionReachability;
@@ -48,6 +52,13 @@
 @property (nonatomic, retain) NSMutableSet *streamsNotSync;
 @property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
 @property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
+
+//ids
+/**
+ * unique ID that define the connection in the form http[s]://<host>/[path/]?auth=<token>
+ */
+@property (nonatomic, readonly) NSString *idURL;
+@property (nonatomic, readonly) NSString *idCaching;
 
 
 

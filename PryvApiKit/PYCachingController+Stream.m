@@ -14,13 +14,6 @@
 
 @implementation  PYCachingController (Stream)
 
-- (BOOL)cachingEnabled
-{
-#if CACHE
-    return YES;
-#endif
-    return NO;
-}
 
 - (void)removeStream:(PYStream *)stream
 {

@@ -21,9 +21,20 @@
 {
     [super setUp];
     [PYClient setDefaultDomainStaging];
-    self.connection = [PYClient createConnectionWithUsername:kPYAPITestAccount andAccessToken:kPYAPITestAccessToken];
+    self.connection = [PYClient createConnectionWithUsername:kPYAPITestAccount
+                                              andAccessToken:kPYAPITestAccessToken];
     STAssertNotNil(self.connection, @"Connection not created.");
-    
+   
+}
+
+- (void)testConnection
+{
+    STAssertTrue([self.connection.idURL
+                  isEqualToString:@"https://perkikiki.pryv.in:443/?auth=Ve-U8SCASM"],
+                 @"connection URL is not valid, %@", self.connection.idURL);
+    STAssertTrue([self.connection.idCaching
+                  isEqualToString:@"05c3ee6670ecbd28744c71ec723f0b05_perkikiki.pryv.in__Ve-U8SCASM"],
+                 @"id caching is unexpected, %@", self.connection.idCaching);
 }
 
 - (void)testGettingStreams

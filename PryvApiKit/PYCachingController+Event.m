@@ -14,13 +14,7 @@
 
 @implementation PYCachingController (Event)
 
-- (BOOL)cachingEnabled
-{
-#if CACHE
-    return YES;
-#endif
-    return NO;
-}
+
 
 - (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
 {

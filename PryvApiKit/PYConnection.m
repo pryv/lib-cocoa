@@ -21,6 +21,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "Reachability.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
+#import "PYUtils.h"
 
 @implementation PYConnection
 
@@ -28,6 +29,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize accessToken = _accessToken;
 @synthesize apiDomain = _apiDomain;
 @synthesize apiScheme = _apiScheme;
+@synthesize apiPort = _apiPort;
+@synthesize apiExtraPath = _apiExtraPath;
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize connectionReachability = _connectionReachability;
 @synthesize eventsNotSync = _eventsNotSync;
@@ -44,6 +47,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         self.accessToken = token;
         self.apiDomain = [PYClient defaultDomain];
         self.apiScheme = kPYAPIScheme;
+        self.apiExtraPath = @"";
+        self.apiPort = 443;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
@@ -383,7 +388,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (NSString *)apiBaseUrl;
 {
-    return [NSString stringWithFormat:@"%@://%@%@", self.apiScheme, self.userID, self.apiDomain];
+    return [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, self.apiExtraPath];
 }
 
 - (void) apiRequest:(NSString *)path
@@ -395,7 +400,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             failure:(PYClientFailureBlock)failureHandler {
     
     if (path == nil) path = @"";
-    NSString* fullPath = [NSString stringWithFormat:@"%@/%@",[self apiBaseUrl],path];
+    NSString* fullPath = [NSString stringWithFormat:@"%@%@",[self apiBaseUrl],path];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
    [PYClient apiRequest:fullPath
@@ -458,6 +463,17 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
              }];
 }
 
+- (NSString*) idURL
+{
+  return [NSString stringWithFormat:@"%@?auth=%@", [self apiBaseUrl], self.accessToken];
+}
 
+- (NSString*) idCaching
+{
+   return [NSString
+            stringWithFormat:@"%@_%@%@_%@_%@",
+            [PYUtils md5FromString:self.idURL],
+            self.userID, self.apiDomain, self.apiExtraPath, self.accessToken];
+}
 
 @end
