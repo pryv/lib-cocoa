@@ -193,6 +193,7 @@
 
 - (void)dealloc
 {
+    [_clientId release];
     [_eventId release];
     [_type release];
     [_eventContent release];

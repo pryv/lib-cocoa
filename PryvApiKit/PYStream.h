@@ -11,6 +11,7 @@
 
 @interface PYStream : NSObject
 {
+    NSString  *_clientId;
     PYConnection *_connection;
     NSString *_streamId;
     NSString *_name;
@@ -28,7 +29,8 @@
     NSTimeInterval _synchedAt;
     NSDictionary *_modifiedStreamPropertiesAndValues;
 }
-
+/** client side id only.. remain the same before and after synching **/
+@property (nonatomic, retain) NSString  *clientId;
 @property (nonatomic, retain) PYConnection *connection;
 @property (nonatomic, copy) NSString *streamId;
 @property (nonatomic, copy) NSString *name;

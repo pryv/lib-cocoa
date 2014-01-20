@@ -11,6 +11,7 @@
 
 @implementation PYStream
 
+@synthesize clientId = _clientId;
 @synthesize connection = _connection;
 @synthesize streamId = _streamId;
 @synthesize name = _name;
@@ -28,8 +29,28 @@
 @synthesize synchedAt = _synchedAt;
 @synthesize modifiedStreamPropertiesAndValues = _modifiedStreamPropertiesAndValues;
 
++ (NSString *)newClientId
+{
+    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+    CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+    CFRelease(uuidRef);
+    return [(NSString *)uuidStringRef autorelease];
+}
+
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.clientId = [PYStream newClientId];
+    }
+    
+    return self;
+}
+
 - (void)dealloc
 {
+    [_clientId release];
     [_streamId release];
     [_name release];
     [_parentId release];
