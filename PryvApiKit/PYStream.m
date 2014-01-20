@@ -62,6 +62,11 @@
 {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     
+    
+    if (_clientId && _clientId.length > 0) {
+        [dic setObject:_clientId forKey:@"clientId"];
+    }
+    
     if (_streamId && _streamId.length > 0) {
         [dic setObject:_streamId forKey:@"id"];
     }
