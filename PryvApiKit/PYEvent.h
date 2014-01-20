@@ -39,6 +39,8 @@
     BOOL _notSyncTrashOrDelete;
     BOOL _isSyncTriedNow;
     NSDictionary *_modifiedEventPropertiesAndValues;
+    
+    PYConnection  *_connection;
 
 }
 /** client side id only.. remain the same before and after synching **/
@@ -55,6 +57,8 @@
 
 @property (nonatomic, retain) NSArray *tags;
 @property (nonatomic, retain) NSString  *eventDescription;
+
+@property (nonatomic, retain) PYConnection  *connection;
 
 //array of PYEventAttachment objects
 @property (nonatomic, retain) NSMutableArray *attachments;

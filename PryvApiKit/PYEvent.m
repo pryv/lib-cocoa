@@ -33,6 +33,7 @@
 @synthesize notSyncTrashOrDelete = _notSyncTrashOrDelete;
 @synthesize isSyncTriedNow = _isSyncTriedNow;
 @synthesize modifiedEventPropertiesAndValues = _modifiedEventPropertiesAndValues;
+@synthesize connection = _connection;
 
 + (NSString *)newClientId
 {
@@ -193,6 +194,7 @@
 
 - (void)dealloc
 {
+    [_connection release];
     [_clientId release];
     [_eventId release];
     [_type release];

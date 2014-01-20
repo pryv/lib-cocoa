@@ -472,6 +472,13 @@
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
+    
+    if (event.connection != nil) {
+        return errorHandler([NSError errorWithDomain:@"Cann create PYEvet with a known connection" code:500 userInfo:nil]);
+    }
+    
+    event.connection = self;
+    
     //    event.timeIntervalWhenCreationTried = [[NSDate date] timeIntervalSince1970];
     [self apiRequest:kROUTE_EVENTS
          requestType:reqType
@@ -508,7 +515,7 @@
                          //When we try to create event and we came here it have tmpId
                          event.hasTmpId = YES;
                          //this is random id
-                         event.eventId = [[NSString stringWithFormat:@"%f",event.time] stringByReplacingOccurrencesOfString:@"." withString:@""];
+                         event.eventId = [event.clientId copy];
                          //return that created id so it can work offline. Event will be cached when added to unsync list
                          if (event.attachments.count > 0) {
                              for (PYAttachment *attachment in event.attachments) {

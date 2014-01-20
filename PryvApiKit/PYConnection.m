@@ -231,8 +231,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     NSLog(@"Not syncEvents: %@",nonSyncEvents);
     for (PYEvent *event in nonSyncEvents) {
         
-   
-        
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;
         

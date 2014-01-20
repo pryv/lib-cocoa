@@ -16,7 +16,7 @@
 + (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
 {    
     PYEvent *event = [[self alloc] init];
-    
+    event.connection = connection;
     event.eventId = [JSON objectForKey:@"id"];
     id streamId = [JSON objectForKey:@"streamId"];
     if ([streamId isKindOfClass:[NSNull class]]) {

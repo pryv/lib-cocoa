@@ -37,10 +37,13 @@
     
     __block NSString *createdEventId;
 
+    STAssertNil(event.connection, @"Event.connection is not nil.");
+    
     [self.connection createEvent:event
              requestType:PYRequestTypeAsync
           successHandler:^(NSString *newEventId, NSString *stoppedId) {
               STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");
+              STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
               createdEventId = [NSString stringWithString:newEventId];
               event.eventId = [NSString stringWithString:newEventId];
           } errorHandler:^(NSError *error) {
