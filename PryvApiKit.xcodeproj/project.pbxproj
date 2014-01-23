@@ -341,6 +341,7 @@
 		4E7318D6184E48E100CC474B /* PYEventTypesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventTypesTests.m; sourceTree = "<group>"; };
 		4E8C83D318507209001E4F05 /* PYEventType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventType.h; sourceTree = "<group>"; };
 		4E8C83D418507209001E4F05 /* PYEventType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventType.m; sourceTree = "<group>"; };
+		4EA0D39A188E6434005CA76A /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.md; sourceTree = "<group>"; };
 		8A6D9E7416FB79A1008F2B2C /* PYErrorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYErrorUtility.h; sourceTree = "<group>"; };
 		8A6D9E7516FB79A1008F2B2C /* PYErrorUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYErrorUtility.m; sourceTree = "<group>"; };
 		8AB2361E16FA895800B28F06 /* PYClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYClient.m; sourceTree = "<group>"; };
@@ -728,6 +729,7 @@
 		FBC2047016B95B3700CB5FFB = {
 			isa = PBXGroup;
 			children = (
+				4EA0D39A188E6434005CA76A /* Readme.md */,
 				FBC2048316B95B3800CB5FFB /* PryvApiKit */,
 				4E2AF479185B5FE100A88661 /* Vendors */,
 				FBC2047C16B95B3700CB5FFB /* Frameworks */,
