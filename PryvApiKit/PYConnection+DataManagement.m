@@ -14,6 +14,7 @@
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
+#import "PYAsyncService.h"
 
 @implementation PYConnection (DataManagement)
 
@@ -766,25 +767,33 @@
                       successHandler:(void (^) (NSData * filedata))success
                         errorHandler:(void (^) (NSError *error))errorHandler
 {
-    NSString *oldApiDomain = [self.apiDomain copy];
-    self.apiDomain = [NSString stringWithFormat:@"%@:3443",self.apiDomain];
-    NSString *path = [NSString stringWithFormat:@"%@/%@.jpg",kROUTE_EVENTS, eventId];
+    
+    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, eventId, fileName];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    [self apiRequest:urlPath
-         requestType:reqType
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 //In this case this is not JSON object, it's file's NSData
-                 success(JSON);
-                 
-             } failure:^(NSError *error) {
-                 if (errorHandler) {
-                     errorHandler (error);
-                 }
-             }];
-    self.apiDomain = oldApiDomain;
+
+    
+    
+    NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, urlPath];
+    
+    NSURL *url = [NSURL URLWithString:fullPath];
+
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+    [request setValue:self.accessToken forHTTPHeaderField:@"Authorization"];
+    [request setURL:url];
+    [request setHTTPMethod:@"GET"];
+    request.timeoutInterval = 60.0f;
+    
+    [PYAsyncService RAWRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+        if (success) {
+            NSLog(@"*66 %i %@", [result length], url);
+            success(result);
+        }
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
+        errorHandler(error);
+        
+    }];
+
+    
 }
 
 @end

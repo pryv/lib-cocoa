@@ -9,6 +9,10 @@
 typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
 typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON);
 
+typedef enum {
+	PYRequestResultTypeJSON = 1,
+	PYRequestResultTypeRAW
+} PYRequestResultType;
 
 #import <Foundation/Foundation.h>
 
@@ -18,6 +22,7 @@ typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *
     NSURLRequest *_request;
     NSHTTPURLResponse *_response;
     NSMutableData *_responseData;
+    PYRequestResultType _requestResultType;
     
     BOOL _running;
     PYAsyncServiceSuccessBlock _onSuccess;
@@ -34,6 +39,11 @@ typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
                             success:(PYAsyncServiceSuccessBlock)success
                             failure:(PYAsyncServiceFailureBlock)failure;
+
++ (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlock)success
+                              failure:(PYAsyncServiceFailureBlock)failure;
+
 
 - (id)initWithRequest:(NSURLRequest *)request;
 

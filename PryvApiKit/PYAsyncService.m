@@ -10,10 +10,12 @@
 #import "PYErrorUtility.h"
 #import "PYJSONUtility.h"
 #import "PYClient.h"
+#import "PYError.h"
 
 @interface PYAsyncService ()
 
 @property (nonatomic) BOOL running;
+@property (nonatomic) PYRequestResultType requestResultType;
 
 @property (nonatomic, copy) PYAsyncServiceSuccessBlock onSuccess;
 @property (nonatomic, copy) PYAsyncServiceFailureBlock onFailure;
@@ -28,8 +30,9 @@
 @synthesize request = _request;
 @synthesize response = _response;
 @synthesize running = _running;
-@synthesize onSuccess = _onSuccess;
 @synthesize onFailure = _onFailure;
+@synthesize onSuccess = _onSuccess;
+@synthesize requestResultType = _requestResultType;
 
 - (void)dealloc
 {
@@ -47,6 +50,7 @@
     if (self) {
         // create the connection with the request
         // and start loading the data asynchronously
+        self.request = request;
         self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
         if (_connection) {
             // Create the NSMutableData to hold the received data.
@@ -62,19 +66,48 @@
     return self;
 }
 
-+ (void)JSONRequestServiceWithRequest:(NSURLRequest *)req
+
++ (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
+                             success:(PYAsyncServiceSuccessBlock)success
+                             failure:(PYAsyncServiceFailureBlock)failure
+{
+    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+    
+    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, id responseData) {
+        if (success) {
+            success (req, resp, responseData);
+        }
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id responseData) {
+        if (failure) {
+            failure (req, resp, error, responseData);
+        }
+    }];
+
+}
+
+
++ (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
                             success:(PYAsyncServiceSuccessBlock)success
                             failure:(PYAsyncServiceFailureBlock)failure
 {
-    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:req] autorelease];
+    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
-    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
+    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, id responseData) {
         if (success) {
+            
+            id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+            if (JSON == nil) {
+                
+                NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
+                NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
+                return failure (req, resp, error, responseData);
+            }
+            
             success (req, resp, JSON);
         }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id responseData) {
         if (failure) {
-            failure (req, resp, error, JSON);
+            failure (req, resp, error, responseData);
         }
     }];
     
@@ -161,14 +194,13 @@
     // receivedData is declared as a method instance elsewhere
     //NSLog(@"Succeeded! Received %d bytes of data",[_responseData length]);
     _running = NO;
-    id JSON = [PYJSONUtility getJSONObjectFromData:self.responseData];
     
     BOOL isUnacceptableStatusCode = [PYClient isUnacceptableStatusCode:self.response.statusCode];
     
     if (isUnacceptableStatusCode)
 	{
         if (self.onFailure){
-            self.onFailure(self.request, self.response, nil, JSON);
+            self.onFailure(self.request, self.response, nil, self.responseData);
         }
         // release the connection, and the data object
         [connection release];
@@ -177,14 +209,9 @@
         return;
 	}
     
-    if (JSON == nil) {
-        //This is not valid JSON object, this means that this is attached file (NSData)
-        JSON = self.responseData;
-    }
-    
     if (self.onSuccess)
     {
-        self.onSuccess(self.request, self.response, JSON);
+        self.onSuccess(self.request, self.response, self.responseData);
     }
     
     // release the connection, and the data object

@@ -17,6 +17,8 @@ FOUNDATION_EXPORT NSString *const PryvErrorSubErrorsKey;
 
 FOUNDATION_EXPORT NSString *const PryvErrorJSONResponseId;
 
+FOUNDATION_EXPORT NSString *const PryvErrorJSONResponseIsNotJSON;
+
 FOUNDATION_EXPORT NSString *const PryvErrorHTTPStatusCodeKey;
 
 FOUNDATION_EXPORT NSString *const PryvRequestKey;

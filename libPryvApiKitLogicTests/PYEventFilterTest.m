@@ -40,7 +40,7 @@
     __block BOOL finished1 = NO;
     __block BOOL finished2 = NO;
     [[NSNotificationCenter defaultCenter] addObserverForName:@"EVENTS"
-                                                      object:nil
+                                                      object:pyFilter
                                                        queue:nil
                                                   usingBlock:^(NSNotification *note)
      {

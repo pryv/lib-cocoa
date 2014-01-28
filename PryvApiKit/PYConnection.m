@@ -389,6 +389,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, self.apiExtraPath];
 }
 
+
 - (void) apiRequest:(NSString *)path
         requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
@@ -408,26 +409,33 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 postData:postData
              attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
+                     
+                     NSDictionary* headerFields = [response allHeaderFields];
+                     NSNumber* serverTime = nil;
+                     if (headerFields != nil ) {
+                        [headerFields objectForKey:@"Server-Time"];
+                     }
+                     
                      if (serverTime == nil) {
-                         NSLog(@"Error cannot find Server-Time in headers");
+                         NSLog(@"Error cannot find Server-Time in headers path: %@", fullPath);
                          
-                         NSDictionary *errorInfoDic = [NSDictionary dictionaryWithObject:@"Error cannot find Server-Time in headers"
-                                                                                  forKey:@"message"];
+                         
+                         /*
+                          NSDictionary *errorInfoDic = @{ @"message" : @"Error cannot find Server-Time in headers"};
+                       
                          NSError *errorToReturn =
                          [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
                          failureHandler(errorToReturn);
-                         
+                         */
                      } else {
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
+
                         
-                         // anticipation of upcomming API responses
-                         
-                         
-                         if (successHandler) {
-                             successHandler(request,response,JSON);
-                         }
+                     }
+                     
+                     if (successHandler) {
+                         successHandler(request,response,JSON);
                      }
                      
                  }

@@ -55,8 +55,93 @@ The first line is needed whenever you need to (re-)log a user. Here you are send
 	
 Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborded:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
 
-##PryvApiKit : Main Methods
+
+
+##PryvApiKit 
+
 *Compatible with iOS and Mac OS X.*
+
+### Perki's Whish list
+
+#### Inits
+
+```
+/** refresh stream list **/
+[connection refreshStreams:^done]
+
+
+
+
+```
+
+#### Calls
+```
+/** get latest stream structure fetched **/
+NSArray *currentStreams = connection.currentStreams;
+```
+
+
+#### Notifications
+
+###### streams
+
+```
+[[NSNotificationCenter defaultCenter] addObserverForName:@"STREAMS"
+                                                  object:connection
+                                                   queue:nil
+                                              usingBlock:^(NSNotification *note)
+    {
+	NSDictionary *message = (NSDictionary*) note.userInfo;
+    NSArray* streams = [message objectForKey:@"STREAMS"];
+		...
+    }]
+    
+// shortcut for the above
+[connection addObserverForStreams:^(NSArray *streams) { ... } ]
+    
+```
+
+###### events
+
+```
+PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
+                                                               fromTime:PYEventFilter_UNDEFINED_FROMTIME
+                                                                 toTime:PYEventFilter_UNDEFINED_TOTIME
+                                                                  limit:20
+                                                         onlyStreamsIDs:nil
+                                                                   tags:nil];
+                                                                   
+[[NSNotificationCenter defaultCenter] addObserverForName:@"EVENTS"
+                                                  object:pyFilter
+                                                   queue:nil
+                                              usingBlock:^(NSNotification *note)
+     {
+	NSDictionary *message = (NSDictionary*) note.userInfo;
+         NSArray* toAdd = [message objectForKey:@"ADD"];
+         if (toAdd && toAdd.count > 0) {
+             NSLog(@"ADD %i", toAdd.count);             
+         }
+         NSArray* toRemove = [message objectForKey:@"REMOVE"];
+         if (toRemove) {
+             NSLog(@"REMOVE %i", toRemove.count);
+         }
+         NSArray* modify = [message objectForKey:@"MODIFY"];
+         if (modify) {
+             NSLog(@"MODIFY %i", modify.count);
+         }
+	}]
+	
+// shortcut with the same effect than previous code
+[pyFilter addObserverForEvents:^(NSArray *toAdd, NSArray *modify, NSArray *toRemove) { ... }]
+
+[pyFilter refresh]; // refresh once
+
+[pyFilter autoRefresh:30000]; // time in miliseconds
+
+```
+
+### Main Methods
+
 
 The user ID and the access token are used for creating PYConnection object.
 
@@ -77,6 +162,11 @@ This library can work offline if caching is enabled. To enable/disable caching p
 `cachedStreamList` and `onlineStreamList` contain `PYStream` objects. A Stream il linked to `PYStream` children and `PYEvent` objects.
 
 You can manipulate streams and events. For example, you can create, delete, modify, …. Same rules applie for other object types. Currently only personal type of access allows creating Streams and it will be added for v2 of SDK when access-rights will be covered in depth.
+
+
+
+
+
 
 ###Some useful `PYConnection` methods:
 
