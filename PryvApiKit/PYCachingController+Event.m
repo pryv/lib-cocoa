@@ -12,6 +12,10 @@
 #import "PYConnection+DataManagement.h"
 #import "PYJSONUtility.h"
 
+@interface PYCachingController ()
+- (NSString *)previewDataKeyForEvent:(PYEvent *)event;
+@end
+
 @implementation PYCachingController (Event)
 
 
@@ -54,10 +58,12 @@
 - (void)removeEvent:(PYEvent *)event WithKey:(NSString *)key
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
-    [self removeEventWithKey:eventKey];
+    [self removeEntityWithKey:eventKey];
     //second try
     eventKey = [[NSString stringWithFormat:@"event_%f",event.time] stringByReplacingOccurrencesOfString:@"." withString:@""];
-    [self removeEventWithKey:eventKey];
+    [self removeEntityWithKey:eventKey];
+    //preview
+    [self removeEntityWithKey:[self previewDataKeyForEvent:event]];
 
 }
 
@@ -116,5 +122,18 @@
                       }];
 }
 
+#pragma mark - previews
+
+- (NSString *)previewDataKeyForEvent:(PYEvent *)event {
+    return [NSString stringWithFormat:@"%@_preview", event.eventId];
+}
+
+- (NSData *)previewForEvent:(PYEvent *)event {
+    return [self getDataForKey:[self previewDataKeyForEvent:event]];
+}
+
+- (void)savePreview:(NSData *)fileData forEvent:(PYEvent *)event {
+    [self cacheData:fileData  withKey:[self previewDataKeyForEvent:event]];
+}
 
 @end

@@ -47,4 +47,15 @@
                          requestType:(PYRequestType)reqType;
 
 
+/**
+ get cachedPreview (if any)
+ */
+- (NSData *)previewForEvent:(PYEvent *)event;
+
+/**
+ save preview for this event
+ */
+- (void)savePreview:(NSData *)fileData forEvent:(PYEvent *)event;
+
+
 @end

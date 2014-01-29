@@ -801,6 +801,17 @@
                         errorHandler:(void (^) (NSError *error))errorHandler
 {
     
+    
+    //---- got it from cache
+    
+    NSData *cachedData = [self.cache previewForEvent:event];
+    if (cachedData) {
+        success(cachedData);
+        return;
+    }
+    
+    
+    
     NSString *path = [NSString stringWithFormat:@"%@/%@.jpg",kROUTE_EVENTS, event.eventId];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
@@ -819,7 +830,9 @@
     [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
         if (success) {
             NSLog(@"*77 %i %@", [result length], url);
+            
             success(result);
+            [self.cache savePreview:result forEvent:event];
         }
     } failure:^(NSError *error) {
         errorHandler(error);
