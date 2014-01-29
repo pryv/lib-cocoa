@@ -413,7 +413,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                      NSDictionary* headerFields = [response allHeaderFields];
                      NSNumber* serverTime = nil;
                      if (headerFields != nil ) {
-                        [headerFields objectForKey:@"Server-Time"];
+                        serverTime = [NSNumber numberWithDouble:[[headerFields objectForKey:@"Server-Time"] doubleValue]] ;
                      }
                      
                      if (serverTime == nil) {
