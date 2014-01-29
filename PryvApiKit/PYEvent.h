@@ -11,7 +11,7 @@
 @class PYConnection;
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+
 
 @interface PYEvent : NSObject
 {
@@ -42,6 +42,7 @@
     NSDictionary *_modifiedEventPropertiesAndValues;
     
     PYConnection  *_connection;
+    
 
 }
 /** client side id only.. remain the same before and after synching **/
@@ -66,6 +67,7 @@
 @property (nonatomic, retain) NSDictionary *clientData;
 @property (nonatomic) BOOL trashed;
 @property (nonatomic, retain) NSDate *modified;
+
 
 /**
  @property hasTmpId - Check if event from cache has tmpId. If event has it it means that isn't sync from server (created offline)
@@ -100,9 +102,6 @@
  */
 @property NSTimeInterval synchedAt;
 
-
-/** get a preview image (if available) **/
-- (void)preview:(void (^) (UIImage *img))previewImage failure:(void(^) (NSError *error))failure;
 
 - (void)addAttachment:(PYAttachment *)attachment;
 - (void)removeAttachment:(PYAttachment *)attachmentToRemove;

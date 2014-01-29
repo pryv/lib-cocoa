@@ -6,8 +6,24 @@
 //  Copyright (c) 2014 Pryv. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "PYEvent.h"
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#import <Cocoa/Cocoa.h>
+#define PYImage NSImage
+#else
+#import <UIKit/UIKit.h>
+#define PYImage UIImage
+#endif
 
-@interface PYEvent_Utils : NSObject
+
+
+
+
+@interface PYEvent (Utils)
+
+/** get a preview image (if available) **/
+- (void)preview:(void (^) (PYImage *img))previewImage failure:(void(^) (NSError *error))failure;
+
+
 
 @end

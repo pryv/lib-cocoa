@@ -15,6 +15,7 @@
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
 
+
 @implementation PYConnection (DataManagement)
 
 #pragma mark - Pryv API Streams
@@ -795,8 +796,8 @@
     }];
 }
 
-- (void)getPreviewForEvent:(PYEvent *)event
-                      successHandler:(void (^) (NSData * filedata))success
+- (void)previewForEvent:(PYEvent *)event
+                      successHandler:(void (^) (NSData * content))success
                         errorHandler:(void (^) (NSError *error))errorHandler
 {
     

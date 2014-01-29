@@ -195,8 +195,8 @@
 /**
  Get preview NSData (jpg image) for event id
  */
-- (void)getPreviewForEvent:(PYEvent *)event
-                      successHandler:(void (^) (NSData * filedata))success
+- (void)previewForEvent:(PYEvent *)event
+                      successHandler:(void (^) (NSData * content))success
                         errorHandler:(void (^) (NSError *error))errorHandler;
 
 
