@@ -11,6 +11,8 @@
 #import "PYAttachment.h"
 
 #import "PYEventTypes.h"
+#import "PYConnection+DataManagement.h"
+
 
 @implementation PYEvent
 @synthesize clientId = _clientId;
@@ -216,6 +218,16 @@
     }
     
     return self;
+}
+
+- (void)preview:(void (^) (UIImage *img))previewImage failure:(void(^) (NSError *error))failure {
+    if (! self.connection) {
+        if (failure) failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);
+        return;
+    }
+    [self.connection getPreviewForEvent:self successHandler:^(NSData *filedata) {
+         previewImage([UIImage imageWithData:filedata]);
+    } errorHandler:failure];
 }
 
 - (void)addAttachment:(PYAttachment *)attachment

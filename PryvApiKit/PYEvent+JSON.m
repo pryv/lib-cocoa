@@ -14,7 +14,11 @@
 @implementation PYEvent (JSON)
 
 + (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
-{    
+{
+    if (connection == nil) {
+        [NSException raise:@"Connection cannot be nil" format:nil];
+    }
+    
     PYEvent *event = [[self alloc] init];
     event.connection = connection;
     event.eventId = [JSON objectForKey:@"id"];

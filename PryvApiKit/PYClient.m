@@ -275,20 +275,19 @@ static NSString *myLanguageCodePrefered;
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
     }
-    [self sendRequest:request withReqType:reqType success:successHandler failure:failureHandler];
+    [self sendJSONRequest:request success:successHandler failure:failureHandler];
     return request;
 }
 
 /**
  *
  */
-+ (void)sendRequest:(NSURLRequest *)request
-        withReqType:(PYRequestType)reqType
++ (void)sendJSONRequest:(NSURLRequest *)request
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler
 {
 
-    NSLog(@"started async request with url: %@",[[request URL] absoluteString]);
+    //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
     [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
         if (successHandler) {
             successHandler(req,resp,JSON);
@@ -297,12 +296,31 @@ static NSString *myLanguageCodePrefered;
         
         if (failureHandler) {
             NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
-            NSLog(@"** PYClient.sendRequest Async ** : %@", errorToReturn);
+            NSLog(@"** PYClient.sendJSONRequest Async ** : %@", errorToReturn);
             failureHandler(errorToReturn);
         }
     }];
 }
 
-
++ (void)sendRAWRequest:(NSURLRequest *)request
+               success:(PYClientSuccessBlock)successHandler
+               failure:(PYClientFailureBlock)failureHandler
+{
+    //NSLog(@"started RAW request with url: %@",[[request URL] absoluteString]);
+    [PYAsyncService RAWRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+        if (successHandler) {
+            successHandler(req,resp,result);
+        }
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id result) {
+        if (failureHandler) {
+            NSString *content = @"";
+            if (result != nil) {
+                content = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+            }
+            NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
+            failureHandler(error);
+        }
+    }];
+}
 
 @end

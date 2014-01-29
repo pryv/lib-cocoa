@@ -29,6 +29,7 @@
 {
     self = [super init];
 	if (self) {
+        self.connection = connection;
 		NSError *error = nil;
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:

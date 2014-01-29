@@ -11,6 +11,7 @@
 @class PYConnection;
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface PYEvent : NSObject
 {
@@ -98,6 +99,10 @@
  @property synchedAt - Timestamp when event is synced with server
  */
 @property NSTimeInterval synchedAt;
+
+
+/** get a preview image (if available) **/
+- (void)preview:(void (^) (UIImage *img))previewImage failure:(void(^) (NSError *error))failure;
 
 - (void)addAttachment:(PYAttachment *)attachment;
 - (void)removeAttachment:(PYAttachment *)attachmentToRemove;

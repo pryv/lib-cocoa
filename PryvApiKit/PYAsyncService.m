@@ -199,8 +199,9 @@
     
     if (isUnacceptableStatusCode)
 	{
+        NSError *e = [NSError errorWithDomain:@"HTTP URL Connection is unacceptable status code" code:self.response.statusCode userInfo:nil];
         if (self.onFailure){
-            self.onFailure(self.request, self.response, nil, self.responseData);
+            self.onFailure(self.request, self.response, e, self.responseData);
         }
         // release the connection, and the data object
         [connection release];

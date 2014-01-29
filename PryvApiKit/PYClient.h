@@ -44,10 +44,13 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 + (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params;
 
-+ (void)sendRequest:(NSURLRequest *)request
-        withReqType:(PYRequestType)reqType
++ (void)sendJSONRequest:(NSURLRequest *)request
             success:(PYClientSuccessBlock)successHandler
             failure:(PYClientFailureBlock)failureHandler;
+
++ (void)sendRAWRequest:(NSURLRequest *)request
+                success:(PYClientSuccessBlock)successHandler
+                failure:(PYClientFailureBlock)failureHandler;
 
 + (NSMutableURLRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary*)headers

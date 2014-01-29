@@ -14,7 +14,6 @@
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
-#import "PYAsyncService.h"
 
 @implementation PYConnection (DataManagement)
 
@@ -383,6 +382,7 @@
                      
                      [eventsArray addObject:event];
                      
+                     /**
                      if (event.attachments.count > 0) {
                          for (int j = 0; j < event.attachments.count; j++) {
                              PYAttachment *attachment = [event.attachments objectAtIndex:j];
@@ -398,6 +398,7 @@
                                                  } errorHandler:errorHandler];
                          }
                      }
+                      **/
                  }
                  
                  if (syncAndCache == YES) {
@@ -783,17 +784,46 @@
     [request setHTTPMethod:@"GET"];
     request.timeoutInterval = 60.0f;
     
-    [PYAsyncService RAWRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
         if (success) {
             NSLog(@"*66 %i %@", [result length], url);
             success(result);
         }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
+    } failure:^(NSError *error) {
         errorHandler(error);
         
     }];
+}
 
+- (void)getPreviewForEvent:(PYEvent *)event
+                      successHandler:(void (^) (NSData * filedata))success
+                        errorHandler:(void (^) (NSError *error))errorHandler
+{
     
+    NSString *path = [NSString stringWithFormat:@"%@/%@.jpg",kROUTE_EVENTS, event.eventId];
+    NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    
+    
+    
+    NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, 3443, urlPath];
+    
+    NSURL *url = [NSURL URLWithString:fullPath];
+    
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+    [request setValue:self.accessToken forHTTPHeaderField:@"Authorization"];
+    [request setURL:url];
+    [request setHTTPMethod:@"GET"];
+    request.timeoutInterval = 60.0f;
+    
+    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+        if (success) {
+            NSLog(@"*77 %i %@", [result length], url);
+            success(result);
+        }
+    } failure:^(NSError *error) {
+        errorHandler(error);
+        
+    }];
 }
 
 @end
