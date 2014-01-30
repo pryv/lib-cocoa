@@ -56,6 +56,28 @@
 }
 
 
+- (void)testGettingStreams
+{
+    __block BOOL finished1 = NO;
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
+     
+                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
+                                     
+                                 } gotOnlineStreams:^(NSArray *onlineStreamList) {
+                                     
+                                     STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
+                                     
+                                     finished1 = YES;
+                                 } errorHandler:^(NSError *error) {
+                                     
+                                 }];
+    [PYTestsUtils execute:^{
+        STFail(@"Cannot get streams within 10 seconds");
+    } ifNotTrue:&finished1 afterSeconds:10];
+    
+}
+
+
 
 - (void)tearDown
 {

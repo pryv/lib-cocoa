@@ -269,6 +269,9 @@ BOOL requestedLoginView = false;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     if ([PYConnection onNotNSDictionary:JSON failWith:^(NSError *error) {
+                         [self handleFailure:error];
+                     }]) return;
                      [self handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
                      [self handleFailure:error];

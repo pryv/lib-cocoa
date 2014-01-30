@@ -71,6 +71,9 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 
+                 if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return; // Fail if not an NSArray
+                 
                  NSMutableArray *streamList = [[NSMutableArray alloc] init];
                  for (NSDictionary *streamDictionary in JSON) {
                      [streamList addObject:[PYStream streamFromJSON:streamDictionary]];
@@ -93,6 +96,8 @@
 }
 
 
+
+
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                            filter:(NSDictionary*)filterDic
                    successHandler:(void (^) (NSArray *streamsList))onlineStreamList
@@ -106,6 +111,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return; // Fail if not an NSArray
                  
                  NSMutableArray *streamList = [[NSMutableArray alloc] init];
                  for(NSDictionary *streamDictionary in JSON){
@@ -137,6 +143,8 @@
             postData:[stream dictionary]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return; // Fail if not an NotNSDictionary
+                 
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
                  if (successHandler) {
                      successHandler(createdStreamId);
@@ -371,6 +379,8 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return; // Fail if not an NotNSArray
+                 
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                  NSMutableArray *eventsCachingArray = [[NSMutableArray alloc] init];
                  [eventsCachingArray addObjectsFromArray:JSON];
@@ -489,6 +499,7 @@
             postData:[event dictionary]
          attachments:event.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
                  
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
@@ -557,6 +568,7 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  
+                 
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  if (successHandler) {
                      successHandler();
@@ -605,6 +617,7 @@
             postData:[eventObject dictionary]
          attachments:eventObject.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                  if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
                  
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -677,6 +690,7 @@
             postData:[event dictionary]
          attachments:event.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                  if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
                  
                  NSString *startedEventId = [JSON objectForKey:@"id"];
                  
@@ -715,6 +729,7 @@
             postData:[postData autorelease]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                  if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
                  
                  NSString *stoppedEventId = [JSON objectForKey:@"stoppedId"];
                  
@@ -745,6 +760,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return;
                  
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                  for (NSDictionary *eventDic in JSON) {
@@ -785,7 +801,7 @@
     [request setHTTPMethod:@"GET"];
     request.timeoutInterval = 60.0f;
     
-    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
             NSLog(@"*66 %i %@", [result length], url);
             success(result);
@@ -827,7 +843,7 @@
     [request setHTTPMethod:@"GET"];
     request.timeoutInterval = 60.0f;
     
-    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
             NSLog(@"*77 %i %@", [result length], url);
             
@@ -839,5 +855,6 @@
         
     }];
 }
+
 
 @end

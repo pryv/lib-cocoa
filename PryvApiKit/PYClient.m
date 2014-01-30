@@ -315,15 +315,15 @@ static NSString *myLanguageCodePrefered;
                failure:(PYClientFailureBlock)failureHandler
 {
     //NSLog(@"started RAW request with url: %@",[[request URL] absoluteString]);
-    [PYAsyncService RAWRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id result) {
+    [PYAsyncService RAWRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (successHandler) {
             successHandler(req,resp,result);
         }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id result) {
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error,  NSMutableData *result) {
         if (failureHandler) {
             NSString *content = @"";
             if (result != nil) {
-                content = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+                content = [[NSString alloc] initWithData:[result bytes] encoding:NSUTF8StringEncoding];
             }
             NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
             failureHandler(error);

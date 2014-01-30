@@ -7,7 +7,7 @@
 //
 
 typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData);
-typedef void(^PYAsyncServiceSuccessBlockJSON)(NSURLRequest *req, NSHTTPURLResponse *resp, NSDictionary *JSON);
+typedef void(^PYAsyncServiceSuccessBlockJSON)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
 typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData);
 
 typedef enum {

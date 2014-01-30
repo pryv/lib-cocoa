@@ -409,6 +409,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 postData:postData
              attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                    
                      
                      NSDictionary* headerFields = [response allHeaderFields];
                      NSNumber* serverTime = nil;
@@ -481,5 +482,28 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [PYUtils md5FromString:self.idURL],
             self.userID, self.apiDomain, self.apiExtraPath, self.accessToken];
 }
+
+
+#pragma mark - check JSON responses
+
++ (BOOL) onNotNSArray:(id)object failWith:(void (^)(NSError *error))failureHandler
+{
+    if (! [object isKindOfClass:[NSArray class]]) {
+        failureHandler([NSError errorWithDomain:@"Not an NSArray" code:1000 userInfo:nil]);
+        return true;
+    }
+    return false;
+}
+
++ (BOOL) onNotNSDictionary:(id)object failWith:(void (^)(NSError *error))failureHandler
+{
+    if (! [object isKindOfClass:[NSDictionary class]]) {
+        failureHandler([NSError errorWithDomain:@"Not an NSDictionary" code:1000 userInfo:nil]);
+        return true;
+    }
+    return false;
+}
+
+
 
 @end

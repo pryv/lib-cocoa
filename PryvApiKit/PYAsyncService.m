@@ -73,7 +73,7 @@
 {
     PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
-    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, id responseData) {
+    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData) {
         if (success) {
             success (req, resp, responseData);
         }
@@ -95,8 +95,8 @@
     [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
         if (success) {
             
-            NSDictionary *JSON = [PYJSONUtility getJSONObjectFromData:responseData];
-            if (JSON == nil) {
+            id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+            if (JSON == nil) { // Is NSDictionary or NSArray
                 
                 NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
                 NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
