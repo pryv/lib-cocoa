@@ -182,7 +182,7 @@ static NSString *myLanguageCodePrefered;
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockJSON)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 {
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
@@ -283,20 +283,28 @@ static NSString *myLanguageCodePrefered;
  *
  */
 + (void)sendJSONRequest:(NSURLRequest *)request
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockJSON)successHandler
             failure:(PYClientFailureBlock)failureHandler
 {
 
     //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
-    [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
+    [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSDictionary *JSON) {
         if (successHandler) {
-            successHandler(req,resp,JSON);
+            successHandler(req, resp, JSON);
         }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON) {
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
         
         if (failureHandler) {
-            NSError *errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
-            NSLog(@"** PYClient.sendJSONRequest Async ** : %@", errorToReturn);
+            NSDictionary *JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+            NSError *errorToReturn;
+            if (JSON == nil) {
+                NSString *responseString = [NSString stringWithCString:[responseData bytes] encoding:NSUTF8StringEncoding];
+                errorToReturn = [PYErrorUtility getErrorFromStringResponse:responseString error:error withResponse:resp andRequest:request];
+            } else {
+                errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
+               
+            }
+             NSLog(@"** PYClient.sendJSONRequest Async ** : %@", errorToReturn);
             failureHandler(errorToReturn);
         }
     }];

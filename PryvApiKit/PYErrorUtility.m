@@ -29,7 +29,7 @@
  
  */
 
-+ (NSError *)getErrorFromJSONResponse:(id)JSONerror
++ (NSError *)getErrorFromJSONResponse:(NSDictionary*) JSONerror
                                 error:(NSError *)error
                          withResponse:(NSHTTPURLResponse *)response
                            andRequest:(NSURLRequest *)request;
@@ -102,6 +102,13 @@
     return [[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:userInfo] autorelease];
 }
 
++ (NSString*) contentForRequest:(NSURLRequest *)request {
+    return [NSString stringWithFormat:@"%@ url: %@ \n%@",request, request.URL.absoluteString,
+            [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    
+    //NSLog(@"Method: %@", self.HTTPMethod);
+    
+}
 
 
 @end

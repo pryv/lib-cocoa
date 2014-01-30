@@ -12,7 +12,7 @@
 /**
  Get NSError object for server response
  */
-+ (NSError *)getErrorFromJSONResponse:(id)JSONerror
++ (NSError *)getErrorFromJSONResponse:(NSDictionary* ) JSONerror
                                 error:(NSError *)error
                          withResponse:(NSHTTPURLResponse *)response
                            andRequest:(NSURLRequest *)request;

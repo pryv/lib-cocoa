@@ -18,7 +18,8 @@ typedef enum {
 	PYRequestMethodDELETE
 } PYRequestMethod;
 
-typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON);
+typedef void(^PYClientSuccessBlockJSON)(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *JSON);
+typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *response, NSMutableData *responseData);
 typedef void(^PYClientFailureBlock)(NSError *error);
 
 @class PYConnection;
@@ -45,7 +46,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 + (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params;
 
 + (void)sendJSONRequest:(NSURLRequest *)request
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockJSON)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
 + (void)sendRAWRequest:(NSURLRequest *)request
@@ -58,7 +59,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockJSON)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
 

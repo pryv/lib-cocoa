@@ -6,8 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
-typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id JSON);
+typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData);
+typedef void(^PYAsyncServiceSuccessBlockJSON)(NSURLRequest *req, NSHTTPURLResponse *resp, NSDictionary *JSON);
+typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData);
 
 typedef enum {
 	PYRequestResultTypeJSON = 1,
@@ -37,7 +38,7 @@ typedef enum {
 @property (nonatomic, retain) NSMutableData *responseData;
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
-                            success:(PYAsyncServiceSuccessBlock)success
+                            success:(PYAsyncServiceSuccessBlockJSON)success
                             failure:(PYAsyncServiceFailureBlock)failure;
 
 + (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
