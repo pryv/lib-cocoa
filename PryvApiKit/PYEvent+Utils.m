@@ -39,8 +39,8 @@
         success(attachment.fileData); // already loaded
         return;
     }
-    [self.connection attachmentDataForEvent:self
-                               withFileName:attachment.fileName
+    [self.connection dataForAttachment:attachment
+                               onEvent:self
                                 requestType:PYRequestTypeAsync
                              successHandler:success
                                errorHandler:failure];

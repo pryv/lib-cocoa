@@ -762,14 +762,23 @@
 
 # pragma mark - event attachment
 
-- (void)attachmentDataForEvent:(PYEvent *)event
-                  withFileName:(NSString *)fileName
-                         requestType:(PYRequestType)reqType
-                      successHandler:(void (^) (NSData * filedata))success
-                        errorHandler:(void (^) (NSError *error))errorHandler
+- (void)dataForAttachment:(PYAttachment *)attachment
+                  onEvent:(PYEvent *)event
+              requestType:(PYRequestType)reqType
+           successHandler:(void (^) (NSData * filedata))success
+             errorHandler:(void (^) (NSError *error))errorHandler
 {
     
-    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, event.eventId, fileName];
+    //---- got it from cache
+    
+    NSData *cachedData = [self.cache dataForAttachment:attachment onEvent:event];
+    if (cachedData && cachedData.length > 0) {
+        success(cachedData);
+        return;
+    }
+    
+    
+    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, event.eventId, attachment.fileName];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 
 
@@ -787,6 +796,9 @@
         if (success) {
             NSLog(@"*66 %i %@", [result length], url);
             success(result);
+            
+            attachment.fileData = result;
+            [self.cache saveDataForAttachment:attachment onEvent:event];
         }
     } failure:errorHandler];
 }
