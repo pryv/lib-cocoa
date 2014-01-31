@@ -269,9 +269,7 @@ BOOL requestedLoginView = false;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     if ([PYConnection onNotNSDictionary:JSON failWith:^(NSError *error) {
-                         [self handleFailure:error];
-                     }]) return;
+                     NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                      [self handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
                      [self handleFailure:error];
@@ -339,9 +337,9 @@ BOOL requestedLoginView = false;
     
 }
 
-- (void)handlePollSuccess:(id)JSON
+- (void)handlePollSuccess:(NSDictionary*) jsonDictionary
 {
-    NSDictionary *jsonDictionary = (NSDictionary *)JSON;
+
     
     // check status
     NSString *statusString = [jsonDictionary objectForKey:@"status"];
@@ -350,7 +348,7 @@ BOOL requestedLoginView = false;
         if (requestedLoginView) {
             requestedLoginView = false;
             // -- open url only once !! -- //
-            assert([JSON objectForKey:@"url"]);
+            assert([jsonDictionary objectForKey:@"url"]);
             NSString *loginPageUrlString = [jsonDictionary objectForKey:@"url"];
             NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
             assert(loginPageURL);

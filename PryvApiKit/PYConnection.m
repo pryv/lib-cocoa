@@ -484,26 +484,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 }
 
 
-#pragma mark - check JSON responses
-
-+ (BOOL) onNotNSArray:(id)object failWith:(void (^)(NSError *error))failureHandler
-{
-    if (! [object isKindOfClass:[NSArray class]]) {
-        failureHandler([NSError errorWithDomain:@"Not an NSArray" code:1000 userInfo:nil]);
-        return true;
-    }
-    return false;
-}
-
-+ (BOOL) onNotNSDictionary:(id)object failWith:(void (^)(NSError *error))failureHandler
-{
-    if (! [object isKindOfClass:[NSDictionary class]]) {
-        failureHandler([NSError errorWithDomain:@"Not an NSDictionary" code:1000 userInfo:nil]);
-        return true;
-    }
-    return false;
-}
-
 
 
 @end

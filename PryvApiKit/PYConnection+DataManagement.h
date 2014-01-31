@@ -186,8 +186,8 @@
 /**
  Get attachment NSData for file name and event id
  */
-- (void)getAttachmentDataForFileName:(NSString *)fileName
-                             eventId:(NSString *)eventId
+- (void)attachmentDataForEvent:(PYEvent *)event
+                             withFileName:(NSString *)fileName
                          requestType:(PYRequestType)reqType
                       successHandler:(void (^) (NSData * filedata))success
                         errorHandler:(void (^) (NSError *error))errorHandler;

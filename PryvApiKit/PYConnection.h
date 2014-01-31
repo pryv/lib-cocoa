@@ -107,11 +107,6 @@
                      errorHandler:(void(^)(NSError *error))errorHandler;
 
 
-#pragma mark - check JSON responses
-
-+ (BOOL) onNotNSArray:(id)object failWith:(void (^)(NSError *error))failureHandler;
-
-+ (BOOL) onNotNSDictionary:(id)object failWith:(void (^)(NSError *error))failureHandler;
 
 
 

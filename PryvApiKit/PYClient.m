@@ -320,12 +320,13 @@ static NSString *myLanguageCodePrefered;
             successHandler(req,resp,result);
         }
     } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error,  NSMutableData *result) {
+        
+        NSString *content = @"";
+        if (result != nil) {
+            content = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+        }
+        NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
         if (failureHandler) {
-            NSString *content = @"";
-            if (result != nil) {
-                content = [[NSString alloc] initWithData:[result bytes] encoding:NSUTF8StringEncoding];
-            }
-            NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
             failureHandler(error);
         }
     }];

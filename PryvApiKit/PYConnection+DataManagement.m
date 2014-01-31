@@ -71,8 +71,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 
-                 if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return; // Fail if not an NSArray
+                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
                  
                  NSMutableArray *streamList = [[NSMutableArray alloc] init];
                  for (NSDictionary *streamDictionary in JSON) {
@@ -111,7 +110,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return; // Fail if not an NSArray
+                NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NSArray
                  
                  NSMutableArray *streamList = [[NSMutableArray alloc] init];
                  for(NSDictionary *streamDictionary in JSON){
@@ -143,7 +142,7 @@
             postData:[stream dictionary]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return; // Fail if not an NotNSDictionary
+                NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary"); // Fail if not an NotNSDictionary
                  
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
                  if (successHandler) {
@@ -379,7 +378,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return; // Fail if not an NotNSArray
+                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NotNSArray
                  
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                  NSMutableArray *eventsCachingArray = [[NSMutableArray alloc] init];
@@ -392,24 +391,6 @@
                      PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
                      
                      [eventsArray addObject:event];
-                     
-                     /**
-                     if (event.attachments.count > 0) {
-                         for (int j = 0; j < event.attachments.count; j++) {
-                             PYAttachment *attachment = [event.attachments objectAtIndex:j];
-                             NSString *fileName = attachment.fileName;
-                             [self getAttachmentDataForFileName:fileName
-                                                        eventId:event.eventId
-                                                    requestType:PYRequestTypeAsync
-                                                 successHandler:^(NSData *filedata) {
-                                                     
-                                                     attachment.fileData = filedata;
-                                                     [eventsCachingArray replaceObjectAtIndex:i withObject:[event cachingDictionary]];
-                                                     
-                                                 } errorHandler:errorHandler];
-                         }
-                     }
-                      **/
                  }
                  
                  if (syncAndCache == YES) {
@@ -499,7 +480,7 @@
             postData:[event dictionary]
          attachments:event.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
@@ -617,7 +598,7 @@
             postData:[eventObject dictionary]
          attachments:eventObject.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                  if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
+                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -690,7 +671,7 @@
             postData:[event dictionary]
          attachments:event.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                  if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
+                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *startedEventId = [JSON objectForKey:@"id"];
                  
@@ -729,7 +710,7 @@
             postData:[postData autorelease]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                  if ([PYConnection onNotNSDictionary:JSON failWith:errorHandler]) return;
+                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *stoppedEventId = [JSON objectForKey:@"stoppedId"];
                  
@@ -760,7 +741,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 if ([PYConnection onNotNSArray:JSON failWith:errorHandler]) return;
+                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
                  
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
                  for (NSDictionary *eventDic in JSON) {
@@ -779,18 +760,19 @@
     
 }
 
-- (void)getAttachmentDataForFileName:(NSString *)fileName
-                             eventId:(NSString *)eventId
+# pragma mark - event attachment
+
+- (void)attachmentDataForEvent:(PYEvent *)event
+                  withFileName:(NSString *)fileName
                          requestType:(PYRequestType)reqType
                       successHandler:(void (^) (NSData * filedata))success
                         errorHandler:(void (^) (NSError *error))errorHandler
 {
     
-    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, eventId, fileName];
+    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, event.eventId, fileName];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 
-    
-    
+
     NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, urlPath];
     
     NSURL *url = [NSURL URLWithString:fullPath];
@@ -806,10 +788,7 @@
             NSLog(@"*66 %i %@", [result length], url);
             success(result);
         }
-    } failure:^(NSError *error) {
-        errorHandler(error);
-        
-    }];
+    } failure:errorHandler];
 }
 
 - (void)previewForEvent:(PYEvent *)event

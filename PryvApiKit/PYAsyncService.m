@@ -96,7 +96,7 @@
         if (success) {
             
             id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
-            if (JSON == nil) { // Is NSDictionary or NSArray
+            if (JSON == nil) { // Is not NSDictionary or NSArray
                 
                 NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
                 NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
