@@ -8,14 +8,13 @@
 
 @class PYEvent;
 @class PYStream;
-@class PYConnection;
 
 @interface PYCachingController : NSObject
 {
     NSString *_localDataPath;
-    PYConnection *_connection;
 }
-- (id)initWithConnection:(PYConnection*)connection;
+
+- (id)initWithCachingId:(NSString *)connectionCachingId;
 
 /** return true is caching is enbaled (at compile time) **/
 - (BOOL)cachingEnabled;
@@ -42,10 +41,12 @@
 - (void)removeStreamWithKey:(NSString *)key;
 /**
  Get all PYEvent objects from disk
+ doesn't set connection property on Event
  */
 - (NSArray *)allEventsFromCache;
 /**
  Get single PYEvent object from disk for key
+ doesn't set connection property on Event
  */
 - (PYEvent *)eventWithKey:(NSString *)key;
 /**
