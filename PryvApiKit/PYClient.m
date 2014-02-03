@@ -298,11 +298,9 @@ static NSString *myLanguageCodePrefered;
             NSDictionary *JSON = [PYJSONUtility getJSONObjectFromData:responseData];
             NSError *errorToReturn;
             if (JSON == nil) {
-                NSString *responseString = [NSString stringWithCString:[responseData bytes] encoding:NSUTF8StringEncoding];
-                errorToReturn = [PYErrorUtility getErrorFromStringResponse:responseString error:error withResponse:resp andRequest:request];
+                errorToReturn = [PYErrorUtility getErrorFromStringResponse:responseData error:error withResponse:resp andRequest:request];
             } else {
                 errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
-               
             }
              NSLog(@"** PYClient.sendJSONRequest Async ** : %@", errorToReturn);
             failureHandler(errorToReturn);
@@ -319,15 +317,10 @@ static NSString *myLanguageCodePrefered;
         if (successHandler) {
             successHandler(req,resp,result);
         }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error,  NSMutableData *result) {
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error,  NSMutableData *responseData) {
         
-        NSString *content = @"";
-        if (result != nil) {
-            content = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
-        }
-        NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
         if (failureHandler) {
-            failureHandler(error);
+            failureHandler([PYErrorUtility getErrorFromStringResponse:responseData error:error withResponse:resp andRequest:request]);
         }
     }];
 }

@@ -31,6 +31,7 @@
 
 + (id)getJSONObjectFromData:(NSData *)JSONData
 {
+    if (JSONData == nil) return nil;
     Class<MyNSJSONSerialization> klass = NSClassFromString(@"NSJSONSerialization");
     if (klass) {
         return [klass JSONObjectWithData:JSONData options:0 error:nil];
