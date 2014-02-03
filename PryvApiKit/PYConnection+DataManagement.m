@@ -355,7 +355,7 @@
 
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
                             parameters:(NSDictionary*)filterDic
-                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime))onlineEventsList
+                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime))successBlock
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache
 {
@@ -385,13 +385,14 @@
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
                      PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
                      [self.cache cacheEvent:event];
+                     [eventsArray addObject:event];
                  }
                  
-                 if (onlineEventsList) {
+                 if (successBlock) {
                      //cacheEvents method will overwrite contents of currently cached file
                      [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
-                     onlineEventsList(eventsArray, serverTime);
+                     successBlock(eventsArray, serverTime);
                  }
                  
              } failure:^(NSError *error) {
