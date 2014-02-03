@@ -18,7 +18,7 @@
 
 @interface PYEventTypes ()
 
-- (void)initObject;
+- (void)setup;
 - (void)updateFlatAndKlasses;
 - (void)changeNSDictionary:(NSDictionary**) dict withContentOfJSONString:(id) jsonString;
 - (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError*)error;
@@ -41,13 +41,13 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedInstance = [[PYEventTypes alloc] init];
-        [_sharedInstance initObject];
+        [_sharedInstance setup];
     });
     return _sharedInstance;
 }
 
 
-- (void)initObject
+- (void)setup
 {
     
     _hierarchical = [[NSDictionary alloc] init];
@@ -135,10 +135,11 @@
     NSDictionary *setsJSON = [_extras objectForKey:@"sets"];
     for(NSString *setKey in [setsJSON allKeys])
     {
-        [self.measurementSets addObject:[[PYMeasurementSet alloc]
-                                         initWithKey:setKey
-                                         andDictionary:[setsJSON objectForKey:setKey]
-                                         andPYEventsTypes:self]];
+        PYMeasurementSet *measurement = [[PYMeasurementSet alloc] initWithKey:setKey
+                                                                andDictionary:[setsJSON objectForKey:setKey]
+                                                             andPYEventsTypes:self];
+        [self.measurementSets addObject:measurement];
+        [measurement release];
     }
 }
 

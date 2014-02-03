@@ -40,6 +40,12 @@
     _request = nil;
     [_response release];
     _response = nil;
+
+    [_onSuccess release];
+    [_onFailure release];
+    [_connection release];
+    //[_responseData release];
+    
         
     [super dealloc];
 }

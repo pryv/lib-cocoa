@@ -25,7 +25,7 @@
                         errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
-    NSArray *allStreamsFromCache = [self.cache getStreamsFromCache];
+    NSArray *allStreamsFromCache = [self.cache streamsFromCache];
     //    [allStreamsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedStreams) {
         NSUInteger currentNumberOfStreamsInCache = allStreamsFromCache.count;
@@ -82,6 +82,8 @@
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      onlineStreamsList([streamList autorelease]);
+                 } else {
+                     [streamList release];
                  }
                  
              } failure:^(NSError *error) {
@@ -140,9 +142,9 @@
                  if (successHandler) {
                      successHandler(createdStreamId);
                  }
-                 [self.cache getAndCacheStream:stream
-                                                withServerId:createdStreamId
-                                                 requestType:reqType];
+                 [self.cache findAndCacheStream:stream
+                                   withServerId:createdStreamId
+                                    requestType:reqType];
              } failure:^(NSError *error) {
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (stream.isSyncTriedNow == NO) {
@@ -256,7 +258,7 @@
                  //Cache modified stream - We cache stream
                  NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
                  //If streamId isn't temporary cache stream (it will be overwritten in cache)
-                 [self.cache getAndCacheStream:stream withServerId:streamId requestType:reqType];
+                 [self.cache findAndCacheStream:stream withServerId:streamId requestType:reqType];
                  
                  if (successHandler) {
                      successHandler();
@@ -269,7 +271,7 @@
                      if (stream.isSyncTriedNow == NO) {
                          
                          //Get current stream with id from cache
-                         PYStream *currentStreamFromCache = [self.cache getStreamFromCacheWithStreamId:streamId];
+                         PYStream *currentStreamFromCache = [self.cache streamFromCacheWithStreamId:streamId];
                          
                          currentStreamFromCache.notSyncModify = YES;
                          
@@ -429,11 +431,11 @@
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
     
     NSArray* filteredCachedEventList = [PYEventFilterUtility
-                                        filterEventsList:[self.cache getEventsFromCache]
+                                        filterEventsList:[self.cache eventsFromCache]
                                                                    withFilter:filter];
     
     if (cachedEvents) {
-        if ([self.cache getEventsFromCache].count > 0) {
+        if ([self.cache eventsFromCache].count > 0) {
             //if there are cached events return it, when get response return in onlineList
             cachedEvents(filteredCachedEventList);
         }
@@ -610,9 +612,9 @@
                  //Cache modified event - We cache event
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  //If eventId isn't temporary cache event (it will be overwritten in cache)
-                 [self.cache getAndCacheEventWithServerId:eventId
-                                                       usingConnection:self
-                                                           requestType:reqType];
+                 [self.cache findAndCacheEventWithServerId:eventId
+                                           usingConnection:self
+                                               requestType:reqType];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -631,7 +633,7 @@
                      if (eventObject.isSyncTriedNow == NO) {
                          
                          //Get current event with id from cache
-                         PYEvent *currentEventFromCache = [self.cache getEventFromCacheWithEventId:eventId];
+                         PYEvent *currentEventFromCache = [self.cache eventFromCacheWithEventId:eventId];
                          
                          NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                          currentEventFromCache.notSyncModify = YES;

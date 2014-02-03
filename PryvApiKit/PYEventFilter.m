@@ -115,6 +115,7 @@
      postNotificationName:@"EVENTS"
      object:self
      userInfo:userInfo];
+    [userInfo release];
 }
 
 

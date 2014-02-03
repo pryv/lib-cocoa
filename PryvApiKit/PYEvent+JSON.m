@@ -74,7 +74,7 @@
             NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", event.eventId, attachment.fileName];
             
             if ([connection.cache isDataCachedForKey:attachmentDataKey]) {
-                NSData *fileDataFromCache = [connection.cache getDataForKey:attachmentDataKey];
+                NSData *fileDataFromCache = [connection.cache dataForKey:attachmentDataKey];
                 attachment.fileData = fileDataFromCache;
             }
             [attachmentObjects addObject:attachment];

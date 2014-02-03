@@ -313,11 +313,12 @@ static NSString *myLanguageCodePrefered;
         }
     } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id result) {
         if (failureHandler) {
-            NSString *content = @"";
+            NSString *content = [[NSString alloc] initWithString:@""];
             if (result != nil) {
                 content = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
             }
             NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
+            [content release];
             failureHandler(error);
         }
     }];

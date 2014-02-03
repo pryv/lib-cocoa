@@ -16,7 +16,7 @@
 
 
 
-- (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key
+- (void)cacheEvent:(NSDictionary *)event withKey:(NSString *)key
 {
     NSMutableDictionary *eventForCache = [event mutableCopy];
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
@@ -51,7 +51,7 @@
     
 }
 
-- (void)removeEvent:(PYEvent *)event WithKey:(NSString *)key
+- (void)removeEvent:(PYEvent *)event withKey:(NSString *)key
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
     [self removeEventWithKey:eventKey];
@@ -65,7 +65,7 @@
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *eventDic in events) {
-            [self cacheEvent:eventDic WithKey:[eventDic objectForKey:@"id"]];
+            [self cacheEvent:eventDic withKey:[eventDic objectForKey:@"id"]];
         }
 
     }
@@ -74,35 +74,35 @@
 - (void)cacheEvent:(PYEvent *)event
 {
     NSDictionary *eventDic = [event cachingDictionary];
-    [self cacheEvent:eventDic WithKey:[self getKeyForEvent:event]];
+    [self cacheEvent:eventDic withKey:[self keyForEvent:event]];
 }
 
 - (void)removeEvent:(PYEvent *)event
 {
-    [self removeEvent:event WithKey:[self getKeyForEvent:event]];
+    [self removeEvent:event withKey:[self keyForEvent:event]];
 }
 
-- (NSString *)getKeyForEvent:(PYEvent *)event
+- (NSString *)keyForEvent:(PYEvent *)event
 {    
     return event.eventId;
 }
 
 
-- (NSArray *)getEventsFromCache
+- (NSArray *)eventsFromCache
 {
-    return [self getAllEventsFromCache];
+    return [self allEventsFromCache];
 }
 
-- (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId
+- (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId
 {
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",eventId];
-    return [self getEventWithKey:eventKey];
+    return [self eventWithKey:eventKey];
 
 }
 
-- (void)getAndCacheEventWithServerId:(NSString *)eventId
-                     usingConnection:(PYConnection *)connection
-                         requestType:(PYRequestType)reqType
+- (void)findAndCacheEventWithServerId:(NSString *)eventId
+                      usingConnection:(PYConnection *)connection
+                          requestType:(PYRequestType)reqType
 {
     //In this method we will ask server for event with eventId and we'll cache it
     [connection getOnlineEventWithId:eventId
@@ -112,7 +112,7 @@
                           [self cacheEvent:event];
                           
                       } errorHandler:^(NSError *error) {
-                          NSLog(@"error");
+                          NSLog(@"error: %@", error);
                       }];
 }
 
