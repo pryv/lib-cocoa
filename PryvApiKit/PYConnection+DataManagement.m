@@ -9,7 +9,6 @@
 #import "PYConnection+DataManagement.h"
 #import "PYStream+JSON.h"
 #import "PYEventFilterUtility.h"
-#import "PYConstants.h"
 #import "PYEvent.h"
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
@@ -73,7 +72,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
                  
-                 NSMutableArray *streamList = [[NSMutableArray alloc] init];
+                 NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for (NSDictionary *streamDictionary in JSON) {
                      [streamList addObject:[PYStream streamFromJSON:streamDictionary]];
                  }
@@ -85,10 +84,7 @@
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      onlineStreamsList([streamList autorelease]);
-                 } else {
-                     [streamList release];
                  }
-                 
              } failure:^(NSError *error) {
                  if (errorHandler) {
                      errorHandler (error);
@@ -114,7 +110,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NSArray
                  
-                 NSMutableArray *streamList = [[NSMutableArray alloc] init];
+                 NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for(NSDictionary *streamDictionary in JSON){
                      PYStream *streamObject = [PYStream streamFromJSON:streamDictionary];
                      streamObject.connection = self;
@@ -122,7 +118,7 @@
                  }
                  if(onlineStreamList){
                      [self.cache cacheStreams:JSON];
-                     onlineStreamList([streamList autorelease]);
+                     onlineStreamList(streamList);
                  }
              } failure:^(NSError *error){
                  if(errorHandler){
@@ -382,7 +378,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NotNSArray
                  
-                 NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+                 NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
                  
                  for (int i = 0; i < [JSON count]; i++) {
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
@@ -394,7 +390,7 @@
                      //cacheEvents method will overwrite contents of currently cached file
                      [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
-                     onlineEventsList([eventsArray autorelease], serverTime);
+                     onlineEventsList(eventsArray, serverTime);
                  }
                  
              } failure:^(NSError *error) {
@@ -487,7 +483,7 @@
                  //                                                       usingConnection:self
                  //                                                           requestType:reqType];
                  //Fix maybe ?
-                 event.eventId = [createdEventId copy];
+                 event.eventId = createdEventId;
                  [self.cache cacheEvent:event];
                  
                  if (successHandler) {
@@ -505,7 +501,7 @@
                          //When we try to create event and we came here it have tmpId
                          event.hasTmpId = YES;
                          //this is random id
-                         event.eventId = [event.clientId copy];
+                         event.eventId = event.clientId;
                          //return that created id so it can work offline. Event will be cached when added to unsync list
                          if (event.attachments.count > 0) {
                              for (PYAttachment *attachment in event.attachments) {
@@ -738,14 +734,13 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
                  
-                 NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+                 NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
                  for (NSDictionary *eventDic in JSON) {
                      [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic onConnection:self]];
                  }
                  if (successHandler) {
-                     successHandler([eventsArray autorelease]);
+                     successHandler(eventsArray);
                  }
-                 
              } failure:^(NSError *error) {
                  if (errorHandler) {
                      errorHandler (error);

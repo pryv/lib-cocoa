@@ -13,13 +13,11 @@
 
 #import "PYClient.h"
 #import "PYConstants.h"
-#import "PYError.h"
 #import "PYErrorUtility.h"
 #import "PYConnection.h"
 #import "PYAttachment.h"
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
-#import "PYError.h"
 
 @implementation PYClient
 
@@ -66,33 +64,6 @@ static NSString *myLanguageCodePrefered;
  */
 #pragma mark - PrYv API authorize and get server time (GET /)
 
-+ (id)nonNil:(id)object
-{
-    if (!object) {
-        return @"";
-    }
-    else
-        return object;
-}
-
-
-+ (NSError *)createNotReadyErrorForConnection:(PYConnection *)connection
-{
-    NSError *error;
-    if (connection.userID == nil || connection.userID.length == 0) {
-        error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorUserNotSet userInfo:nil];
-    }
-    else if (connection.accessToken == nil || connection.accessToken.length == 0) {
-        error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorTokenNotSet userInfo:nil];
-    }
-    else {
-        error = [NSError errorWithDomain:PryvSDKDomain code:PYErrorUnknown userInfo:nil];
-    }
-    return error;
-}
-
-
-
 
 #pragma mark - Utilities
 
@@ -112,17 +83,12 @@ static NSString *myLanguageCodePrefered;
     switch (method) {
         case PYRequestMethodGET:
             return @"GET";
-            break;
         case PYRequestMethodPOST:
             return @"POST";
-            break;
         case PYRequestMethodPUT:
             return @"PUT";
-            break;
         case PYRequestMethodDELETE:
             return @"DELETE";
-            break;
-            
         default:
             break;
     }
@@ -205,7 +171,6 @@ static NSString *myLanguageCodePrefered;
     if (!fullURL) {
         
         [NSException raise:@"There is no fullURL string" format:@"fullURL can't be nil"];
-        return request;
     }
     
     url = [NSURL URLWithString:fullURL];
@@ -218,8 +183,6 @@ static NSString *myLanguageCodePrefered;
     {
         [NSException raise:NSInvalidArgumentException
                     format:@"postData must be nil for GET method or DELETE method" ];
-
-        return request;
     }
     
     if (attachments && attachments.count) {

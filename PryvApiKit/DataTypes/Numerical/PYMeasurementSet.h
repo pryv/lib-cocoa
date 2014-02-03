@@ -12,8 +12,6 @@
 @interface PYMeasurementSet : NSObject
 {
     NSString *_key;
-    NSString *_localizedName;
-    NSString *_localizedDescription;
     NSMutableArray *_measurementGroups;
     
     @private
@@ -23,12 +21,12 @@
 
 - (id)initWithKey:(NSString*)key andDictionary:(NSDictionary*)dictionary andPYEventsTypes:(PYEventTypes*) pyTypes;
 
-@property (nonatomic, strong) NSString *key;
-@property (nonatomic, readonly) NSString *localizedName;
-@property (nonatomic, readonly) NSString *localizedDescription;
+@property (nonatomic, copy) NSString *key;
 @property (nonatomic, strong) NSMutableArray *measurementGroups;
 //Private variables
 @property (nonatomic, copy) NSDictionary *names;
 @property (nonatomic, copy) NSDictionary *descriptions;
 
+- (NSString *)localizedName;
+- (NSString *)localizedDescription;
 @end

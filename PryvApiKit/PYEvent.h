@@ -46,19 +46,19 @@
 
 }
 /** client side id only.. remain the same before and after synching **/
-@property (nonatomic, retain) NSString  *clientId;
-@property (nonatomic, retain) NSString  *eventId;
-@property (nonatomic, retain) NSString  *streamId;
+@property (nonatomic, copy) NSString  *clientId;
+@property (nonatomic, copy) NSString  *eventId;
+@property (nonatomic, copy) NSString  *streamId;
 
 @property (nonatomic) NSTimeInterval time;
 @property (nonatomic) NSTimeInterval duration;
 
-@property (nonatomic, retain) NSString *type;
+@property (nonatomic, copy) NSString *type;
 
 @property (nonatomic, retain) id eventContent;
 
 @property (nonatomic, retain) NSArray *tags;
-@property (nonatomic, retain) NSString  *eventDescription;
+@property (nonatomic, copy) NSString  *eventDescription;
 
 @property (nonatomic, retain) PYConnection  *connection;
 
@@ -121,7 +121,7 @@
 /**
  Sugar to get the corresponding PYEventType of this event
  */
-@property (nonatomic, readonly) PYEventType *pyType;
+- (PYEventType *)pyType;
 
 + (NSString *)newClientId;
 

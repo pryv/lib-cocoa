@@ -9,7 +9,6 @@
 
 #import <Foundation/Foundation.h>
 #import "PYConstants.h"
-#import "PYClient.h"
 
 
 @class PYConnection;
@@ -27,8 +26,7 @@
     NSArray *_tags;
     
     NSTimeInterval _lastRefresh;
-    NSString *_notificationCenterName;
-    
+
     NSMutableDictionary *_currentEventsDic;
 
 }
@@ -41,7 +39,7 @@
 @property (nonatomic, retain) NSArray *tags;
 
 
-@property (nonatomic, readonly) NSMutableDictionary *currentEventsDic;
+@property (nonatomic, retain, readonly) NSMutableDictionary *currentEventsDic;
 
 /** double value serverTime **/
 @property (nonatomic) NSTimeInterval lastRefresh;

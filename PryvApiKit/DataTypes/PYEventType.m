@@ -37,6 +37,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [_formatKey release];
+    [super dealloc];
+}
+
 - (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras
 {
     self.extras = extras;

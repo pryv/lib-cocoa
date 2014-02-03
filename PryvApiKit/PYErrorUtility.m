@@ -81,8 +81,8 @@
         }
         
         [userInfo setObject:arrayOfSubErrors forKey:PryvErrorSubErrorsKey];
-        [arrayOfErrros release];
         [userInfoSuberrors release];
+        [arrayOfSubErrors release];
     }
     
     
@@ -112,8 +112,9 @@
 }
 
 + (NSString*) contentForRequest:(NSURLRequest *)request {
-    return [NSString stringWithFormat:@"%@ url: %@ \n%@",request, request.URL.absoluteString,
-            [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
+    return [NSString stringWithFormat:@"%@ url: %@ \n%@", request, request.URL.absoluteString,
+                                      [[[NSString alloc] initWithData:request.HTTPBody
+                                                             encoding:NSUTF8StringEncoding] autorelease]];
     
     //NSLog(@"Method: %@", self.HTTPMethod);
     

@@ -80,7 +80,7 @@
         [childrenArrayOfStreams addObject:[self streamFromJSON:streamDic]];
     }
     
-    stream.children = [childrenArrayOfStreams copy];
+    stream.children = childrenArrayOfStreams;
     [childrenArrayOfStreams release];
 }
 

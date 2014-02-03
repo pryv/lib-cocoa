@@ -7,8 +7,6 @@
 //
 
 #import "PYEventTypesGroup.h"
-#import "PYEventTypes.h"
-#import "PYEventClass.h"
 
 @interface PYEventTypesGroup ()
 
@@ -16,7 +14,6 @@
 
 @implementation PYEventTypesGroup
 
-@synthesize classKey = _classKey;
 @synthesize formatKeys = _formatKeys;
 @synthesize klass = _klass;
 
@@ -31,10 +28,16 @@
         }
         self.klass = [pyTypes pyClassForString:classKey];
     
-        self.formatKeys = [[NSMutableArray alloc] init];
+        self.formatKeys = [[[NSMutableArray alloc] init] autorelease];
         [self addFormats:listOfFormats withClassKey:classKey];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_formatKeys release];
+    [super dealloc];
 }
 
 - (NSString*) name {
@@ -81,7 +84,7 @@
     }
 }
 
-- (NSArray*) formatKeyList {
+- (NSArray *) formatKeyList {
     return [NSArray arrayWithArray:self.formatKeys];
 }
 

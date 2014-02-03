@@ -18,11 +18,14 @@
 - (id)initWithClassKey:(NSString*)classKey andDefinitionDictionary:(NSDictionary*)dict;
 - (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras;
 
-@property (nonatomic, strong) NSString *classKey;
-@property (nonatomic, strong) NSString *description;
+- (NSString *)localizedName;
+
+@property (nonatomic, copy) NSString *classKey;
+
+#warning fixme reserved object method
+@property (nonatomic, copy) NSString *description;
+
 @property (nonatomic, strong) NSDictionary *extrasName;
 
-
-@property (nonatomic, readonly) NSString *localizedName;
 
 @end

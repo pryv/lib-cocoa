@@ -28,11 +28,17 @@
 
 - (void)dealloc
 {
-    self.fileData = nil;
-    self.name = nil;
-    self.fileName = nil;
-    self.size = nil;
-    self.mimeType = nil;
+    [_fileData release];
+    [_name release];
+    [_fileName release];
+    [_size release];
+    [_mimeType release];
+
+    _fileData = nil;
+    _name = nil;
+    _fileName = nil;
+    _size = nil;
+    _mimeType = nil;
     [super dealloc];
 }
 

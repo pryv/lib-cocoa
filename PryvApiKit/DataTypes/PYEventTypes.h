@@ -32,15 +32,15 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 @property (nonatomic, strong) NSMutableDictionary *klasses;
 @property (nonatomic, strong) NSMutableArray *measurementSets;
 
-+ (PYEventTypes*)sharedInstance;
++ (PYEventTypes *)sharedInstance;
 
 - (void)reloadWithCompletionBlock:(PYEventTypesCompletionBlock)completionBlock;
 
-- (PYEventType*) pyTypeForEvent:(PYEvent*)event;
+- (PYEventType *)pyTypeForEvent:(PYEvent*)event;
 
-- (PYEventType*) pyTypeForString:(NSString*)typeKey;
+- (PYEventType *)pyTypeForString:(NSString*)typeKey;
 
-- (PYEventClass*) pyClassForString:(NSString*)classKey;
+- (PYEventClass *)pyClassForString:(NSString*)classKey;
 
 
 @end

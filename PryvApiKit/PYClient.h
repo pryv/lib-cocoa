@@ -26,7 +26,6 @@ typedef void(^PYClientSuccessBlock)(NSURLRequest *request, NSHTTPURLResponse *re
 typedef void(^PYClientFailureBlock)(NSError *error);
 
 @class PYConnection;
-@class PYRequest;
 
 
 @interface PYClient : NSObject

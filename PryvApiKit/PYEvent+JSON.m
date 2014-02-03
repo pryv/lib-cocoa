@@ -13,7 +13,7 @@
 
 @implementation PYEvent (JSON)
 
-+ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
++ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
 {
     if (connection == nil) {
         [NSException raise:@"Connection cannot be nil" format:nil];
@@ -123,7 +123,7 @@
         event.synchedAt = [synchedAt doubleValue];
     }
     
-    return event;
+    return [event autorelease];
 }
 
 @end

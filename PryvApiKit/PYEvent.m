@@ -210,6 +210,7 @@
     [_attachments release];
     [_clientData release];
     [_modified release];
+    [_modifiedEventPropertiesAndValues release];
     [super dealloc];
 }
 
@@ -217,6 +218,7 @@
 {
     self = [super init];
     if (self) {
+        #warning fixme
         self.clientId = [PYEvent newClientId];
     }
     
@@ -237,11 +239,11 @@
 + (id)getEventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
 {
     PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON onConnection:connection];
-    return [generalEvent autorelease];
+    return generalEvent;
     
 }
 
-- (PYEventType*) pyType
+- (PYEventType *)pyType
 {
     return [[PYEventTypes sharedInstance] pyTypeForEvent:self];
 }

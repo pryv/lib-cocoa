@@ -10,7 +10,6 @@
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
-#import "PYEventFilter.h"
 #import "PYStream.h"
 #import "PYConnection.h"
 #import "PYStream+JSON.h"
@@ -158,7 +157,8 @@
     return nil;
 }
 
-- (void) dealloc {
+- (void) dealloc
+{
     [_localDataPath release];
     _localDataPath = nil;
     [_connection release];

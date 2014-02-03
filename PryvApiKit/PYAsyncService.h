@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData);
 typedef void(^PYAsyncServiceSuccessBlockJSON)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
 typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData);
@@ -14,8 +16,6 @@ typedef enum {
 	PYRequestResultTypeJSON = 1,
 	PYRequestResultTypeRAW
 } PYRequestResultType;
-
-#import <Foundation/Foundation.h>
 
 @interface PYAsyncService : NSObject
 

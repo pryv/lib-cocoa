@@ -15,15 +15,13 @@
 
 @interface PYMeasurementSet ()
 
-- (void)initMeasurementTypesWithTypesDic:(NSDictionary*)types andPYEventsTypes:(PYEventTypes*) pyTypes;
+- (void)setupMeasurementTypesWithTypesDic:(NSDictionary*)types andPYEventsTypes:(PYEventTypes*) pyTypes;
 
 @end
 
 @implementation PYMeasurementSet
 
 @synthesize key = _key;
-@synthesize localizedName = _localizedName;
-@synthesize localizedDescription = _localizedDescription;
 @synthesize measurementGroups = _measurementGroups;
 @synthesize names = _names;
 @synthesize descriptions = _descriptions;
@@ -37,12 +35,12 @@
         self.names = [dictionary objectForKey:@"name"];
         self.descriptions = [dictionary objectForKey:@"description"];
         self.measurementGroups = [NSMutableArray array];
-        [self initMeasurementTypesWithTypesDic:[dictionary objectForKey:@"types"] andPYEventsTypes:pyTypes];
+        [self setupMeasurementTypesWithTypesDic:[dictionary objectForKey:@"types"] andPYEventsTypes:pyTypes];
     }
     return self;
 }
 
-- (void)initMeasurementTypesWithTypesDic:(NSDictionary *)types andPYEventsTypes:(PYEventTypes*) pyTypes
+- (void)setupMeasurementTypesWithTypesDic:(NSDictionary *)types andPYEventsTypes:(PYEventTypes*) pyTypes
 {
     
     for(NSString *classKey in [types allKeys])
@@ -52,15 +50,26 @@
                                     andListOfFormats:[types objectForKey:classKey]
                                     andPYEventsTypes:pyTypes];
         [self.measurementGroups addObject:group];
+        [group release];
     }
 }
 
-- (NSString*)localizedName
+- (void)dealloc
+{
+    [_names release];
+    [_descriptions release];
+    [_key release];
+    [_measurementGroups release];
+
+    [super dealloc];
+}
+
+- (NSString *)localizedName
 {
     return [PYUtilsLocalization fromDictionary:_names defaultValue:self.key];
 }
 
-- (NSString*)localizedDescription
+- (NSString *)localizedDescription
 {
     return [PYUtilsLocalization fromDictionary:_descriptions defaultValue:@"TODO add some default values there"];
 }
