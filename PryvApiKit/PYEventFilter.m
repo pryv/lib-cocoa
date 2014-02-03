@@ -19,7 +19,6 @@
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYEvent.h"
-#import "PYClient.h"
 #import "PYEventFilterUtility.h"
 
 @implementation PYEventFilter
@@ -43,6 +42,9 @@
     //TODO check that it's necessary
     [_currentEventsDic release];
     _currentEventsDic = nil;
+    [_connection release];
+    [_onlyStreamsIDs release];
+    [_tags release];
     [super dealloc];
 }
 
@@ -164,15 +166,6 @@
 
 #pragma mark - Utilities sort
 
-+ (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
-    /** Sort untested **/
-    if (sortAscending) {
-        [events sortUsingFunction:_compareEventByTimeAsc context:nil];
-    } else {
-        [events sortUsingFunction:_compareEventByTimeDesc context:nil];
-    }
-}
-
 /**
  * Untested
  */
@@ -203,9 +196,13 @@ NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* igno
         return NSOrderedSame;
 }
 
-
-
-
-
++ (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
+    /** Sort untested **/
+    if (sortAscending) {
+        [events sortUsingFunction:_compareEventByTimeAsc context:nil];
+    } else {
+        [events sortUsingFunction:_compareEventByTimeDesc context:nil];
+    }
+}
 
 @end

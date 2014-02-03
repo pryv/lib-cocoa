@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
+@class PYConnection;
 @class PYEventFilter;
 
 @interface PYEventFilterUtility : NSObject

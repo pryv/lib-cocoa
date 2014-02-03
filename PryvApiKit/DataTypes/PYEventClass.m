@@ -26,12 +26,19 @@
      return self;
 }
 
+- (void)dealloc
+{
+    [_classKey release];
+    [_description release];
+    [super dealloc];
+}
+
 - (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras
 {
     self.extrasName = [extras objectForKey:@"name"];
 }
 
--(NSString*) localizedName {
+-(NSString *)localizedName {
     if (self.extrasName) {
         return [PYUtilsLocalization fromDictionary:self.extrasName defaultValue:self.classKey];
     }

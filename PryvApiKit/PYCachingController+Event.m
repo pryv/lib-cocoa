@@ -33,7 +33,7 @@
     NSMutableDictionary *eventForCache = [event mutableCopy];
     NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
     NSMutableDictionary *attachmentsDic = [[eventForCache objectForKey:@"attachments"] mutableCopy];
-    if (attachmentsDic && attachmentsDic.count > 0) {
+    if ([attachmentsDic count] > 0) {
         
         [[eventForCache objectForKey:@"attachments"] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
             
@@ -52,13 +52,17 @@
             [mutableAttachmentDataDic removeObjectForKey:@"attachmentData"];
             [attachmentsDic setObject:mutableAttachmentDataDic forKey:key];
 
+            [mutableAttachmentDataDic release];
+
         }];
         
         [eventForCache setObject:attachmentsDic forKey:@"attachments"];
     }
+    [attachmentsDic release];
     
     NSData *eventData = [PYJSONUtility getDataFromJSONObject:eventForCache];
     [self cacheData:eventData withKey:eventKey];
+    [eventForCache release];
 }
 
 - (void)removeEvent:(PYEvent *)event withKey:(NSString *)key
@@ -133,7 +137,7 @@
 #pragma clang diagnostic pop
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event {
-    return [self getDataForKey:[self keyForAttachment:attachment onEvent:event]];
+    return [self dataForKey:[self keyForAttachment:attachment onEvent:event]];
 }
 
 - (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
@@ -152,7 +156,7 @@
 #pragma clang diagnostic pop
 
 - (NSData *)previewForEvent:(PYEvent *)event {
-    return [self getDataForKey:[self keyForPreviewOnEvent:event]];
+    return [self dataForKey:[self keyForPreviewOnEvent:event]];
 }
 
 - (void)savePreview:(NSData *)fileData forEvent:(PYEvent *)event {

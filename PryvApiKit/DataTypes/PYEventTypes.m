@@ -181,18 +181,18 @@
 
 
 
-- (PYEventType*) pyTypeForEvent:(PYEvent*)event
+- (PYEventType *)pyTypeForEvent:(PYEvent*)event
 {
     return [self pyTypeForString:event.type];
 }
 
-- (PYEventType*) pyTypeForString:(NSString *)typeKey
+- (PYEventType *)pyTypeForString:(NSString *)typeKey
 {
     //TODO either generate an error if unkown or return an "uknown event structure"
     return [_flat objectForKey:typeKey];
 }
 
-- (PYEventClass*) pyClassForString:(NSString *)classKey
+- (PYEventClass *)pyClassForString:(NSString *)classKey
 {
     //TODO either generate an error if unkown or return an "uknown event structure"
     PYEventClass* result = [_klasses objectForKey:classKey];
@@ -212,6 +212,17 @@
             completionBlock(object, error);
         }
     });
+}
+
+- (void)dealloc
+{
+    [_hierarchical release];
+    [_extras release];
+    [_flat release];
+    [_klasses release];
+    [_measurementSets release];
+
+    [super dealloc];
 }
 
 @end

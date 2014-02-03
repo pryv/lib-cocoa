@@ -15,7 +15,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYStream+JSON.h"
 #import "PYEvent.h"
 #import "PYAttachment.h"
-#import "PYError.h"
 #import "PYConnection+DataManagement.h"
 #import "PYCachingController.h"
 #import "Reachability.h"
@@ -77,6 +76,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     _streamsNotSync = nil;
     [_cache release];
     _cache = nil;
+    [_apiExtraPath release];
+    _apiExtraPath = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
@@ -252,7 +253,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
                        //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
                        event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                       event.eventId = [tempId copy];
+                       event.eventId = tempId;
                        event.notSyncAdd = NO;
                        event.hasTmpId = NO;
                        
@@ -271,7 +272,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                    } errorHandler:^(NSError *error) {
                        //reset flag if fail, very IMPORTANT
                        event.isSyncTriedNow = NO;
-                       event.eventId = [tempId copy];
+                       event.eventId = tempId;
                        NSLog(@"SYNC error: creating event failed");
                        NSLog(@"%@",error);
                    }];

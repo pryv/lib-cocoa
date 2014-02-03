@@ -109,6 +109,7 @@
     if (result.count > filter.limit)
     {
         NSArray *limitedArray = [result subarrayWithRange:NSMakeRange(0, filter.limit)];
+        [result release];
         return  limitedArray;
     }
     return [result autorelease];
@@ -143,6 +144,7 @@
     [testPredicate release];
     
     NSPredicate *resultPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    [predicates release];
     return resultPredicate;
 }
 

@@ -55,6 +55,9 @@
     [_name release];
     [_parentId release];
     [_clientData release];
+    [_modifiedStreamPropertiesAndValues release];
+    [_children release];
+    [_connection release];
     [super dealloc];
 }
 
