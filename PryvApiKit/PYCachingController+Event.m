@@ -60,22 +60,6 @@
 
 }
 
-- (void)findAndCacheEventWithServerId:(NSString *)eventId
-                      usingConnection:(PYConnection *)connection
-                          requestType:(PYRequestType)reqType
-{
-    //In this method we will ask server for event with eventId and we'll cache it
-    [connection getOnlineEventWithId:eventId
-                         requestType:reqType
-                      successHandler:^(PYEvent *event) {
-                          
-                          [self cacheEvent:event];
-                          
-                      } errorHandler:^(NSError *error) {
-                          NSLog(@"error: %@", error);
-                      }];
-}
-
 
 #pragma mark - attachments
 

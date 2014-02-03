@@ -155,8 +155,6 @@
  @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set)
  */
 - (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
-                              forEventId:(NSString *)eventId
-                             requestType:(PYRequestType)reqType
                           successHandler:(void (^)(NSString *stoppedId))successHandler
                             errorHandler:(void (^)(NSError *error))errorHandler;
 
