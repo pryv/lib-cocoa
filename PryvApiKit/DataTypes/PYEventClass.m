@@ -9,18 +9,22 @@
 #import "PYEventClass.h"
 #import "PYUtilsLocalization.h"
 
+@interface PYEventClass ()
+@property (nonatomic, copy) NSString *eventDescription;
+@end
+
 @implementation PYEventClass
 
 @synthesize classKey = _classKey;
 @synthesize extrasName = _extrasName;
-@synthesize description = _description;
+@synthesize eventDescription = _eventDescription;
 
 - (id)initWithClassKey:(NSString*)classKey andDefinitionDictionary:(NSDictionary*)dict {
      self = [super init];
      if(self)
      {
          self.classKey = classKey;
-         self.description = [dict objectForKey:@"description"];
+         self.eventDescription = [dict objectForKey:@"description"];
          
      }
      return self;
@@ -29,13 +33,18 @@
 - (void)dealloc
 {
     [_classKey release];
-    [_description release];
+    [_eventDescription release];
     [super dealloc];
 }
 
 - (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras
 {
     self.extrasName = [extras objectForKey:@"name"];
+}
+
+- (NSString *)description
+{
+    return self.eventDescription;
 }
 
 -(NSString *)localizedName {

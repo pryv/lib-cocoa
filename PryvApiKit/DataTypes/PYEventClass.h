@@ -15,17 +15,15 @@
     NSDictionary *_extrasName;
 }
 
+@property (nonatomic, copy) NSString *classKey;
+@property (nonatomic, strong) NSDictionary *extrasName;
+
 - (id)initWithClassKey:(NSString*)classKey andDefinitionDictionary:(NSDictionary*)dict;
+
 - (void)addExtrasDefinitionsFromDictionary:(NSDictionary*)extras;
 
 - (NSString *)localizedName;
 
-@property (nonatomic, copy) NSString *classKey;
-
-#warning fixme reserved object method
-@property (nonatomic, copy) NSString *description;
-
-@property (nonatomic, strong) NSDictionary *extrasName;
-
+- (NSString *)description;
 
 @end
