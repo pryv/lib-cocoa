@@ -22,6 +22,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYCachingController+Stream.h"
 #import "PYUtils.h"
 
+@interface PYConnection ()
+{
+    NSTimeInterval _serverTimeInterval;
+}
+
+@property (nonatomic, readwrite) NSTimeInterval serverTimeInterval;
+
+@end
+
 @implementation PYConnection
 
 @synthesize userID = _userID;

@@ -58,11 +58,11 @@
         [dic setObject:_eventId forKey:@"id"];
     }
     
-    if (_time > 0) {
+    if (_time != PYEvent_UNDEFINED_TIME) {
         [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
     }
     
-    if (_duration) {
+    if (_duration >= 0) {
         [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
     }
     
@@ -220,6 +220,8 @@
     if (self) {
         #warning fixme
         self.clientId = [PYEvent newClientId];
+        self.time = PYEvent_UNDEFINED_TIME;
+        self.duration = PYEvent_UNDEFINED_DURATION;
     }
     
     return self;

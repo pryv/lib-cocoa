@@ -26,7 +26,6 @@
     
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
-    event.time = NSTimeIntervalSince1970;
     event.eventContent = @"Test";
     event.type = @"note/txt";
 //    NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];

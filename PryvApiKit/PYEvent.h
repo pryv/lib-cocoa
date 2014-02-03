@@ -10,6 +10,10 @@
 @class PYAttachment;
 @class PYConnection;
 
+
+#define PYEvent_UNDEFINED_TIME DBL_MIN
+#define PYEvent_UNDEFINED_DURATION DBL_MIN
+
 #import <Foundation/Foundation.h>
 
 

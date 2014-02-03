@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CWLSynthesizeSingleton.h"
 
+
 typedef enum {
     PYRequestTypeAsync = 1,
     PYRequestTypeSync
