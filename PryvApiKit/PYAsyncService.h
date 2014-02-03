@@ -18,24 +18,6 @@ typedef enum {
 } PYRequestResultType;
 
 @interface PYAsyncService : NSObject
-{
-    NSURLConnection *_connection;
-    NSURLRequest *_request;
-    NSHTTPURLResponse *_response;
-    NSMutableData *_responseData;
-    PYRequestResultType _requestResultType;
-    
-    BOOL _running;
-    PYAsyncServiceSuccessBlock _onSuccess;
-    PYAsyncServiceFailureBlock _onFailure;
-
-}
-
-@property (nonatomic, strong) NSURLConnection *connection;
-@property (nonatomic, strong) NSURLRequest *request;
-@property (nonatomic, strong) NSHTTPURLResponse *response;
-
-@property (nonatomic, retain) NSMutableData *responseData;
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
                             success:(PYAsyncServiceSuccessBlockJSON)success

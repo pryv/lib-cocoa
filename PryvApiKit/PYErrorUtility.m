@@ -86,14 +86,19 @@
     }
     
     
-    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:userInfo] autorelease];
+    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:response.statusCode userInfo:userInfo] autorelease];
 }
 
-+ (NSError *)getErrorFromStringResponse:(NSString*)content error:(NSError *)error
++ (NSError *)getErrorFromStringResponse:(NSData*)responseData error:(NSError *)error
                            withResponse:(NSHTTPURLResponse *)response
                              andRequest:(NSURLRequest *)request;
 {
   
+    NSString *content = @"";
+    if (responseData != nil) {
+        content = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+    }
+    
     
     NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
     
@@ -101,7 +106,9 @@
     [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
     if (error != nil) [userInfo setObject:error forKey:@"error"];
     
-    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:userInfo] autorelease];
+    NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
+    
+    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:response.statusCode userInfo:userInfo] autorelease];
 }
 
 + (NSString*) contentForRequest:(NSURLRequest *)request {

@@ -17,7 +17,7 @@
                          withResponse:(NSHTTPURLResponse *)response
                            andRequest:(NSURLRequest *)request;
 
-+ (NSError *)getErrorFromStringResponse:(NSString*)content error:(NSError *)error
++ (NSError *)getErrorFromStringResponse:(NSData*)responseData error:(NSError *)error
                            withResponse:(NSHTTPURLResponse *)response
                              andRequest:(NSURLRequest *)request;
 @end
