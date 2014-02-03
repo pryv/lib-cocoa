@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import "CWLSynthesizeSingleton.h"
+
 typedef enum {
     PYRequestTypeAsync = 1,
     PYRequestTypeSync
@@ -25,8 +28,6 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 @class PYConnection;
 @class PYRequest;
 
-#import <Foundation/Foundation.h>
-#import "CWLSynthesizeSingleton.h"
 
 @interface PYClient : NSObject
 

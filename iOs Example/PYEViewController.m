@@ -18,17 +18,21 @@
 
 @synthesize signinButton;
 
+- (void)dealloc
+{
+    [super dealloc];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
 }
 
 - (IBAction)siginButtonPressed: (id) sender  {
     NSLog(@"Signin Started");
     
     
-    NSArray *keys = [NSArray arrayWithObjects:  kPYAPIConnectionRequestStreamId,
+    NSArray *keys = [NSArray arrayWithObjects:kPYAPIConnectionRequestStreamId,
                                                 kPYAPIConnectionRequestLevel,
                                                 nil];
     
@@ -40,24 +44,28 @@
                                                                                 forKeys:keys]];
     
     [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-ios-example"
-                                     andPermissions:permissions
-                                           delegate:self];
+    
+    __unused
+    PYWebLoginViewController *webLoginController =
+        [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-ios-example"
+                                              andPermissions:permissions
+                                                    delegate:self];
 
 }
 
 #pragma mark --PYWebLoginDelegate
 
-- (UIViewController *) pyWebLoginGetController {
+- (UIViewController *)pyWebLoginGetController {
     return self;
 }
 
-- (void) pyWebLoginSuccess:(PYConnection*)pyAccess {
+- (void)pyWebLoginSuccess:(PYConnection*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 }
-- (void) pyWebLoginAborded:(NSString*)reason {
-    NSLog(@"Signin Aborded: %@",reason);
+
+- (void)pyWebLoginAborted:(NSString*)reason {
+    NSLog(@"Signin Aborted: %@",reason);
 }
 
 - (void) pyWebLoginError:(NSError*)error {

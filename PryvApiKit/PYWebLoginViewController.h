@@ -20,11 +20,11 @@
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 //- (void) pyWebLoginNotVisible:(NSNotification *)notification;
 #else
-- (UIViewController*) pyWebLoginGetController;
+- (UIViewController *)pyWebLoginGetController;
 #endif
-- (void) pyWebLoginSuccess:(PYConnection*)pyConnection;
-- (void) pyWebLoginAborded:(NSString*)reason;
-- (void) pyWebLoginError:(NSError*)error;
+- (void)pyWebLoginSuccess:(PYConnection *)pyConnection;
+- (void)pyWebLoginAborted:(NSString *)reason;
+- (void)pyWebLoginError:(NSError *)error;
 @end
 
 
@@ -47,10 +47,10 @@
 
 
 + (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID
-                                      andPermissions:(NSArray *)permissions
-                                            delegate:(id ) delegate
+                                          andPermissions:(NSArray *)permissions
+                                                delegate:(id )delegate
                                 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-                                           withWebView:(WebView **)webView
+                                             withWebView:(WebView **)webView
                                 #endif
                                             ;
 

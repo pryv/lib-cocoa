@@ -25,7 +25,7 @@
 @synthesize localDataPath = _localDataPath;
 @synthesize connection = _connection;
 
-- initWithConnection:(PYConnection*)connection
+- (id)initWithConnection:(PYConnection*)connection
 {
     self = [super init];
 	if (self) {
@@ -64,7 +64,7 @@
 		[[NSFileManager defaultManager] createFileAtPath:[self.localDataPath stringByAppendingPathComponent:key] contents:data attributes:nil];
 }
 
-- (NSData *)getDataForKey:(NSString *)key
+- (NSData *)dataForKey:(NSString *)key
 {
     if (key)
         return [NSData dataWithContentsOfFile:[self.localDataPath stringByAppendingPathComponent:key]];
@@ -102,7 +102,7 @@
     }
 }
 
-- (NSArray *)getAllEventsFromCache
+- (NSArray *)allEventsFromCache
 {
     NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'event_'"];
     if (!filesWithSelectedPrefix.count) {
@@ -111,19 +111,19 @@
     
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
     for (NSString *eventCachedName in filesWithSelectedPrefix) {
-        NSData *eventData = [self getDataForKey:eventCachedName];
+        NSData *eventData = [self dataForKey:eventCachedName];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
         [arrayOFCachedEvents
          addObject:[PYEvent eventFromDictionary:eventDic onConnection:self.connection]];
     }
     
-    return arrayOFCachedEvents;
+    return [arrayOFCachedEvents autorelease];
 }
 
-- (PYEvent *)getEventWithKey:(NSString *)key;
+- (PYEvent *)eventWithKey:(NSString *)key;
 {
     if ([self isDataCachedForKey:key]) {
-        NSData *eventData = [self getDataForKey:key];
+        NSData *eventData = [self dataForKey:key];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
         return [PYEvent eventFromDictionary:eventDic onConnection:self.connection];
     }
@@ -131,7 +131,7 @@
     return nil;
 }
 
-- (NSArray *)getAllStreamsFromCache
+- (NSArray *)allStreamsFromCache
 {
     NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'stream_'"];
     if (!filesWithSelectedPrefix.count) {
@@ -140,17 +140,17 @@
     
     NSMutableArray *arrayOFCachedStreams = [[NSMutableArray alloc] init];
     for (NSString *streamCachedName in filesWithSelectedPrefix) {
-        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:[self getDataForKey:streamCachedName]];
+        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:[self dataForKey:streamCachedName]];
         [arrayOFCachedStreams addObject:[PYStream streamFromJSON:streamDic]];
     }
     
-    return arrayOFCachedStreams;
+    return [arrayOFCachedStreams autorelease];
 }
 
-- (PYStream *)getStreamWithKey:(NSString *)key
+- (PYStream *)streamWithKey:(NSString *)key
 {
     if ([self isDataCachedForKey:key]) {
-        NSData *streamData = [self getDataForKey:key];
+        NSData *streamData = [self dataForKey:key];
         NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:streamData];
         return [PYStream streamFromJSON:streamDic];
     }
@@ -159,6 +159,8 @@
 }
 
 - (void) dealloc {
+    [_localDataPath release];
+    _localDataPath = nil;
     [_connection release];
     _connection = nil;
     [super dealloc];

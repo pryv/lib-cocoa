@@ -28,11 +28,11 @@
 /**
  Get all PYEvent objects from disk
  */
-- (NSArray *)getEventsFromCache;
+- (NSArray *)eventsFromCache;
 /**
  Get PYEvent object from disk with key(eventId)
  */
-- (PYEvent *)getEventFromCacheWithEventId:(NSString *)eventId;
+- (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId;
 
 /**
  Utility method - Get key for event
@@ -42,9 +42,9 @@
 /**
  This method get particular event from server and cache it
  */
-- (void)getAndCacheEventWithServerId:(NSString *)eventId
-                     usingConnection:(PYConnection *)connection
-                         requestType:(PYRequestType)reqType;
+- (void)findAndCacheEventWithServerId:(NSString *)eventId
+                      usingConnection:(PYConnection *)connection
+                          requestType:(PYRequestType)reqType;
 
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event;

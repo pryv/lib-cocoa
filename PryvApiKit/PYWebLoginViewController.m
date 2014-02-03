@@ -15,10 +15,15 @@
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @interface PYWebLoginViewController ()
 #else
-@interface PYWebLoginViewController () <UIWebViewDelegate>
+@interface PYWebLoginViewController () <UIWebViewDelegate> {
+    UIBarButtonItem *loadingActivityIndicator;
+    UIWebView *webView;
+    UIActivityIndicatorView *loadingActivityIndicatorView;
+    UIBarButtonItem *refreshBarButtonItem;
+}
 #endif
 @property (nonatomic, retain) NSArray *permissions;
-@property (nonatomic, retain) NSString *appID;
+@property (nonatomic, copy) NSString *appID;
 @property (nonatomic, retain) NSTimer *pollTimer;
 @property (nonatomic, assign) id  delegate;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
@@ -37,11 +42,6 @@
 @synthesize permissions;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @synthesize webView;
-#else
-UIBarButtonItem *loadingActivityIndicator;
-UIWebView *webView;
-UIActivityIndicatorView *loadingActivityIndicatorView;
-UIBarButtonItem *refreshBarButtonItem;
 #endif
 
 
@@ -57,7 +57,7 @@ BOOL closing;
     withWebView:(WebView **)webView
     #endif
 {
-    PYWebLoginViewController *login = [PYWebLoginViewController alloc];
+    PYWebLoginViewController *login = [[PYWebLoginViewController alloc] init];
     login.permissions = permissions;
     login.appID = appID;
     login.delegate = delegate;
@@ -67,13 +67,13 @@ BOOL closing;
     
     [login openOn];
         
-    return login;
+    return [login autorelease];
 }
 
 - (PYWebLoginViewController* )openOn
 {
-    [self init];
-    closing = false;
+    //[self init];
+    closing = NO;
     
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
@@ -89,7 +89,7 @@ BOOL closing;
     // -- navigation bar -- //
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
     navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
     
     refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
     self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
@@ -121,7 +121,7 @@ BOOL closing;
 - (void)close
 {
     if (closing) return;
-    closing = true;
+    closing = YES;
     [self.pollTimer invalidate];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     #else
@@ -131,16 +131,20 @@ BOOL closing;
 
 - (void)dealloc
 {
-    self.pollTimer = nil;
+    self.delegate = nil;
+    [pollTimer invalidate];
+    [pollTimer release];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     //[[NSNotificationCenter defaultCenter] removeObserver:self];
     #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [webView release];
+    [permissions release];
+    [appID release];
     [refreshBarButtonItem release];
-    [loadingActivityIndicator release];
     [loadingActivityIndicatorView release];
+    [loadingActivityIndicator release];
     #endif
     [super dealloc];
 }
@@ -196,12 +200,14 @@ BOOL closing;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-   [self requestLoginView];
-
+    [super viewWillAppear:animated];
+    
+    [self requestLoginView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     // kill the timer if one existed
     [self.pollTimer invalidate];
 }
@@ -211,7 +217,7 @@ BOOL closing;
 
 - (IBAction)cancel:(id)sender
 {
-    [self abordedWithReason:@"Canceled by user"];
+    [self abortedWithReason:@"Canceled by user"];
 }
 
 - (IBAction)reload:(id)sender
@@ -241,10 +247,10 @@ BOOL closing;
 //      (which is a login form) to a child webView
 //      activate a timer loop
 
-BOOL requestedLoginView = false;
+static BOOL s_requestedLoginView = NO;
 - (void)requestLoginView
 {
-    requestedLoginView = true;
+    s_requestedLoginView = YES;
     // TODO extract the url to a more meaningful place
     NSString *preferredLanguageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
     
@@ -262,6 +268,7 @@ BOOL requestedLoginView = false;
     
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
     
+    __block __typeof__(self) bself = self;
     [PYClient apiRequest:fullPathString
                  headers:nil
              requestType:PYRequestTypeAsync
@@ -269,10 +276,12 @@ BOOL requestedLoginView = false;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     if (!bself) return;
                      NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                     [self handlePollSuccess:JSON];
+                     [bself handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
-                     [self handleFailure:error];
+                     if (!bself) return;
+                     [bself handleFailure:error];
                  }];
     
 }
@@ -288,7 +297,7 @@ BOOL requestedLoginView = false;
     #endif
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-        [self abordedWithError:error];
+        [self abortedWithError:error];
     });
     
 }
@@ -312,6 +321,7 @@ BOOL requestedLoginView = false;
     [self.pollTimer invalidate];
     
     // schedule a GET reqest in seconds amount stored in pollTimeInterval
+    __block __typeof__(self) bself = self;
     self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
                                                       target:[NSBlockOperation blockOperationWithBlock:
                                                               ^{
@@ -322,9 +332,11 @@ BOOL requestedLoginView = false;
                                                                               postData:nil
                                                                            attachments:nil
                                                                                success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                   [self handlePollSuccess:JSON];
+                                                                                   if (!bself) return;
+                                                                                   [bself handlePollSuccess:JSON];
                                                                               } failure:^(NSError *error) {
-                                                                                   [self handleFailure:error];
+                                                                                   if (!bself) return;
+                                                                                   [bself handleFailure:error];
                                                                                }];
                                                                   
                                                               }]
@@ -345,8 +357,8 @@ BOOL requestedLoginView = false;
     NSString *statusString = [jsonDictionary objectForKey:@"status"];
     
     if ([@"NEED_SIGNIN" isEqualToString:statusString]) {
-        if (requestedLoginView) {
-            requestedLoginView = false;
+        if (s_requestedLoginView) {
+            s_requestedLoginView = NO;
             // -- open url only once !! -- //
             assert([jsonDictionary objectForKey:@"url"]);
             NSString *loginPageUrlString = [jsonDictionary objectForKey:@"url"];
@@ -388,7 +400,7 @@ BOOL requestedLoginView = false;
         } else if ([@"REFUSED" isEqualToString:statusString]) {
             
             NSString *message = [jsonDictionary objectForKey:@"message"];
-            [self abordedWithReason:message];
+            [self abortedWithReason:message];
             
         } else if ([@"ERROR" isEqualToString:statusString]) {
            
@@ -400,7 +412,7 @@ BOOL requestedLoginView = false;
                 errorCode = [jsonDictionary objectForKey:@"id"];
             }
             
-            [self abordedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
+            [self abortedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
             
             
         } else {
@@ -411,7 +423,7 @@ BOOL requestedLoginView = false;
                 message = [jsonDictionary objectForKey:@"message"];
             }
             
-            [self abordedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
+            [self abortedWithError:[[[NSError alloc] initWithDomain:PryvSDKDomain code:0 userInfo:jsonDictionary] autorelease]];
             
         }
     }
@@ -424,13 +436,13 @@ BOOL requestedLoginView = false;
     [self close];
 }
 
--  (void)abordedWithReason:(NSString *)reason
+-  (void)abortedWithReason:(NSString *)reason
 {
-    [self.delegate pyWebLoginAborded:reason];
+    [self.delegate pyWebLoginAborted:reason];
     [self close];
 }
 
--  (void)abordedWithError:(NSError *)error
+-  (void)abortedWithError:(NSError *)error
 {
     [self.delegate pyWebLoginError:error];
     [self close];

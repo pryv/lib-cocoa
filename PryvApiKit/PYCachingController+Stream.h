@@ -24,11 +24,11 @@
 /**
  Get all PYStream objects from disk
  */
-- (NSArray *)getStreamsFromCache;
+- (NSArray *)streamsFromCache;
 /**
  Get PYStream object from disk with key(streamId)
  */
-- (PYStream *)getStreamFromCacheWithStreamId:(NSString *)streamId;
+- (PYStream *)streamFromCacheWithStreamId:(NSString *)streamId;
 /**
  Cache PYStream object on disk
  */
@@ -36,8 +36,8 @@
 /**
  Get stream with particular id from server and cache it on disk
  */
-- (void)getAndCacheStream:(PYStream *)stream
-             withServerId:(NSString *)serverId
-              requestType:(PYRequestType)reqType;
+- (void)findAndCacheStream:(PYStream *)stream
+              withServerId:(NSString *)serverId
+               requestType:(PYRequestType)reqType;
 
 @end

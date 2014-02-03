@@ -19,6 +19,6 @@
  *called by Button on the UINavBar
  *This is a shortcut to a pushMenu static call
  **/
-- (IBAction)siginButtonPressed: (id) sender  ;
+- (IBAction)siginButtonPressed:(id)sender;
 
 @end

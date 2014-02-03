@@ -81,6 +81,8 @@
         }
         
         [userInfo setObject:arrayOfSubErrors forKey:PryvErrorSubErrorsKey];
+        [arrayOfErrros release];
+        [userInfoSuberrors release];
     }
     
     

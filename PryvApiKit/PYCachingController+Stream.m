@@ -17,19 +17,19 @@
 
 - (void)removeStream:(PYStream *)stream
 {
-    [self removeStream:stream WithKey:[self getKeyForStream:stream]];
+    [self removeStream:stream withKey:[self keyForStream:stream]];
 }
 
-- (void)removeStream:(PYStream *)stream WithKey:(NSString *)key
+- (void)removeStream:(PYStream *)stream withKey:(NSString *)key
 {
     NSString *streamKey = [NSString stringWithFormat:@"stream_%@",key];
     [self removeStreamWithKey:streamKey];
     
 }
 
--(void)getAndCacheStream:(PYStream *)stream
-            withServerId:(NSString *)serverId
-             requestType:(PYRequestType)reqType
+-(void)findAndCacheStream:(PYStream *)stream
+             withServerId:(NSString *)serverId
+              requestType:(PYRequestType)reqType
 {
         [stream.connection getOnlineStreamWithId:serverId
                                  requestType:reqType
@@ -44,12 +44,12 @@
 {
     if ([self cachingEnabled]) {
         for (NSDictionary *streamDic in streams) {
-            [self cacheStream:streamDic WithKey:[streamDic objectForKey:@"id"]];
+            [self cacheStream:streamDic withKey:[streamDic objectForKey:@"id"]];
         }        
     }
 }
 
-- (void)cacheStream:(NSDictionary *)stream WithKey:(NSString *)key
+- (void)cacheStream:(NSDictionary *)stream withKey:(NSString *)key
 {
     NSString *streamKey = [NSString stringWithFormat:@"stream_%@",key];
     [self cacheData:[PYJSONUtility getDataFromJSONObject:stream] withKey:streamKey];
@@ -59,24 +59,24 @@
 {
     NSDictionary *streamDic = [stream cachingDictionary];
 //    [self cacheEvent:eventDic WithKey:[self keyForEvent:event]];
-    [self cacheStream:streamDic WithKey:[self getKeyForStream:stream]];
+    [self cacheStream:streamDic withKey:[self keyForStream:stream]];
 }
 
-- (NSString *)getKeyForStream:(PYStream *)stream
+- (NSString *)keyForStream:(PYStream *)stream
 {    
     return stream.streamId;
 }
 
 
-- (NSArray *)getStreamsFromCache
+- (NSArray *)streamsFromCache
 {
-    return [self getAllStreamsFromCache];
+    return [self allStreamsFromCache];
 }
 
-- (PYStream *)getStreamFromCacheWithStreamId:(NSString *)streamId
+- (PYStream *)streamFromCacheWithStreamId:(NSString *)streamId
 {
     NSString *streamKey = [NSString stringWithFormat:@"stream_%@",streamId];
-    return [self getStreamWithKey:streamKey];
+    return [self streamWithKey:streamKey];
     
 }
 

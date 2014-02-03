@@ -15,7 +15,7 @@
     NSString *_localDataPath;
     PYConnection *_connection;
 }
-- (PYCachingController*) initWithConnection:(PYConnection*)connection;
+- (id)initWithConnection:(PYConnection*)connection;
 
 /** return true is caching is enbaled (at compile time) **/
 - (BOOL)cachingEnabled;
@@ -31,7 +31,7 @@
 /**
  Get NSData object from disk
  */
-- (NSData *)getDataForKey:(NSString *)key;
+- (NSData *)dataForKey:(NSString *)key;
 /**
  Remove an entity from disk for key
  */
@@ -43,17 +43,17 @@
 /**
  Get all PYEvent objects from disk
  */
-- (NSArray *)getAllEventsFromCache;
+- (NSArray *)allEventsFromCache;
 /**
  Get single PYEvent object from disk for key
  */
-- (PYEvent *)getEventWithKey:(NSString *)key;
+- (PYEvent *)eventWithKey:(NSString *)key;
 /**
  Get all PYStream objects from disk
  */
-- (NSArray *)getAllStreamsFromCache;
+- (NSArray *)allStreamsFromCache;
 /**
  Get single PYStream object from disk for key
  */
-- (PYStream *)getStreamWithKey:(NSString *)key;
+- (PYStream *)streamWithKey:(NSString *)key;
 @end

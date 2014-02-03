@@ -592,7 +592,6 @@
 		3D6FCEAF16F7C3B60003D970 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
-				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
 				B62A9C6B17E5E071006CADFB /* PYClient.h */,
 				8AB2361E16FA895800B28F06 /* PYClient.m */,
 				4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */,
@@ -796,6 +795,7 @@
 		FBC2048316B95B3800CB5FFB /* PryvApiKit */ = {
 			isa = PBXGroup;
 			children = (
+				FBC2048A16B95B3800CB5FFB /* PryvApiKit.h */,
 				3D6FCEA616F7C2FF0003D970 /* Model */,
 				3D6FCEAF16F7C3B60003D970 /* Clients */,
 				4E16DECC184755B400934F6C /* DataTypes */,
