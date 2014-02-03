@@ -15,7 +15,12 @@
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @interface PYWebLoginViewController ()
 #else
-@interface PYWebLoginViewController () <UIWebViewDelegate>
+@interface PYWebLoginViewController () <UIWebViewDelegate> {
+    UIBarButtonItem *loadingActivityIndicator;
+    UIWebView *webView;
+    UIActivityIndicatorView *loadingActivityIndicatorView;
+    UIBarButtonItem *refreshBarButtonItem;
+}
 #endif
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, copy) NSString *appID;
@@ -37,11 +42,6 @@
 @synthesize permissions;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @synthesize webView;
-#else
-UIBarButtonItem *loadingActivityIndicator;
-UIWebView *webView;
-UIActivityIndicatorView *loadingActivityIndicatorView;
-UIBarButtonItem *refreshBarButtonItem;
 #endif
 
 
@@ -103,7 +103,6 @@ BOOL closing;
     // -- webview -- //
     [self cleanURLCache];
     CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
-    [webView release];
     webView = [[UIWebView alloc] initWithFrame:applicationFrame];
     [webView setDelegate:self];
     [webView setBackgroundColor:[UIColor grayColor]];
@@ -218,7 +217,7 @@ BOOL closing;
 
 - (IBAction)cancel:(id)sender
 {
-    [self abordedWithReason:@"Canceled by user"];
+    [self abortedWithReason:@"Canceled by user"];
 }
 
 - (IBAction)reload:(id)sender
@@ -269,7 +268,7 @@ static BOOL s_requestedLoginView = NO;
     
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
     
-    __weak __typeof(&*self)weakSelf = self;
+    __block __typeof__(self) bself = self;
     [PYClient apiRequest:fullPathString
                  headers:nil
              requestType:PYRequestTypeAsync
@@ -277,10 +276,12 @@ static BOOL s_requestedLoginView = NO;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     if (!bself) return;
                      NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                     [weakSelf handlePollSuccess:JSON];
+                     [bself handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
-                     [weakSelf handleFailure:error];
+                     if (!bself) return;
+                     [bself handleFailure:error];
                  }];
     
 }
@@ -320,9 +321,7 @@ static BOOL s_requestedLoginView = NO;
     [self.pollTimer invalidate];
     
     // schedule a GET reqest in seconds amount stored in pollTimeInterval
-    __weak __typeof(&*self)weakSelf = self;
-    
-    // hmmm
+    __block __typeof__(self) bself = self;
     self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
                                                       target:[NSBlockOperation blockOperationWithBlock:
                                                               ^{
@@ -333,9 +332,11 @@ static BOOL s_requestedLoginView = NO;
                                                                               postData:nil
                                                                            attachments:nil
                                                                                success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                   [weakSelf handlePollSuccess:JSON];
+                                                                                   if (!bself) return;
+                                                                                   [bself handlePollSuccess:JSON];
                                                                               } failure:^(NSError *error) {
-                                                                                   [weakSelf handleFailure:error];
+                                                                                   if (!bself) return;
+                                                                                   [bself handleFailure:error];
                                                                                }];
                                                                   
                                                               }]
@@ -399,7 +400,7 @@ static BOOL s_requestedLoginView = NO;
         } else if ([@"REFUSED" isEqualToString:statusString]) {
             
             NSString *message = [jsonDictionary objectForKey:@"message"];
-            [self abordedWithReason:message];
+            [self abortedWithReason:message];
             
         } else if ([@"ERROR" isEqualToString:statusString]) {
            
@@ -435,9 +436,9 @@ static BOOL s_requestedLoginView = NO;
     [self close];
 }
 
--  (void)abordedWithReason:(NSString *)reason
+-  (void)abortedWithReason:(NSString *)reason
 {
-    [self.delegate pyWebLoginAborded:reason];
+    [self.delegate pyWebLoginAborted:reason];
     [self close];
 }
 
