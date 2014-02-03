@@ -12,6 +12,7 @@
 
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
+#import "PYConnection+TimeManagement.h"
 
 
 
@@ -227,6 +228,22 @@
     return self;
 }
 
+#pragma mark - date
+
+- (NSDate*)eventDate {
+    if (self.time == PYEvent_UNDEFINED_TIME) return nil;
+    return [self.connection localDateFromServerTime:self.time];
+}
+
+- (void) setEventDate:(NSDate *)newDate {
+    if (newDate == nil) {
+        self.time = PYEvent_UNDEFINED_TIME;
+        return;
+    }
+    self.time = [self.connection serverTimeFromLocalDate:newDate];
+}
+
+#pragma mark - attachmennt
 
 - (void)addAttachment:(PYAttachment *)attachment
 {
