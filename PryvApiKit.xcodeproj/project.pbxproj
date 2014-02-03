@@ -149,6 +149,8 @@
 		4E8C83D8185096CF001E4F05 /* PYEventType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C83D418507209001E4F05 /* PYEventType.m */; };
 		4E9C346C189FE1B00029DA16 /* offLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C346B189FE1B00029DA16 /* offLineTests.m */; };
 		4E9C346F189FEAB30029DA16 /* PYConnection+TimeManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C346E189FEAB30029DA16 /* PYConnection+TimeManagement.m */; };
+		4E9C3470189FFC860029DA16 /* PYConnection+TimeManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C346E189FEAB30029DA16 /* PYConnection+TimeManagement.m */; };
+		4E9C3471189FFC940029DA16 /* PYConnection+TimeManagement.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E9C346D189FEAB30029DA16 /* PYConnection+TimeManagement.h */; };
 		4EA29C54174B7AAA00233897 /* JSONKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D75F4CA173304F200380629 /* JSONKit.h */; };
 		4EBC559F18995F9A00C4A136 /* PYEvent+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EBC559D18995F9A00C4A136 /* PYEvent+Utils.h */; };
 		4EBC55A018995F9A00C4A136 /* PYEvent+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC559E18995F9A00C4A136 /* PYEvent+Utils.m */; };
@@ -206,6 +208,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				4E9C3471189FFC940029DA16 /* PYConnection+TimeManagement.h in CopyFiles */,
 				4EBC55A1189960B200C4A136 /* PYEvent+Utils.h in CopyFiles */,
 				4E6240DF188D84FB00477564 /* PYUtils.h in CopyFiles */,
 				4ECD102C185B707C00D4BBA0 /* PYEventFilter.h in CopyFiles */,
@@ -1146,6 +1149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E9C3470189FFC860029DA16 /* PYConnection+TimeManagement.m in Sources */,
 				4EBC55A2189960C200C4A136 /* PYEvent+Utils.m in Sources */,
 				4ECD102D185B708F00D4BBA0 /* PYEventFilter.m in Sources */,
 				B62A9C7917E5EACD006CADFB /* PYConnection+DataManagement.m in Sources */,
