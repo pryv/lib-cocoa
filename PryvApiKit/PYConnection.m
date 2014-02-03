@@ -53,7 +53,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         [self.connectionReachability startNotifier];
         self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
         [self pyAccessStatus:self.connectionReachability];
-        [self initDeserializeNonSyncList];
+        [self setupDeserializeNonSyncList];
     }
     return self;
 }
@@ -114,7 +114,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 /**
  * Load event form cache.. Part of this init
  */
-- (void)initDeserializeNonSyncList
+- (void)setupDeserializeNonSyncList
 {
     NSArray *allEventsFromCache = [self.cache eventsFromCache];
 
