@@ -73,7 +73,7 @@
                                  }];
     [PYTestsUtils execute:^{
         STFail(@"Cannot get streams within 10 seconds");
-    } ifNotTrue:&finished1 afterSeconds:10];
+    } ifNotTrue:&finished1 afterSeconds:10]; 
     
 }
 

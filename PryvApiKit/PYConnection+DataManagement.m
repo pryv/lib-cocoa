@@ -84,6 +84,7 @@
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      onlineStreamsList(streamList);
+
                  }
              } failure:^(NSError *error) {
                  if (errorHandler) {
@@ -503,7 +504,7 @@
                          event.time = [[NSDate date] timeIntervalSince1970];
                          event.modified = [NSDate date];
                          //When we try to create event and we came here it have tmpId
-                         event.hasTmpId = YES;
+                         //event.hasTmpId = YES;
                          //this is random id
                          event.eventId = event.clientId;
                          //return that created id so it can work offline. Event will be cached when added to unsync list
@@ -581,14 +582,12 @@
 
 //PUT /events/{event-id}
 - (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
-                              forEventId:(NSString *)eventId
-                             requestType:(PYRequestType)reqType
                           successHandler:(void (^)(NSString *stoppedId))successHandler
                             errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,eventId]
-         requestType:reqType
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@", kROUTE_EVENTS, eventObject.eventId]
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodPUT
             postData:[eventObject dictionary]
          attachments:eventObject.attachments
@@ -600,9 +599,11 @@
                  //Cache modified event - We cache event
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  //If eventId isn't temporary cache event (it will be overwritten in cache)
-                 [self.cache findAndCacheEventWithServerId:eventId
-                                           usingConnection:self
-                                               requestType:reqType];
+                 
+                 eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
+                 
+                 [self.cache cacheEvent:eventObject];
+                 
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -621,7 +622,7 @@
                      if (eventObject.isSyncTriedNow == NO) {
                          
                          //Get current event with id from cache
-                         PYEvent *currentEventFromCache = [self.cache eventFromCacheWithEventId:eventId];
+                         PYEvent *currentEventFromCache = [self.cache eventFromCacheWithEventId:eventObject.eventId];
                          currentEventFromCache.connection = self;
                          
                          NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");

@@ -210,8 +210,6 @@ Example of modifying event data on server. You create an event object with the p
     event.value = @"someEventValue";
 
     [connection setModifiedEventAttributesObject:event
-                                   forEventId:@"someEventId"
-                                  requestType:PYRequestTypeAsync
                                successHandler:^(NSString *stoppedId) {
         
     } errorHandler:^(NSError *error) {

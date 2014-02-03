@@ -43,12 +43,6 @@
 - (NSString *)keyForEvent:(PYEvent *)event;
 - (NSString *)keyForEventId:(NSString *)eventId;
 
-/**
- This method get particular event from server and cache it
- */
-- (void)findAndCacheEventWithServerId:(NSString *)eventId
-                      usingConnection:(PYConnection *)connection
-                          requestType:(PYRequestType)reqType;
 
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event;

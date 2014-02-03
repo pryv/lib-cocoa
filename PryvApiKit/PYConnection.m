@@ -296,8 +296,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 }];
                 
                 [self setModifiedEventAttributesObject:modifiedEvent
-                                            forEventId:event.eventId
-                                           requestType:PYRequestTypeAsync
                                         successHandler:^(NSString *stoppedId) {
                                             
                                             //We have success here. Event is cached in setModifiedEventAttributesObject:forEventId method
