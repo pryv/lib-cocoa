@@ -123,6 +123,6 @@
  */
 - (PYEventType *)pyType;
 
-+ (NSString *)newClientId;
++ (NSString *)createClientId;
 
 @end

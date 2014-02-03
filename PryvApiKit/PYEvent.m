@@ -38,7 +38,7 @@
 @synthesize modifiedEventPropertiesAndValues = _modifiedEventPropertiesAndValues;
 @synthesize connection = _connection;
 
-+ (NSString *)newClientId
++ (NSString *)createClientId
 {
     CFUUIDRef uuidRef = CFUUIDCreate(NULL);
     CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
@@ -219,7 +219,7 @@
     self = [super init];
     if (self) {
         #warning fixme
-        self.clientId = [PYEvent newClientId];
+        self.clientId = [PYEvent createClientId];
     }
     
     return self;

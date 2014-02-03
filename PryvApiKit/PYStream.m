@@ -29,7 +29,7 @@
 @synthesize synchedAt = _synchedAt;
 @synthesize modifiedStreamPropertiesAndValues = _modifiedStreamPropertiesAndValues;
 
-+ (NSString *)newClientId
++ (NSString *)createClientId
 {
     CFUUIDRef uuidRef = CFUUIDCreate(NULL);
     CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
@@ -42,7 +42,7 @@
 {
     self = [super init];
     if (self) {
-        self.clientId = [PYStream newClientId];
+        self.clientId = [PYStream createClientId];
     }
     
     return self;
