@@ -12,6 +12,7 @@
 
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
+#import "PYConnection+TimeManagement.h"
 
 
 
@@ -58,11 +59,11 @@
         [dic setObject:_eventId forKey:@"id"];
     }
     
-    if (_time > 0) {
+    if (_time != PYEvent_UNDEFINED_TIME) {
         [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
     }
     
-    if (_duration) {
+    if (_duration >= 0) {
         [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
     }
     
@@ -220,11 +221,29 @@
     if (self) {
         #warning fixme
         self.clientId = [PYEvent createClientId];
+        self.time = PYEvent_UNDEFINED_TIME;
+        self.duration = PYEvent_UNDEFINED_DURATION;
     }
     
     return self;
 }
 
+#pragma mark - date
+
+- (NSDate*)eventDate {
+    if (self.time == PYEvent_UNDEFINED_TIME) return nil;
+    return [self.connection localDateFromServerTime:self.time];
+}
+
+- (void) setEventDate:(NSDate *)newDate {
+    if (newDate == nil) {
+        self.time = PYEvent_UNDEFINED_TIME;
+        return;
+    }
+    self.time = [self.connection serverTimeFromLocalDate:newDate];
+}
+
+#pragma mark - attachmennt
 
 - (void)addAttachment:(PYAttachment *)attachment
 {

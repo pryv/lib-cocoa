@@ -10,6 +10,10 @@
 @class PYAttachment;
 @class PYConnection;
 
+
+#define PYEvent_UNDEFINED_TIME DBL_MIN
+#define PYEvent_UNDEFINED_DURATION DBL_MIN
+
 #import <Foundation/Foundation.h>
 
 
@@ -102,6 +106,10 @@
  */
 @property NSTimeInterval synchedAt;
 
+/** get event Date, return "nil" if undefined. If nil will be synched as "NOW" **/
+- (NSDate*)eventDate;
+/** set event Date. "nil" if undefined. If nil will be synched as "NOW" **/
+- (void) setEventDate:(NSDate *)newDate;
 
 - (void)addAttachment:(PYAttachment *)attachment;
 - (void)removeAttachment:(PYAttachment *)attachmentToRemove;

@@ -502,7 +502,11 @@
                      if (event.isSyncTriedNow == NO) {
                          //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
                          event.notSyncAdd = YES;
-                         event.time = [[NSDate date] timeIntervalSince1970];
+                         
+                         if (event.time == PYEvent_UNDEFINED_TIME) {
+                             event.time = [[NSDate date] timeIntervalSince1970];
+                         }
+                        
                          event.modified = [NSDate date];
                          //When we try to create event and we came here it have tmpId
                          //event.hasTmpId = YES;

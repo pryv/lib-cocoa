@@ -147,7 +147,7 @@
         event.streamId = @"osx_example_test_stream";
         event.type = @"note/txt";
         event.eventContent = @"This is a note from the OS X Example app.";
-        event.time = NSTimeIntervalSince1970;
+   
         
         NSLog(@"%@",event);
         [connection createEvent:event
@@ -259,7 +259,6 @@
         runningEvent = [[PYEvent alloc] init];
         runningEvent.streamId = @"osx_example_test_stream";
         runningEvent.type = @"activity/pryv";
-        runningEvent.time = NSTimeIntervalSince1970;
         
         [connection startPeriodEvent:runningEvent requestType:PYRequestTypeAsync successHandler:^(NSString *startedEventId) {
             NSLog(@"Started event ID : %@",startedEventId);
@@ -365,7 +364,6 @@
                 eventWithAttachment = [[PYEvent alloc] init];
                 eventWithAttachment.streamId = @"osx_example_test_stream";
                 eventWithAttachment.type = @"file/attached-multiple";
-                eventWithAttachment.time = NSTimeIntervalSince1970;
                 eventWithAttachment.attachments = [NSMutableArray arrayWithArray:attachments];
                 NSLog(@"Attached : %@",eventWithAttachment.attachments);
                 [PYClient setDefaultDomainStaging];

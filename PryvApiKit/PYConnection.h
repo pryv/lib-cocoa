@@ -22,7 +22,7 @@
     NSString *_apiDomain;
     NSUInteger _apiPort;
     NSString *_apiExtraPath;
-    NSTimeInterval _serverTimeInterval;
+    
     NSTimeInterval _lastTimeServerContact;
     
     Reachability *_connectionReachability;
@@ -41,10 +41,11 @@
 @property (nonatomic, copy) NSString *apiDomain;
 @property (nonatomic) NSUInteger apiPort;
 @property (nonatomic, copy) NSString *apiExtraPath;
-@property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 @property (nonatomic, retain) Reachability *connectionReachability;
 @property (nonatomic, retain) PYCachingController *cache;
+
+@property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;
