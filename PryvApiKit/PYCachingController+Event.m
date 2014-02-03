@@ -24,73 +24,28 @@
 
 - (void)cacheEvent:(PYEvent *)event
 {
-    NSDictionary *eventDic = [event cachingDictionary];
-    [self cacheEvent:eventDic withKey:[self keyForEvent:event]];
-}
 
-- (void)cacheEvent:(NSDictionary *)event withKey:(NSString *)key
-{
-    NSMutableDictionary *eventForCache = [event mutableCopy];
-    NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
-    NSMutableDictionary *attachmentsDic = [[eventForCache objectForKey:@"attachments"] mutableCopy];
-    if (attachmentsDic && attachmentsDic.count > 0) {
-        
-        [[eventForCache objectForKey:@"attachments"] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *attachmentDataDic, BOOL *stop) {
-            
-            NSMutableDictionary *mutableAttachmentDataDic = [attachmentDataDic mutableCopy];
-            
-            NSString *eventId = [eventForCache objectForKey:@"id"];
-            NSString *fileName = [mutableAttachmentDataDic objectForKey:@"fileName"];
-            if (!fileName) {
-                fileName = @"";
-            }
-            
-            NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", eventId, fileName];
-            NSData *attachmentData = [mutableAttachmentDataDic objectForKey:@"attachmentData"];
-            [self cacheData:attachmentData withKey:attachmentDataKey];
-            
-            [mutableAttachmentDataDic removeObjectForKey:@"attachmentData"];
-            [attachmentsDic setObject:mutableAttachmentDataDic forKey:key];
-
-        }];
-        
-        [eventForCache setObject:attachmentsDic forKey:@"attachments"];
+    for (PYAttachment *att in event.attachments) {
+        if (att.fileData && att.fileData.length > 0) [self saveDataForAttachment:att onEvent:event];
     }
-    
-    NSData *eventData = [PYJSONUtility getDataFromJSONObject:eventForCache];
-    [self cacheData:eventData withKey:eventKey];
-}
-
-- (void)removeEvent:(PYEvent *)event withKey:(NSString *)key
-{
-    NSString *eventKey = [NSString stringWithFormat:@"event_%@",key];
-    [self removeEntityWithKey:eventKey];
-    //second try
-    eventKey = [[NSString stringWithFormat:@"event_%f",event.time] stringByReplacingOccurrencesOfString:@"." withString:@""];
-    [self removeEntityWithKey:eventKey];
-    //preview
-    [self removeEntityWithKey:[self keyForPreviewOnEvent:event]];
-
-}
-
-- (void)cacheEvents:(NSArray *)events
-{
-    if ([self cachingEnabled]) {
-        for (NSDictionary *eventDic in events) {
-            [self cacheEvent:eventDic withKey:[eventDic objectForKey:@"id"]];
-        }
-
-    }
+      
+    NSData *eventData = [PYJSONUtility getDataFromJSONObject:[event cachingDictionary]];
+    [self cacheData:eventData withKey:[self keyForEvent:event]];
 }
 
 - (void)removeEvent:(PYEvent *)event
 {
-    [self removeEvent:event withKey:[self keyForEvent:event]];
+    [self removeEntityWithKey:[self keyForEvent:event]];
+    [self removeEntityWithKey:[self keyForPreviewOnEvent:event]];
 }
 
-- (NSString *)keyForEvent:(PYEvent *)event
-{    
-    return event.eventId;
+
+- (NSString *)keyForEvent:(PYEvent *)event {
+    return [self keyForEventId:event.eventId];
+}
+
+- (NSString *)keyForEventId:(NSString *)eventId {
+    return [NSString stringWithFormat:@"event_%@", eventId];
 }
 
 
@@ -101,8 +56,7 @@
 
 - (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId
 {
-    NSString *eventKey = [NSString stringWithFormat:@"event_%@",eventId];
-    return [self eventWithKey:eventKey];
+    return [self eventWithKey:[self keyForEventId:eventId]];
 
 }
 
@@ -128,12 +82,12 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (NSString *)keyForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
-    return [NSString stringWithFormat:@"%@_attachment_%@", event.eventId, attachment.fileName];
+    return [NSString stringWithFormat:@"%@_attachment_%@", [self keyForEvent:event], attachment.fileName];
 }
 #pragma clang diagnostic pop
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event {
-    return [self getDataForKey:[self keyForAttachment:attachment onEvent:event]];
+    return [self dataForKey:[self keyForAttachment:attachment onEvent:event]];
 }
 
 - (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
@@ -147,12 +101,12 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (NSString *)keyForPreviewOnEvent:(PYEvent *)event {
-    return [NSString stringWithFormat:@"%@_preview", event.eventId];
+    return [NSString stringWithFormat:@"%@_preview", [self keyForEvent:event]];
 }
 #pragma clang diagnostic pop
 
 - (NSData *)previewForEvent:(PYEvent *)event {
-    return [self getDataForKey:[self keyForPreviewOnEvent:event]];
+    return [self dataForKey:[self keyForPreviewOnEvent:event]];
 }
 
 - (void)savePreview:(NSData *)fileData forEvent:(PYEvent *)event {

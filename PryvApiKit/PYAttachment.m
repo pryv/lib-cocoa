@@ -67,11 +67,13 @@
         [objects addObject:self.size];
         [keys addObject:@"size"];
     }
+    // fileData is saved asside by caching utilities
+    /**
     if(self.fileData)
     {
         [objects addObject:self.fileData];
         [keys addObject:@"attachmentData"];
-    }
+    }**/
     
     NSDictionary *attachmentObject = [NSDictionary dictionaryWithObjects: objects
                                                                  forKeys: keys];

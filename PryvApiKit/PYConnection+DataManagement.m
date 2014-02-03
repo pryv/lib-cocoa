@@ -383,21 +383,13 @@
                  NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NotNSArray
                  
                  NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
-                 NSMutableArray *eventsCachingArray = [[NSMutableArray alloc] init];
-                 [eventsCachingArray addObjectsFromArray:JSON];
                  
                  for (int i = 0; i < [JSON count]; i++) {
-                     
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
-                     
                      PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
-                     
-                     [eventsArray addObject:event];
+                     [self.cache cacheEvent:event];
                  }
                  
-                 if (syncAndCache == YES) {
-                     [self.cache cacheEvents:eventsCachingArray];
-                 }
                  if (onlineEventsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];

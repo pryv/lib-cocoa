@@ -65,24 +65,15 @@
     event.eventDescription = [JSON objectForKey:@"description"];
 
     NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
-    
     if (attachmentsDic) {
         NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
         
         [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
-            PYAttachment *attachment = [PYAttachment attachmentFromDictionary:obj];
-            NSString *attachmentDataKey = [NSString stringWithFormat:@"%@_%@", event.eventId, attachment.fileName];
-            
-            if ([connection.cache isDataCachedForKey:attachmentDataKey]) {
-                NSData *fileDataFromCache = [connection.cache dataForKey:attachmentDataKey];
-                [attachment setFileData:fileDataFromCache];
-            }
-            [attachmentObjects addObject:attachment];
+            [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
         }];
         
         event.attachments = attachmentObjects;
         [attachmentObjects release];
-
     }
     
     event.clientData = [JSON objectForKey:@"clientData"];

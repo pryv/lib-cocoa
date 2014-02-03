@@ -21,10 +21,7 @@
  Remove PYEvent object from disk
  */
 - (void)removeEvent:(PYEvent *)event;
-/**
- Cache event json objects on disk
- */
-- (void)cacheEvents:(NSArray *)events;
+
 /**
  Get all PYEvent objects from disk
  */
@@ -38,6 +35,7 @@
  Utility method - Get key for event
  */
 - (NSString *)keyForEvent:(PYEvent *)event;
+- (NSString *)keyForEventId:(NSString *)eventId;
 
 /**
  This method get particular event from server and cache it

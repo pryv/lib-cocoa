@@ -66,12 +66,12 @@
         [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
     }
     
-//    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-//        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-//        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-//        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-//        [dic setObject:typeDic forKey:@"type"];
-//    }
+    //    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
+    //        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
+    //        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
+    //        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+    //        [dic setObject:typeDic forKey:@"type"];
+    //    }
     if (_type) {
         [dic setObject:_type forKey:@"type"];
     }
@@ -100,6 +100,7 @@
         [dic setObject:_clientData forKey:@"clientData"];
     }
     
+    
     if (_attachments && _attachments.count > 0) {
         NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
         [_attachments enumerateObjectsUsingBlock:^(PYAttachment *attachment, NSUInteger idx, BOOL *stop) {
@@ -117,19 +118,17 @@
         [dic setObject:_modifiedEventPropertiesAndValues forKey:@"modifiedProperties"];
     }
     
- 
-    
     [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
     
     return [dic autorelease];
-
+    
 }
 
 
 - (NSDictionary *)dictionary {
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-
+    
     if (_eventId) {
         [dic setObject:_eventId forKey:@"id"];
     }
@@ -192,7 +191,7 @@
     [description appendFormat:@", self.trashed=%d", self.trashed];
     [description appendFormat:@", self.modified=%@", self.modified];
     [description appendFormat:@", self.content=%@",self.eventContent];
-
+    
     [description appendString:@">"];
     
     return description;
@@ -236,7 +235,7 @@
 }
 
 + (id)getEventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
-{        
+{
     PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON onConnection:connection];
     return [generalEvent autorelease];
     
