@@ -83,7 +83,7 @@
                  
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
-                     onlineStreamsList([streamList autorelease]);
+                     onlineStreamsList(streamList);
                  }
              } failure:^(NSError *error) {
                  if (errorHandler) {
