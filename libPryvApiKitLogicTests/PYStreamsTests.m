@@ -9,6 +9,7 @@
 #import "PYStreamsTests.h"
 #import "PYConnection+DataManagement.h"
 #import "PYStream.h"
+#import "PYCachingController+Stream.h"
 
 @implementation PYStreamsTests
 
@@ -64,10 +65,10 @@
    
     
         NSString *fakeStreamId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
-        PYStream *streamFromCacheWithFakeId = [self.connection.cache getStreamFromCacheWithStreamId:fakeStreamId];
+        PYStream *streamFromCacheWithFakeId = [self.connection.cache streamFromCacheWithStreamId:fakeStreamId];
         STAssertNil(streamFromCacheWithFakeId, @"This must be nil. It's fake stream id");
         
-        PYStream *streamFromCache = [self.connection.cache getStreamFromCacheWithStreamId:createdStreamIdFromServer];
+        PYStream *streamFromCache = [self.connection.cache streamFromCacheWithStreamId:createdStreamIdFromServer];
         STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
         
     } errorHandler:^(NSError *error) {
