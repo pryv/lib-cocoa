@@ -270,7 +270,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                        event.hasTmpId = NO;
                        
                        [self.eventsNotSync enumerateObjectsUsingBlock:^(PYEvent *obj, BOOL *stop) {
-                           if([obj.eventId isEqualToString:event.eventId] || obj.time == event.time)
+                           if([obj.eventId isEqualToString:event.eventId]) // || obj.time == event.time)
                            {
                                [self.eventsNotSync removeObject:obj];
                                *stop = YES;

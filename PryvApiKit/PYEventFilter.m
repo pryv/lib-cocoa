@@ -171,8 +171,8 @@
  */
 NSComparisonResult _compareEventByTimeAsc( PYEvent* e1, PYEvent* e2, void* ignore)
 {
-    NSTimeInterval t1 = [e1 time];
-    NSTimeInterval t2 = [e2 time];
+    NSTimeInterval t1 = [e1 getEventServerTime];
+    NSTimeInterval t2 = [e2 getEventServerTime];
     if (t1 < t2)
         return NSOrderedAscending;
     else if (t1 > t2)
@@ -186,8 +186,8 @@ NSComparisonResult _compareEventByTimeAsc( PYEvent* e1, PYEvent* e2, void* ignor
  */
 NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* ignore)
 {
-    NSTimeInterval t1 = [e1 time];
-    NSTimeInterval t2 = [e2 time];
+    NSTimeInterval t1 = [e1 getEventServerTime];
+    NSTimeInterval t2 = [e2 getEventServerTime];
     if (t1 > t2)
         return NSOrderedAscending;
     else if (t1 < t2)

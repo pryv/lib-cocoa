@@ -502,8 +502,8 @@
                          //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
                          event.notSyncAdd = YES;
                          
-                         if (event.time == PYEvent_UNDEFINED_TIME) {
-                             event.time = [[NSDate date] timeIntervalSince1970];
+                         if ([event eventDate] == nil) {
+                             [event setEventDate:[NSDate date]]; // now
                          }
                         
                          event.modified = [NSDate date];

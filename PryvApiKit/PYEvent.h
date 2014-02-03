@@ -23,7 +23,7 @@
     NSString  *_eventId;
     NSString  *_streamId;
     
-    NSTimeInterval _time;
+    
     NSTimeInterval _duration;
     
     NSString *_type;
@@ -54,7 +54,7 @@
 @property (nonatomic, copy) NSString  *eventId;
 @property (nonatomic, copy) NSString  *streamId;
 
-@property (nonatomic) NSTimeInterval time;
+
 @property (nonatomic) NSTimeInterval duration;
 
 @property (nonatomic, copy) NSString *type;
@@ -102,14 +102,24 @@
 @property (nonatomic, retain) NSDictionary *modifiedEventPropertiesAndValues;
 
 /**
- @property synchedAt - Timestamp when event is synced with server
+ @property synchedAt - (PRIVATE) Timestamp in serverTime when event is synced with server
  */
 @property NSTimeInterval synchedAt;
+
+# pragma mark - date
 
 /** get event Date, return "nil" if undefined. If nil will be synched as "NOW" **/
 - (NSDate*)eventDate;
 /** set event Date. "nil" if undefined. If nil will be synched as "NOW" **/
 - (void) setEventDate:(NSDate *)newDate;
+
+/** (PRIVATE) set eventTime in "server-Time space" .. for internal user only **/
+- (void) setEventServerTime:(NSTimeInterval)newTimeStamp;
+
+/** (PRIVATE) get eventTime in "server-Time space" .. for internal user only **/
+- (NSTimeInterval) getEventServerTime;
+
+# pragma mark - attachment
 
 - (void)addAttachment:(PYAttachment *)attachment;
 - (void)removeAttachment:(PYAttachment *)attachmentToRemove;

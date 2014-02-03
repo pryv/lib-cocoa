@@ -24,7 +24,7 @@
         event.streamId = streamId;
     }
     
-    event.time = [[JSON objectForKey:@"time"] doubleValue];
+    [event setEventServerTime:[[JSON objectForKey:@"time"] doubleValue]];
     if ([JSON objectForKey:@"duration"] == [NSNull null]) {
         event.duration = 0;
     }else{

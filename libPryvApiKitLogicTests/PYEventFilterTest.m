@@ -88,24 +88,24 @@
 {
     
     PYEvent *event1 = [[PYEvent alloc] init];
-    event1.streamId = @"1"; event1.time = 10;
+    event1.streamId = @"1"; [event1 setEventServerTime:10];
     PYEvent *event2 = [[PYEvent alloc] init];
-    event2.streamId = @"2"; event2.time = 20;
+    event2.streamId = @"2"; [event2 setEventServerTime:20];
     PYEvent *event3 = [[PYEvent alloc] init];
-    event3.streamId = @"3"; event3.time = 30;
+    event3.streamId = @"3"; [event3 setEventServerTime:30];
     
     NSMutableArray* events = [[NSMutableArray alloc] initWithObjects:event2,event1,event3,nil];
     
     [PYEventFilter sortNSMutableArrayOfPYEvents:events sortAscending:NO];
-    STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:0] time],@"wrong postion of event");
-    STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] time],@"wrong postion of event");
-    STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:2] time],@"wrong postion of event");
+    STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
+    STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
+    STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
     
     
     [PYEventFilter sortNSMutableArrayOfPYEvents:events sortAscending:YES];
-    STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:0] time],@"wrong postion of event");
-    STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] time],@"wrong postion of event");
-    STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:2] time],@"wrong postion of event");
+    STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
+    STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
+    STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
 
     
 }

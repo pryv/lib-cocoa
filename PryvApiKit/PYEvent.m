@@ -14,7 +14,14 @@
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
 
+@interface PYEvent ()
+{
+    NSTimeInterval _time;
+}
 
+@property (nonatomic) NSTimeInterval time;
+
+@end
 
 @implementation PYEvent
 @synthesize clientId = _clientId;
@@ -230,6 +237,8 @@
 
 #pragma mark - date
 
+
+
 - (NSDate*)eventDate {
     if (self.time == PYEvent_UNDEFINED_TIME) return nil;
     return [self.connection localDateFromServerTime:self.time];
@@ -242,6 +251,19 @@
     }
     self.time = [self.connection serverTimeFromLocalDate:newDate];
 }
+
+/** (PRIVATE) set eventTime in "server-Time space" .. for internal user only **/
+- (void) setEventServerTime:(NSTimeInterval)newTimeStamp
+{
+    self.time = newTimeStamp;
+}
+
+/** (PRIVATE) get eventTime in "server-Time space" .. for internal user only **/
+- (NSTimeInterval) getEventServerTime
+{
+    return self.time;
+}
+
 
 #pragma mark - attachmennt
 
