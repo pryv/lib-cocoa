@@ -9,6 +9,15 @@
 #import "PYEventsTests.h"
 #import "PYConnection+DataManagement.h"
 
+#define NOT_DONE(done) __block BOOL done = NO;
+#define DONE(done) done = YES;
+#define WAIT_FOR_DONE(done)     \
+                    while (!done) {\
+                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode\
+                        beforeDate:[NSDate distantFuture]];\
+                        usleep(10000);\
+                    }
+
 @implementation PYEventsTests
 
 - (void)setUp
@@ -23,6 +32,7 @@
     
     [self testGettingStreams];
     
+    NOT_DONE(done);
     
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
@@ -41,12 +51,13 @@
     
     //-- Create event on server
     [self.connection createEvent:event
-             requestType:PYRequestTypeAsync
-          successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                     requestType:PYRequestTypeAsync
+                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                      
               STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");
               STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
-              createdEventId = [NSString stringWithString:newEventId];
-              event.eventId = [NSString stringWithString:newEventId];
+              createdEventId = newEventId;
+              event.eventId = newEventId;
               
               
               // --- check if this event is found online
@@ -63,28 +74,28 @@
                                                     break;
                                                 }
                                             }
-                                            STAssertTrue(foundEventOnServer, @"Event hasn't found on server");
+                                            STAssertTrue(foundEventOnServer, @"Event hasn't been found on server");
                                             
                                             //-- delete event found
-                                            [self.connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:NULL errorHandler:^(NSError *error) {
+                                            [self.connection trashOrDeleteEvent:event
+                                                                withRequestType:PYRequestTypeAsync
+                                                                 successHandler:^{
+                                                                     DONE(done);
+                                                                 }
+                                                                   errorHandler:^(NSError *error) {
                                                 STFail(@"Error occured when deleting.");
+                                                DONE(done);
                                             }];
-                                            
-                                            
                                         } onlineDiffWithCached:NULL errorHandler:^(NSError *error) {
                                             STFail(@"Error occured when checking.");
+                                            DONE(done);
                                         }];
-
-              
-              
-              
           } errorHandler:^(NSError *error) {
               STFail(@"Error occured when creating.");
+              DONE(done);
           }];
-    
-    
   
-        
+    WAIT_FOR_DONE(done);
 }
 
 - (void)tearDown
