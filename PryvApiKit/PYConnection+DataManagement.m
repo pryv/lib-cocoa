@@ -458,7 +458,8 @@
 {
     
     if (event.connection != nil) {
-        return errorHandler([NSError errorWithDomain:@"Cann create PYEvet with a known connection" code:500 userInfo:nil]);
+        return errorHandler([NSError errorWithDomain:@"Cann create PYEvent on API with an unknown connection"
+                                                code:500 userInfo:nil]);
     }
     
     event.connection = self;

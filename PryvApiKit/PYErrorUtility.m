@@ -86,7 +86,7 @@
     }
     
     
-    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:response.statusCode userInfo:userInfo] autorelease];
+    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:error.code userInfo:userInfo] autorelease];
 }
 
 + (NSError *)getErrorFromStringResponse:(NSData*)responseData error:(NSError *)error
@@ -108,7 +108,7 @@
     
     NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
     
-    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:response.statusCode userInfo:userInfo] autorelease];
+    return [[[NSError alloc] initWithDomain:PryvSDKDomain code:error.code userInfo:userInfo] autorelease];
 }
 
 + (NSString*) contentForRequest:(NSURLRequest *)request {
