@@ -10,6 +10,8 @@
 #import "PYConnection.h"
 #import "PYEventFilter.h"
 
+@class PYAttachment;
+
 @interface PYConnection (DataManagement)
 
 #pragma mark - Pryv API Streams
@@ -186,17 +188,17 @@
 /**
  Get attachment NSData for file name and event id
  */
-- (void)getAttachmentDataForFileName:(NSString *)fileName
-                             eventId:(NSString *)eventId
-                         requestType:(PYRequestType)reqType
-                      successHandler:(void (^) (NSData * filedata))success
-                        errorHandler:(void (^) (NSError *error))errorHandler;
+- (void)dataForAttachment:(PYAttachment *)attachment
+                  onEvent:(PYEvent *)event
+              requestType:(PYRequestType)reqType
+           successHandler:(void (^) (NSData * filedata))success
+             errorHandler:(void (^) (NSError *error))errorHandler;
 
 /**
  Get preview NSData (jpg image) for event id
  */
-- (void)getPreviewForEvent:(PYEvent *)event
-                      successHandler:(void (^) (NSData * filedata))success
+- (void)previewForEvent:(PYEvent *)event
+                      successHandler:(void (^) (NSData * content))success
                         errorHandler:(void (^) (NSError *error))errorHandler;
 
 

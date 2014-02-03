@@ -277,6 +277,7 @@ static BOOL s_requestedLoginView = NO;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                     NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                      [weakSelf handlePollSuccess:JSON];
                  } failure:^(NSError *error) {
                      [weakSelf handleFailure:error];
@@ -347,9 +348,9 @@ static BOOL s_requestedLoginView = NO;
     
 }
 
-- (void)handlePollSuccess:(id)JSON
+- (void)handlePollSuccess:(NSDictionary*) jsonDictionary
 {
-    NSDictionary *jsonDictionary = (NSDictionary *)JSON;
+
     
     // check status
     NSString *statusString = [jsonDictionary objectForKey:@"status"];
@@ -358,7 +359,7 @@ static BOOL s_requestedLoginView = NO;
         if (s_requestedLoginView) {
             s_requestedLoginView = NO;
             // -- open url only once !! -- //
-            assert([JSON objectForKey:@"url"]);
+            assert([jsonDictionary objectForKey:@"url"]);
             NSString *loginPageUrlString = [jsonDictionary objectForKey:@"url"];
             NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
             assert(loginPageURL);

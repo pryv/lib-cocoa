@@ -106,4 +106,8 @@
 - (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
                      errorHandler:(void(^)(NSError *error))errorHandler;
 
+
+
+
+
 @end

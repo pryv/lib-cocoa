@@ -39,6 +39,7 @@
 
     STAssertNil(event.connection, @"Event.connection is not nil.");
     
+    //-- Create event on server
     [self.connection createEvent:event
              requestType:PYRequestTypeAsync
           successHandler:^(NSString *newEventId, NSString *stoppedId) {
@@ -46,31 +47,43 @@
               STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
               createdEventId = [NSString stringWithString:newEventId];
               event.eventId = [NSString stringWithString:newEventId];
-          } errorHandler:^(NSError *error) {
               
+              
+              // --- check if this event is found online
+              __block BOOL foundEventOnServer;
+              [self.connection getEventsWithRequestType:PYRequestTypeAsync
+                                                 filter:nil
+                                        gotCachedEvents:NULL
+                                        gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                                            STAssertTrue(onlineEventList.count > 0, @"Some events are already created before running this test, error in geting online events list");
+                                            
+                                            for (PYEvent *eventTemp in onlineEventList) {
+                                                if ([eventTemp.eventId isEqualToString:createdEventId]) {
+                                                    foundEventOnServer = YES;
+                                                    break;
+                                                }
+                                            }
+                                            STAssertTrue(foundEventOnServer, @"Event hasn't found on server");
+                                            
+                                            //-- delete event found
+                                            [self.connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:NULL errorHandler:^(NSError *error) {
+                                                STFail(@"Error occured when deleting.");
+                                            }];
+                                            
+                                            
+                                        } onlineDiffWithCached:NULL errorHandler:^(NSError *error) {
+                                            STFail(@"Error occured when checking.");
+                                        }];
+
+              
+              
+              
+          } errorHandler:^(NSError *error) {
+              STFail(@"Error occured when creating.");
           }];
     
-    __block BOOL foundEventOnServer;
-    [self.connection getEventsWithRequestType:PYRequestTypeAsync
-                                       filter:nil
-                                     gotCachedEvents:NULL
-                                     gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                         STAssertTrue(onlineEventList.count > 0, @"Some events are already created before running this test, error in geting online events list");
-                                         
-                                         for (PYEvent *event in onlineEventList) {
-                                             if ([event.eventId isEqualToString:createdEventId]) {
-                                                 foundEventOnServer = YES;
-                                                 break;
-                                             }
-                                         }
-                                         STAssertTrue(foundEventOnServer, @"Event hasn't found on server");
-                                         
-                                     } onlineDiffWithCached:NULL errorHandler:^(NSError *error) {
-                                     }];
     
-    [self.connection trashOrDeleteEvent:event withRequestType:PYRequestTypeAsync successHandler:NULL errorHandler:^(NSError *error) {
-        STFail(@"Error occured when deleting.");
-    }];
+  
         
 }
 

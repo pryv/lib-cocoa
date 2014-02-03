@@ -33,9 +33,9 @@
  */
 - (NSData *)dataForKey:(NSString *)key;
 /**
- Remove event from disk for key
+ Remove an entity from disk for key
  */
-- (void)removeEventWithKey:(NSString *)key;
+- (void)removeEntityWithKey:(NSString *)key;
 /**
  Remove stream from disk for key
  */

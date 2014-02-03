@@ -37,31 +37,6 @@
                  @"id caching is unexpected, %@", self.connection.idCaching);
 }
 
-- (void)testGettingStreams
-{
-    
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
-     
-      gotCachedStreams:^(NSArray *cachedStreamsList) {
-        
-    } gotOnlineStreams:^(NSArray *onlineStreamList) {
-        
-        STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
-        
-        //NSLog(@"*********** %i", onlineStreamList.count);
-        for (PYStream *stream in onlineStreamList) {
-            //NSLog(@"*********** %@", stream.streamId);
-            //Nenad_test stream
-            //if ([stream.streamId isEqualToString:@"TVKoK036of"]) {
-            //    STAssertNotNil(stream, @"Error with creating stream object");
-            //}
-        }
-        
-    } errorHandler:^(NSError *error) {
-        
-    }];
-    
-}
 
 - (void)testSynchronizeTime
 {
@@ -77,6 +52,28 @@
     [PYTestsUtils execute:^{
         STFail(@"Cannot get ServerTime within 10 seconds");
     } ifNotTrue:&finished afterSeconds:10];
+    
+}
+
+
+- (void)testGettingStreams
+{
+    __block BOOL finished1 = NO;
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
+     
+                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
+                                     
+                                 } gotOnlineStreams:^(NSArray *onlineStreamList) {
+                                     
+                                     STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
+                                     
+                                     finished1 = YES;
+                                 } errorHandler:^(NSError *error) {
+                                     
+                                 }];
+    [PYTestsUtils execute:^{
+        STFail(@"Cannot get streams within 10 seconds");
+    } ifNotTrue:&finished1 afterSeconds:10];
     
 }
 

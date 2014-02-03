@@ -77,7 +77,8 @@
     
     
     
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamsList) {
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
+                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
         
     } gotOnlineStreams:^(NSArray *onlineStreamList) {
         STAssertTrue(onlineStreamList.count > 0, @"Didn't retrieve any stream online.");

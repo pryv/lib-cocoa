@@ -409,11 +409,12 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                 postData:postData
              attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                    
                      
                      NSDictionary* headerFields = [response allHeaderFields];
                      NSNumber* serverTime = nil;
                      if (headerFields != nil ) {
-                        [headerFields objectForKey:@"Server-Time"];
+                        serverTime = [NSNumber numberWithDouble:[[headerFields objectForKey:@"Server-Time"] doubleValue]] ;
                      }
                      
                      if (serverTime == nil) {
@@ -481,5 +482,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [PYUtils md5FromString:self.idURL],
             self.userID, self.apiDomain, self.apiExtraPath, self.accessToken];
 }
+
+
+
 
 @end

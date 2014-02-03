@@ -117,6 +117,8 @@
         [dic setObject:_modifiedEventPropertiesAndValues forKey:@"modifiedProperties"];
     }
     
+ 
+    
     [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
     
     return [dic autorelease];
@@ -159,6 +161,7 @@
     if (_time > 0) {
         [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
     }
+    
     
     return [dic autorelease];
     
@@ -221,15 +224,6 @@
     return self;
 }
 
-- (void)preview:(void (^) (UIImage *img))previewImage failure:(void(^) (NSError *error))failure {
-    if (! self.connection) {
-        if (failure) failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);
-        return;
-    }
-    [self.connection getPreviewForEvent:self successHandler:^(NSData *filedata) {
-         previewImage([UIImage imageWithData:filedata]);
-    } errorHandler:failure];
-}
 
 - (void)addAttachment:(PYAttachment *)attachment
 {

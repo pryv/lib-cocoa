@@ -12,6 +12,7 @@
 
 // Model
 #import <PryvApiKit/PYEvent.h>
+#import <PryvApiKit/PYEvent+Utils.h>
 #import <PryvApiKit/PYEventFilter.h>
 #import <PryvApiKit/PYConnection.h>
 #import <PryvApiKit/PYStream.h>

@@ -75,7 +75,7 @@
             
             if ([connection.cache isDataCachedForKey:attachmentDataKey]) {
                 NSData *fileDataFromCache = [connection.cache dataForKey:attachmentDataKey];
-                attachment.fileData = fileDataFromCache;
+                [attachment setFileData:fileDataFromCache];
             }
             [attachmentObjects addObject:attachment];
         }];

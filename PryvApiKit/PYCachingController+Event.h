@@ -9,7 +9,7 @@
 #import "PYClient.h"
 #import "PYCachingController.h"
 
-@class PYEvent, PYConnection;
+@class PYEvent, PYConnection, PYAttachment;
 
 @interface PYCachingController (Event)
 
@@ -45,6 +45,23 @@
 - (void)findAndCacheEventWithServerId:(NSString *)eventId
                       usingConnection:(PYConnection *)connection
                           requestType:(PYRequestType)reqType;
+
+
+- (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event;
+- (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event;
+
+
+
+/**
+ get cachedPreview (if any)
+ */
+- (NSData *)previewForEvent:(PYEvent *)event;
+
+/**
+ save preview for this event
+ */
+- (void)savePreview:(NSData *)fileData forEvent:(PYEvent *)event;
+
 
 
 @end

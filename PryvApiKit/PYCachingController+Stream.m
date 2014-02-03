@@ -58,7 +58,7 @@
 - (void)cacheStream:(PYStream *)stream
 {
     NSDictionary *streamDic = [stream cachingDictionary];
-//    [self cacheEvent:eventDic WithKey:[self getKeyForEvent:event]];
+//    [self cacheEvent:eventDic WithKey:[self keyForEvent:event]];
     [self cacheStream:streamDic withKey:[self keyForStream:stream]];
 }
 
