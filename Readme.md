@@ -29,7 +29,7 @@ The first one is needed whenever you need to (re-)log a user. Notice in the seco
 	    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 	}
 	
-Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborded:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
+Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborted:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
 
 ## LibPryvApiKit.a
 This is a static library to be used for iOS. Usage is pretty straightforward. First of all, you need to obtain access token. To achieve this, you should set up a permission array in which you specify what streams you need and what access for those streams you ask for, like this :
@@ -53,7 +53,7 @@ The first line is needed whenever you need to (re-)log a user. Here you are send
 	    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 	}
 	
-Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborded:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
+Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborted:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
 
 
 
