@@ -24,10 +24,16 @@
 
 /**
  Get all PYEvent objects from disk
+
+ Attention! connection is not set on Events, caller of this method
+ shoul set the connection property on all events
  */
 - (NSArray *)eventsFromCache;
 /**
  Get PYEvent object from disk with key(eventId)
+
+ Attention! connection is not set on Events, caller of this method
+ shoul set the connection property on all events
  */
 - (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId;
 

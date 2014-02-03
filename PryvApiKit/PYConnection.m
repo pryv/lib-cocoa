@@ -60,7 +60,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [Reachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
-        self.cache = [[[PYCachingController alloc] initWithConnection:self] autorelease];
+        self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
         [self pyAccessStatus:self.connectionReachability];
         [self initDeserializeNonSyncList];
     }
@@ -126,6 +126,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (void)initDeserializeNonSyncList
 {
     NSArray *allEventsFromCache = [self.cache eventsFromCache];
+
+    // set connection property on events
+    [allEventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
     
     for (PYEvent *event in allEventsFromCache) {
         if (event.notSyncAdd || event.notSyncModify || event.notSyncTrashOrDelete) {

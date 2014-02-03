@@ -11,29 +11,25 @@
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
 #import "PYStream.h"
-#import "PYConnection.h"
 #import "PYStream+JSON.h"
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
-@property (nonatomic, retain) PYConnection *connection;
 @end
 
 @implementation PYCachingController
 
 @synthesize localDataPath = _localDataPath;
-@synthesize connection = _connection;
 
-- (id)initWithConnection:(PYConnection*)connection
+- (id)initWithCachingId:(NSString *)connectionCachingId
 {
     self = [super init];
 	if (self) {
-        self.connection = connection;
 		NSError *error = nil;
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:
                               [NSString
-                                stringWithFormat:@"cache_%@", connection.idCaching]];
+                                stringWithFormat:@"cache_%@", connectionCachingId]];
                               
         NSLog(@"self.localDataPath %@", self.localDataPath);
 		
@@ -113,7 +109,7 @@
         NSData *eventData = [self dataForKey:eventCachedName];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
         [arrayOFCachedEvents
-         addObject:[PYEvent eventFromDictionary:eventDic onConnection:self.connection]];
+         addObject:[PYEvent eventFromDictionary:eventDic]];
     }
     
     return [arrayOFCachedEvents autorelease];
@@ -124,7 +120,7 @@
     if ([self isDataCachedForKey:key]) {
         NSData *eventData = [self dataForKey:key];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        return [PYEvent eventFromDictionary:eventDic onConnection:self.connection];
+        return [PYEvent eventFromDictionary:eventDic];
     }
     
     return nil;
@@ -161,8 +157,7 @@
 {
     [_localDataPath release];
     _localDataPath = nil;
-    [_connection release];
-    _connection = nil;
+    
     [super dealloc];
 }
 

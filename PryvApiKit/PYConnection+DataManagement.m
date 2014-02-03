@@ -410,13 +410,17 @@
                     errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
+
+    NSArray *eventsFromCache = [self.cache eventsFromCache];
+    // set connection property on events
+    [eventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
+
     
-    NSArray* filteredCachedEventList = [PYEventFilterUtility
-                                        filterEventsList:[self.cache eventsFromCache]
+    NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                    withFilter:filter];
     
     if (cachedEvents) {
-        if ([self.cache eventsFromCache].count > 0) {
+        if ([eventsFromCache count] > 0) {
             //if there are cached events return it, when get response return in onlineList
             cachedEvents(filteredCachedEventList);
         }
@@ -623,6 +627,7 @@
                          
                          //Get current event with id from cache
                          PYEvent *currentEventFromCache = [self.cache eventFromCacheWithEventId:eventObject.eventId];
+                         currentEventFromCache.connection = self;
                          
                          NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                          currentEventFromCache.notSyncModify = YES;

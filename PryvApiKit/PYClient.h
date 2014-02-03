@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CWLSynthesizeSingleton.h"
 
 
 typedef enum {
