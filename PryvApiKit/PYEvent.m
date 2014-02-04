@@ -13,6 +13,8 @@
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
+#import "PYConnection.h"
+#import "PYCachingController+Event.h"
 
 @interface PYEvent ()
 {
@@ -20,6 +22,14 @@
 }
 
 @property (nonatomic) NSTimeInterval time;
+
++ (NSString *)createClientId;
+
+/**
+ @property modifiedEventPropertiesToBeSync 
+ - NSMutableSet that list event properties should be modified on server during the synching
+ - Those values are set when updating fails by comparing values from the cache
+ */
 
 @end
 
@@ -38,12 +48,7 @@
 @synthesize trashed = _trashed;
 @synthesize modified = _modified;
 @synthesize synchedAt = _synchedAt;
-@synthesize hasTmpId = _hasTmpId;
-@synthesize notSyncAdd = _notSyncAdd;
-@synthesize notSyncModify = _notSyncModify;
-@synthesize notSyncTrashOrDelete = _notSyncTrashOrDelete;
-@synthesize isSyncTriedNow = _isSyncTriedNow;
-@synthesize modifiedEventPropertiesAndValues = _modifiedEventPropertiesAndValues;
+@synthesize modifiedEventPropertiesToBeSync = _modifiedEventPropertiesToBeSync;
 @synthesize connection = _connection;
 
 + (NSString *)createClientId
@@ -53,6 +58,27 @@
     CFRelease(uuidRef);
     return [(NSString *)uuidStringRef autorelease];
 }
+
+- (BOOL) hasTmpId {
+    return (self.eventId == nil || [self.eventId isEqualToString:self.clientId]);
+}
+
+
+/**
+ * toBeSync - return True if event has to be Synched
+ * True if is known by cache (i.e. has been created) AND 
+ *  (hasTmpId <-- to be created OR modifiedPropertiesAndValues.count > 0 to be updated)
+ */
+- (BOOL) toBeSync {
+   return ([self toBeSyncSkipCacheTest] && [self.connection.cache eventIsKnownByCache:self]);
+}
+
+- (BOOL) toBeSyncSkipCacheTest {
+    return (self.hasTmpId ||
+             (self.modifiedEventPropertiesToBeSync != nil &&
+              self.modifiedEventPropertiesToBeSync.count > 0));
+}
+
 
 - (NSDictionary *)cachingDictionary
 {
@@ -118,12 +144,9 @@
         [dic setObject:attachments forKey:@"attachments"];
     }
     
-    [dic setObject:[NSNumber numberWithBool:_hasTmpId] forKey:@"hasTmpId"];
-    [dic setObject:[NSNumber numberWithBool:_notSyncAdd] forKey:@"notSyncAdd"];
-    [dic setObject:[NSNumber numberWithBool:_notSyncModify] forKey:@"notSyncModify"];
-    [dic setObject:[NSNumber numberWithBool:_notSyncTrashOrDelete] forKey:@"notSyncTrashOrDelete"];
-    if (_modifiedEventPropertiesAndValues) {
-        [dic setObject:_modifiedEventPropertiesAndValues forKey:@"modifiedProperties"];
+    
+    if (_modifiedEventPropertiesToBeSync) {
+        [dic setObject:_modifiedEventPropertiesToBeSync forKey:@"modifiedProperties"];
     }
     
     [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
@@ -218,7 +241,7 @@
     [_attachments release];
     [_clientData release];
     [_modified release];
-    [_modifiedEventPropertiesAndValues release];
+    [_modifiedEventPropertiesToBeSync release];
     [super dealloc];
 }
 
@@ -227,7 +250,7 @@
     self = [super init];
     if (self) {
         #warning fixme
-        self.clientId = [PYEvent createClientId];
+        _clientId = [PYEvent createClientId]; // should we retain?
         self.time = PYEvent_UNDEFINED_TIME;
         self.duration = PYEvent_UNDEFINED_DURATION;
     }
@@ -236,7 +259,6 @@
 }
 
 #pragma mark - date
-
 
 
 - (NSDate*)eventDate {

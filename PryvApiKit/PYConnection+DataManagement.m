@@ -10,6 +10,7 @@
 #import "PYStream+JSON.h"
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"
+#import "PYEvent+Sync.h"
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
@@ -40,16 +41,16 @@
             onlineStreams(streamsList);
         }
     }
-                       errorHandler:errorHandler
-                 shouldSyncAndCache:YES];
+                             errorHandler:errorHandler
+                       shouldSyncAndCache:YES];
 }
 
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                     filterParams:(NSDictionary *)filter
-                   successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
-                     errorHandler:(void (^) (NSError *error))errorHandler
-               shouldSyncAndCache:(BOOL)syncAndCache
+                           filterParams:(NSDictionary *)filter
+                         successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
+                           errorHandler:(void (^) (NSError *error))errorHandler
+                     shouldSyncAndCache:(BOOL)syncAndCache
 {
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
@@ -84,7 +85,7 @@
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      onlineStreamsList(streamList);
-
+                     
                  }
              } failure:^(NSError *error) {
                  if (errorHandler) {
@@ -97,9 +98,9 @@
 
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                           filter:(NSDictionary*)filterDic
-                   successHandler:(void (^) (NSArray *streamsList))onlineStreamList
-                     errorHandler:(void (^)(NSError *error))errorHandler
+                                 filter:(NSDictionary*)filterDic
+                         successHandler:(void (^) (NSArray *streamsList))onlineStreamList
+                           errorHandler:(void (^)(NSError *error))errorHandler
 {
     //This method should retrieve always online streams and need to cache (sync) online streams
     
@@ -109,7 +110,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NSArray
+                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NSArray
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for(NSDictionary *streamDictionary in JSON){
@@ -141,7 +142,7 @@
             postData:[stream dictionary]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary"); // Fail if not an NotNSDictionary
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary"); // Fail if not an NotNSDictionary
                  
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
                  if (successHandler) {
@@ -327,6 +328,8 @@
 
 #pragma mark - Pryv API Events
 
+
+
 - (void)getOnlineEventWithId:(NSString *)eventId
                  requestType:(PYRequestType)reqType
               successHandler:(void (^) (PYEvent *event))onlineEvent
@@ -404,18 +407,18 @@
 
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                      filter:(PYEventFilter *)filter
+                          filter:(PYEventFilter *)filter
                  gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
                  gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
-                  onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+            onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
-
+    
     NSArray *eventsFromCache = [self.cache eventsFromCache];
     // set connection property on events
     [eventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
-
+    
     
     NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                    withFilter:filter];
@@ -470,7 +473,6 @@
     
     event.connection = self;
     
-    //    event.timeIntervalWhenCreationTried = [[NSDate date] timeIntervalSince1970];
     [self apiRequest:kROUTE_EVENTS
          requestType:reqType
               method:PYRequestMethodPOST
@@ -482,14 +484,10 @@
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
-                 //The following method only cached the event with id gotten from server. Let's try
-                 //to cache it directly here and see what happens.
-                 //Cache particular event in cache
-                 //                 [self.cache getAndCacheEventWithServerId:createdEventId
-                 //                                                       usingConnection:self
-                 //                                                           requestType:reqType];
-                 //Fix maybe ?
+        
+                 event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
+                 [event clearModifiedProperties]; // clear modified properties
                  [self.cache cacheEvent:event];
                  
                  if (successHandler) {
@@ -497,45 +495,33 @@
                  }
                  
              } failure:^(NSError *error) {
-                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
-                     
-                     if (event.isSyncTriedNow == NO) {
-                         //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
-                         event.notSyncAdd = YES;
-                         
-                         if ([event eventDate] == nil) {
-                             [event setEventDate:[NSDate date]]; // now
-                         }
-                        
-                         event.modified = [NSDate date];
-                         //When we try to create event and we came here it have tmpId
-                         //event.hasTmpId = YES;
-                         //this is random id
-                         event.eventId = event.clientId;
-                         //return that created id so it can work offline. Event will be cached when added to unsync list
-                         if (event.attachments.count > 0) {
-                             for (PYAttachment *attachment in event.attachments) {
-                                 //                                     attachment.mimeType = @"mimeType";
-                                 attachment.size = [NSNumber numberWithInt:attachment.fileData.length];
-                             }
-                         }
-                         [self.cache cacheEvent:event];
-                         [self addEvent:event toUnsyncList:error];
-                         
-                         successHandler (event.eventId, @"");
-                         
-                     }else{
-                         NSLog(@"Event wants to be synchronized on server from unsync list but there is no internet");
-                     }
-                     
-                     
-                 }else{
-                     if (errorHandler) {
-                         errorHandler (error);
-                     }
+                 if (event.isSyncTriedNow == YES) {
+                     NSLog(@"Event wants to be synchronized on server from unsync list but there is no internet");
+                     return ;
                  }
                  
-             }];
+                 //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
+                 
+                 if ([event eventDate] == nil) {
+                     [event setEventDate:[NSDate date]]; // now
+                 }
+                 
+                 event.modified = [NSDate date];
+                 //When we try to create event and we came here it have tmpId
+                 
+                 //return that created id so it can work offline. Event will be cached when added to unsync list
+                 if (event.attachments.count > 0) {
+                     for (PYAttachment *attachment in event.attachments) {
+                         //  attachment.mimeType = @"mimeType";
+                         attachment.size = [NSNumber numberWithInt:attachment.fileData.length];
+                     }
+                 }
+                 [self.cache cacheEvent:event];
+                 
+                 successHandler (nil, @"");
+             }
+     
+     ];
 }
 
 - (void)trashOrDeleteEvent:(PYEvent *)event
@@ -560,7 +546,6 @@
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (event.isSyncTriedNow == NO) {
                          
-                         event.notSyncTrashOrDelete = YES;
                          event.modified = [NSDate date];
                          
                          if (event.trashed == NO) {
@@ -569,7 +554,6 @@
                          }else{
                              //if event has trashed = yes flag it needs to be deleted from cache
                              [self.cache removeEvent:event];
-                             [self.eventsNotSync removeObject:event];
                          }
                          
                          
@@ -597,7 +581,7 @@
             postData:[eventObject dictionary]
          attachments:eventObject.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -606,7 +590,7 @@
                  //If eventId isn't temporary cache event (it will be overwritten in cache)
                  
                  eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
-                 
+                 [eventObject clearModifiedProperties];
                  [self.cache cacheEvent:eventObject];
                  
                  
@@ -625,23 +609,15 @@
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      
                      if (eventObject.isSyncTriedNow == NO) {
-                         
                          //Get current event with id from cache
-                         PYEvent *currentEventFromCache = [self.cache eventFromCacheWithEventId:eventObject.eventId];
+                         PYEvent *currentEventFromCache
+                         = [self.cache eventFromCacheWithEventId:eventObject.eventId];
                          currentEventFromCache.connection = self;
-                         
-                         NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
-                         currentEventFromCache.notSyncModify = YES;
                          currentEventFromCache.modified = [NSDate date];
                          
-                         NSDictionary *modifiedPropertiesDic = [eventObject dictionary];
-                         [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
-                             [currentEventFromCache setValue:value forKey:property];
-                         }];
+                         [eventObject compareAndSetModifiedPropertiesFrom:currentEventFromCache];
                          
-                         //We have to know what properties are modified in order to make succesfull request
-                         currentEventFromCache.modifiedEventPropertiesAndValues = [eventObject dictionary];
-                         //We must have cached modified properties of event in cache
+                         
                          [self.cache cacheEvent:currentEventFromCache];
                          
                          if (successHandler) {
@@ -673,7 +649,7 @@
             postData:[event dictionary]
          attachments:event.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *startedEventId = [JSON objectForKey:@"id"];
                  
@@ -712,7 +688,7 @@
             postData:[postData autorelease]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  
                  NSString *stoppedEventId = [JSON objectForKey:@"stoppedId"];
                  
@@ -781,12 +757,12 @@
     
     NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, event.eventId, attachment.fileName];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-
-
+    
+    
     NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, urlPath];
     
     NSURL *url = [NSURL URLWithString:fullPath];
-
+    
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
     [request setValue:self.accessToken forHTTPHeaderField:@"Authorization"];
     [request setURL:url];
@@ -805,8 +781,8 @@
 }
 
 - (void)previewForEvent:(PYEvent *)event
-                      successHandler:(void (^) (NSData * content))success
-                        errorHandler:(void (^) (NSError *error))errorHandler
+         successHandler:(void (^) (NSData * content))success
+           errorHandler:(void (^) (NSError *error))errorHandler
 {
     
     

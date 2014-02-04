@@ -66,6 +66,7 @@
     return nil;
 }
 
+
 - (NSArray *)getAllFilesWithPredicateFormat:(NSString *)format
 {
     NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localDataPath error:nil];

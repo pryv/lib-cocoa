@@ -41,7 +41,7 @@
 
 
 - (NSString *)keyForEvent:(PYEvent *)event {
-    return [self keyForEventId:event.eventId];
+    return [self keyForEventId:event.clientId];
 }
 
 - (NSString *)keyForEventId:(NSString *)eventId {
@@ -57,7 +57,11 @@
 - (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId
 {
     return [self eventWithKey:[self keyForEventId:eventId]];
+}
 
+- (BOOL)eventIsKnownByCache:(PYEvent *)event
+{
+    return [self isDataCachedForKey:[self keyForEvent:event]];
 }
 
 
@@ -77,7 +81,6 @@
 - (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
     [self cacheData:attachment.fileData  withKey:[self keyForAttachment:attachment onEvent:event]];
 }
-
 
 
 #pragma mark - previews

@@ -14,6 +14,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConnection.h"
 #import "PYStream+JSON.h"
 #import "PYEvent.h"
+#import "PYEvent+Sync.h"
 #import "PYAttachment.h"
 #import "PYConnection+DataManagement.h"
 #import "PYCachingController.h"
@@ -41,7 +42,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize apiExtraPath = _apiExtraPath;
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize connectionReachability = _connectionReachability;
-@synthesize eventsNotSync = _eventsNotSync;
 @synthesize streamsNotSync = _streamsNotSync;
 @synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
@@ -79,8 +79,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     _apiScheme = nil;
     [_connectionReachability release];
     _connectionReachability = nil;
-    [_eventsNotSync release];
-    _eventsNotSync = nil;
     [_streamsNotSync release];
     _streamsNotSync = nil;
     [_cache release];
@@ -96,17 +94,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return _online;
 }
 
-- (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error
-{
-    /*When we deserialize unsync list (when app starts) we will know what events are not sync with these informations:
-     They have one of these flags or combination of them
-     notSyncAdd
-     notSyncModify
-     notSyncTrashOrDelete
-     */
-    [self.eventsNotSync addObject:event];
-    
-}
 
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
 {
@@ -119,22 +106,34 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
+- (NSArray*)allEventsFromCache
+{
+    NSArray *allEventsFromCache = [self.cache eventsFromCache];
+    // set connection property on events
+    [allEventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
+    return allEventsFromCache;
+}
+
+- (NSArray*)eventsNotSync
+{
+    NSMutableArray* result = [[NSMutableArray alloc] init];
+    PYEvent* event;
+    for (event in [self allEventsFromCache]) {
+        if ([event toBeSyncSkipCacheTest]) {
+            [result addObject:event];
+        }
+    }
+    return [result autorelease];
+}
+
 
 /**
  * Load event form cache.. Part of this init
  */
 - (void)setupDeserializeNonSyncList
 {
-    NSArray *allEventsFromCache = [self.cache eventsFromCache];
-
-    // set connection property on events
-    [allEventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
     
-    for (PYEvent *event in allEventsFromCache) {
-        if (event.notSyncAdd || event.notSyncModify || event.notSyncTrashOrDelete) {
-            [self.eventsNotSync addObject:event];
-        }
-    }
+    
     
     NSArray *nonSyncStreamsArray = [self.cache streamsFromCache];
     
@@ -147,14 +146,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
-- (NSMutableSet *)eventsNotSync
-{
-    if (!_eventsNotSync) {
-        _eventsNotSync = [[NSMutableSet alloc] init];
-    }
-    
-    return _eventsNotSync;
-}
+
 
 - (NSMutableSet *)streamsNotSync
 {
@@ -239,97 +231,45 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)syncNotSynchedEventsIfAny
 {
-    NSMutableArray *nonSyncEvents = [[[NSMutableArray alloc] init] autorelease];
-    [nonSyncEvents addObjectsFromArray:[self.eventsNotSync allObjects]];
-    NSLog(@"Not syncEvents: %@",nonSyncEvents);
-    for (PYEvent *event in nonSyncEvents) {
+    for (PYEvent *event in self.eventsNotSync) {
         
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;
         
-        if (event.hasTmpId == YES) {
-            
-            if (event.notSyncModify || event.notSyncTrashOrDelete) {
-                NSLog(@"event has tmpId and it's mofified or trashed do nothing. If event doesn't have server id it needs to be added to server and that is all what is matter. Modified or trashed or deleted object will update PYEvent object in cache and in unsyncList");
-                
-            }
-            NSLog(@"event has tmpId and it's added");
-            if (event.notSyncAdd) {
-                NSString *tempId = [event.eventId copy];
-                event.eventId = nil;
-                NSLog(@"%@",event);
-                [self createEvent:event
-                      requestType:PYRequestTypeAsync
-                   successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                       
-                       //If succedded remove from unsyncSet and add call syncEventWithServer(PTEventFilterUtitliy)
-                       //In that method we were search for event with <newEventId> and we should done mapping between server and temp id in cache
-                       event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                       event.eventId = tempId;
-                       event.notSyncAdd = NO;
-                       event.hasTmpId = NO;
-                       
-                       [self.eventsNotSync enumerateObjectsUsingBlock:^(PYEvent *obj, BOOL *stop) {
-                           if([obj.eventId isEqualToString:event.eventId]) // || obj.time == event.time)
-                           {
-                               [self.eventsNotSync removeObject:obj];
-                               *stop = YES;
-                           }
-                       }];
-                       
-                       //We have success here. Event is cached in createEvent:requestType: method, remove old event with tmpId from cache
-                       //He will always have tmpId here but just in case for testing (defensive programing)
-                       [self.cache removeEvent:event];
-                       
-                   } errorHandler:^(NSError *error) {
-                       //reset flag if fail, very IMPORTANT
-                       event.isSyncTriedNow = NO;
-                       event.eventId = tempId;
-                       NSLog(@"SYNC error: creating event failed");
-                       NSLog(@"%@",error);
-                   }];
-            }
-            
-        }else{
+        
+        if ([event toBeDeleteOnSync]) {
+            [self trashOrDeleteEvent:event
+                     withRequestType:PYRequestTypeAsync
+                      successHandler:^{
+                          event.isSyncTriedNow = NO;
+                      } errorHandler:^(NSError *error) {
+                          event.isSyncTriedNow = NO;
+                      }];
+        } else if (event.hasTmpId) { // create
+            [self createEvent:event
+                  requestType:PYRequestTypeAsync
+               successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                   event.isSyncTriedNow = NO;
+                   
+               } errorHandler:^(NSError *error) {
+                   //reset flag if fail, very IMPORTANT
+                   event.isSyncTriedNow = NO;
+                   NSLog(@"SYNC error: creating event failed");
+                   NSLog(@"%@",error);
+               }];
+        } else { // update
             NSLog(@"In this case event has server id");
-            
-            if (event.notSyncModify) {
-                NSLog(@"for modifified unsync events with serverId we have to provide only modified values, not full event object");
-                
-                NSDictionary *modifiedPropertiesDic = event.modifiedEventPropertiesAndValues;
-                PYEvent *modifiedEvent = [[PYEvent alloc] init];
-                modifiedEvent.isSyncTriedNow = YES;
-                
-                [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
-                    [modifiedEvent setValue:value forKey:property];
-                }];
-                
-                [self setModifiedEventAttributesObject:modifiedEvent
-                                        successHandler:^(NSString *stoppedId) {
-                                            
-                                            //We have success here. Event is cached in setModifiedEventAttributesObject:forEventId method
-                                            
-                                            event.synchedAt = [[NSDate date] timeIntervalSince1970];
-                                            [self.eventsNotSync removeObject:event];
-                                            
-                                        } errorHandler:^(NSError *error) {
-                                            modifiedEvent.isSyncTriedNow = NO;
-                                            event.isSyncTriedNow = NO;
-                                            
-                                        }];
-            }
-            
-            if (event.notSyncTrashOrDelete) {
-                [self trashOrDeleteEvent:event
-                         withRequestType:PYRequestTypeAsync
-                          successHandler:^{
-                              
-                          } errorHandler:^(NSError *error) {
-                              event.isSyncTriedNow = NO;
-                          }];
-            }
+            [self setModifiedEventAttributesObject:event
+                                    successHandler:^(NSString *stoppedId) {
+                                        event.isSyncTriedNow = NO;
+                                        
+                                    } errorHandler:^(NSError *error) {
+                                        event.isSyncTriedNow = NO;
+                                        
+                                    }];
         }
-        //}
+        
+        
     }
 }
 
@@ -413,19 +353,19 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     NSString* fullPath = [NSString stringWithFormat:@"%@%@",[self apiBaseUrl],path];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
-   [PYClient apiRequest:fullPath
+    [PYClient apiRequest:fullPath
                  headers:headers
              requestType:reqType
                   method:method
                 postData:postData
              attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                    
+                     
                      
                      NSDictionary* headerFields = [response allHeaderFields];
                      NSNumber* serverTime = nil;
                      if (headerFields != nil ) {
-                        serverTime = [NSNumber numberWithDouble:[[headerFields objectForKey:@"Server-Time"] doubleValue]] ;
+                         serverTime = [NSNumber numberWithDouble:[[headerFields objectForKey:@"Server-Time"] doubleValue]] ;
                      }
                      
                      if (serverTime == nil) {
@@ -434,16 +374,16 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                          
                          /*
                           NSDictionary *errorInfoDic = @{ @"message" : @"Error cannot find Server-Time in headers"};
-                       
-                         NSError *errorToReturn =
-                         [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
-                         failureHandler(errorToReturn);
-                         */
+                          
+                          NSError *errorToReturn =
+                          [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
+                          failureHandler(errorToReturn);
+                          */
                      } else {
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
-
-                        
+                         
+                         
                      }
                      
                      if (successHandler) {
@@ -483,12 +423,12 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (NSString*) idURL
 {
-  return [NSString stringWithFormat:@"%@?auth=%@", [self apiBaseUrl], self.accessToken];
+    return [NSString stringWithFormat:@"%@?auth=%@", [self apiBaseUrl], self.accessToken];
 }
 
 - (NSString*) idCaching
 {
-   return [NSString
+    return [NSString
             stringWithFormat:@"%@_%@%@_%@_%@",
             [PYUtils md5FromString:self.idURL],
             self.userID, self.apiDomain, self.apiExtraPath, self.accessToken];

@@ -27,7 +27,6 @@
     
     Reachability *_connectionReachability;
     BOOL _online;
-    NSMutableSet *_eventsNotSync;
     NSMutableSet *_streamsNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
@@ -49,7 +48,6 @@
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;
-@property (nonatomic, retain) NSMutableSet *eventsNotSync;
 @property (nonatomic, retain) NSMutableSet *streamsNotSync;
 @property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
 @property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
@@ -66,10 +64,12 @@
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 - (NSString *)apiBaseUrl;
+
 /**
- Add event to unsync list. If app tryed to create, modify or trash event and it fails due to no internet access it will be added to unsync list
+ * Get all event known by cache
  */
-- (void)addEvent:(PYEvent *)event toUnsyncList:(NSError *)error;
+- (NSArray*)allEventsFromCache;
+
 /**
  Add stream to unsync list. If app tryed to create, modify or trash stream and it fails due to no internet access it will be added to unsync list
  */

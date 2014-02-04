@@ -38,6 +38,11 @@
 - (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId;
 
 /**
+ check if the event is known by cache
+ */
+- (BOOL)eventIsKnownByCache:(PYEvent *)event;
+
+/**
  Utility method - Get key for event
  */
 - (NSString *)keyForEvent:(PYEvent *)event;
