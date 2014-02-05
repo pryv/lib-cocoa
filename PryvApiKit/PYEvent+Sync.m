@@ -22,7 +22,7 @@ NSString* const kPYEventDeleteOnSync = @"SYNC_TO_BE_DELETED";
     self.modifiedEventPropertiesToBeSync = nil;
 }
 
-- (void) compareAndSetModifiedPropertiesFrom:(PYEvent*) event {
+- (void) compareAndSetModifiedPropertiesFromCache {
     // for now we set all properties but we should check properties
     
     /**
@@ -36,6 +36,7 @@ NSString* const kPYEventDeleteOnSync = @"SYNC_TO_BE_DELETED";
      currentEventFromCache.modifiedEventPropertiesToBeSync = [eventObject dictionary];
      //We must have cached modified properties of event in cache
      **/
+    [self addPropertiesToSync:kPYEventSyncAll];
 }
 
 - (void) addPropertiesToSync:(NSString*) propertyName

@@ -17,10 +17,21 @@
 - (NSString *)keyForPreviewOnEvent:(PYEvent *)event;
 - (NSString *)keyForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event ;
 - (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key;
+- (NSString *)keyForNotYetCreatedEvent:(PYEvent *)event;
+- (NSString *)keyForEventId:(NSString *)eventId ;
 @end
 
 @implementation PYCachingController (Event)
 
+
+
+- (void)cacheEvent:(PYEvent *)event andCleanTempData:(BOOL)cleanTemp
+{
+    if (cleanTemp) {
+       [self removeEntityWithKey:[self keyForNotYetCreatedEvent:event]];
+    }
+    [self cacheEvent:event];
+}
 
 - (void)cacheEvent:(PYEvent *)event
 {
@@ -41,6 +52,19 @@
 
 
 - (NSString *)keyForEvent:(PYEvent *)event {
+    if (event.hasTmpId) {
+        return [self keyForNotYetCreatedEvent:event];
+    }
+    
+    return [self keyForEventId:event.eventId];
+}
+
+#pragma mark - previews
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
+
+- (NSString *)keyForNotYetCreatedEvent:(PYEvent *)event {
     return [self keyForEventId:event.clientId];
 }
 
@@ -48,15 +72,11 @@
     return [NSString stringWithFormat:@"event_%@", eventId];
 }
 
+#pragma clang diagnostic pop
 
 - (NSArray *)eventsFromCache
 {
     return [self allEventsFromCache];
-}
-
-- (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId
-{
-    return [self eventWithKey:[self keyForEventId:eventId]];
 }
 
 - (BOOL)eventIsKnownByCache:(PYEvent *)event

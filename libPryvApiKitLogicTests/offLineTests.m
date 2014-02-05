@@ -8,6 +8,7 @@
 
 #import "offLineTests.h"
 #import "PYTestsUtils.h"
+#import "PYCachingController+Event.h"
 
 @interface offLineTests ()
 {
@@ -46,26 +47,26 @@
     event.type = @"note/txt";
     
     STAssertNil(event.connection, @"Event.connection is not nil.");
-    STAssertTrue(event.hasTmpId);
-    
+    STAssertTrue(event.hasTmpId, @"event must have a temp id");
+    STAssertFalse([event.connection.cache eventIsKnownByCache:event], @"event should not be known by cache");
     
     //-- Create event on server
     __block BOOL step_1_CreateEvent = NO;
-    __block NSString *createdEventId;
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
                   successHandler:^(NSString *newEventId, NSString *stoppedId) {
-                      
-                      createdEventId = newEventId;
-                      
-                      event.toBeSync;
+                      STAssertNil(newEventId, @"We shouldn't get a new id");
+                      STAssertTrue(event.hasTmpId, @"event must have a temp id");
+                      STAssertTrue([event.connection.cache eventIsKnownByCache:event], @"event should be known by cache");
+                      STAssertTrue(event.toBeSync, @"event should be known as to be synched");
                       
                       step_1_CreateEvent = YES;
                   }
                     errorHandler:^(NSError *error) {
                       STFail(@"Error occured when creating event: %@", error);
                   }];
-
+    
+    
 
     
     [PYTestsUtils waitForBOOL:&step_1_CreateEvent forSeconds:10];
@@ -77,7 +78,7 @@
     
     
     
-    self.connection.apiPort = originalApiPort;
+    self.connection.apiPort = originalApiPort; // set conn onnLine
     
     
 }

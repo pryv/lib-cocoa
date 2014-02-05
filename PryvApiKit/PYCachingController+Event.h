@@ -17,6 +17,12 @@
  Cache PYEvent object on disk
  */
 - (void)cacheEvent:(PYEvent *)event;
+
+/**
+ Cache PYEvent object on disk and eventually remove temporary data
+ */
+- (void)cacheEvent:(PYEvent *)event andCleanTempData:(BOOL)cleanTemp;
+
 /**
  Remove PYEvent object from disk
  */
@@ -29,13 +35,7 @@
  shoul set the connection property on all events
  */
 - (NSArray *)eventsFromCache;
-/**
- Get PYEvent object from disk with key(eventId)
 
- Attention! connection is not set on Events, caller of this method
- shoul set the connection property on all events
- */
-- (PYEvent *)eventFromCacheWithEventId:(NSString *)eventId;
 
 /**
  check if the event is known by cache
@@ -46,8 +46,6 @@
  Utility method - Get key for event
  */
 - (NSString *)keyForEvent:(PYEvent *)event;
-- (NSString *)keyForEventId:(NSString *)eventId;
-
 
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event;

@@ -372,7 +372,8 @@
      This method must be SYNC not ASYNC and this method sync events with server and cache them
      */
     if (syncAndCache == YES) {
-        [self syncNotSynchedEventsIfAny];
+# warning - change logic
+      //  [self syncNotSynchedEventsIfAny];
     }
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
          requestType:reqType
@@ -466,7 +467,7 @@
        errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    if (event.connection != nil) {
+    if (event.connection == nil) {
         return errorHandler([NSError errorWithDomain:@"Cann create PYEvent on API with an unknown connection"
                                                 code:500 userInfo:nil]);
     }
@@ -484,11 +485,11 @@
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
-        
+                 
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
                  [event clearModifiedProperties]; // clear modified properties
-                 [self.cache cacheEvent:event];
+                 [self.cache cacheEvent:event ];
                  
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId);
@@ -575,10 +576,14 @@
                             errorHandler:(void (^)(NSError *error))errorHandler
 {
     
+    
+    [eventObject compareAndSetModifiedPropertiesFromCache];
+    
+    
     [self apiRequest:[NSString stringWithFormat:@"%@/%@", kROUTE_EVENTS, eventObject.eventId]
          requestType:PYRequestTypeAsync
               method:PYRequestMethodPUT
-            postData:[eventObject dictionary]
+            postData:[eventObject dictionaryForUpdate]
          attachments:eventObject.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
@@ -591,7 +596,7 @@
                  
                  eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
                  [eventObject clearModifiedProperties];
-                 [self.cache cacheEvent:eventObject];
+                 [self.cache cacheEvent:eventObject andCleanTempData:YES];
                  
                  
                  if (successHandler) {
@@ -606,35 +611,26 @@
                  
              } failure:^(NSError *error) {
                  
-                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
+                 
+                 if (eventObject.isSyncTriedNow == NO) {
+                     //Get current event with id from cache
+                     [self.cache cacheEvent:eventObject];
                      
-                     if (eventObject.isSyncTriedNow == NO) {
-                         //Get current event with id from cache
-                         PYEvent *currentEventFromCache
-                         = [self.cache eventFromCacheWithEventId:eventObject.eventId];
-                         currentEventFromCache.connection = self;
-                         currentEventFromCache.modified = [NSDate date];
-                         
-                         [eventObject compareAndSetModifiedPropertiesFrom:currentEventFromCache];
-                         
-                         
-                         [self.cache cacheEvent:currentEventFromCache];
-                         
-                         if (successHandler) {
-                             NSString *stoppedIdToReturn = @"";
-                             successHandler(stoppedIdToReturn);
-                         }
-                         
-                     }else{
-                         NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
+                     if (successHandler) {
+                         NSString *stoppedIdToReturn = @"";
+                         successHandler(stoppedIdToReturn);
+                         return ;
                      }
-                 }else{
-                     if (errorHandler) {
-                         errorHandler (error);
-                     }
+                     
                  }
                  
-             }];
+                 
+                 if (errorHandler) {
+                     errorHandler (error);
+                 }
+             }
+     
+     ];
 }
 
 //POST /events/start

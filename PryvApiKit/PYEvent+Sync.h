@@ -18,7 +18,7 @@
 /**
  * use before caching an updated, not synched event;
  */
-- (void) compareAndSetModifiedPropertiesFrom:(PYEvent*) event;
+- (void) compareAndSetModifiedPropertiesFromCache;
 
 /**
  * set this event to be delete on next Sync
