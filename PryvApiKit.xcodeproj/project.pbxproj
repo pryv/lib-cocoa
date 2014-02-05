@@ -163,6 +163,8 @@
 		4ECD102C185B707C00D4BBA0 /* PYEventFilter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */; };
 		4ECD102D185B708F00D4BBA0 /* PYEventFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6DFE0F1757417F000DFF7A /* PYEventFilter.m */; };
 		4ED3DD2018563317006350B5 /* PYEventType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E8C83D318507209001E4F05 /* PYEventType.h */; };
+		4EE237A818A29093005C0B4D /* PYEAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE237A718A29093005C0B4D /* PYEAppTests.m */; };
+		4EE237A918A29628005C0B4D /* PYTestsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E308AD41860A9320087129E /* PYTestsUtils.m */; };
 		8A6D9E7616FB79A1008F2B2C /* PYErrorUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A6D9E7416FB79A1008F2B2C /* PYErrorUtility.h */; };
 		8A6D9E7716FB79A1008F2B2C /* PYErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PYErrorUtility.m */; };
 		8A6D9E7816FB79A1008F2B2C /* PYErrorUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D9E7516FB79A1008F2B2C /* PYErrorUtility.m */; };
@@ -365,6 +367,8 @@
 		4EBC559D18995F9A00C4A136 /* PYEvent+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+Utils.h"; sourceTree = "<group>"; };
 		4EBC559E18995F9A00C4A136 /* PYEvent+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+Utils.m"; sourceTree = "<group>"; };
 		4EBC55A31899622800C4A136 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		4EE237A618A29093005C0B4D /* PYEAppTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEAppTests.h; sourceTree = "<group>"; };
+		4EE237A718A29093005C0B4D /* PYEAppTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEAppTests.m; sourceTree = "<group>"; };
 		8A6D9E7416FB79A1008F2B2C /* PYErrorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYErrorUtility.h; sourceTree = "<group>"; };
 		8A6D9E7516FB79A1008F2B2C /* PYErrorUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYErrorUtility.m; sourceTree = "<group>"; };
 		8AB2361E16FA895800B28F06 /* PYClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYClient.m; sourceTree = "<group>"; };
@@ -715,6 +719,8 @@
 				4E582DEC16C25379003B59DB /* PYEViewController.h */,
 				4E582DED16C25379003B59DB /* PYEViewController.m */,
 				4E582DD516C25378003B59DB /* Supporting Files */,
+				4EE237A618A29093005C0B4D /* PYEAppTests.h */,
+				4EE237A718A29093005C0B4D /* PYEAppTests.m */,
 			);
 			path = "iOs Example";
 			sourceTree = "<group>";
@@ -1111,7 +1117,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E582DDB16C25378003B59DB /* main.m in Sources */,
+				4EE237A918A29628005C0B4D /* PYTestsUtils.m in Sources */,
 				4E582DDF16C25379003B59DB /* PYEAppDelegate.m in Sources */,
+				4EE237A818A29093005C0B4D /* PYEAppTests.m in Sources */,
 				4E582DEE16C25379003B59DB /* PYEViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1371,7 +1379,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"\\\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\\\"",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOs Example/iOs Example-Prefix.pch";
@@ -1399,7 +1408,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"\\\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\\\"",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOs Example/iOs Example-Prefix.pch";

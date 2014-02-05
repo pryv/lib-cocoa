@@ -251,6 +251,7 @@
     if (self) {
         #warning fixme
         _clientId = [PYEvent createClientId]; // should we retain?
+        [_clientId retain];
         self.time = PYEvent_UNDEFINED_TIME;
         self.duration = PYEvent_UNDEFINED_DURATION;
     }

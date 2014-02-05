@@ -21,4 +21,7 @@
  **/
 - (IBAction)siginButtonPressed:(id)sender;
 
+
+- (IBAction)startTestPressed:(id)sender;
+
 @end

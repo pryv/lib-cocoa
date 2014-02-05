@@ -9,6 +9,8 @@
 #import "PYEViewController.h"
 #import "PryvApiKit.h"
 #import "PYWebLoginViewController.h"
+#import "PYEAppTests.h"
+
 
 @interface PYEViewController () <PYWebLoginDelegate>
 
@@ -79,6 +81,15 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - tests
+
+- (IBAction)startTestPressed:(id)sender {
+    PYEAppTests* test = [[PYEAppTests alloc] init];
+    [test startTests];
+    
+    //-- no release
 }
 
 @end
