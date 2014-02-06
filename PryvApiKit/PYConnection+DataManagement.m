@@ -17,6 +17,16 @@
 #import "PYCachingController+Stream.h"
 
 
+@interface PYConnection ()
+
+- (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
+                              create:(void(^) (PYEvent*event))create
+                              update:(void(^) (PYEvent*event))update
+                                same:(void(^) (PYEvent*event))same;
+
+@end
+
+
 @implementation PYConnection (DataManagement)
 
 #pragma mark - Pryv API Streams
@@ -331,30 +341,6 @@
 
 
 
-- (void)getOnlineEventWithId:(NSString *)eventId
-                 requestType:(PYRequestType)reqType
-              successHandler:(void (^) (PYEvent *event))onlineEvent
-                errorHandler:(void (^) (NSError *error))errorHandler
-{
-    //Method below automatically cache (overwrite) all events, so this is bad
-    //When API support separate method of getting only one event by its id this will be implemneted here
-    
-    //This method should get particular event and return it, not to cache it
-    
-    [self getOnlineEventsWithRequestType:reqType
-                              parameters:nil
-                          successHandler:^(NSArray *eventList, NSNumber *serverTime) {
-                              for (PYEvent *currentEvent in eventList) {
-                                  if ([currentEvent.eventId compare:eventId] == NSOrderedSame) {
-                                      onlineEvent(currentEvent);
-                                      break;
-                                  }
-                              }
-                          }
-                            errorHandler:errorHandler
-                      shouldSyncAndCache:NO];
-}
-
 //GET /events
 
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
@@ -415,6 +401,8 @@
              }];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 
 - (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
                               create:(void(^) (PYEvent*event))create
@@ -426,6 +414,7 @@
     {
         PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
         [self.cache cacheEvent:event];
+        // notify of event creation
         create(event);
         return;
     }
@@ -436,8 +425,12 @@
         return;
     }
     [cachedEvent resetFromDictionary:eventDic];
+    // notify of event update
+    [self.cache cacheEvent:cachedEvent];
     update(cachedEvent);
 }
+
+#pragma clang diagnostic pop
 
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType

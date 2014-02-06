@@ -103,13 +103,6 @@
 
 #pragma mark - Pryv API Events
 
-/**
- Get online event with id from server. This method mustn't cache event
- */
-- (void)getOnlineEventWithId:(NSString *)eventId
-                 requestType:(PYRequestType)reqType
-              successHandler:(void (^) (PYEvent *event))onlineEvent
-                errorHandler:(void (^) (NSError *error))errorHandler;
 
 //This is not supposed to be called directly by client app
 /**

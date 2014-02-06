@@ -31,12 +31,6 @@
                  eventsToRemove:(NSMutableArray *)eventsToRemove
                  eventsModified:(NSMutableArray *)eventsModified;
 
-/**
- This method get particular event from server and cache it
-*/
-+ (void)getAndCacheEventWithServerId:(NSString *)eventId
-                     usingConnection:(PYConnection *)connection
-                         requestType:(PYRequestType)reqType;
 
 
 @end

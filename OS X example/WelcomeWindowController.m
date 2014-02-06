@@ -201,50 +201,7 @@
 }
 
 - (IBAction)deleteEvent:(id)sender {
-    if ([[[AppDelegate sharedInstance] user] username]) {
-        NSString *username = [NSString stringWithString:[[[AppDelegate sharedInstance] user]
-                                                         username]];
-        NSString *token = [NSString stringWithString:[[[AppDelegate sharedInstance] user] token]];
-        
-        [PYClient setDefaultDomainStaging];
-        PYConnection *connection = [[PYConnection alloc] initWithUsername:username andAccessToken:token];
-        
-        PYEvent *customEvent = [PYEventsCachingUtillity getEventFromCacheWithEventId:[eventID stringValue]];
-        
-        //If not found in cache (removed manually, error, ...)
-        if (!customEvent) {
-            [connection getOnlineEventWithId:[eventID stringValue] requestType:PYRequestTypeAsync successHandler:^(PYEvent *customEvent) {
-                [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
-                    [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
-                        NSLog(@"Event deleted.");
-                    }errorHandler:^(NSError *error) {
-                        NSLog(@"Error while deleting : %@",error);
-                    }];
-                } errorHandler:^(NSError *error) {
-                    NSLog(@"Error while trashing : %@",error);
-                }];
 
-            } errorHandler:^(NSError *error) {
-                NSLog(@"%@",error);
-            }];
-        }else{
-            [PYEventsCachingUtillity removeEvent:customEvent];
-            [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
-                [connection trashOrDeleteEvent:customEvent withRequestType:PYRequestTypeAsync successHandler:^{
-                    NSLog(@"Event deleted.");
-                }errorHandler:^(NSError *error) {
-                    NSLog(@"Error while deleting : %@",error);
-                }];
-            } errorHandler:^(NSError *error) {
-                NSLog(@"Error while trashing : %@",error);
-            }];
-        }
-    
-        [connection release];
-        connection = nil;
-    }else{
-        NSLog(@"No user connected.");
-    }
 }
 
 - (IBAction)startRunningEvent:(id)sender {

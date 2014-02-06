@@ -32,7 +32,7 @@
     NSDictionary *_clientData;
     BOOL _trashed;
     
-    /** in server TimeSpace **&
+    /** in server TimeSpace **/
     NSTimeInterval _modified;
     
     
