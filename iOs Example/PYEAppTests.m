@@ -37,6 +37,70 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
     [PYClient setDefaultDomainStaging];
     self.connection = [PYClient createConnectionWithUsername:kPYAPITestAccount
                                               andAccessToken:kPYAPITestAccessToken];
+    
+    
+    
+    [self testGoingOfflineThenOnline];
+    
+}
+
+
+- (void)testGoingOfflineThenOnline
+{
+    int originalApiPort = self.connection.apiPort;
+
+    self.connection.apiPort = 0; // set conn offline
+    PYEvent *event = [[PYEvent alloc] init];
+    event.streamId = @"TVKoK036of";
+    event.eventContent = @"Test Offline";
+    event.type = @"note/txt";
+    
+    
+    //-- Create event
+    __block BOOL step_1_CreateEvent = NO;
+    [self.connection createEvent:event
+                     requestType:PYRequestTypeAsync
+                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                        step_1_CreateEvent = YES;
+                  }
+                    errorHandler:^(NSError *error) {
+                        
+                    }];
+    
+    
+    
+    
+    [PYTestsUtils waitForBOOL:&step_1_CreateEvent forSeconds:10];
+    if (!step_1_CreateEvent) {
+        
+        return;
+    }
+    
+    self.connection.apiPort = originalApiPort; // set conn onnLine
+    
+    //-- Launch synch
+    __block BOOL step_2_SynchEvents = NO;
+    [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
+        step_2_SynchEvents = YES;
+    }];
+    
+    [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];
+    if (!step_2_SynchEvents) {
+      
+        return;
+    }
+    
+    
+    
+    
+    
+}
+
+
+
+- (void) testFilter
+{
+    
     //STAssertNotNil(self.connection, @"Connection not created.");
     
     

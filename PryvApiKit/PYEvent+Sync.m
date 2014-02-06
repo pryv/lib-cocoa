@@ -17,8 +17,6 @@ NSString* const kPYEventSyncAll = @"SYNC_ALL_PROPERTIES";
 NSString* const kPYEventDeleteOnSync = @"SYNC_TO_BE_DELETED";
 
 - (void) clearModifiedProperties {
-#warning check for running condition here
-    [self.modifiedEventPropertiesToBeSync release];
     self.modifiedEventPropertiesToBeSync = nil;
 }
 

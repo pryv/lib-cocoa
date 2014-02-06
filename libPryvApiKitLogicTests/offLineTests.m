@@ -50,7 +50,7 @@
     STAssertTrue(event.hasTmpId, @"event must have a temp id");
     STAssertFalse([event.connection.cache eventIsKnownByCache:event], @"event should not be known by cache");
     
-    //-- Create event on server
+    //-- Create event
     __block BOOL step_1_CreateEvent = NO;
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
@@ -76,10 +76,22 @@
         return;
     }
     
-    
-    
-    
     self.connection.apiPort = originalApiPort; // set conn onnLine
+    
+    //-- Launch synch
+    __block BOOL step_2_SynchEvents = NO;
+    [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
+        step_2_SynchEvents = YES;
+    }];
+    
+    [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];
+    if (!step_2_SynchEvents) {
+        STFail(@"Timeout synching events.");
+        return;
+    }
+
+    
+    
     
     
 }

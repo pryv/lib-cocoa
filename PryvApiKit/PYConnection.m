@@ -229,10 +229,22 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     // }
 }
 
-- (void)syncNotSynchedEventsIfAny
+
+  // to be batched
+- (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done
 {
+    
+
+    NSArray* eventNotSync = self.eventsNotSync;
+    
+   int eventCounter = eventNotSync.count;
+   __block int successCounter = 0;
+ 
+    
+    dispatch_group_t group = dispatch_group_create();
+    
     for (PYEvent *event in self.eventsNotSync) {
-        
+        dispatch_group_enter(group);
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;
         
@@ -242,18 +254,24 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                      withRequestType:PYRequestTypeAsync
                       successHandler:^{
                           event.isSyncTriedNow = NO;
+                          dispatch_group_leave(group);
+                          successCounter++;
                       } errorHandler:^(NSError *error) {
                           event.isSyncTriedNow = NO;
+                          dispatch_group_leave(group);
                       }];
         } else if (event.hasTmpId) { // create
+            
             [self createEvent:event
                   requestType:PYRequestTypeAsync
                successHandler:^(NSString *newEventId, NSString *stoppedId) {
                    event.isSyncTriedNow = NO;
-                   
+                   dispatch_group_leave(group);
+                   successCounter++;
                } errorHandler:^(NSError *error) {
                    //reset flag if fail, very IMPORTANT
                    event.isSyncTriedNow = NO;
+                   dispatch_group_leave(group);
                    NSLog(@"SYNC error: creating event failed");
                    NSLog(@"%@",error);
                }];
@@ -262,15 +280,21 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [self setModifiedEventAttributesObject:event
                                     successHandler:^(NSString *stoppedId) {
                                         event.isSyncTriedNow = NO;
+                                        dispatch_group_leave(group);
+                                        successCounter++;
                                         
                                     } errorHandler:^(NSError *error) {
                                         event.isSyncTriedNow = NO;
+                                       dispatch_group_leave(group);
                                         
                                     }];
         }
-        
-        
     }
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        done(successCounter, eventCounter);
+    });
+    dispatch_release(group);
 }
 
 
@@ -292,7 +316,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         NSLog(@"HAVE internet");
         _online = YES;
         //[self syncNotSynchedStreamsIfAny];
-        [self syncNotSynchedEventsIfAny];
+        [self syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
+            NSLog(@"synched %i events", successCount);
+        }];
     }
 }
 

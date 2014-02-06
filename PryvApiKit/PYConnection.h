@@ -83,7 +83,7 @@
 /**
  Sync all events from list
  */
-- (void)syncNotSynchedEventsIfAny;
+- (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done;
 
 /**
  Low level method for web service communication

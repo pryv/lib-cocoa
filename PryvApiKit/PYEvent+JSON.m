@@ -41,10 +41,6 @@
 
 - (void)resetFromDictionary:(NSDictionary *)JSON
 {
-    
-   
-    
-    
     id streamId = [JSON objectForKey:@"streamId"];
     if ([streamId isKindOfClass:[NSNull class]]) {
         self.streamId = nil;
