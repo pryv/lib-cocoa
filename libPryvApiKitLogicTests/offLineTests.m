@@ -57,7 +57,8 @@
                   successHandler:^(NSString *newEventId, NSString *stoppedId) {
                       STAssertNil(newEventId, @"We shouldn't get a new id");
                       STAssertTrue(event.hasTmpId, @"event must have a temp id");
-                      STAssertTrue([event.connection.cache eventIsKnownByCache:event], @"event should be known by cache");
+                      STAssertTrue([event.connection.cache eventIsKnownByCache:event],
+                                   @"event should be known by cache");
                       STAssertTrue(event.toBeSync, @"event should be known as to be synched");
                       
                       step_1_CreateEvent = YES;

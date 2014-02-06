@@ -40,7 +40,7 @@
             // TODO Add to app cache if not done by getEventsWithRequestType
             [eventsToAdd addObject:onlineEvent];
             
-        } else if ([cachedOnlineEvent.modified compare:onlineEvent.modified] != NSOrderedSame){
+        } else if (cachedOnlineEvent.modified != onlineEvent.modified){
             //If online event is in cache and if it's modified add to modified list
             [eventsModified addObject:onlineEvent];
         }else{
@@ -89,6 +89,10 @@
     //Doesn't work when sending - error in request parameters
     if (filter.onlyStreamsIDs != nil) {
         [dic setObject:filter.onlyStreamsIDs forKey:kPYAPIEventFilterOnlyStreams];
+    }
+    
+    if (filter.modifiedSince != PYEventFilter_UNDEFINED_FROMTIME) {
+        [dic setObject:[NSString stringWithFormat:@"%f",filter.modifiedSince] forKey:kPYAPIEventModifiedSinceTime];
     }
     
     //Not implemeted in web service

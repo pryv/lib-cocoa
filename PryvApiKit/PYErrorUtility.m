@@ -106,7 +106,7 @@
     [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
     if (error != nil) [userInfo setObject:error forKey:@"error"];
     
-    NSLog(@"** PYClient.sendRAWRequest ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
+    NSLog(@"** PYClient.getErrorFromStringResponse ** : %@\n>> %@\n>>%@", error, [[request URL] absoluteString], content);
     
     return [[[NSError alloc] initWithDomain:PryvSDKDomain code:error.code userInfo:userInfo] autorelease];
 }

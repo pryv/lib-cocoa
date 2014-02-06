@@ -13,22 +13,50 @@
 
 @implementation PYEvent (JSON)
 
+
+
+
 + (id)eventFromDictionary:(NSDictionary *)JSON
 {
-    PYEvent *event = [[self alloc] init];
-    event.eventId = [JSON objectForKey:@"id"];
-    id streamId = [JSON objectForKey:@"streamId"];
-    if ([streamId isKindOfClass:[NSNull class]]) {
-        event.streamId = nil;
-    }else{
-        event.streamId = streamId;
+    PYEvent *event;
+    
+    // we have a clientId if event is loaded from cache
+    id clientId = [JSON objectForKey:@"id"];
+    if ([clientId isKindOfClass:[NSNull class]]) {
+        event = [[self alloc] initWithClientId:clientId];
+    } else {
+        event = [[self alloc] init];
     }
     
-    [event setEventServerTime:[[JSON objectForKey:@"time"] doubleValue]];
-    if ([JSON objectForKey:@"duration"] == [NSNull null]) {
-        event.duration = 0;
+    id eventId = [JSON objectForKey:@"id"];
+    if ([eventId isKindOfClass:[NSNull class]]) {
+        event.eventId = nil;
     }else{
-        event.duration = [[JSON objectForKey:@"duration"] doubleValue];
+        event.eventId = eventId;
+    }
+    
+    [event resetFromDictionary:JSON];
+    return event;
+}
+
+- (void)resetFromDictionary:(NSDictionary *)JSON
+{
+    
+   
+    
+    
+    id streamId = [JSON objectForKey:@"streamId"];
+    if ([streamId isKindOfClass:[NSNull class]]) {
+        self.streamId = nil;
+    }else{
+        self.streamId = streamId;
+    }
+    
+    [self setEventServerTime:[[JSON objectForKey:@"time"] doubleValue]];
+    if ([JSON objectForKey:@"duration"] == [NSNull null]) {
+        self.duration = 0;
+    }else{
+        self.duration = [[JSON objectForKey:@"duration"] doubleValue];
     }
     
     id eventType = [JSON objectForKey:@"type"];
@@ -36,28 +64,28 @@
     if([[eventType class] isSubclassOfClass:[NSDictionary class]])
     {
         NSDictionary *eventTypeDic = (NSDictionary*)eventType;
-        event.type = [NSString stringWithFormat:@"%@/%@",[eventTypeDic objectForKey:@"class"],[eventTypeDic objectForKey:@"type"]];
+        self.type = [NSString stringWithFormat:@"%@/%@",[eventTypeDic objectForKey:@"class"],[eventTypeDic objectForKey:@"type"]];
     }
     else
     {
-        event.type = eventType;
+        self.type = eventType;
     }
     
     if ([JSON objectForKey:@"content"] == [NSNull null]) {
-        event.eventContent = nil;
+        self.eventContent = nil;
     }else{
-        event.eventContent = [JSON objectForKey:@"content"];;
+        self.eventContent = [JSON objectForKey:@"content"];;
     }
     
     
     id tags = [JSON objectForKey:@"tags"];
     if ([tags isKindOfClass:[NSNull class]]) {
-        event.tags = nil;
+        self.tags = nil;
     }else{
-        event.tags = tags;
+        self.tags = tags;
     }
     
-    event.eventDescription = [JSON objectForKey:@"description"];
+    self.eventDescription = [JSON objectForKey:@"description"];
     
     NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
     if (attachmentsDic) {
@@ -67,33 +95,35 @@
             [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
         }];
         
-        event.attachments = attachmentObjects;
+        self.attachments = attachmentObjects;
         [attachmentObjects release];
     }
     
-    event.clientData = [JSON objectForKey:@"clientData"];
-    event.trashed = [[JSON objectForKey:@"trashed"] boolValue];
-    event.modified = [NSDate dateWithTimeIntervalSince1970:[[JSON objectForKey:@"modified"] doubleValue]];
+    self.clientData = [JSON objectForKey:@"clientData"];
+    self.trashed = [[JSON objectForKey:@"trashed"] boolValue];
     
+    NSNumber *modified = [JSON objectForKey:@"modified"];
+    if ([modified isKindOfClass:[NSNull class]]) {
+        self.modified = PYEvent_UNDEFINED_TIME;
+    }else{
+        self.modified = [modified doubleValue];
+    }
     
-
     
     NSArray *modifiedProperties = [JSON objectForKey:@"modifiedProperties"];
     if ([modifiedProperties isKindOfClass:[NSNull class]]) {
-        event.modifiedEventPropertiesToBeSync = nil;
+        self.modifiedEventPropertiesToBeSync = nil;
     }else{
-        event.modifiedEventPropertiesToBeSync =
+        self.modifiedEventPropertiesToBeSync =
         [NSMutableSet setWithArray:modifiedProperties];
     }
     
     NSNumber *synchedAt = [JSON objectForKey:@"synchedAt"];
     if ([synchedAt isKindOfClass:[NSNull class]]) {
-        event.synchedAt = 0;
+        self.synchedAt = PYEvent_UNDEFINED_TIME;
     }else{
-        event.synchedAt = [synchedAt doubleValue];
+        self.synchedAt = [synchedAt doubleValue];
     }
-    
-    return [event autorelease];
 }
 
 + (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;

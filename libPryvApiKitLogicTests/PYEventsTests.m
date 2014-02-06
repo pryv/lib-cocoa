@@ -8,6 +8,7 @@
 
 #import "PYEventsTests.h"
 #import "PYConnection+DataManagement.h"
+#import "PYConnection+TimeManagement.h"
 
 #define NOT_DONE(done) __block BOOL done = NO;
 #define DONE(done) done = YES;
@@ -34,6 +35,7 @@
     
     NOT_DONE(done);
     
+    
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
     event.eventContent = @"Test";
@@ -51,18 +53,28 @@
     //-- Create event on server
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
-                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                  successHandler:^(NSString *newEventId, NSString *stoppedId)
+    {
+        STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");
+        STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
+        createdEventId = newEventId;
+              
+              
+        // --- check if this event is found online
                       
-              STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");
-              STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
-              createdEventId = newEventId;
-              event.eventId = newEventId;
-              
-              
-              // --- check if this event is found online
+        PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
+                                                                   fromTime:PYEventFilter_UNDEFINED_FROMTIME
+                                                                     toTime:PYEventFilter_UNDEFINED_TOTIME
+                                                                      limit:20
+                                                             onlyStreamsIDs:nil
+                                                                       tags:nil];
+        pyFilter.modifiedSince = [self.connection serverTimeFromLocalDate:nil] - 120; // last 120 seconds
+
+        
+                      
               __block BOOL foundEventOnServer;
               [self.connection getEventsWithRequestType:PYRequestTypeAsync
-                                                 filter:nil
+                                                 filter:pyFilter
                                         gotCachedEvents:NULL
                                         gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
                                             STAssertTrue(onlineEventList.count > 0, @"Some events are already created before running this test, error in geting online events list");
@@ -90,7 +102,7 @@
                                             DONE(done);
                                         }];
           } errorHandler:^(NSError *error) {
-              STFail(@"Error occured when creating.");
+              STFail(@"Error occured when creating. %@", error);
               DONE(done);
           }];
   

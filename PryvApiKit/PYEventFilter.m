@@ -31,7 +31,7 @@
 @synthesize onlyStreamsIDs = _onlyStreamsIDs;
 @synthesize tags = _tags;
 
-@synthesize lastRefresh = _lastRefresh;
+@synthesize modifiedSince = _modifiedSince;
 
 @synthesize currentEventsDic = _currentEventsDic;
 
@@ -62,7 +62,7 @@
                              limit:limit
                     onlyStreamsIDs:onlyStreamsIDs
                               tags:tags];
-        _lastRefresh = PYEventFilter_UNDEFINED_FROMTIME;
+        _modifiedSince = PYEventFilter_UNDEFINED_FROMTIME;
         _currentEventsDic = [[NSMutableDictionary alloc] init];
     }
     return self;
@@ -155,7 +155,7 @@
                                   [self synchWithList:cachedEventList];
                           
                               } gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                  //self.lastRefresh = [serverTime doubleValue];
+                                  self.modifiedSince = [serverTime doubleValue];
                                   [self synchWithList:onlineEventList];
                                   
                               } onlineDiffWithCached:nil

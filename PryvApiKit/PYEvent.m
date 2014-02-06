@@ -23,6 +23,8 @@
 
 @property (nonatomic) NSTimeInterval time;
 
+- (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId;
+
 + (NSString *)createClientId;
 
 /**
@@ -58,6 +60,47 @@
     CFRelease(uuidRef);
     return [(NSString *)uuidStringRef autorelease];
 }
+
+
+
+
+- (id) init
+{
+    return [self initWithConnection:nil];
+}
+
+- (id) initWithClientId:(NSString*) clientId {
+    return [self initWithConnection:nil andClientId:clientId];
+}
+
+
+- (id) initWithConnection:(PYConnection*) connection {
+    return [self initWithConnection:connection andClientId:nil];
+}
+
+- (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId{
+    self = [super init];
+    if (self)
+    {
+        if (clientId) {
+            _clientId = clientId;
+        } else {
+            _clientId = [PYEvent createClientId];
+        }
+        #warning fixme
+        [_clientId retain]; // should we retain?
+        self.time = PYEvent_UNDEFINED_TIME;
+        self.duration = PYEvent_UNDEFINED_DURATION;
+        self.synchedAt = PYEvent_UNDEFINED_TIME;
+        self.modified = PYEvent_UNDEFINED_TIME;
+        self.connection = connection;
+    }
+    return self;
+}
+
+
+
+
 
 - (BOOL) hasTmpId {
     return (self.eventId == nil || [self.eventId isEqualToString:self.clientId]);
@@ -128,7 +171,7 @@
     }
     
     [dic setObject:[NSNumber numberWithBool:_trashed] forKey:@"trashed"];
-    [dic setObject:[NSNumber numberWithDouble:[_modified timeIntervalSince1970]] forKey:@"modified"];
+    
     
     if (_clientData && _clientData.count > 0) {
         [dic setObject:_clientData forKey:@"clientData"];
@@ -146,10 +189,16 @@
     
     
     if (_modifiedEventPropertiesToBeSync) {
-        [dic setObject:_modifiedEventPropertiesToBeSync forKey:@"modifiedProperties"];
+        [dic setObject:[_modifiedEventPropertiesToBeSync allObjects] forKey:@"modifiedProperties"];
     }
     
-    [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
+    if (_synchedAt != PYEvent_UNDEFINED_TIME) {
+        [dic setObject:[NSNumber numberWithDouble:_synchedAt] forKey:@"synchedAt"];
+    }
+    
+    if (_modified != PYEvent_UNDEFINED_TIME) {
+        [dic setObject:[NSNumber numberWithDouble:_modified] forKey:@"modified"];
+    }
     
     return [dic autorelease];
     
@@ -188,7 +237,7 @@
         [dic setObject:_clientData forKey:@"clientData"];
     }
     
-    if (_time > 0) {
+    if (_time != PYEvent_UNDEFINED_TIME) {
         [dic setObject:[NSNumber numberWithDouble:_time] forKey:@"time"];
     }
     
@@ -220,7 +269,7 @@
     [description appendFormat:@", self.attachments=%@", self.attachments];
     [description appendFormat:@", self.clientData=%@", self.clientData];
     [description appendFormat:@", self.trashed=%d", self.trashed];
-    [description appendFormat:@", self.modified=%@", self.modified];
+    [description appendFormat:@", self.modified=%f", self.modified];
     [description appendFormat:@", self.content=%@",self.eventContent];
     
     [description appendString:@">"];
@@ -240,23 +289,8 @@
     [_eventDescription release];
     [_attachments release];
     [_clientData release];
-    [_modified release];
     [_modifiedEventPropertiesToBeSync release];
     [super dealloc];
-}
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        #warning fixme
-        _clientId = [PYEvent createClientId]; // should we retain?
-        [_clientId retain];
-        self.time = PYEvent_UNDEFINED_TIME;
-        self.duration = PYEvent_UNDEFINED_DURATION;
-    }
-    
-    return self;
 }
 
 #pragma mark - date

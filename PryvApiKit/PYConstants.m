@@ -30,6 +30,7 @@ NSString *const kPYAPIConnectionRequestContributeLevel = @"contribute";
 NSString *const kPYAPIEventFilterLimit = @"limit";
 NSString *const kPYAPIEventFilterFromTime = @"fromTime";
 NSString *const kPYAPIEventFilterToTime = @"toTime";
+NSString *const kPYAPIEventModifiedSinceTime = @"modifiedSince";
 NSString *const kPYAPIEventFilterOnlyStreams = @"onlyStreams[]";
 NSString *const kPYAPIEventFilterTags = @"tags[]";
 

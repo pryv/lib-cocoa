@@ -11,6 +11,7 @@
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+Sync.h"
+#import "PYEvent+JSON.h"
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
@@ -387,9 +388,17 @@
                  
                  for (int i = 0; i < [JSON count]; i++) {
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
-                     PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
-                     [self.cache cacheEvent:event];
-                     [eventsArray addObject:event];
+                     __block PYEvent* myEvent;
+                     [self eventFromReceivedDictionary:eventDic
+                                                create:^(PYEvent *event) {
+                                                    myEvent = event;
+                                                } update:^(PYEvent *event) {
+                                                    myEvent = event;
+                                                } same:^(PYEvent *event) {
+                                                    myEvent = event;
+                                                }];
+                     
+                     [eventsArray addObject:myEvent];
                  }
                  
                  if (successBlock) {
@@ -404,6 +413,30 @@
                      errorHandler (error);
                  }
              }];
+}
+
+
+- (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
+                              create:(void(^) (PYEvent*event))create
+                              update:(void(^) (PYEvent*event))update
+                              same:(void(^) (PYEvent*event))same
+{
+    PYEvent* cachedEvent = [self.cache eventWithKey:[eventDic objectForKey:@"id"]];
+    if (cachedEvent == nil) // cache event
+    {
+        PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
+        [self.cache cacheEvent:event];
+        create(event);
+        return;
+    }
+    // eventId is already known.. same event or modified ?
+    NSNumber *modified = [eventDic objectForKey:@"modified"];
+    if ([modified doubleValue] < cachedEvent.modified) { // cached win
+        same(cachedEvent);
+        return;
+    }
+    [cachedEvent resetFromDictionary:eventDic];
+    update(cachedEvent);
 }
 
 
@@ -435,6 +468,9 @@
     [self getOnlineEventsWithRequestType:reqType
                               parameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
                           successHandler:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                              
+                              
+                              
                               if (onlineEvents) {
                                   onlineEvents(onlineEventList, serverTime);
                               }
@@ -468,11 +504,15 @@
 {
     
     if (event.connection == nil) {
-        return errorHandler([NSError errorWithDomain:@"Cann create PYEvent on API with an unknown connection"
+        event.connection = self;
+    }
+    if (event.connection != self)
+    {
+        return errorHandler([NSError
+                             errorWithDomain:@"Cannot create PYEvent on API with an different connection"
                                                 code:500 userInfo:nil]);
     }
-    
-    event.connection = self;
+
     
     [self apiRequest:kROUTE_EVENTS
          requestType:reqType
@@ -484,6 +524,12 @@
                  
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
+                 
+#warning Hack until we get server time for untimed envent
+                 if (event.eventDate == nil) {
+                     [event setEventDate:[NSDate date]]; // now
+                 }
+                 
                  
                  
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
@@ -507,7 +553,6 @@
                      [event setEventDate:[NSDate date]]; // now
                  }
                  
-                 event.modified = [NSDate date];
                  //When we try to create event and we came here it have tmpId
                  
                  //return that created id so it can work offline. Event will be cached when added to unsync list
@@ -547,7 +592,6 @@
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (event.isSyncTriedNow == NO) {
                          
-                         event.modified = [NSDate date];
                          
                          if (event.trashed == NO) {
                              event.trashed = YES;

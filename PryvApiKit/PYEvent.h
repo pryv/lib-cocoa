@@ -11,8 +11,8 @@
 @class PYConnection;
 
 
-#define PYEvent_UNDEFINED_TIME DBL_MIN
-#define PYEvent_UNDEFINED_DURATION DBL_MIN
+#define PYEvent_UNDEFINED_TIME -DBL_MAX
+#define PYEvent_UNDEFINED_DURATION -DBL_MAX
 
 #import <Foundation/Foundation.h>
 
@@ -32,14 +32,15 @@
     NSDictionary *_clientData;
     BOOL _trashed;
     
-    
-    
-    NSTimeInterval _synchedAt;
-    NSDate *_modified;
+    /** in server TimeSpace **&
+    NSTimeInterval _modified;
     
     
 //    NSTimeInterval _timeIntervalWhenCreationTried;
     
+    
+    /** timestamp in client time space **/
+    NSTimeInterval _synchedAt;
     BOOL _toBeSync;
     BOOL _isSyncTriedNow;
     NSMutableSet *_modifiedEventPropertiesToBeSync;
@@ -66,12 +67,16 @@
 @property (nonatomic, retain) NSDictionary *clientData;
 @property (nonatomic) BOOL trashed;
 
+@property (nonatomic) NSTimeInterval modified;
 
 # pragma mark - synch status
 
-@property (nonatomic, retain) NSDate *modified;
 
 @property (nonatomic, retain) NSMutableSet *modifiedEventPropertiesToBeSync;
+
+- (id) initWithConnection:(PYConnection*) connection;
+
+- (id) initWithClientId:(NSString*) clientId;
 
 /**
  hasTmpId - Check if event from cache has tmpId. If event has it it means that isn't sync from server (created offline)
@@ -100,7 +105,7 @@
 
 # pragma mark - date
 
-/** get event Date, return "nil" if undefined. If nil will be synched as "NOW" **/
+/** get event Date, return "nil" if undefined **/
 - (NSDate*)eventDate;
 /** set event Date. "nil" if undefined. If nil will be synched as "NOW" **/
 - (void) setEventDate:(NSDate *)newDate;

@@ -13,7 +13,7 @@
 
 @class PYConnection;
 
-#define PYEventFilter_UNDEFINED_FROMTIME DBL_MIN
+#define PYEventFilter_UNDEFINED_FROMTIME -DBL_MAX
 #define PYEventFilter_UNDEFINED_TOTIME DBL_MAX
 
 @interface PYEventFilter : NSObject
@@ -25,7 +25,7 @@
     NSArray *_onlyStreamsIDs; // of strings
     NSArray *_tags;
     
-    NSTimeInterval _lastRefresh;
+    NSTimeInterval _modifiedSince;
 
     NSMutableDictionary *_currentEventsDic;
 
@@ -42,7 +42,7 @@
 @property (nonatomic, retain, readonly) NSMutableDictionary *currentEventsDic;
 
 /** double value serverTime **/
-@property (nonatomic) NSTimeInterval lastRefresh;
+@property (nonatomic) NSTimeInterval modifiedSince;
 
 
 /**

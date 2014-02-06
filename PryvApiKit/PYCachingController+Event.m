@@ -90,7 +90,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (NSString *)keyForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
-    return [NSString stringWithFormat:@"%@_attachment_%@", [self keyForEvent:event], attachment.fileName];
+    return [NSString stringWithFormat:@"%@-attachment_%@", [self keyForEvent:event], attachment.fileName];
 }
 #pragma clang diagnostic pop
 
@@ -108,7 +108,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (NSString *)keyForPreviewOnEvent:(PYEvent *)event {
-    return [NSString stringWithFormat:@"%@_preview", [self keyForEvent:event]];
+    return [NSString stringWithFormat:@"%@-preview", [self keyForEvent:event]];
 }
 #pragma clang diagnostic pop
 

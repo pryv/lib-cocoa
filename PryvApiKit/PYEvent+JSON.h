@@ -12,6 +12,11 @@
 
 @interface PYEvent (JSON)
 
+/**
+ * reset content of this event with this dictionary (not clientId nor eventId)
+ */
+- (void)resetFromDictionary:(NSDictionary *)JSON;
+
 + (id)eventFromDictionary:(NSDictionary *)JSON;
 
 /**
