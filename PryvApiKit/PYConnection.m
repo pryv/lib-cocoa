@@ -243,7 +243,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     dispatch_group_t group = dispatch_group_create();
     
-    for (PYEvent *event in self.eventsNotSync) {
+    for (PYEvent *event in eventNotSync) {
         dispatch_group_enter(group);
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;

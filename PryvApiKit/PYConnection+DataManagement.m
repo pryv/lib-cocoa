@@ -7,6 +7,7 @@
 //
 
 #import "PYConnection+DataManagement.h"
+#import "PYConnection+TimeManagement.h"
 #import "PYStream+JSON.h"
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"

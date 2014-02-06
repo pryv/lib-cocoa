@@ -43,7 +43,7 @@
     self.connection.apiPort = 0; // set conn offline
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
-    event.eventContent = @"Test Offline";
+    event.eventContent = [NSString stringWithFormat:@"Test Offline %@", [NSDate date]];
     event.type = @"note/txt";
     
     STAssertNil(event.connection, @"Event.connection is not nil.");
@@ -68,8 +68,6 @@
                   }];
     
     
-
-    
     [PYTestsUtils waitForBOOL:&step_1_CreateEvent forSeconds:10];
     if (!step_1_CreateEvent) {
        STFail(@"Timeout creating event.");
@@ -82,6 +80,7 @@
     __block BOOL step_2_SynchEvents = NO;
     [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
         step_2_SynchEvents = YES;
+        NSLog(@"*453 %i %i",successCount, overEventCount);
     }];
     
     [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];

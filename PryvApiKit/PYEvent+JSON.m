@@ -21,11 +21,11 @@
     PYEvent *event;
     
     // we have a clientId if event is loaded from cache
-    id clientId = [JSON objectForKey:@"id"];
+    id clientId = [JSON objectForKey:@"clientId"];
     if ([clientId isKindOfClass:[NSNull class]]) {
-        event = [[self alloc] initWithClientId:clientId];
-    } else {
         event = [[self alloc] init];
+    } else {
+        event = [[self alloc] initWithClientId:clientId];
     }
     
     id eventId = [JSON objectForKey:@"id"];

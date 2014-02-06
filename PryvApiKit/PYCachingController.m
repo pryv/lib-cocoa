@@ -55,6 +55,7 @@
 
 - (void)cacheData:(NSData *)data withKey:(NSString *)key
 {
+    NSLog(@"*23 %@",key);
 	if (key)
 		[[NSFileManager defaultManager] createFileAtPath:[self.localDataPath stringByAppendingPathComponent:key] contents:data attributes:nil];
 }

@@ -82,6 +82,9 @@
     self = [super init];
     if (self)
     {
+        
+        
+        
         if (clientId) {
             _clientId = clientId;
         } else {
