@@ -25,7 +25,8 @@
     if ([clientId isKindOfClass:[NSNull class]]) {
         event = [[self alloc] init];
     } else {
-        event = [[self alloc] initWithClientId:clientId];
+        event = [PYEvent createOrRetreiveWithClientId:clientId];
+        [event retain];
     }
     
     id eventId = [JSON objectForKey:@"id"];

@@ -124,6 +124,9 @@
 		4E6240DD188D84E500477564 /* PYUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6240DA188D6FC700477564 /* PYUtils.m */; };
 		4E6240DE188D84E600477564 /* PYUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6240DA188D6FC700477564 /* PYUtils.m */; };
 		4E6240DF188D84FB00477564 /* PYUtils.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E6240D9188D6FC700477564 /* PYUtils.h */; };
+		4E66C2EF18A522C70067201C /* PYEvent+Supervisor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E66C2ED18A522C70067201C /* PYEvent+Supervisor.h */; };
+		4E66C2F018A522C70067201C /* PYEvent+Supervisor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E66C2EE18A522C70067201C /* PYEvent+Supervisor.m */; };
+		4E66C2F118A522C70067201C /* PYEvent+Supervisor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E66C2EE18A522C70067201C /* PYEvent+Supervisor.m */; };
 		4E6891A81850EA8C00099B26 /* PYEventClass.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E6891A61850EA8C00099B26 /* PYEventClass.h */; };
 		4E6891A91850EA8C00099B26 /* PYEventClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6891A71850EA8C00099B26 /* PYEventClass.m */; };
 		4E6891AA1850EA8C00099B26 /* PYEventClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6891A71850EA8C00099B26 /* PYEventClass.m */; };
@@ -144,6 +147,7 @@
 		4E7318C4184CE41D00CC474B /* PYUtilsLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7318C0184CE41D00CC474B /* PYUtilsLocalization.m */; };
 		4E7318C5184CE5C900CC474B /* PYUtilsLocalization.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E7318BF184CE41D00CC474B /* PYUtilsLocalization.h */; };
 		4E7318D7184E48E100CC474B /* PYEventTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7318D6184E48E100CC474B /* PYEventTypesTests.m */; };
+		4E79BC9D18A52A5400F79CC9 /* PYEvent+Supervisor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E66C2ED18A522C70067201C /* PYEvent+Supervisor.h */; };
 		4E86191A18A151C600BBC42A /* PYEvent+Sync.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E86191818A151C600BBC42A /* PYEvent+Sync.h */; };
 		4E86191B18A151C600BBC42A /* PYEvent+Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E86191918A151C600BBC42A /* PYEvent+Sync.m */; };
 		4E86191C18A151C600BBC42A /* PYEvent+Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E86191918A151C600BBC42A /* PYEvent+Sync.m */; };
@@ -213,6 +217,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				4E79BC9D18A52A5400F79CC9 /* PYEvent+Supervisor.h in CopyFiles */,
 				4E9C3471189FFC940029DA16 /* PYConnection+TimeManagement.h in CopyFiles */,
 				4EBC55A1189960B200C4A136 /* PYEvent+Utils.h in CopyFiles */,
 				4E6240DF188D84FB00477564 /* PYUtils.h in CopyFiles */,
@@ -343,6 +348,8 @@
 		4E582DF516C25379003B59DB /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4E6240D9188D6FC700477564 /* PYUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUtils.h; sourceTree = "<group>"; };
 		4E6240DA188D6FC700477564 /* PYUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYUtils.m; sourceTree = "<group>"; };
+		4E66C2ED18A522C70067201C /* PYEvent+Supervisor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PYEvent+Supervisor.h"; sourceTree = "<group>"; };
+		4E66C2EE18A522C70067201C /* PYEvent+Supervisor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PYEvent+Supervisor.m"; sourceTree = "<group>"; };
 		4E6891A61850EA8C00099B26 /* PYEventClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventClass.h; sourceTree = "<group>"; };
 		4E6891A71850EA8C00099B26 /* PYEventClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEventClass.m; sourceTree = "<group>"; };
 		4E6DFE0E1757417F000DFF7A /* PYEventFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEventFilter.h; sourceTree = "<group>"; };
@@ -579,6 +586,8 @@
 				3D67412517106EA10050B251 /* PYEvent+JSON.m */,
 				FB03E24816B982CC00DAD162 /* PYAttachment.h */,
 				FB03E24916B982CC00DAD162 /* PYAttachment.m */,
+				4E66C2ED18A522C70067201C /* PYEvent+Supervisor.h */,
+				4E66C2EE18A522C70067201C /* PYEvent+Supervisor.m */,
 			);
 			name = PYEvent;
 			sourceTree = "<group>";
@@ -862,6 +871,7 @@
 				3D9DCF301752BEE20010FE84 /* PYCachingController.h in Headers */,
 				3DD608EC1702543F00905533 /* CWLSynthesizeSingleton.h in Headers */,
 				3D67412617106EA10050B251 /* PYEvent+JSON.h in Headers */,
+				4E66C2EF18A522C70067201C /* PYEvent+Supervisor.h in Headers */,
 				3D6BE315171C75EB0023A39C /* PYAsyncService.h in Headers */,
 				4E16DED51847739500934F6C /* PYEventTypesPackagedData.h in Headers */,
 				4EBC559F18995F9A00C4A136 /* PYEvent+Utils.h in Headers */,
@@ -1135,6 +1145,7 @@
 				0C96BFEC18510731007155E2 /* PYEventTypesPackagedData.m in Sources */,
 				4E7318C2184CE41D00CC474B /* PYUtilsLocalization.m in Sources */,
 				FB03E25B16B982CD00DAD162 /* PYEvent.m in Sources */,
+				4E66C2F018A522C70067201C /* PYEvent+Supervisor.m in Sources */,
 				FB03E26116B982CD00DAD162 /* PYAttachment.m in Sources */,
 				FB03E26416B982CD00DAD162 /* PYStream.m in Sources */,
 				3D6FCEBE16F7CB460003D970 /* PYStream+JSON.m in Sources */,
@@ -1173,6 +1184,7 @@
 				B62A9C6A17E5DF4F006CADFB /* PYClient.m in Sources */,
 				FB03E25C16B982CD00DAD162 /* PYEvent.m in Sources */,
 				4E16DED71847739500934F6C /* PYEventTypesPackagedData.m in Sources */,
+				4E66C2F118A522C70067201C /* PYEvent+Supervisor.m in Sources */,
 				FB03E26216B982CD00DAD162 /* PYAttachment.m in Sources */,
 				4E6240DD188D84E500477564 /* PYUtils.m in Sources */,
 				FB03E26516B982CD00DAD162 /* PYStream.m in Sources */,

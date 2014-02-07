@@ -13,6 +13,7 @@
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
+#import "PYEvent+Supervisor.h"
 #import "PYConnection.h"
 #import "PYCachingController+Event.h"
 
@@ -61,30 +62,29 @@
     return [(NSString *)uuidStringRef autorelease];
 }
 
-
-
-
 - (id) init
 {
     return [self initWithConnection:nil];
 }
 
-- (id) initWithClientId:(NSString*) clientId {
-    return [self initWithConnection:nil andClientId:clientId];
++ (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId {
+    if (clientId) {
+        PYEvent* liveEvent = [PYEvent liveEventForClientId:clientId];
+        if (liveEvent) {
+            return liveEvent;
+        }
+    }
+    return [[[PYEvent alloc] initWithConnection:nil andClientId:clientId] autorelease];
 }
-
 
 - (id) initWithConnection:(PYConnection*) connection {
     return [self initWithConnection:connection andClientId:nil];
 }
 
-- (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId{
+- (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId {
     self = [super init];
     if (self)
     {
-        
-        
-        
         if (clientId) {
             _clientId = clientId;
         } else {
@@ -92,6 +92,9 @@
         }
         #warning fixme
         [_clientId retain]; // should we retain?
+        
+        [self superviseIn];
+        
         self.time = PYEvent_UNDEFINED_TIME;
         self.duration = PYEvent_UNDEFINED_DURATION;
         self.synchedAt = PYEvent_UNDEFINED_TIME;
@@ -282,6 +285,7 @@
 
 - (void)dealloc
 {
+    [self superviseOut];
     [_connection release];
     [_clientId release];
     [_eventId release];
@@ -348,6 +352,7 @@
 {
     return [[PYEventTypes sharedInstance] pyTypeForEvent:self];
 }
+
 
 
 @end

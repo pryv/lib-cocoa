@@ -9,6 +9,7 @@
 #import "PryvApiKit.h"
 #import "PYEAppTests.h"
 #import "PYTestsUtils.h"
+#import "PYCachingController.h"
 
 @interface PYEAppTests ()
 
@@ -77,20 +78,23 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
     }
     
     self.connection.apiPort = originalApiPort; // set conn onnLine
+   
     
-    //-- Launch synch
+    __block NSTimeInterval startingSynchAt = [[NSDate date] timeIntervalSince1970];
+    
+    //--####### Launch synch
     __block BOOL step_2_SynchEvents = NO;
     [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
+       [self.connection.cache eventIsKnownByCache:event];
         step_2_SynchEvents = YES;
     }];
     
     [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];
     if (!step_2_SynchEvents) {
-      
         return;
     }
     
-    
+
     
     
     

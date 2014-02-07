@@ -76,7 +76,7 @@
 
 - (id) initWithConnection:(PYConnection*) connection;
 
-- (id) initWithClientId:(NSString*) clientId;
++ (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId;
 
 /**
  hasTmpId - Check if event from cache has tmpId. If event has it it means that isn't sync from server (created offline)

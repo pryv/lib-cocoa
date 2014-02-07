@@ -529,7 +529,7 @@
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
                  [event clearModifiedProperties]; // clear modified properties
-                 [self.cache cacheEvent:event ];
+                 [self.cache cacheEvent:event andCleanTempData:YES]; //-- remove eventual 
                  
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId);
