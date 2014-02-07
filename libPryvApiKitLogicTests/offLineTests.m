@@ -39,48 +39,68 @@
 
 - (void)testGoingOfflineThenOnline
 {
-
-    self.connection.apiPort = 0; // set conn offline
-    PYEvent *event = [[PYEvent alloc] init];
+    //--####### set conn offline
+    self.connection.apiPort = 0;
+    
+    PYCachingController *cache = self.connection.cache;
+    
+    __block PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
     event.eventContent = [NSString stringWithFormat:@"Test Offline %@", [NSDate date]];
     event.type = @"note/txt";
     
     STAssertNil(event.connection, @"Event.connection is not nil.");
     STAssertTrue(event.hasTmpId, @"event must have a temp id");
-    STAssertFalse([event.connection.cache eventIsKnownByCache:event], @"event should not be known by cache");
+    STAssertFalse([cache eventIsKnownByCache:event], @"event should not be known by cache");
     
-    //-- Create event
+    STAssertEquals(event.synchedAt, PYEvent_UNDEFINED_TIME, @"event should not have synched time");
+    
+    //--####### Create event
     __block BOOL step_1_CreateEvent = NO;
+    __block NSString *unsyncEventCacheKey ;
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
                   successHandler:^(NSString *newEventId, NSString *stoppedId) {
                       STAssertNil(newEventId, @"We shouldn't get a new id");
                       STAssertTrue(event.hasTmpId, @"event must have a temp id");
-                      STAssertTrue([event.connection.cache eventIsKnownByCache:event],
-                                   @"event should be known by cache");
                       STAssertTrue(event.toBeSync, @"event should be known as to be synched");
+                      STAssertEquals(event.synchedAt, PYEvent_UNDEFINED_TIME, @"event should not have synched time");
+                      
+                      
+                      //-- cache test
+                      STAssertTrue([cache eventIsKnownByCache:event],
+                                   @"event should be known by cache");
+                      unsyncEventCacheKey = [cache keyForEvent:event];
+                      
+                      
                       
                       step_1_CreateEvent = YES;
                   }
                     errorHandler:^(NSError *error) {
-                      STFail(@"Error occured when creating event: %@", error);
-                  }];
+                        STFail(@"Error occured when creating event: %@", error);
+                    }];
     
-    
+
     [PYTestsUtils waitForBOOL:&step_1_CreateEvent forSeconds:10];
     if (!step_1_CreateEvent) {
-       STFail(@"Timeout creating event.");
+        STFail(@"Timeout creating event.");
         return;
     }
     
     self.connection.apiPort = originalApiPort; // set conn onnLine
     
-    //-- Launch synch
+    __block NSTimeInterval startingSynchAt = [[NSDate date] timeIntervalSince1970];
+    
+    //--####### Launch synch
     __block BOOL step_2_SynchEvents = NO;
     [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
+        STAssertEquals(overEventCount, successCount, @"All events should have been synchronized");
+        STAssertFalse([cache isDataCachedForKey:unsyncEventCacheKey], @"Event temporary caching data must be removed");
+        STAssertTrue([cache eventIsKnownByCache:event], @"event should be known by cache");
+        STAssertTrue(event.synchedAt > startingSynchAt, @"event should have a synchedAtDate after startingSync date");
+        STAssertTrue(event.synchedAt < [[NSDate date] timeIntervalSince1970],
+                     @"event should have a synchedAtDate before now");
         step_2_SynchEvents = YES;
-        NSLog(@"*453 %i %i",successCount, overEventCount);
     }];
     
     [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];
@@ -88,9 +108,9 @@
         STFail(@"Timeout synching events.");
         return;
     }
-
     
     
+    [PYEvent release];
     
     
 }

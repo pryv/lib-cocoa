@@ -51,9 +51,9 @@
              
              if (! finished1) {
                  STAssertEquals(20u, toAdd.count, @"Got wrong number of events");
-                 finished1 = YES;
                  pyFilter.limit = 30;
                  [pyFilter update];
+                 finished1 = YES;
                  
              } else {
                  STAssertEquals(10u, toAdd.count, @"Got wrong number of events");
