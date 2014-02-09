@@ -110,7 +110,7 @@
  */
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
                           parameters:(NSDictionary*)filterDic
-                  successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime))onlineEventsList
+                  successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))onlineEventsList
                     errorHandler:(void (^) (NSError *error))errorHandler
               shouldSyncAndCache:(BOOL)syncAndCache;
 

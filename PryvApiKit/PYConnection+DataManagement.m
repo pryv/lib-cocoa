@@ -346,7 +346,7 @@
 
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
                             parameters:(NSDictionary*)filterDic
-                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime))successBlock
+                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache
 {
@@ -372,17 +372,24 @@
                  NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NotNSArray
                  
                  NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
+                 __block NSMutableArray* addArray = [[[NSMutableArray alloc] init] autorelease];
+                 __block NSMutableArray* modifyArray = [[[NSMutableArray alloc] init] autorelease];
+                 __block NSMutableArray* sameArray = [[[NSMutableArray alloc] init] autorelease];
                  
                  for (int i = 0; i < [JSON count]; i++) {
                      NSDictionary *eventDic = [JSON objectAtIndex:i];
+                     
                      __block PYEvent* myEvent;
                      [self eventFromReceivedDictionary:eventDic
                                                 create:^(PYEvent *event) {
                                                     myEvent = event;
+                                                    [addArray addObject:event];
                                                 } update:^(PYEvent *event) {
                                                     myEvent = event;
+                                                    [modifyArray addObject:event];
                                                 } same:^(PYEvent *event) {
                                                     myEvent = event;
+                                                    [sameArray addObject:event];
                                                 }];
                      
                      [eventsArray addObject:myEvent];
@@ -392,7 +399,14 @@
                      //cacheEvents method will overwrite contents of currently cached file
                      [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
-                     successBlock(eventsArray, serverTime);
+                     
+                     [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
+                     [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
+                     [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
+                     
+                     NSDictionary* details = @{@"ADD": addArray, @"MODIFY": modifyArray, @"SAME": sameArray};
+                     
+                     successBlock(eventsArray, serverTime, details);
                  }
                  
              } failure:^(NSError *error) {
@@ -448,7 +462,7 @@
     [eventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
     
     
-    NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
+    __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                    withFilter:filter];
     
     if (cachedEvents) {
@@ -461,7 +475,7 @@
     //In this method we should synchronize events from cache with ones online and to return current online list
     [self getOnlineEventsWithRequestType:reqType
                               parameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
-                          successHandler:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                          successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
                               
                               
                               
@@ -470,20 +484,14 @@
                               }
                               if (syncDetails) {
                                   // give differences between cachedEvents and received events
+                                 
+                                  NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
+                                  [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
+                                  NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
                                   
-                                  NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
-                                  NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
-                                  NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
-                                  
-                                  [PYEventFilterUtility createEventsSyncDetails:onlineEventList
-                                                                    knownEvents:filteredCachedEventList
-                                                                    eventsToAdd:eventsToAdd
-                                                                 eventsToRemove:eventsToRemove
-                                                                 eventsModified:eventsModified];
-                                  
-                                  
-                                  
-                                  syncDetails(eventsToAdd, eventsToRemove, eventsModified);
+                                  [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
+                        
+                                  syncDetails([details objectForKey:@"ADD"], removeArray, [details objectForKey:@"ADD"]);
                               }
                           }
                             errorHandler:errorHandler

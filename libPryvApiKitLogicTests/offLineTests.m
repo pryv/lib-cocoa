@@ -70,7 +70,7 @@
                       //-- cache test
                       STAssertTrue([cache eventIsKnownByCache:event],
                                    @"event should be known by cache");
-                      unsyncEventCacheKey = [cache keyForEvent:event];
+                      unsyncEventCacheKey = [[cache keyForEvent:event] copy];
                       
                       
                       

@@ -155,7 +155,9 @@
                                   [self synchWithList:cachedEventList];
                           
                               } gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                  self.modifiedSince = [serverTime doubleValue];
+                                  
+                                # warning should be uncommentend .. keep self.modified if no property has been changed since last update
+                                  //self.modifiedSince = [serverTime doubleValue];
                                   [self synchWithList:onlineEventList];
                                   
                               } onlineDiffWithCached:nil
