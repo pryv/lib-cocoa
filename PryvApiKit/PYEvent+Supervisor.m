@@ -22,7 +22,7 @@ static NSMutableDictionary* _eventsDic;
 }
 
 + (PYEvent*) liveEventForClientId:(NSString*)clientId {
-    return [[PYEvent eventsDic] objectForKey:clientId];
+    return [(NSValue*)[[PYEvent eventsDic] objectForKey:clientId] nonretainedObjectValue];
 }
 
 
@@ -31,7 +31,7 @@ static NSMutableDictionary* _eventsDic;
 }
 
 - (void) superviseIn {
-    [[PYEvent eventsDic] setObject:self forKey:self.clientId];
+    [[PYEvent eventsDic] setObject:[NSValue valueWithNonretainedObject:self] forKey:self.clientId];
 }
 
 
