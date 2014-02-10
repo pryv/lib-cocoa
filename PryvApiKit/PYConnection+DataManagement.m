@@ -414,7 +414,7 @@
                      [[NSNotificationCenter defaultCenter]
                       postNotificationName:kPYNotificationEvents
                       object:self
-                      userInfo:@{kPYNotificationKeyAdd: addArray,kPYNotificationKeyModify: modifyArray}];
+                      userInfo:@{kPYNotificationKeyAdd: addArray, kPYNotificationKeyModify: modifyArray}];
                      
                  }
                  
@@ -436,7 +436,7 @@
     PYEvent* cachedEvent = [self.cache eventWithKey:[eventDic objectForKey:@"id"]];
     if (cachedEvent == nil) // cache event
     {
-        PYEvent *event = [PYEvent getEventFromDictionary:eventDic onConnection:self];
+        PYEvent *event = [PYEvent eventFromDictionary:eventDic onConnection:self];
         [self.cache cacheEvent:event];
         // notify of event creation
         create(event);
@@ -543,7 +543,6 @@
                  }
                  
                  
-                 
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
                  [event clearModifiedProperties]; // clear modified properties
@@ -552,6 +551,15 @@
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId);
                  }
+                 
+                 // notification
+                 
+                 // event is synchonized.. this mean it is already known .. so we advertise a modification..
+                 NSString* notificationKey = event.isSyncTriedNow ? kPYNotificationKeyModify : kPYNotificationKeyAdd;
+                 [[NSNotificationCenter defaultCenter]
+                  postNotificationName:kPYNotificationEvents
+                  object:self
+                  userInfo:@{notificationKey: @[event]}];
                  
              } failure:^(NSError *error) {
                  if (event.isSyncTriedNow == YES) {
@@ -575,6 +583,10 @@
                      }
                  }
                  [self.cache cacheEvent:event];
+                 [[NSNotificationCenter defaultCenter]
+                  postNotificationName:kPYNotificationEvents
+                  object:self
+                  userInfo:@{kPYNotificationKeyAdd: @[event]}];
                  
                  successHandler (nil, @"");
              }
@@ -775,7 +787,7 @@
                  
                  NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
                  for (NSDictionary *eventDic in JSON) {
-                     [eventsArray addObject:[PYEvent getEventFromDictionary:eventDic onConnection:self]];
+                     [eventsArray addObject:[PYEvent eventFromDictionary:eventDic onConnection:self]];
                  }
                  if (successHandler) {
                      successHandler(eventsArray);

@@ -341,9 +341,9 @@
     [self.attachments removeObject:attachmentToRemove];
 }
 
-+ (id)getEventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
++ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
 {
-    PYEvent *generalEvent = [PYEvent eventFromDictionary:JSON onConnection:connection];
+    PYEvent *generalEvent = [PYEvent _eventFromDictionary:JSON onConnection:connection];
     return generalEvent;
     
 }

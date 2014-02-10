@@ -111,7 +111,7 @@
         NSData *eventData = [self dataForKey:eventCachedName];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
         [arrayOFCachedEvents
-         addObject:[PYEvent eventFromDictionary:eventDic]];
+         addObject:[PYEvent _eventFromDictionary:eventDic]];
     }
     
     return [arrayOFCachedEvents autorelease];
@@ -122,7 +122,7 @@
     if ([self isDataCachedForKey:key]) {
         NSData *eventData = [self dataForKey:key];
         NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        return [PYEvent eventFromDictionary:eventDic];
+        return [PYEvent _eventFromDictionary:eventDic];
     }
     
     return nil;

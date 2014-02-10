@@ -21,9 +21,12 @@
 
 @implementation PYEventsTests
 
+
 - (void)setUp
 {
     [super setUp];
+    
+
     
 }
 
@@ -33,8 +36,22 @@
     
     [self testGettingStreams];
     
-    NOT_DONE(done);
+    // --------------- notification
     
+    id connectionEventObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
+                                                                                object:self.connection
+                                                                                 queue:nil
+                                                                            usingBlock:^(NSNotification *note)
+                               {
+                                   
+                                   
+                               }];
+    [connectionEventObserver retain];
+    
+    
+    
+    
+    NOT_DONE(done);
     
     __block PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
@@ -111,6 +128,12 @@
      }];
     
     WAIT_FOR_DONE(done);
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:connectionEventObserver];
+    [connectionEventObserver release];
+    
 }
 
 - (void)tearDown
