@@ -123,6 +123,10 @@
        [userInfo setObject:modified forKey:kPYNotificationKeyModify];
     }
     
+    if ((toAdd.count + toRemove.count + modified.count) == 0 ) {
+        NSLog(@"*42 void Filter notification.. no changes detected ");
+        return;
+    }
     
     [[NSNotificationCenter defaultCenter]
      postNotificationName:kPYNotificationEvents

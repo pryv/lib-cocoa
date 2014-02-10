@@ -445,7 +445,7 @@
     }
     // eventId is already known.. same event or modified ?
     NSNumber *modified = [eventDic objectForKey:@"modified"];
-    if ([modified doubleValue] < cachedEvent.modified) { // cached win
+    if ([modified doubleValue] <= cachedEvent.modified) { // cached win
         same(cachedEvent);
         return;
     }
