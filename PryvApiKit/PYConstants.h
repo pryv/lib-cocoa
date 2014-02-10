@@ -35,3 +35,11 @@ FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTags;
 FOUNDATION_EXPORT NSString *const kPYAPIEventModifiedSinceTime;
 
 FOUNDATION_EXPORT NSString *const kPYWebViewLoginNotVisibleNotification;
+
+
+FOUNDATION_EXPORT NSString *const kPYNotificationEvents;
+FOUNDATION_EXPORT NSString *const kPYNotificationKeyAdd;
+FOUNDATION_EXPORT NSString *const kPYNotificationKeyModify;
+FOUNDATION_EXPORT NSString *const kPYNotificationKeyDelete;
+FOUNDATION_EXPORT NSString *const kPYNotificationKeyUnchanged;
+

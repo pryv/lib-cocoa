@@ -125,13 +125,13 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
     
     __block BOOL finished1 = NO;
     __block BOOL finished2 = NO;
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"EVENTS"
+    [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
                                                       object:pyFilter
                                                        queue:nil
                                                   usingBlock:^(NSNotification *note)
      {
          NSDictionary *message = (NSDictionary*) note.userInfo;
-         NSArray* toAdd = [message objectForKey:@"ADD"];
+         NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
          if (toAdd && toAdd.count > 0) {
              NSLog(@"*162 ADD %i", toAdd.count);
              
@@ -147,11 +147,11 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
              }
              
          }
-         NSArray* toRemove = [message objectForKey:@"REMOVE"];
+         NSArray* toRemove = [message objectForKey:kPYNotificationKeyDelete];
          if (toRemove) {
              NSLog(@"*162 REMOVE %i", toRemove.count);
          }
-         NSArray* modify = [message objectForKey:@"MODIFY"];
+         NSArray* modify = [message objectForKey:kPYNotificationKeyModify];
          if (modify) {
              NSLog(@"*162 MODIFY %i", modify.count);
          }

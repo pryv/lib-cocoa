@@ -404,9 +404,18 @@
                      [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
                      [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
                      
-                     NSDictionary* details = @{@"ADD": addArray, @"MODIFY": modifyArray, @"SAME": sameArray};
-                     
+                     NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
+                                               kPYNotificationKeyAdd: modifyArray,
+                                               kPYNotificationKeyUnchanged: sameArray};
                      successBlock(eventsArray, serverTime, details);
+                     
+                     
+                     
+                     [[NSNotificationCenter defaultCenter]
+                      postNotificationName:kPYNotificationEvents
+                      object:self
+                      userInfo:@{kPYNotificationKeyAdd: addArray,kPYNotificationKeyModify: modifyArray}];
+                     
                  }
                  
              } failure:^(NSError *error) {
@@ -491,7 +500,8 @@
                                   
                                   [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
                         
-                                  syncDetails([details objectForKey:@"ADD"], removeArray, [details objectForKey:@"ADD"]);
+                                  syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
+                                              [details objectForKey:kPYNotificationKeyModify]);
                               }
                           }
                             errorHandler:errorHandler

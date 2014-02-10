@@ -92,7 +92,7 @@
     NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
     PYEvent* event;
     if (toAdd != nil) {
-        [userInfo setObject:toAdd forKey:@"ADD"];
+        [userInfo setObject:toAdd forKey:kPYNotificationKeyAdd];
         NSEnumerator *toAddEnumerator = [toAdd objectEnumerator];
         while ((event = [toAddEnumerator nextObject]) != nil) {
             if ([self.currentEventsDic objectForKey:event.clientId] == nil) {
@@ -103,7 +103,7 @@
         }
     }
     if (toRemove != nil) {
-        [userInfo setObject:toRemove forKey:@"REMOVE"];
+        [userInfo setObject:toRemove forKey:kPYNotificationKeyDelete];
         NSEnumerator *toRemoveEnumerator = [toRemove objectEnumerator];
         while ((event = [toRemoveEnumerator nextObject]) != nil) {
             [self.currentEventsDic removeObjectForKey:event.clientId];
@@ -111,10 +111,10 @@
         
     }
     if (modified != nil) {
-       [userInfo setObject:modified forKey:@"MODIFY"];
+       [userInfo setObject:modified forKey:kPYNotificationKeyModify];
     }
     [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"EVENTS"
+     postNotificationName:kPYNotificationEvents
      object:self
      userInfo:userInfo];
     [userInfo release];

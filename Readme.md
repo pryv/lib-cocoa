@@ -61,9 +61,7 @@ Otherwise, you can manage abortion and error using the methods `- (void) pyWebLo
 
 *Compatible with iOS and Mac OS X.*
 
-### Perki's Whish list
-
-#### Inits
+### Inits
 
 ```
 /** refresh stream list **/
@@ -74,14 +72,56 @@ Otherwise, you can manage abortion and error using the methods `- (void) pyWebLo
 
 ```
 
-#### Calls
+### Calls
 ```
 /** get latest stream structure fetched **/
 NSArray *currentStreams = connection.currentStreams;
 ```
 
 
-#### Notifications
+### Notifications
+
+#### PYConnection 
+
+- name: "EVENTS"   
+  **userInfo**  
+  
+  ```
+  "NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents, 
+                     kPYNotificationKeyModify : ...
+                     kPYNotificationKeyDelete : ... }
+  ```
+  
+- name: "STREAMS"
+  **userInfo**  
+  
+  ```
+  "NSArray of (root) PYStreams
+  ```
+  complete structure of streams is accessible thru childrens
+  
+- name: "LOADING"
+  **userInfo**  
+  
+  ```
+  "NSDictionary = @{ kPYNotificationKeyAdd : @"BEGIN" or @"END", 
+                     @"CALL" : @"STREAMS" or kPYNotificationEvents or @"PROFILE" ... (API key) }
+  ```
+
+
+  
+#### PYFilter
+
+- name: "EVENTS"   
+  **userInfo**  
+  
+  ```
+  "NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents, 
+                     kPYNotificationKeyModify : ...
+                     kPYNotificationKeyDelete : ... }
+  ```
+ 
+
 
 ###### streams
 
@@ -111,21 +151,21 @@ PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connect
                                                          onlyStreamsIDs:nil
                                                                    tags:nil];
                                                                    
-[[NSNotificationCenter defaultCenter] addObserverForName:@"EVENTS"
+[[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
                                                   object:pyFilter
                                                    queue:nil
                                               usingBlock:^(NSNotification *note)
      {
 	NSDictionary *message = (NSDictionary*) note.userInfo;
-         NSArray* toAdd = [message objectForKey:@"ADD"];
+         NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
          if (toAdd && toAdd.count > 0) {
              NSLog(@"ADD %i", toAdd.count);             
          }
-         NSArray* toRemove = [message objectForKey:@"REMOVE"];
+         NSArray* toRemove = [message objectForKey:kPYNotificationKeyDelete];
          if (toRemove) {
              NSLog(@"REMOVE %i", toRemove.count);
          }
-         NSArray* modify = [message objectForKey:@"MODIFY"];
+         NSArray* modify = [message objectForKey:kPYNotificationKeyModify];
          if (modify) {
              NSLog(@"MODIFY %i", modify.count);
          }
