@@ -21,27 +21,27 @@
 
 @implementation PYClient
 
-static NSString *myDefaultDomain;
-static NSString *myLanguageCodePrefered;
+static NSString *s_myDefaultDomain;
+static NSString *s_myLanguageCodePrefered;
 
 
 
 + (NSString *)languageCodePrefered {
-    if (myLanguageCodePrefered == nil) myLanguageCodePrefered = kLanguageCodeDefault;
-    return myLanguageCodePrefered;
+    if (s_myLanguageCodePrefered == nil) s_myLanguageCodePrefered = kLanguageCodeDefault;
+    return s_myLanguageCodePrefered;
 }
 
 + (void)setLanguageCodePrefered:(NSString*) languageCode {
-     myLanguageCodePrefered = languageCode;
+     s_myLanguageCodePrefered = languageCode;
 }
 
 + (NSString *)defaultDomain {
-    if (myDefaultDomain == nil) myDefaultDomain = kPYAPIDomain;
-    return myDefaultDomain;
+    if (s_myDefaultDomain == nil) s_myDefaultDomain = kPYAPIDomain;
+    return s_myDefaultDomain;
 }
 
 + (void)setDefaultDomain:(NSString*) domain {
-    myDefaultDomain = domain;
+    s_myDefaultDomain = domain;
 }
 
 + (void)setDefaultDomainStaging {
