@@ -30,20 +30,24 @@
  * get attachment data
  * REVIEW and eventually move it from Utils to PYAttachment or directly in PYEvent
  **/
-- (void)dataForAttachment:(PYAttachment*)attachment successHandler:(void (^) (NSData *data))success errorHandler:(void(^) (NSError *error))failure {
-    if (! self.connection) {
-        if (failure) failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);
-        return;
-    }
-    if (attachment.fileData && attachment.fileData.length > 0) {
+- (void)dataForAttachment:(PYAttachment*)attachment
+           successHandler:(void (^) (NSData *data))success
+             errorHandler:(void(^) (NSError *error))failure
+{
+    
+    if ((attachment.fileData != nil) && attachment.fileData.length > 0) {
         success(attachment.fileData); // already loaded
         return;
     }
-    [self.connection dataForAttachment:attachment
-                               onEvent:self
-                                requestType:PYRequestTypeAsync
-                             successHandler:success
-                               errorHandler:failure];
+    if (self.connection) { // certainly a temporary event (not yet attached to a connection)
+        [self.connection dataForAttachment:attachment
+                                   onEvent:self
+                               requestType:PYRequestTypeAsync
+                            successHandler:success
+                              errorHandler:failure];
+    } else {
+        if (failure) failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);
+    }
 }
 
 @end

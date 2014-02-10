@@ -21,6 +21,11 @@
 #import "PYEvent.h"
 #import "PYEventFilterUtility.h"
 
+
+@interface PYEventFilter ()
+- (void)connectionEventUpdate:(NSNotification *)notification;
+@end
+
 @implementation PYEventFilter
 
 
@@ -36,9 +41,9 @@
 @synthesize currentEventsDic = _currentEventsDic;
 
 
-
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     //TODO check that it's necessary
     [_currentEventsDic release];
     _currentEventsDic = nil;
@@ -64,6 +69,10 @@
                               tags:tags];
         _modifiedSince = PYEventFilter_UNDEFINED_FROMTIME;
         _currentEventsDic = [[NSMutableDictionary alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionEventUpdate:)
+                                                     name:kPYNotificationEvents object:self.connection];
+        
     }
     return self;
 }
@@ -113,6 +122,8 @@
     if (modified != nil) {
        [userInfo setObject:modified forKey:kPYNotificationKeyModify];
     }
+    
+    
     [[NSNotificationCenter defaultCenter]
      postNotificationName:kPYNotificationEvents
      object:self
@@ -164,6 +175,23 @@
                                  errorHandler:^(NSError *error) {
                                   
                               }];
+}
+
+
+#pragma mark - notifications from connection
+
+- (void)connectionEventUpdate:(NSNotification *)notification
+{
+    
+    NSDictionary *message = (NSDictionary*) notification.userInfo;
+    
+    NSArray* toAdd = [PYEventFilterUtility
+                      filterEventsList:[message objectForKey:kPYNotificationKeyAdd] withFilter:self];
+    NSArray* toRemove = [PYEventFilterUtility
+                         filterEventsList:[message objectForKey:kPYNotificationKeyDelete] withFilter:self];
+    NSArray* modify = [PYEventFilterUtility
+                       filterEventsList:[message objectForKey:kPYNotificationKeyModify] withFilter:self];
+   [self notifyEventsToAdd:toAdd toRemove:toRemove modified:modify];
 }
 
 #pragma mark - Utilities sort

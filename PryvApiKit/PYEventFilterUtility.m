@@ -45,7 +45,7 @@
             [eventsModified addObject:onlineEvent];
         }else{
             //event is cached and not modified
-            NSLog(@"event is cached and not modified");
+            // NSLog(@"event is cached and not modified");
         }
     }
     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToAdd sortAscending:YES];

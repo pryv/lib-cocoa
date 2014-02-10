@@ -332,6 +332,7 @@
 
 - (void)addAttachment:(PYAttachment *)attachment
 {
+    
     [self.attachments addObject:attachment];
 }
 

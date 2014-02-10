@@ -67,10 +67,11 @@ NSString* const kPYEventDeleteOnSync = @"SYNC_TO_BE_DELETED";
 - (NSDictionary*) dictionaryForUpdate
 {
     if (self.modifiedEventPropertiesToBeSync == nil) { return nil; };
-    if (! [self.modifiedEventPropertiesToBeSync member:kPYEventSyncAll]) {
+    if ([self.modifiedEventPropertiesToBeSync member:kPYEventSyncAll]) {
         return [self dictionary];
     }
-    return nil;
+    // return everything until we optimze
+    return [self dictionary];
 }
 
 

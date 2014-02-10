@@ -405,7 +405,7 @@
                      [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
                      
                      NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
-                                               kPYNotificationKeyAdd: modifyArray,
+                                               kPYNotificationKeyModify: modifyArray,
                                                kPYNotificationKeyUnchanged: sameArray};
                      successBlock(eventsArray, serverTime, details);
                      
@@ -655,17 +655,17 @@
          attachments:eventObject.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
-                 
-                 //Cache modified event - We cache event
-                 NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
-                 //If eventId isn't temporary cache event (it will be overwritten in cache)
+               
                  
                  eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
                  [eventObject clearModifiedProperties];
-                 [self.cache cacheEvent:eventObject andCleanTempData:YES];
+                 [self.cache cacheEvent:eventObject ];
                  
+                 [[NSNotificationCenter defaultCenter]
+                  postNotificationName:kPYNotificationEvents
+                  object:self
+                  userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -683,6 +683,11 @@
                  if (eventObject.isSyncTriedNow == NO) {
                      //Get current event with id from cache
                      [self.cache cacheEvent:eventObject];
+                     
+                     [[NSNotificationCenter defaultCenter]
+                      postNotificationName:kPYNotificationEvents
+                      object:self
+                      userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
                      
                      if (successHandler) {
                          NSString *stoppedIdToReturn = @"";

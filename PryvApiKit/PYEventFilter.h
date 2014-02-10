@@ -70,6 +70,7 @@
  */
 - (NSArray*)currentEventsSet;
 
+
 /**
  * trigger an update of this filter. Result to be monitored on Notification Center
  */
