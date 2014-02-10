@@ -37,13 +37,13 @@
 
 + (PYEventTypes*)sharedInstance
 {
-    static PYEventTypes *_sharedInstance;
+    static PYEventTypes *s_sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedInstance = [[PYEventTypes alloc] init];
-        [_sharedInstance setup];
+        s_sharedInstance = [[PYEventTypes alloc] init];
+        [s_sharedInstance setup];
     });
-    return _sharedInstance;
+    return s_sharedInstance;
 }
 
 

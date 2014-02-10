@@ -46,8 +46,9 @@
     NSMutableSet *_modifiedEventPropertiesToBeSync;
     
     PYConnection  *_connection;
-    
 
+@private
+    NSTimeInterval _time;
 }
 
 @property (nonatomic, retain) PYConnection  *connection;

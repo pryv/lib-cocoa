@@ -32,6 +32,9 @@
     NSInteger _attachmentSizeNotSync;
     
     PYCachingController *_cache;
+
+@private
+    NSTimeInterval _serverTimeInterval;
 }
 
 @property (nonatomic, copy) NSString *userID;

@@ -12,18 +12,6 @@
 #import "PYError.h"
 
 @interface PYAsyncService ()
-{
-    NSURLConnection *_connection;
-    NSURLRequest *_request;
-    NSHTTPURLResponse *_response;
-    NSMutableData *_responseData;
-    PYRequestResultType _requestResultType;
-    
-    BOOL _running;
-    PYAsyncServiceSuccessBlock _onSuccess;
-    PYAsyncServiceFailureBlock _onFailure;
-    
-}
 
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSURLRequest *request;
