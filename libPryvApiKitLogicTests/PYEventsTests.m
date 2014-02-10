@@ -56,17 +56,32 @@
     // --------------- notification
     
     NOT_DONE(eventCreationReceived);
+    NOT_DONE(eventModificationReceived);
     id connectionEventObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
                                                                                    object:self.connection
                                                                                     queue:nil
                                                                                usingBlock:^(NSNotification *note)
                                   {
-                                      NSDictionary *message = (NSDictionary*) note.userInfo;
-                                      NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
-                                      STAssertNotNil(toAdd, @"We should get toAdd Array");
-                                      STAssertEquals(1u,toAdd.count , @"Array should contain just one event");
-                                      STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
-                                      DONE(eventCreationReceived);
+                                      
+                                      if (! eventCreationReceived) {
+                                          NSDictionary *message = (NSDictionary*) note.userInfo;
+                                          NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
+                                          STAssertNotNil(toAdd, @"We should get toAdd Array");
+                                          STAssertEquals(1u,toAdd.count , @"Array should contain just one event");
+                                          STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
+                                          DONE(eventCreationReceived);
+                                      } else {
+                                          NSDictionary *message = (NSDictionary*) note.userInfo;
+                                          NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
+                                          STAssertNotNil(toAdd, @"We should not get toAdd Array");
+                                          
+                                          NSArray* modify = [message objectForKey:kPYNotificationKeyModify];
+                                          
+                                          STAssertEquals(1u,modify.count , @"Array should contain just one event");
+                                          STAssertEquals([modify firstObject], event, @"Event should be the same than the one created");
+                                          DONE(eventModificationReceived);
+                                          
+                                      }
                                   }];
     [connectionEventObserver retain];
     
@@ -136,6 +151,7 @@
     
     WAIT_FOR_DONE(done);
     WAIT_FOR_DONE(eventCreationReceived);
+    WAIT_FOR_DONE(eventModificationReceived);
     
     
     [[NSNotificationCenter defaultCenter] removeObserver:connectionEventObserver];
