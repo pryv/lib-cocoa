@@ -823,7 +823,7 @@
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
     
-    NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, urlPath];
+    NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%@/%@", self.apiScheme, self.userID, self.apiDomain, @(self.apiPort), urlPath];
     
     NSURL *url = [NSURL URLWithString:fullPath];
     
@@ -835,7 +835,7 @@
     
     [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
-            NSLog(@"*66 %i %@", [result length], url);
+            NSLog(@"*66 %@ %@", @([result length]), url);
             success(result);
             
             attachment.fileData = result;
@@ -877,7 +877,7 @@
     
     [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
-            NSLog(@"*77 %i %@", [result length], url);
+            NSLog(@"*77 %@ %@", @([result length]), url);
             
             success(result);
             [self.cache savePreview:result forEvent:event];

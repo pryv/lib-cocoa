@@ -24,9 +24,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYUtils.h"
 
 @interface PYConnection ()
-{
-    NSTimeInterval _serverTimeInterval;
-}
 
 @property (nonatomic, readwrite) NSTimeInterval serverTimeInterval;
 
@@ -237,7 +234,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
     NSArray* eventNotSync = self.eventsNotSync;
     
-   int eventCounter = eventNotSync.count;
+   int eventCounter = (int)eventNotSync.count;
    __block int successCounter = 0;
  
     
@@ -363,7 +360,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (NSString *)apiBaseUrl;
 {
-    return [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, self.apiPort, self.apiExtraPath];
+    return [NSString stringWithFormat:@"%@://%@%@:%@/%@", self.apiScheme, self.userID, self.apiDomain, @(self.apiPort), self.apiExtraPath];
 }
 
 

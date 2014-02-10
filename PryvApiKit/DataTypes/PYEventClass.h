@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PYEventClass : NSObject
-{
+@interface PYEventClass : NSObject {
+    
+@private
     NSString *_classKey;
-    NSString *_description;
+    NSString *_eventDescription;
     NSDictionary *_extrasName;
 }
 

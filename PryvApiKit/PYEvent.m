@@ -18,9 +18,7 @@
 #import "PYCachingController+Event.h"
 
 @interface PYEvent ()
-{
-    NSTimeInterval _time;
-}
+
 
 @property (nonatomic) NSTimeInterval time;
 
@@ -53,6 +51,7 @@
 @synthesize synchedAt = _synchedAt;
 @synthesize modifiedEventPropertiesToBeSync = _modifiedEventPropertiesToBeSync;
 @synthesize connection = _connection;
+@synthesize isSyncTriedNow = _isSyncTriedNow;
 
 + (NSString *)createClientId
 {
