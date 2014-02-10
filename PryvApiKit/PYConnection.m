@@ -326,7 +326,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             NSLog(@"No internet, cannot create access");
             _online = NO;
         }else{
-            NSLog(@"HAVE internet acces created");
+            NSLog(@"HAVE internet access created");
             _online = YES;
         }
     }
