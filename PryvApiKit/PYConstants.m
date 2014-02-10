@@ -37,3 +37,9 @@ NSString *const kPYAPIEventFilterTags = @"tags[]";
 
 //Notifications
 NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisibleNotification";
+
+NSString *const kPYNotificationEvents = @"EVENTS";
+NSString *const kPYNotificationKeyAdd = @"ADD";
+NSString *const kPYNotificationKeyModify = @"MODIFY";
+NSString *const kPYNotificationKeyDelete = @"DELETE";
+NSString *const kPYNotificationKeyUnchanged = @"SAME";
