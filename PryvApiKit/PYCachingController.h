@@ -49,6 +49,7 @@
  doesn't set connection property on Event
  */
 - (PYEvent *)eventWithKey:(NSString *)key;
+- (PYEvent *)eventWithEventId:(NSString *)eventId;
 /**
  Get all PYStream objects from disk
  */

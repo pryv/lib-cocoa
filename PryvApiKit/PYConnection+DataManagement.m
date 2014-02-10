@@ -433,7 +433,7 @@
                               update:(void(^) (PYEvent*event))update
                               same:(void(^) (PYEvent*event))same
 {
-    PYEvent* cachedEvent = [self.cache eventWithKey:[eventDic objectForKey:@"id"]];
+    PYEvent* cachedEvent = [self.cache eventWithEventId:[eventDic objectForKey:@"id"]];
     if (cachedEvent == nil) // cache event
     {
         PYEvent *event = [PYEvent eventFromDictionary:eventDic onConnection:self];

@@ -36,17 +36,7 @@
     
     [self testGettingStreams];
     
-    // --------------- notification
     
-    id connectionEventObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
-                                                                                object:self.connection
-                                                                                 queue:nil
-                                                                            usingBlock:^(NSNotification *note)
-                               {
-                                   
-                                   
-                               }];
-    [connectionEventObserver retain];
     
     
     
@@ -55,19 +45,36 @@
     
     __block PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
-    event.eventContent = @"Test";
+    event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
     event.type = @"note/txt";
     //    NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
     //    NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
     //    PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
     //    [event addAttachment:att];
-    
-    
-    __block NSString *createdEventId;
-    
     STAssertNil(event.connection, @"Event.connection is not nil.");
     
+    // --------------- notification
+    
+    NOT_DONE(eventCreationReceived);
+    id connectionEventObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
+                                                                                   object:self.connection
+                                                                                    queue:nil
+                                                                               usingBlock:^(NSNotification *note)
+                                  {
+                                      NSDictionary *message = (NSDictionary*) note.userInfo;
+                                      NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
+                                      STAssertNotNil(toAdd, @"We should get toAdd Array");
+                                      STAssertEquals(1u,toAdd.count , @"Array should contain just one event");
+                                      STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
+                                      DONE(eventCreationReceived);
+                                  }];
+    [connectionEventObserver retain];
+    
+    
+    
     //-- Create event on server
+    __block NSString *createdEventId;
+
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
                   successHandler:^(NSString *newEventId, NSString *stoppedId)
@@ -128,7 +135,7 @@
      }];
     
     WAIT_FOR_DONE(done);
-    
+    WAIT_FOR_DONE(eventCreationReceived);
     
     
     [[NSNotificationCenter defaultCenter] removeObserver:connectionEventObserver];
