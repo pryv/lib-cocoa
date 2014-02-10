@@ -7,6 +7,7 @@
 //
 
 #import "PYCachingController.h"
+#import "PYCachingController+Event.h"
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
@@ -126,6 +127,11 @@
     }
     
     return nil;
+}
+
+- (PYEvent *)eventWithEventId:(NSString *)eventId;
+{
+    return [self eventWithKey:[self keyForEventId:eventId]];
 }
 
 - (NSArray *)allStreamsFromCache

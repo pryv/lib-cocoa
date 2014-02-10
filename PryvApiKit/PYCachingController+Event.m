@@ -18,7 +18,7 @@
 - (NSString *)keyForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event ;
 - (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key;
 - (NSString *)keyForNotYetCreatedEvent:(PYEvent *)event;
-- (NSString *)keyForEventId:(NSString *)eventId ;
+
 @end
 
 @implementation PYCachingController (Event)
@@ -59,7 +59,6 @@
     return [self keyForEventId:event.eventId];
 }
 
-#pragma mark - previews
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
@@ -68,11 +67,15 @@
     return [self keyForEventId:event.clientId];
 }
 
+#pragma clang diagnostic pop
+
 - (NSString *)keyForEventId:(NSString *)eventId {
     return [NSString stringWithFormat:@"event_%@", eventId];
 }
 
-#pragma clang diagnostic pop
+
+#pragma mark - previews
+
 
 - (NSArray *)eventsFromCache
 {

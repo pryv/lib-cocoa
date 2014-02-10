@@ -46,7 +46,7 @@
  Utility method - Get key for event
  */
 - (NSString *)keyForEvent:(PYEvent *)event;
-
+- (NSString *)keyForEventId:(NSString *)eventId ;
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event;
 - (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event;
