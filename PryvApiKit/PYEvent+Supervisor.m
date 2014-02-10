@@ -11,14 +11,14 @@
 
 @implementation PYEvent (Supervisor)
 
-static NSMutableDictionary* _eventsDic;
+static NSMutableDictionary* s_eventsDic;
 
 
-+ (NSMutableDictionary*) eventsDic {
-    if (! _eventsDic) {
-        _eventsDic = [[NSMutableDictionary alloc] init];
++ (NSMutableDictionary*)eventsDic {
+    if (! s_eventsDic) {
+        s_eventsDic = [[NSMutableDictionary alloc] init];
     }
-    return _eventsDic;
+    return s_eventsDic;
 }
 
 + (PYEvent*) liveEventForClientId:(NSString*)clientId {
