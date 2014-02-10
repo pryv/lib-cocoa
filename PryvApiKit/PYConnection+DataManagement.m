@@ -434,6 +434,7 @@
                               same:(void(^) (PYEvent*event))same
 {
     PYEvent* cachedEvent = [self.cache eventWithEventId:[eventDic objectForKey:@"id"]];
+    cachedEvent.connection = self;
     if (cachedEvent == nil) // cache event
     {
         PYEvent *event = [PYEvent eventFromDictionary:eventDic onConnection:self];
@@ -451,6 +452,8 @@
     [cachedEvent resetFromDictionary:eventDic];
     // notify of event update
     [self.cache cacheEvent:cachedEvent];
+    
+    
     update(cachedEvent);
 }
 
@@ -466,10 +469,7 @@
 {
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
     
-    NSArray *eventsFromCache = [self.cache eventsFromCache];
-    // set connection property on events
-    [eventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
-    
+    NSArray *eventsFromCache = [self allEventsFromCache];
     
     __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                    withFilter:filter];
