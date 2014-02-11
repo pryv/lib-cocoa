@@ -47,7 +47,7 @@
     //TODO check that it's necessary
     [_currentEventsDic release];
     _currentEventsDic = nil;
-    [_connection release];
+    _connection  = nil;
     [_onlyStreamsIDs release];
     [_tags release];
     [super dealloc];
@@ -91,8 +91,12 @@
     _limit = limit;
 }
 
-- (void)notifyEventsToAdd:(NSArray*)toAdd toRemove:(NSArray*)toRemove modified:(NSArray*)modified
+- (void)notifyEventsToAdd:(NSArray*)srcAdd toRemove:(NSArray*)srcRemove modified:(NSArray*)srcModified
 {
+    
+    NSMutableArray *resultAdd = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *resultRemove = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *resultModify = [[[NSMutableArray alloc] init] autorelease];
     
     ///  /!\ AT WORK - Proof of concept
     ///
@@ -100,30 +104,37 @@
     
     NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
     PYEvent* event;
-    if (toAdd != nil) {
-        [userInfo setObject:toAdd forKey:kPYNotificationKeyAdd];
-        NSEnumerator *toAddEnumerator = [toAdd objectEnumerator];
+    if (srcAdd != nil) {
+        NSEnumerator *toAddEnumerator = [srcAdd objectEnumerator];
         while ((event = [toAddEnumerator nextObject]) != nil) {
             if ([self.currentEventsDic objectForKey:event.clientId] == nil) {
                 [self.currentEventsDic setValue:event forKey:event.clientId];
-            } else {
-                NSLog(@"<Warning>: PYEventFilter.notifyEventsToAdd event to ADD already known %@", event);
+                [resultAdd addObject:event];
             }
         }
+        [userInfo setObject:resultAdd forKey:kPYNotificationKeyAdd];
     }
-    if (toRemove != nil) {
-        [userInfo setObject:toRemove forKey:kPYNotificationKeyDelete];
-        NSEnumerator *toRemoveEnumerator = [toRemove objectEnumerator];
+    if (srcRemove != nil) {
+        
+        NSEnumerator *toRemoveEnumerator = [srcRemove objectEnumerator];
         while ((event = [toRemoveEnumerator nextObject]) != nil) {
             [self.currentEventsDic removeObjectForKey:event.clientId];
+            [resultRemove addObject:event];
         }
-        
+        [userInfo setObject:resultRemove forKey:kPYNotificationKeyDelete];
     }
-    if (modified != nil) {
-       [userInfo setObject:modified forKey:kPYNotificationKeyModify];
+    if (srcModified != nil) {
+       
+        NSEnumerator *toModifiyEnumerator = [srcModified objectEnumerator];
+        while ((event = [toModifiyEnumerator nextObject]) != nil) {
+            if ([self.currentEventsDic objectForKey:event.clientId] != nil) { // known object
+                [resultModify addObject:event];
+            }
+        }
+        [userInfo setObject:resultModify forKey:kPYNotificationKeyModify];
     }
     
-    if ((toAdd.count + toRemove.count + modified.count) == 0 ) {
+    if ((resultAdd.count + resultRemove.count + resultModify.count) == 0 ) {
         NSLog(@"*42 void Filter notification.. no changes detected ");
         return;
     }
@@ -195,7 +206,8 @@
                          filterEventsList:[message objectForKey:kPYNotificationKeyDelete] withFilter:self];
     NSArray* modify = [PYEventFilterUtility
                        filterEventsList:[message objectForKey:kPYNotificationKeyModify] withFilter:self];
-   [self notifyEventsToAdd:toAdd toRemove:toRemove modified:modify];
+    
+    [self notifyEventsToAdd:toAdd toRemove:toRemove modified:modify];
 }
 
 #pragma mark - Utilities sort
