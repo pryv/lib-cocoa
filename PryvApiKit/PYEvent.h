@@ -88,6 +88,12 @@
  toBeSync - return True if event has to be Synched
  */
 - (BOOL) toBeSync;
+
+/**
+ isDraft - return True if event has to be Synched and had a Temp Id (sugar for hasTmpId && toBeSync)
+ */
+- (BOOL) isDraft;
+
 /** 
  * private , used by PyConnection
  **/
@@ -136,6 +142,16 @@
  Convert PYEvent object to json-like NSDictionary representation for caching on disk
  */
 - (NSDictionary *)cachingDictionary;
+
+
+# pragma mark - changes tools
+/**
+ Reset all the fields from the cache. Can be used to rollback an edit change
+ */
+- (void) resetFromCache;
+
+
+- (NSMutableSet*) listModifiedPropertiesAgainstCachedVersion;
 
 # pragma mark - event Types accessors
 

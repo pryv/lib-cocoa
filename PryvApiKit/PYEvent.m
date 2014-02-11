@@ -121,6 +121,10 @@
    return ([self toBeSyncSkipCacheTest] && [self.connection.cache eventIsKnownByCache:self]);
 }
 
+- (BOOL) isDraft {
+    return ([self hasTmpId] && [self toBeSync]);
+}
+
 - (BOOL) toBeSyncSkipCacheTest {
     return (self.hasTmpId ||
              (self.modifiedEventPropertiesToBeSync != nil &&
@@ -325,6 +329,22 @@
 - (NSTimeInterval) getEventServerTime
 {
     return self.time;
+}
+
+# pragma mark - changes tools
+/**
+ Reset all the fields from the cache. Can be used to rollback an edit change
+ */
+- (void) resetFromCache {
+    if (self.connection) {
+        [self.connection.cache resetEventFromDictionary:self];
+    }
+}
+
+
+- (NSMutableSet*) listModifiedPropertiesAgainstCachedVersion {
+#warning TODO
+    return nil;
 }
 
 

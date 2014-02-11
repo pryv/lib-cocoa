@@ -639,7 +639,8 @@
 }
 
 //PUT /events/{event-id}
-- (void)setModifiedEventAttributesObject:(PYEvent *)eventObject
+
+- (void)updateEvent:(PYEvent *)eventObject
                           successHandler:(void (^)(NSString *stoppedId))successHandler
                             errorHandler:(void (^)(NSError *error))errorHandler
 {

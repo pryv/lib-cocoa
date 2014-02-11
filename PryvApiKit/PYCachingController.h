@@ -44,6 +44,12 @@
  doesn't set connection property on Event
  */
 - (NSArray *)allEventsFromCache;
+
+/**
+ Reset content of an exisiting event with the data present in the cache
+ */
+- (void) resetEventFromDictionary:(PYEvent*)event;
+
 /**
  Get single PYEvent object from disk for key
  doesn't set connection property on Event

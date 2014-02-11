@@ -118,6 +118,19 @@
     return [arrayOFCachedEvents autorelease];
 }
 
+
+- (void) resetEventFromDictionary:(PYEvent*)event
+{
+    NSString* key = [self keyForEventId:event.eventId];
+    if (key && [self isDataCachedForKey:key])
+    {
+        NSData *eventData = [self dataForKey:key];
+        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
+        [event resetFromDictionary:eventDic];
+    }
+    
+}
+
 - (PYEvent *)eventWithKey:(NSString *)key;
 {
     if ([self isDataCachedForKey:key]) {

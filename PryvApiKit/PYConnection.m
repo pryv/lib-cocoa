@@ -274,7 +274,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                }];
         } else { // update
             NSLog(@"In this case event has server id");
-            [self setModifiedEventAttributesObject:event
+            [self updateEvent:event
                                     successHandler:^(NSString *stoppedId) {
                                         event.isSyncTriedNow = NO;
                                         dispatch_group_leave(group);

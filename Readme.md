@@ -249,7 +249,7 @@ Example of modifying event data on server. You create an event object with the p
     event.streamId = @"someStreamId";
     event.value = @"someEventValue";
 
-    [connection setModifiedEventAttributesObject:event
+    [connection updateEvent:event
                                successHandler:^(NSString *stoppedId) {
         
     } errorHandler:^(NSError *error) {
@@ -326,6 +326,8 @@ You can trash/delete stream in this way:
     } errorHandler:^(NSError *error) {
         
     }];
+    
+    
 
 ###Some words about caching
 If caching is enabled for library, Streams, streams or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All Streams, streams or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, streams or Streams will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedStreams` `gotCachedEvents` and `gotCachedStreams` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
@@ -333,6 +335,24 @@ If caching is enabled for library, Streams, streams or events requested from ser
 Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode. 
 
 
-## License
+# Use cases
+
+## Editing an event with an eventual rollback
+
+#### If the event is a draft `event.isDraft` (ie `event.hasTempId && event.toBeSync`)
+
+- Rollback: Event just have to be thrown away in case of cancel.
+- Save: `[connection createEvent:event ......]`  
+
+#### If the event is not a draft, the properties of the event have been cached.
+
+- Rollback: `[event resetFromCache]` 
+- Save: `[connection updateEvent:event ......]`
+
+**Note:** there is a fallback with this method. Until data is reset changes are done on app-wide instance of the event. We may at some point need a logic with  `PYEvent *backupEvent = [event backup] ; [event restoreFromBackup:backupEvent]`
+
+ 
+
+# License
 
 [Revised BSD license](https://github.com/pryv/documents/blob/master/license-bsd-revised.md)

@@ -10,6 +10,8 @@
 #import "PYCachingController.h"
 #import "PryvApiKit.h"
 #import "PYConnection.h"
+#import "PYConnection+DataManagement.h"
+#import "PYTestsUtils.h"
 
 @interface PryvCachingTests ()
 @property (nonatomic, retain) NSData *imageData;
@@ -42,6 +44,48 @@
     NSString *key = @"ImageDataKey";
     [self.connection.cache cacheData:self.imageData withKey:key];
     STAssertTrue([self.connection.cache isDataCachedForKey:@"ImageDataKey"], @"Data isn't cached for key %@",key);
+    
+    
+}
+
+- (void)testResetCacheFromEvent
+{
+    PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
+                                                               fromTime:PYEventFilter_UNDEFINED_FROMTIME
+                                                                 toTime:PYEventFilter_UNDEFINED_TOTIME
+                                                                  limit:1
+                                                         onlyStreamsIDs:nil
+                                                                   tags:nil];
+    
+    
+    __block BOOL done;
+    [self.connection getEventsWithRequestType:PYRequestTypeAsync
+                                       filter:pyFilter
+                              gotCachedEvents:NULL
+                              gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime)
+     {
+         STAssertTrue(onlineEventList.count > 0, @"Should get at least one event");
+         PYEvent* event = [onlineEventList firstObject];
+         
+         NSTimeInterval previousDate = [[event eventDate] timeIntervalSince1970];
+         [event setEventDate:nil];
+         STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
+         [event resetFromCache];
+         STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
+         
+     }onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+         
+     } errorHandler:^(NSError *error) {
+         STFail(@"Failed fetching event.");
+     }];
+    
+    [PYTestsUtils waitForBOOL:&done forSeconds:10];
+    if (!done) {
+        STFail(@"Timeout fetching event.");
+        return;
+    }
+
+
 }
 
 @end
