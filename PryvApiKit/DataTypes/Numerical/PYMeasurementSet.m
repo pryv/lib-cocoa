@@ -71,7 +71,8 @@
 
 - (NSString *)localizedDescription
 {
-    return [PYUtilsLocalization fromDictionary:_descriptions defaultValue:@"TODO add some default values there"];
+    
+    return [PYUtilsLocalization fromDictionary:_descriptions defaultValue:@""];
 }
 
 @end
