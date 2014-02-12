@@ -308,6 +308,16 @@
 
 - (NSDate*)eventDate {
     if (self.time == PYEvent_UNDEFINED_TIME) return nil;
+    if (! self.connection) {
+# warning do the following comment
+        /**
+         * If an event has a time without serverTime It should keep a tempTime
+         * property up to date that will be updated..
+         */
+
+        return [NSDate dateWithTimeIntervalSince1970:self.time];
+    }
+
     return [self.connection localDateFromServerTime:self.time];
 }
 
@@ -315,6 +325,15 @@
     if (newDate == nil) {
         self.time = PYEvent_UNDEFINED_TIME;
         return;
+    }
+    if (! self.connection) {
+        self.time = [newDate timeIntervalSince1970];
+# warning do the following comment
+        /**
+         * If an event has a time without serverTime It should keep a tempTime 
+         * property up to date that will be updated..
+         */
+        return ;
     }
     self.time = [self.connection serverTimeFromLocalDate:newDate];
 }
