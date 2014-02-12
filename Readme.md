@@ -339,7 +339,7 @@ Also, there are some testing classes that are testing whether or not Objective-C
 
 ## Editing an event with an eventual rollback
 
-#### If the event is a draft `event.isDraft` (ie `event.hasTempId && event.toBeSync`)
+#### If the event is a draft `event.isDraft` (ie `event.hasTempId && !event.toBeSync`)
 
 - Rollback: Event just have to be thrown away in case of cancel.
 - Save: `[connection createEvent:event ......]`  

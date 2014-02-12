@@ -122,7 +122,7 @@
 }
 
 - (BOOL) isDraft {
-    return ([self hasTmpId] && [self toBeSync]);
+    return ([self hasTmpId] && (! [self toBeSync]));
 }
 
 - (BOOL) toBeSyncSkipCacheTest {

@@ -90,7 +90,7 @@
 - (BOOL) toBeSync;
 
 /**
- isDraft - return True if event has to be Synched and had a Temp Id (sugar for hasTmpId && toBeSync)
+ isDraft - return True if event has NOT to be Synched and had a Temp Id (sugar for hasTmpId && !toBeSync)
  */
 - (BOOL) isDraft;
 
