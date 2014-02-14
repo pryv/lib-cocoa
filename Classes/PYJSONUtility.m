@@ -7,7 +7,8 @@
 //
 
 #import "PYJSONUtility.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
+#import <AnyJSON/AnyJSON.h>
 
 @protocol MyNSJSONSerialization
 
@@ -25,7 +26,8 @@
         return [klass dataWithJSONObject:JSON options:0 error:nil];
     }
     
-    return [JSON JSONData];
+    //return [JSON JSONData];
+	return AnyJSONEncode([JSON ensureFoundationObject:JSON], nil)
 }
 
 
@@ -37,7 +39,8 @@
         return [klass JSONObjectWithData:JSONData options:0 error:nil];
     }
     
-    return [JSONData objectFromJSONData];
+    //return [JSONData objectFromJSONData];
+	return AnyJSONDecode([JSONData dataUsingEncoding:NSUTF8StringEncoding], nil);
 
 }
 
