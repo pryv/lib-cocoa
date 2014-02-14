@@ -27,7 +27,7 @@
     }
     
     //return [JSON JSONData];
-	return AnyJSONEncode([JSON ensureFoundationObject:JSON], nil)
+	return AnyJSONEncode([JSON ensureFoundationObject:JSON], nil);
 }
 
 
