@@ -136,6 +136,7 @@
     
     if ((resultAdd.count + resultRemove.count + resultModify.count) == 0 ) {
         NSLog(@"*42 void Filter notification.. no changes detected ");
+        [userInfo release];
         return;
     }
     
