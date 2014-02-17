@@ -8,7 +8,7 @@
 
 #import "PYJSONUtility.h"
 //#import "JSONKit.h"
-#import <AnyJSON/AnyJSON.h>
+//#import <AnyJSON/AnyJSON.h>
 
 @protocol MyNSJSONSerialization
 
@@ -21,13 +21,15 @@
 
 + (NSData *)getDataFromJSONObject:(id)JSON
 {
-    Class<MyNSJSONSerialization> klass = NSClassFromString(@"NSJSONSerialization");
-    if (klass) {
-        return [klass dataWithJSONObject:JSON options:0 error:nil];
-    }
-    
-    //return [JSON JSONData];
-	return AnyJSONEncode([JSON ensureFoundationObject:JSON], nil);
+//    Class<MyNSJSONSerialization> klass = NSClassFromString(@"NSJSONSerialization");
+//    if (klass) {
+//        return [klass dataWithJSONObject:JSON options:0 error:nil];
+//    }
+//    
+//    //return [JSON JSONData];
+//	return AnyJSONEncode([JSON ensureFoundationObject:JSON], nil);
+
+    return [NSJSONSerialization dataWithJSONObject:JSON options:0 error:nil];
 }
 
 
@@ -40,8 +42,9 @@
     }
     
     //return [JSONData objectFromJSONData];
-	return AnyJSONDecode([JSONData dataUsingEncoding:NSUTF8StringEncoding], nil);
-
+	//return AnyJSONDecode([JSONData dataUsingEncoding:NSUTF8StringEncoding], nil);
+    
+    return [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:nil];
 }
 
 

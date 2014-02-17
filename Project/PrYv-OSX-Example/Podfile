@@ -1,0 +1,7 @@
+platform :osx, "10.6"
+
+pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
+
+target 'PrYv-OSX-ExampleTests', :exclusive => true do
+  pod 'OCMock'
+end
