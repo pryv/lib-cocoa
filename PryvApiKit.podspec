@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.homepage     = 'https://github.com/pryv/sdk-objectivec-apple'
   s.summary      = 'PrYv SDK'
   s.authors      = { 'Pryv SA (Switzerland)' => 'http://w.pryv.com' }
-  s.source       = { :git => 'https://github.com/dkonst/sdk-objectivec-apple.git', :commit => '97d133dbdc8a0a8' }
+  s.source       = { :git => 'https://github.com/dkonst/sdk-objectivec-apple.git', :commit => 'a234f25e1cc10d4ec5e27c5e1a11c7a7e907d0a1' }
   s.license      = { :type => 'Revised BSD license', :file => 'LICENSE' }
 
   s.source_files = 'Classes/**/*.{h,m}'
