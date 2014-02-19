@@ -599,6 +599,9 @@
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *error))errorHandler
 {
+    
+    
+    
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS, event.eventId]
          requestType:reqType
               method:PYRequestMethodDELETE
@@ -606,11 +609,24 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  
+                 if (event.trashed == YES) {
+                    [self.cache removeEvent:event];
+                 } else {
+                    event.trashed = YES;
+                    [self.cache cacheEvent:event];
+                 }
                  
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
                  if (successHandler) {
                      successHandler();
                  }
+                 
+                 [[NSNotificationCenter defaultCenter]
+                  postNotificationName:kPYNotificationEvents
+                  object:self
+                  userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                 
+                 
              } failure:^(NSError *error) {
                  
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
@@ -625,6 +641,10 @@
                              [self.cache removeEvent:event];
                          }
                          
+                         [[NSNotificationCenter defaultCenter]
+                          postNotificationName:kPYNotificationEvents
+                          object:self
+                          userInfo:@{kPYNotificationKeyDelete: @[event]}];
                          
                      }else{
                          NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
