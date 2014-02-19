@@ -9,6 +9,7 @@
 #import "PYEvent+Utils.h"
 #import "PYConnection+DataManagement.h"
 #import "PYAttachment.h"
+#import "PYCachingController+Event.h"
 
 @implementation PYEvent (Utils)
 
@@ -18,13 +19,37 @@
         return;
     }
     [self.connection previewForEvent:self successHandler:^(NSData *filedata) {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-        previewImage([[[NSImage alloc] initWithData:filedata] autorelease]);
-#else
-        previewImage([UIImage imageWithData:filedata]);
-#endif
-    } errorHandler:failure];
+        previewImage([self imageFromData:filedata]);
+    } errorHandler:^(NSError *error) {
+        // if event is a picture get the data from memoroy or cache
+        if ([self.type isEqualToString:@"picture/attached"]) {
+            if (self.attachments && self.attachments.count > 0) {
+                PYAttachment* attachment = [self.attachments firstObject];
+                if ((attachment.fileData != nil) && attachment.fileData.length > 0) { // memory
+                    previewImage([self imageFromData:attachment.fileData]);
+                    return;
+                } else { // cache
+                    NSData *cachedData = [self.connection.cache dataForAttachment:attachment onEvent:self];
+                    if (cachedData && cachedData.length > 0) {
+                         previewImage([self imageFromData:cachedData]);
+                        return;
+                    }
+                }
+            }
+        }
+        failure(error);
+    }];
 }
+
+
+- (PYImage *) imageFromData:(NSData*)imageData {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+   return [[[NSImage alloc] initWithData:imageData] autorelease];
+#else
+    return [UIImage imageWithData:imageData];
+#endif
+}
+
 
 /**
  * get attachment data

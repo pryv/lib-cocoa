@@ -24,6 +24,8 @@
 /** get a preview image (if available) **/
 - (void)preview:(void (^) (PYImage *img))previewImage failure:(void(^) (NSError *error))failure;
 
+/** portable utility to get an image from data **/
+- (PYImage *) imageFromData:(NSData*)imageData;
 
 /** 
  * get attachment data

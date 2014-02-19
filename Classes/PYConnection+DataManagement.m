@@ -668,12 +668,13 @@
     
     [eventObject compareAndSetModifiedPropertiesFromCache];
     
+#warning - attachments should be updated asside..
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@", kROUTE_EVENTS, eventObject.eventId]
          requestType:PYRequestTypeAsync
               method:PYRequestMethodPUT
             postData:[eventObject dictionaryForUpdate]
-         attachments:eventObject.attachments
+         attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                  NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
@@ -828,6 +829,7 @@
 }
 
 # pragma mark - event attachment
+
 
 - (void)dataForAttachment:(PYAttachment *)attachment
                   onEvent:(PYEvent *)event
