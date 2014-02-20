@@ -18,6 +18,7 @@
 - (NSString *)keyForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event ;
 - (void)cacheEvent:(NSDictionary *)event WithKey:(NSString *)key;
 - (NSString *)keyForNotYetCreatedEvent:(PYEvent *)event;
+- (NSString *)keyForAttachment:(PYAttachment *)attachment onNotYetCreatedEvent:(PYEvent *)event;
 
 @end
 
@@ -29,6 +30,12 @@
 {
     if (cleanTemp) {
        [self removeEntityWithKey:[self keyForNotYetCreatedEvent:event]];
+        // move eventual attachments
+        for (PYAttachment* att in event.attachments) {
+            [self moveEntityWithKey:[self keyForAttachment:att onNotYetCreatedEvent:event]
+                              toKey:[self keyForAttachment:att onEvent:event]];
+        }
+        
     }
     [self cacheEvent:event];
 }
@@ -44,9 +51,17 @@
     [self cacheData:eventData withKey:[self keyForEvent:event]];
 }
 
+
+
+
 - (void)removeEvent:(PYEvent *)event
 {
     [self removeEntityWithKey:[self keyForEvent:event]];
+    if (event.attachments) {
+    for (PYAttachment* att in event.attachments) {
+        [self removeEntityWithKey:[self keyForAttachment:att onEvent:event]];
+    }
+    }
     [self removeEntityWithKey:[self keyForPreviewOnEvent:event]];
 }
 
@@ -66,6 +81,7 @@
 - (NSString *)keyForNotYetCreatedEvent:(PYEvent *)event {
     return [self keyForEventId:event.clientId];
 }
+
 
 #pragma clang diagnostic pop
 
@@ -93,12 +109,18 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (NSString *)keyForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
-    return [NSString stringWithFormat:@"%@-attachment_%@", [self keyForEvent:event], attachment.fileName];
+    return [NSString stringWithFormat:@"att_%@_%@", [self keyForEvent:event], attachment.fileName];
 }
+
+- (NSString *)keyForAttachment:(PYAttachment *)attachment onNotYetCreatedEvent:(PYEvent *)event {
+    return [NSString stringWithFormat:@"att_%@_%@", [self keyForNotYetCreatedEvent:event], attachment.fileName];
+}
+
 #pragma clang diagnostic pop
 
 - (NSData *)dataForAttachment:(PYAttachment *)attachment  onEvent:(PYEvent*) event {
-    return [self dataForKey:[self keyForAttachment:attachment onEvent:event]];
+    attachment.fileData = [self dataForKey:[self keyForAttachment:attachment onEvent:event]];
+    return attachment.fileData;
 }
 
 - (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event {
@@ -111,7 +133,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (NSString *)keyForPreviewOnEvent:(PYEvent *)event {
-    return [NSString stringWithFormat:@"%@-preview", [self keyForEvent:event]];
+    return [NSString stringWithFormat:@"preview_%@", [self keyForEvent:event]];
 }
 #pragma clang diagnostic pop
 

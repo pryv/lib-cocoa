@@ -35,6 +35,9 @@
  Remove an entity from disk for key
  */
 - (void)removeEntityWithKey:(NSString *)key;
+
+
+- (void)moveEntityWithKey:(NSString *)src toKey:(NSString *)dst;
 /**
  Remove stream from disk for key
  */

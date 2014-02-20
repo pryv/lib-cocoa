@@ -187,6 +187,9 @@ static NSString *s_myLanguageCodePrefered;
     
     if (attachments && attachments.count) {
         
+        
+        
+        
         NSData *data = [PYJSONUtility getDataFromJSONObject:postDataa];
         NSMutableData *bodyData = [[NSMutableData alloc] init];
         NSString *boundaryIdentifier = [NSString stringWithFormat:@"--%@--", [[NSProcessInfo processInfo] globallyUniqueString]];
@@ -204,13 +207,20 @@ static NSString *s_myLanguageCodePrefered;
         
         // param: attachment
         for (PYAttachment *attachment in attachments) {
+             // eventually load all attachments data from cached data
+            if (attachment.fileData && attachment.fileData.length > 0) {
             
-            [bodyData appendData:boundaryData];
-            [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", attachment.name, attachment.fileName] dataUsingEncoding:NSUTF8StringEncoding]];
-            
-            [bodyData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", [self fileMIMEType:attachment.fileName]] dataUsingEncoding:NSUTF8StringEncoding]];
-            [bodyData appendData:attachment.fileData];
-            [bodyData appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                
+                [bodyData appendData:boundaryData];
+                [bodyData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", attachment.name, attachment.fileName] dataUsingEncoding:NSUTF8StringEncoding]];
+                
+                [bodyData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", [self fileMIMEType:attachment.fileName]] dataUsingEncoding:NSUTF8StringEncoding]];
+                [bodyData appendData:attachment.fileData];
+                [bodyData appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                
+            } else {
+                NSLog(@"<warning> Skipped upload of empty attachement: %@", attachment.name);
+            }
             
         }
         

@@ -78,6 +78,20 @@
 
 }
 
+- (void)moveEntityWithKey:(NSString *)src toKey:(NSString *)dst
+{
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:src]])
+    {
+        NSLog(@"WANT TO MOVE BAD Entity: %@",src);
+    }
+    NSError *error = nil;
+     [[NSFileManager defaultManager] moveItemAtPath:[self.localDataPath stringByAppendingPathComponent:src]
+                                             toPath:[self.localDataPath stringByAppendingPathComponent:dst] error:&error];
+    if (error) {
+        NSAssert(@"Error in moving entity: %@ to %@", src, dst);
+    }
+}
+
 - (void)removeEntityWithKey:(NSString *)key
 {
     if(![[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]])

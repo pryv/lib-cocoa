@@ -524,6 +524,18 @@
                              errorWithDomain:@"Cannot create PYEvent on API with an different connection"
                                                 code:500 userInfo:nil]);
     }
+    
+    
+   
+    // load filedata in attachment from cache if needed
+    if (event.attachments) {
+        for (PYAttachment* att in event.attachments) {
+            if (! att.fileData || att.fileData.length == 0) {
+                [self.cache dataForAttachment:att onEvent:event];
+            }
+        }
+    }
+    
 
     
     [self apiRequest:kROUTE_EVENTS
