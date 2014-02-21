@@ -165,8 +165,8 @@
     
     [PYClient setLanguageCodePrefered:@"fr"];
     
-    if (! [@"Ensemble des mesures" isEqualToString:testSet.localizedName]) {
-        STFail(@"Failed testing if 'all-measure' measurementSets  event localizedName in french is 'Ensemble des mesures': %@",
+    if (! [@"Toutes les mesures" isEqualToString:testSet.localizedName]) {
+        STFail(@"Failed testing if 'all-measure' measurementSets  event localizedName in french is 'Toutes les mesures': %@",
                testSet.localizedName);
     }
     

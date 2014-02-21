@@ -59,8 +59,8 @@
 - (void)testSynchronizeTime
 {
     __block BOOL finished = NO;
-    [self.connection synchronizeTimeWithSuccessHandler:^(NSTimeInterval serverTime) {
-        NSLog(@"ServerTime %f", serverTime);
+    [self.connection synchronizeTimeWithSuccessHandler:^(NSTimeInterval serverTimeInteval) {
+        NSLog(@"ServerTime Delta (s) %f", serverTimeInteval);
         finished = YES;
     } errorHandler:^(NSError *error) {
         STFail(@"Cannot get ServerTime %@", error);

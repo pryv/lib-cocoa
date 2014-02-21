@@ -96,18 +96,19 @@
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
 /**
  @discussion
- this method simply connect to the PrYv API to retrive the server time in the returned header
+ this method simply connect to the Pryv API and synchronize with the localTime
+ Delta time in seconds between server and machine is returned
  This method will be called when you start the manager
  
  GET /
  
  */
-- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
+- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
                      errorHandler:(void(^)(NSError *error))errorHandler;
 
 

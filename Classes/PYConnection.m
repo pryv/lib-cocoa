@@ -369,7 +369,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler {
     
     if (path == nil) path = @"";
@@ -382,13 +382,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                   method:method
                 postData:postData
              attachments:attachments
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                      
                      
-                     NSDictionary* headerFields = [response allHeaderFields];
+                     NSDictionary* metas = responseDict[kPYAPIResponseMeta];
                      NSNumber* serverTime = nil;
-                     if (headerFields != nil ) {
-                         serverTime = [NSNumber numberWithDouble:[[headerFields objectForKey:@"Server-Time"] doubleValue]] ;
+                     if (metas != nil ) {
+                         serverTime = [NSNumber numberWithDouble:[metas[kPYAPIResponseMetaServerTime] doubleValue]] ;
                      }
                      
                      if (serverTime == nil) {
@@ -410,7 +410,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                      }
                      
                      if (successHandler) {
-                         successHandler(request,response,JSON);
+                         successHandler(request, response, responseDict);
                      }
                      
                  }
@@ -423,7 +423,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 /**
  * probably useless as now all requests synchronize
  */
-- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
+- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
                              errorHandler:(void(^)(NSError *error))errorHandler{
     
     [self apiRequest:@"/profile/app" //TODO: handle app profiles for improved user experience

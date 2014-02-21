@@ -169,12 +169,7 @@
                successHandler:(void (^)(NSString *stoppedEventId))successHandler
                  errorHandler:(void (^)(NSError *error))errorHandler;
 
-//GET /events/running
-/*An array of events containing the running period events.*/
-- (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
-                                   parameters:(NSDictionary *)filter
-                               successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
-                                 errorHandler:(void (^)(NSError *error))errorHandler;
+
 
 /**
  Get attachment NSData for file name and event id

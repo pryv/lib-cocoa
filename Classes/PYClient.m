@@ -148,7 +148,7 @@ static NSString *s_myLanguageCodePrefered;
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlockJSON)successHandler
+            success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 {
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
@@ -248,22 +248,23 @@ static NSString *s_myLanguageCodePrefered;
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
     }
-    [self sendJSONRequest:request success:successHandler failure:failureHandler];
+    [self sendJSONDictRequest:request success:successHandler failure:failureHandler];
     return request;
 }
 
 /**
  *
  */
-+ (void)sendJSONRequest:(NSURLRequest *)request
-            success:(PYClientSuccessBlockJSON)successHandler
++ (void)sendJSONDictRequest:(NSURLRequest *)request
+            success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler
 {
 
     //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
-    [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSDictionary *JSON) {
+    [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
         if (successHandler) {
-            successHandler(req, resp, JSON);
+            NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+            successHandler(req, resp,(NSDictionary*) JSON);
         }
     } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
         
@@ -275,7 +276,7 @@ static NSString *s_myLanguageCodePrefered;
             } else {
                 errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
             }
-             NSLog(@"** PYClient.sendJSONRequest Async ** : %@", errorToReturn);
+             NSLog(@"** PYClient.sendJSONDictRequest Async ** : %@", errorToReturn);
             failureHandler(errorToReturn);
         }
     }];

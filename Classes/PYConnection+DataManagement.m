@@ -82,8 +82,8 @@
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *resultDict) {
+                 NSArray *JSON = resultDict[kPYAPIResponseStreams];
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for (NSDictionary *streamDictionary in JSON) {
@@ -121,8 +121,8 @@
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NSArray
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSArray* JSON = responseDict[kPYAPIResponseStreams];
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for(NSDictionary *streamDictionary in JSON){
@@ -153,9 +153,8 @@
               method:PYRequestMethodPOST
             postData:[stream dictionary]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary"); // Fail if not an NotNSDictionary
-                 
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary* JSON = responseDict[kPYAPIResponseStream];
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
                  if (successHandler) {
                      successHandler(createdStreamId);
@@ -203,7 +202,7 @@
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  if (successHandler) {
                      successHandler();
                  }
@@ -213,52 +212,6 @@
                  }
              }];
 }
-
-//- (void)trashOrDeleteStream:(PYStream *)stream
-//               filterParams:(NSDictionary *)filter
-//           withRequestType:(PYRequestType)reqType
-//            successHandler:(void (^)())successHandler
-//              errorHandler:(void (^)(NSError *error))errorHandler
-//{
-//    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
-//         requestType:reqType
-//              method:PYRequestMethodDELETE
-//            postData:nil
-//         attachments:nil
-//             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//                 NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
-//                 if (successHandler) {
-//                     successHandler();
-//                 }
-//             } failure:^(NSError *error) {
-//                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
-//                     if (stream.isSyncTriedNow == NO) {
-//
-//                         //stream.notSyncTrashOrDelete = YES;
-//
-//                         if (stream.trashed == NO) {
-//                             stream.trashed = YES;
-//                             [self.cache cacheStream:stream];
-//                         }else{
-//                             //if event has trashed = yes flag it needs to be deleted from cache
-//                             NSLog(@"Stream removed from cache.");
-//                             [self.cache removeStream:stream];
-//                             [self.streamsNotSync removeObject:stream];
-//                         }
-//
-//
-//                     }else{
-//                         NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
-//                     }
-//
-//                 }else{
-//                     if (errorHandler) {
-//                         errorHandler (error);
-//                     }
-//                 }
-//             }];
-//}
-
 
 - (void)setModifiedStreamAttributesObject:(PYStream *)stream
                               forStreamId:(NSString *)streamId
@@ -271,7 +224,7 @@
               method:PYRequestMethodPUT
             postData:[stream dictionary]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
                  //Cache modified stream - We cache stream
                  NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
@@ -368,8 +321,8 @@
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NotNSArray
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSArray *JSON = responseDict[kPYAPIResponseEvents];
                  
                  NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
                  __block NSMutableArray* addArray = [[[NSMutableArray alloc] init] autorelease];
@@ -473,6 +426,9 @@
     
     __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                    withFilter:filter];
+#warning - check that retain ... without it was crashing in the subblock ..
+    [filteredCachedEventList retain];
+    
     
     if (cachedEvents) {
         if ([eventsFromCache count] > 0) {
@@ -485,7 +441,6 @@
     [self getOnlineEventsWithRequestType:reqType
                               parameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
                           successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
-                              
                               
                               
                               if (onlineEvents) {
@@ -502,6 +457,7 @@
                         
                                   syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
                                               [details objectForKey:kPYNotificationKeyModify]);
+                                  filteredCachedEventList = nil;
                               }
                           }
                             errorHandler:errorHandler
@@ -543,9 +499,9 @@
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary* JSON = responseDict[kPYAPIResponseEvent];
+                
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -619,7 +575,7 @@
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
                  if (event.trashed == YES) {
                     [self.cache removeEvent:event];
@@ -687,8 +643,8 @@
               method:PYRequestMethodPUT
             postData:[eventObject dictionaryForUpdate]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary *JSON = responseDict[kPYAPIResponseEvent];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                
                  
@@ -751,9 +707,8 @@
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary* JSON = responseDict[kPYAPIResponseEvent];
                  NSString *startedEventId = [JSON objectForKey:@"id"];
                  
                  if (successHandler) {
@@ -790,10 +745,8 @@
               method:PYRequestMethodPOST
             postData:[postData autorelease]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
-                 NSString *stoppedEventId = [JSON objectForKey:@"stoppedId"];
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSString *stoppedEventId = responseDict[@"stoppedId"];
                  
                  if (successHandler) {
                      successHandler(stoppedEventId);
@@ -804,39 +757,6 @@
                      errorHandler (error);
                  }
              }];
-    
-}
-
-//GET /events/running
-- (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
-                                   parameters:(NSDictionary *)filter
-                               successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
-                                 errorHandler:(void (^)(NSError *error))errorHandler
-
-{
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:filter];
-    [parameters setValue:@"true" forKey:@"running"];
-    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:parameters]
-         requestType:reqType
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
-                 
-                 NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
-                 for (NSDictionary *eventDic in JSON) {
-                     [eventsArray addObject:[PYEvent eventFromDictionary:eventDic onConnection:self]];
-                 }
-                 if (successHandler) {
-                     successHandler(eventsArray);
-                 }
-             } failure:^(NSError *error) {
-                 if (errorHandler) {
-                     errorHandler (error);
-                 }
-             }
-     ];
     
 }
 
