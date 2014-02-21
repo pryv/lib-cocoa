@@ -7,6 +7,7 @@
 
 @implementation PYAttachment
 
+@synthesize attachmentId = _attachmentId;
 @synthesize fileData = _fileData;
 @synthesize name = _name;
 @synthesize fileName = _fileName;
@@ -28,12 +29,14 @@
 
 - (void)dealloc
 {
+    [_attachmentId release];
     [_fileData release];
     [_name release];
     [_fileName release];
     [_size release];
     [_mimeType release];
 
+    _attachmentId = nil;
     _fileData = nil;
     _name = nil;
     _fileName = nil;
@@ -45,6 +48,7 @@
 + (PYAttachment *)attachmentFromDictionary:(NSDictionary *)JSON
 {
     PYAttachment *attachment = [[PYAttachment alloc] init];
+    attachment.attachmentId = [JSON objectForKey:@"id"];
     attachment.fileName = [JSON objectForKey:@"fileName"];
     attachment.mimeType = [JSON objectForKey:@"type"];
     attachment.size = [JSON objectForKey:@"size"];
@@ -58,6 +62,11 @@
     //"attachmentData" key won't be ever available when we read attachment from cache
     NSMutableArray *objects = [NSMutableArray array];
     NSMutableArray *keys = [NSMutableArray array];
+    if(self.attachmentId)
+    {
+        [objects addObject:self.attachmentId];
+        [keys addObject:@"attachmentId"];
+    }
     if(self.fileName)
     {
         [objects addObject:self.fileName];
@@ -89,7 +98,7 @@
 
 -(NSString *)description{
     NSMutableString *description = [NSMutableString stringWithString:@"<"];
-    [description appendFormat:@"%@",_fileName];
+    [description appendFormat:@"%@  -- %@",_attachmentId ,_fileName];
     if (_size) {
         [description appendFormat:@" (%@ bytes)",_size];
     }if (_name) {
