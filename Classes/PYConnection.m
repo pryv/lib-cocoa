@@ -431,7 +431,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  NSLog(@"Successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
                  if (successHandler)
                      successHandler(_serverTimeInterval);

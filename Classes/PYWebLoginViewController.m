@@ -275,10 +275,9 @@ static BOOL s_requestedLoginView = NO;
                   method:PYRequestMethodPOST
                 postData:postData
              attachments:nil
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                      if (!bself) return;
-                     NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                     [bself handlePollSuccess:JSON];
+                     [bself handlePollSuccess:responseDict];
                  } failure:^(NSError *error) {
                      if (!bself) return;
                      [bself handleFailure:error];
@@ -331,9 +330,9 @@ static BOOL s_requestedLoginView = NO;
                                                                                 method:PYRequestMethodGET
                                                                               postData:nil
                                                                            attachments:nil
-                                                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                                                                                    if (!bself) return;
-                                                                                   [bself handlePollSuccess:JSON];
+                                                                                   [bself handlePollSuccess:responseDict];
                                                                               } failure:^(NSError *error) {
                                                                                    if (!bself) return;
                                                                                    [bself handleFailure:error];
