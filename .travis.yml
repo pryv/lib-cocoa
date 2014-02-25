@@ -1,10 +1,10 @@
 rvm: 1.9.3
 language: objective-c
-before_install: 
+before_install:
   - cd Project/PrYv-OSX-Example
-  - brew install xcpretty
+  - gem install xcpretty
 script:
   - xcodebuild -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug | xcpretty -sc
-  - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug | xcpretty -sc
+  - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
 notifications:
   email: false
