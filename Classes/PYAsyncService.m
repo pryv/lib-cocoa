@@ -110,13 +110,13 @@
                 if ([resp statusCode] == 204) {
                     // NOTE: special case - Deleting trashed events returns zero length content
                     // maybe need to handle it somewhere else
-                    success(req, resp, [[[NSDictionary alloc] init] autorelease]);
+                    JSON = [[[NSDictionary alloc] init] autorelease];
                 } else {
                     NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
                     NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
                     failure (req, resp, error, responseData);
+                    return;
                 }
-                return ;
             }
             success (req, resp, JSON);
         }
