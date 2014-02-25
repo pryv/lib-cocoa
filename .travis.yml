@@ -1,0 +1,4 @@
+language: objective-c
+script:
+  - xcodebuild -workspace Project/PrYv-OSX-Example/PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
+  - xcodebuild test -workspace Project/PrYv-OSX-Example/PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
