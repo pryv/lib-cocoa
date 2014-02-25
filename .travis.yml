@@ -5,6 +5,6 @@ before_install:
   - gem install xcpretty
 script:
   - xcodebuild -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug | xcpretty -sc
-  - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
+  - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug | xcpretty -sc
 notifications:
   email: false
