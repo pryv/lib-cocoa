@@ -87,7 +87,8 @@
                                      
                                      finished1 = YES;
                                  } errorHandler:^(NSError *error) {
-                                     
+                                     STFail(@"error fetching streams");
+                                     finished1 = YES;
                                  }];
     [PYTestsUtils execute:^{
         STFail(@"Cannot get streams within 10 seconds");

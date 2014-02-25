@@ -67,7 +67,7 @@
                                           NSDictionary *message = (NSDictionary*) note.userInfo;
                                           NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
                                           STAssertNotNil(toAdd, @"We should get toAdd Array");
-                                          STAssertEquals(1u,toAdd.count , @"Array should contain just one event");
+                                          STAssertEquals((NSUInteger)1, toAdd.count , @"Array should contain just one event");
                                           STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
                                           DONE(eventCreationReceived);
                                       } else {

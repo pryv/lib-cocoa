@@ -47,24 +47,24 @@
          NSDictionary *message = (NSDictionary*) note.userInfo;
          NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
          
-         NSLog(@"*162 ADD %i", toAdd.count);
+         NSLog(@"*162 ADD %@", @(toAdd.count));
          
          if (! finished1) {
-             STAssertEquals(20u, toAdd.count, @"Got wrong number of events");
+             STAssertEquals((NSUInteger)20, toAdd.count, @"Got wrong number of events");
              pyFilter.limit = 30;
              finished1 = YES;
              [pyFilter update];
          } else {
-             STAssertEquals(10u, toAdd.count, @"Got wrong number of events");
+             STAssertEquals((NSUInteger)10, (NSUInteger)toAdd.count, @"Got wrong number of events");
          }
          
          NSArray* toRemove = [message objectForKey:kPYNotificationKeyDelete];
          if (toRemove) {
-             NSLog(@"*162 REMOVE %i", toRemove.count);
+             NSLog(@"*162 REMOVE %@", @(toRemove.count));
          }
          NSArray* modify = [message objectForKey:kPYNotificationKeyModify];
          if (modify) {
-             NSLog(@"*162 MODIFY %i", modify.count);
+             NSLog(@"*162 MODIFY %@", @(modify.count));
          }
          
          if (finished1) {
