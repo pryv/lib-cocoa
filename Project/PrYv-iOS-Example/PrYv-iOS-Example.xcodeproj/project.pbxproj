@@ -25,7 +25,6 @@
 		FB51397418B21706000F9BED /* PYEViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51397118B21706000F9BED /* PYEViewController.m */; };
 		FB51397718B2175F000F9BED /* PYEAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51397618B2175F000F9BED /* PYEAppTests.m */; };
 		FB51397A18B21782000F9BED /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB51397918B21782000F9BED /* SenTestingKit.framework */; };
-		FB51399318B2185F000F9BED /* libPryvApiKitLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51397D18B2185F000F9BED /* libPryvApiKitLogicTests.m */; };
 		FB51399418B2185F000F9BED /* offLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51397F18B2185F000F9BED /* offLineTests.m */; };
 		FB51399518B2185F000F9BED /* PryvCachingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398118B2185F000F9BED /* PryvCachingTests.m */; };
 		FB51399618B2185F000F9BED /* PYConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398318B2185F000F9BED /* PYConnectionTests.m */; };
@@ -76,8 +75,6 @@
 		FB51397518B2175F000F9BED /* PYEAppTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYEAppTests.h; sourceTree = "<group>"; };
 		FB51397618B2175F000F9BED /* PYEAppTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYEAppTests.m; sourceTree = "<group>"; };
 		FB51397918B21782000F9BED /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		FB51397C18B2185F000F9BED /* libPryvApiKitLogicTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libPryvApiKitLogicTests.h; path = ../common/libPryvApiKitLogicTests.h; sourceTree = "<group>"; };
-		FB51397D18B2185F000F9BED /* libPryvApiKitLogicTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = libPryvApiKitLogicTests.m; path = ../common/libPryvApiKitLogicTests.m; sourceTree = "<group>"; };
 		FB51397E18B2185F000F9BED /* offLineTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = offLineTests.h; path = ../common/offLineTests.h; sourceTree = "<group>"; };
 		FB51397F18B2185F000F9BED /* offLineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = offLineTests.m; path = ../common/offLineTests.m; sourceTree = "<group>"; };
 		FB51398018B2185F000F9BED /* PryvCachingTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PryvCachingTests.h; path = ../common/PryvCachingTests.h; sourceTree = "<group>"; };
@@ -212,8 +209,6 @@
 		FB51397B18B21810000F9BED /* PrYv-Common */ = {
 			isa = PBXGroup;
 			children = (
-				FB51397C18B2185F000F9BED /* libPryvApiKitLogicTests.h */,
-				FB51397D18B2185F000F9BED /* libPryvApiKitLogicTests.m */,
 				FB51397E18B2185F000F9BED /* offLineTests.h */,
 				FB51397F18B2185F000F9BED /* offLineTests.m */,
 				FB51398018B2185F000F9BED /* PryvCachingTests.h */,
@@ -426,7 +421,6 @@
 			files = (
 				FB51396518B21679000F9BED /* PrYv_iOS_ExampleTests.m in Sources */,
 				FB51399818B2185F000F9BED /* PYEventsTests.m in Sources */,
-				FB51399318B2185F000F9BED /* libPryvApiKitLogicTests.m in Sources */,
 				FB51399C18B2185F000F9BED /* PYTestConstants.m in Sources */,
 				FB51399518B2185F000F9BED /* PryvCachingTests.m in Sources */,
 				FB51399A18B2185F000F9BED /* PYEventTypesTests.m in Sources */,
