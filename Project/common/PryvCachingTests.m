@@ -69,14 +69,15 @@
          
          NSTimeInterval previousDate = [[event eventDate] timeIntervalSince1970];
          [event setEventDate:nil];
-         STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
+         STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
          [event resetFromCache];
-         STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
-         
-     }onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-         
+         STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
+         done = YES;
+     } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+
      } errorHandler:^(NSError *error) {
          STFail(@"Failed fetching event.");
+         done = YES;
      }];
     
     [PYTestsUtils waitForBOOL:&done forSeconds:10];
