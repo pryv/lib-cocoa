@@ -371,15 +371,16 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NotNSArray
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not dictionary"); // Fail if not a dictionary
                  
                  NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
                  __block NSMutableArray* addArray = [[[NSMutableArray alloc] init] autorelease];
                  __block NSMutableArray* modifyArray = [[[NSMutableArray alloc] init] autorelease];
                  __block NSMutableArray* sameArray = [[[NSMutableArray alloc] init] autorelease];
                  
-                 for (int i = 0; i < [JSON count]; i++) {
-                     NSDictionary *eventDic = [JSON objectAtIndex:i];
+                 NSArray *serverEvents = JSON[@"events"];
+                 for (int i = 0; i < [serverEvents count]; i++) {
+                     NSDictionary *eventDic = [serverEvents objectAtIndex:i];
                      
                      __block PYEvent* myEvent;
                      [self eventFromReceivedDictionary:eventDic
