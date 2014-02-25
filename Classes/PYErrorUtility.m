@@ -65,9 +65,9 @@
     
     NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
     
-    [userInfo setObject:[JSONerror objectForKey:@"id"] forKey:PryvErrorJSONResponseId];
+    [userInfo setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
     [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
-    [userInfo setObject:[JSONerror objectForKey:@"message"] forKey:NSLocalizedDescriptionKey];
+    [userInfo setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
     [userInfo setObject:request forKey:PryvRequestKey];
     
     NSArray *arrayOfErrros = [JSONerror objectForKey:@"subErrors"];
@@ -75,8 +75,8 @@
         NSMutableDictionary *userInfoSuberrors = [[NSMutableDictionary alloc] init];
         NSMutableArray *arrayOfSubErrors = [[NSMutableArray alloc] initWithCapacity:arrayOfErrros.count];
         for (NSDictionary *error in arrayOfErrros) {
-            [userInfoSuberrors setObject:[JSONerror objectForKey:@"id"] forKey:PryvErrorJSONResponseId];
-            [userInfoSuberrors setObject:[JSONerror objectForKey:@"message"] forKey:NSLocalizedDescriptionKey];
+            [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
+            [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
             [arrayOfSubErrors addObject:userInfoSuberrors];
         }
         
@@ -84,7 +84,6 @@
         [userInfoSuberrors release];
         [arrayOfSubErrors release];
     }
-    
     
     return [[[NSError alloc] initWithDomain:PryvSDKDomain code:error.code userInfo:userInfo] autorelease];
 }
