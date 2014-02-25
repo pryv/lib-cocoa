@@ -83,15 +83,17 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
+                 NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not NSDictionary");
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
-                 for (NSDictionary *streamDictionary in JSON) {
+                 NSArray *serverStreams = JSON[@"streams"];
+                 
+                 for (NSDictionary *streamDictionary in serverStreams) {
                      [streamList addObject:[PYStream streamFromJSON:streamDictionary]];
                  }
                  
                  if (syncAndCache == YES) {
-                     [self.cache cacheStreams:JSON];
+                     [self.cache cacheStreams:serverStreams];
                  }
                  
                  if (onlineStreamsList) {
