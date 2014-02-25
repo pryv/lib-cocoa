@@ -48,13 +48,14 @@
 {
     STAssertNotNil(self.connection, @"Access isn't created");
     
-    [self testGettingStreams];
+    //[self testGettingStreams];
     
     
     PYStream *stream = [[PYStream alloc] init];
     stream.streamId = @"pystreamstest";
     stream.name = @"PYStreamsTests123";
    
+    NOT_DONE(done1);
     
     __block NSString *createdStreamIdFromServer;
     [self.connection createStream:stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
@@ -70,13 +71,18 @@
         
         PYStream *streamFromCache = [self.connection.cache streamFromCacheWithStreamId:createdStreamIdFromServer];
         STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
-        
+
+        DONE(done1);
     } errorHandler:^(NSError *error) {
         
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
+        DONE(done1);
     }];
     
+    WAIT_FOR_DONE(done1);
     
+    
+    NOT_DONE(done2);
     
     [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
                                  gotCachedStreams:^(NSArray *cachedStreamsList) {
@@ -92,23 +98,31 @@
                        andParent:nil];
         }
         
-        
+        DONE(done2);
         
     } errorHandler:^(NSError *error) {
-        
+        NSLog(@"error: %@", error);
+        DONE(done2);
     }];
      
+    WAIT_FOR_DONE(done2);
     
+    
+    NOT_DONE(done3);
     [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
         [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
             NSLog(@"Test stream deleted.");
+            DONE(done3);
         } errorHandler:^(NSError *error) {
             STFail(@"Failed while deleting stream : %@",error);
+            DONE(done3);
         }];
     } errorHandler:^(NSError *error) {
         STFail(@"Failed while trashing stream : %@",error);
+        DONE(done3);
     }];
     
+    WAIT_FOR_DONE(done3);
 }
 
 - (void)tearDown

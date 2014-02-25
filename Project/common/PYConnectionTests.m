@@ -12,7 +12,7 @@
 #import "PYConnection+DataManagement.h"
 #import "PYTestsUtils.h"
 
-/*
+
 #if TARGET_IPHONE_SIMULATOR
 @interface NSURLRequest (IgnoreSSL)
 + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host;
@@ -28,7 +28,7 @@
 }
 @end
 #endif
-*/
+
 
 @implementation PYConnectionTests
 
