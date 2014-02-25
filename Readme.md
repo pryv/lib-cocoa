@@ -2,6 +2,7 @@
 
 **PryvApiKit is an OS X framework and an iOS static library. It handles all networking and interactions with Pryv API for your Objective-C based applications.**
 
+[![Build Status](https://travis-ci.org/dkonst/sdk-objectivec-apple.png?branch=master)](https://travis-ci.org/dkonst/sdk-objectivec-apple)
 
 **Note PYRequestType Sync / Async will be removed and all request will be made using Async method **
 
