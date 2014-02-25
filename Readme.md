@@ -2,7 +2,7 @@
 
 **PryvApiKit is an OS X framework and an iOS static library. It handles all networking and interactions with Pryv API for your Objective-C based applications.**
 
-[![Build Status](https://travis-ci.org/dkonst/sdk-objectivec-apple.png?branch=master)](https://travis-ci.org/dkonst/sdk-objectivec-apple)
+[![Build Status](https://travis-ci.org/pryv/sdk-objectivec-apple.png?branch=api0.7)](https://travis-ci.org/pryv/sdk-objectivec-apple)
 
 **Note PYRequestType Sync / Async will be removed and all request will be made using Async method **
 
@@ -14,22 +14,22 @@ First of all, you need to create a WebView object `myWebView` that you locate in
 	NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
 	NSArray *keys = [NSArray arrayWithObjects:@"StreamId", @"level", nil];
 	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
-	
+
 After this preparation, you actually request an access token with these two lines :
-	
+
 	[PYClient setDefaultDomainStaging];
 	[PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-osx-example"
                                      andPermissions:permissions
                                            delegate:self
                                            withWebView:&myWebView];
-        
+
 The first one is needed whenever you need to (re-)log a user. Notice in the second method that you pass the reference of your WebView object which will be displayed where you located it asking for username and password. If everything went good, you'll manage the response in the delegate method :
 
 	- (void) pyWebLoginSuccess:(PYConnection*)pyConnection {
 	    NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
 	    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 	}
-	
+
 Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborted:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
 
 ## LibPryvApiKit.a
@@ -37,11 +37,11 @@ This is a static library to be used for iOS. Usage is pretty straightforward. Fi
 
 	NSArray *objects = [NSArray arrayWithObjects:@"*", @"manage", nil];
 	NSArray *keys = [NSArray arrayWithObjects:@"StreamId", @"level", nil];
-	    
+
 	NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 
 After this preparation, you actually request for an access token using this method :
-	
+
 	[PYClient setDefaultDomainStaging];
     [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-ios-example"
                                      andPermissions:permissions
@@ -53,12 +53,12 @@ The first line is needed whenever you need to (re-)log a user. Here you are send
 	    NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
 	    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
 	}
-	
+
 Otherwise, you can manage abortion and error using the methods `- (void) pyWebLoginAborted:(NSString*)reason` and `- (void) pyWebLoginError:(NSError*)error`.
 
 
 
-##PryvApiKit 
+##PryvApiKit
 
 *Compatible with iOS and Mac OS X.*
 
@@ -82,46 +82,46 @@ NSArray *currentStreams = connection.currentStreams;
 
 ### Notifications
 
-#### PYConnection 
+#### PYConnection
 
-- name: "EVENTS"   
-  **userInfo**  
-  
+- name: "EVENTS"
+  **userInfo**
+
   ```
-  "NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents, 
+  "NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents,
                      kPYNotificationKeyModify : ...
                      kPYNotificationKeyDelete : ... }
   ```
-  
+
 - name: "STREAMS"
-  **userInfo**  
-  
+  **userInfo**
+
   ```
   "NSArray of (root) PYStreams
   ```
   complete structure of streams is accessible thru childrens
-  
+
 - name: "LOADING"
-  **userInfo**  
-  
+  **userInfo**
+
   ```
-  "NSDictionary = @{ kPYNotificationKeyAdd : @"BEGIN" or @"END", 
+  "NSDictionary = @{ kPYNotificationKeyAdd : @"BEGIN" or @"END",
                      @"CALL" : @"STREAMS" or kPYNotificationEvents or @"PROFILE" ... (API key) }
   ```
 
 
-  
+
 #### PYFilter
 
-- name: "EVENTS"   
-  **userInfo**  
-  
+- name: "EVENTS"
+  **userInfo**
+
   ```
-  "NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents, 
+  "NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents,
                      kPYNotificationKeyModify : ...
                      kPYNotificationKeyDelete : ... }
   ```
- 
+
 
 
 ###### streams
@@ -136,10 +136,10 @@ NSArray *currentStreams = connection.currentStreams;
     NSArray* streams = [message objectForKey:@"STREAMS"];
 		...
     }]
-    
+
 // shortcut for the above
 [connection addObserverForStreams:^(NSArray *streams) { ... } ]
-    
+
 ```
 
 ###### events
@@ -151,7 +151,7 @@ PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connect
                                                                   limit:20
                                                          onlyStreamsIDs:nil
                                                                    tags:nil];
-                                                                   
+
 [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
                                                   object:pyFilter
                                                    queue:nil
@@ -160,7 +160,7 @@ PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connect
 	NSDictionary *message = (NSDictionary*) note.userInfo;
          NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
          if (toAdd && toAdd.count > 0) {
-             NSLog(@"ADD %i", toAdd.count);             
+             NSLog(@"ADD %i", toAdd.count);
          }
          NSArray* toRemove = [message objectForKey:kPYNotificationKeyDelete];
          if (toRemove) {
@@ -171,7 +171,7 @@ PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connect
              NSLog(@"MODIFY %i", modify.count);
          }
 	}]
-	
+
 // shortcut with the same effect than previous code
 [pyFilter addObserverForEvents:^(NSArray *toAdd, NSArray *modify, NSArray *toRemove) { ... }]
 
@@ -191,11 +191,11 @@ The user ID and the access token are used for creating PYConnection object.
 With `PYConnection` objects, you can browse Streams, streams and events with the permissions you have in access token.
 
 	   [Connection getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamList) {
-	       
+
 	   } gotOnlineStreams:^(NSArray *onlineStreamList) {
-	       
+
 	   } errorHandler:^(NSError *error) {
-	       
+
 	   }];
 
 This library can work offline if caching is enabled. To enable/disable caching possibility you set the preprocessor macro `CACHE` in project file to 1/0 depending on whether or not you want caching support.
@@ -217,13 +217,13 @@ Example of getting all events:
 
     [connection getEventsWithRequestType:PYRequestTypeAsync filter:nil
     gotCachedEvents:^(NSArray *cachedEventList) {
-        
+
     } gotOnlineEvents:^(NSArray *onlineEventList) {
-        
+
     } successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-        
+
     } errorHandler:^(NSError *error) {
-        
+
     }];
 
 Example of creating event on server:
@@ -239,11 +239,11 @@ Example of creating event on server:
     [connection createEvent:event
              requestType:PYRequestTypeAsync
           successHandler:^(NSString *newEventId, NSString *stoppedId) {
-        
+
     } errorHandler:^(NSError *error) {
-        
+
     }];
-                
+
 Example of modifying event data on server. You create an event object with the properties you want to modify. In the example below, we are sending events with id "someEventId" to stream with id "someStreamId" and we are changing event `value` property.
 
     PYEvent *event = [[PYEvent alloc] init];
@@ -252,9 +252,9 @@ Example of modifying event data on server. You create an event object with the p
 
     [connection updateEvent:event
                                successHandler:^(NSString *stoppedId) {
-        
+
     } errorHandler:^(NSError *error) {
-        
+
     }];
 
 
@@ -272,7 +272,7 @@ Example of getting events from server with filter. This particular filter will s
 	                                                                 limit:10
 	                                                        onlyStreamsIDs:@[@"streamId"]
 	                                                                  tags:@[@"tag2"]];
-	   
+
 	   [eventFilter getEventsWithRequestType:PYRequestTypeSync gotCachedEvents:^(NSArray *eventList) {
 	       NSLog(@"cached eventList %@",eventList);
 	   } gotOnlineEvents:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
@@ -290,22 +290,22 @@ Getting all streams from current Stream:
 	[connection getAllStreamsWithRequestType:PYRequestTypeAsync
 	                         filterParams:nil
 	                     gotCachedStreams:^(NSArray *cachedStreamsList) {
-	    
+
 	} gotOnlineStreams:^(NSArray *onlineStreamList) {
-	    
+
 	} errorHandler:^(NSError *error) {
-	    
+
 	}];
-	
+
 Creating stream in current Stream:
 
     PYStream *stream = [[PYStream alloc] init];
     stream.name = @"someStreamName";
-                
+
     [connection createStream:stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
-        
+
     } errorHandler:^(NSError *error) {
-        
+
     }];
 
 If you want to change name of previously created stream above, you do this :
@@ -315,25 +315,25 @@ If you want to change name of previously created stream above, you do this :
     [connec setModifiedStreamAttributesObject:stream
                                    forStreamId:createdStreamId
                                    requestType:PYRequestTypeAsync successHandler:^{
-        
+
     } errorHandler:^(NSError *error) {
-        
+
     }];
 
 You can trash/delete stream in this way:
 
     [connection trashOrDeleteStreamWithId:createdStreamId filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
-        
+
     } errorHandler:^(NSError *error) {
-        
+
     }];
-    
-    
+
+
 
 ###Some words about caching
 If caching is enabled for library, Streams, streams or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All Streams, streams or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, streams or Streams will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedStreams` `gotCachedEvents` and `gotCachedStreams` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
 
-Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode. 
+Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode.
 
 
 # Use cases
@@ -343,16 +343,16 @@ Also, there are some testing classes that are testing whether or not Objective-C
 #### If the event is a draft `event.isDraft` (ie `event.hasTempId && !event.toBeSync`)
 
 - Rollback: Event just have to be thrown away in case of cancel.
-- Save: `[connection createEvent:event ......]`  
+- Save: `[connection createEvent:event ......]`
 
 #### If the event is not a draft, the properties of the event have been cached.
 
-- Rollback: `[event resetFromCache]` 
+- Rollback: `[event resetFromCache]`
 - Save: `[connection updateEvent:event ......]`
 
 **Note:** there is a fallback with this method. Until data is reset changes are done on app-wide instance of the event. We may at some point need a logic with  `PYEvent *backupEvent = [event backup] ; [event restoreFromBackup:backupEvent]`
 
- 
+
 
 # License
 
