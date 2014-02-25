@@ -1,10 +1,11 @@
 rvm: 1.9.3
 language: objective-c
-before_install:
-  - cd Project/PrYv-OSX-Example
-  - gem install xcpretty
 script:
-  - xcodebuild -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug | xcpretty -sc
-  - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug | xcpretty -sc
+  - cd Project/PrYv-OSX-Example
+  - pod install
+  - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
+  - cd ../Project/PrYv-iOS-Example
+  - pod install
+  - xcodebuild test -workspace PrYv-iOS-Example.xcworkspace -scheme PrYv-iOS-Example -verbose -configuration Debug -sdk iphonesimulator7.0 -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch),OS=latest'
 notifications:
   email: false
