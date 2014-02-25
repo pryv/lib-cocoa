@@ -1,0 +1,9 @@
+rvm: 1.9.3
+language: objective-c
+script:
+   - cd Project/PrYv-OSX-Example/
+   - pod install
+   - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
+   - cd ../PrYv-iOS-Example/
+   - pod install
+   - xcodebuild test -workspace PrYv-iOS-Example.xcworkspace -scheme PrYv-iOS-Example -verbose -configuration Debug -sdk iphonesimulator7.0 -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch),OS=latest'
