@@ -1,13 +1,12 @@
 //
-//  PYAccessTests.h
-//  PryvApiKit
+//  PYBaseConnectionTests.m
+//  PrYv-iOS-Example
 //
-//  Created by Nenad Jelic on 6/26/13.
-//  Copyright (c) 2013 Pryv. All rights reserved.
+//  Created by Konstantin Dorodov on 03.03.2014.
+//  Copyright (c) 2014 PrYv. All rights reserved.
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-
 #import <PryvApiKit/PryvApiKit.h>
 
 
@@ -20,10 +19,10 @@
                         usleep(10000);\
                     }
 
-@interface PYConnectionTests : SenTestCase
+
+@interface PYBaseConnectionTests : SenTestCase
 
 @property (nonatomic, retain) PYConnection *connection;
 
-- (void)testGettingStreams;
 
 @end

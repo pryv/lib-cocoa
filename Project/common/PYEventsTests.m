@@ -6,10 +6,12 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventsTests.h"
+#import "PYBaseConnectionTests.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
 
+@interface PYEventsTests : PYBaseConnectionTests
+@end
 
 @implementation PYEventsTests
 
@@ -25,10 +27,6 @@
 - (void)testEvents
 {
     STAssertNotNil(self.connection, @"Connection isn't created");
-    
-    [self testGettingStreams];
-    
-    
     
     
     

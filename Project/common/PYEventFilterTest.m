@@ -6,10 +6,13 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventFilterTest.h"
+#import "PYBaseConnectionTests.h"
 
 #import "PYEventFilter.h"
 #import "PYTestsUtils.h"
+
+@interface PYEventFilterTest : PYBaseConnectionTests
+@end
 
 @implementation PYEventFilterTest
 
@@ -23,9 +26,6 @@
 - (void)testEventFilter
 {
     STAssertNotNil(self.connection, @"Connection isn't created");
-    
-    [self testGettingStreams];
-    
     
     
     PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection

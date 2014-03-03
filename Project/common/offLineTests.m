@@ -6,16 +6,17 @@
 //  Copyright (c) 2014 Pryv. All rights reserved.
 //
 
-#import "offLineTests.h"
+#import "PYBaseConnectionTests.h"
 #import "PYTestsUtils.h"
 #import "PYCachingController+Event.h"
 
-@interface offLineTests ()
+
+@interface offLineTests : PYBaseConnectionTests
 {
     NSUInteger originalApiPort;
 }
-
 @end
+
 
 
 @implementation offLineTests

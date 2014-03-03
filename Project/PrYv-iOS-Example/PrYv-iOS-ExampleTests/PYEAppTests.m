@@ -112,9 +112,6 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
     
     //STAssertNotNil(self.connection, @"Connection isn't created");
     
-  //  [self testGettingStreams];
-    
-    
     
     PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
                                                                fromTime:PYEventFilter_UNDEFINED_FROMTIME

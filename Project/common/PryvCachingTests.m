@@ -6,16 +6,18 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvCachingTests.h"
+#import "PYBaseConnectionTests.h"
 #import "PYCachingController.h"
 #import "PryvApiKit.h"
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYTestsUtils.h"
 
-@interface PryvCachingTests ()
+
+@interface PryvCachingTests : PYBaseConnectionTests
 @property (nonatomic, retain) NSData *imageData;
 @end
+
 
 @implementation PryvCachingTests
 @synthesize imageData = _imageData;

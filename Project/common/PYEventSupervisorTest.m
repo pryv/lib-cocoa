@@ -6,10 +6,15 @@
 //  Copyright (c) 2014 Pryv. All rights reserved.
 //
 
-#import "PYEventSupervisorTest.h"
+#import <SenTestingKit/SenTestingKit.h>
 #import <PryvApiKit/PYEvent.h>
 #import "PYEvent+Supervisor.h"
 #import "PYTestsUtils.h"
+
+
+@interface PYEventSupervisorTest : SenTestCase
+@end
+
 
 @implementation PYEventSupervisorTest
 

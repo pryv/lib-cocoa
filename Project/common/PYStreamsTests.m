@@ -6,12 +6,14 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYStreamsTests.h"
+#import "PYBaseConnectionTests.h"
+
 #import "PYConnection+DataManagement.h"
 #import "PYStream.h"
 #import "PYCachingController+Stream.h"
+#import "PYTestsUtils.h"
 
-@interface PYStreamsTests ()
+@interface PYStreamsTests : PYBaseConnectionTests
 @property (nonatomic, strong) PYStream *stream;
 @end
 
@@ -24,6 +26,28 @@
     self.stream = [[PYStream alloc] init];
     self.stream.streamId = @"pystreamstest";
     self.stream.name = @"PYStreamsTests123";
+    
+}
+
+- (void)testGettingStreams
+{
+    __block BOOL finished1 = NO;
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
+     
+                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
+                                     
+                                 } gotOnlineStreams:^(NSArray *onlineStreamList) {
+                                     
+                                     STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
+                                     
+                                     finished1 = YES;
+                                 } errorHandler:^(NSError *error) {
+                                     STFail(@"error fetching streams");
+                                     finished1 = YES;
+                                 }];
+    [PYTestsUtils execute:^{
+        STFail(@"Cannot get streams within 10 seconds");
+    } ifNotTrue:&finished1 afterSeconds:10];
     
 }
 
@@ -52,13 +76,10 @@
     
 }
 
-- (void)testStreams
+- (void)testStreamCreation
 {
     STAssertNotNil(self.connection, @"Access isn't created");
     
-    //[self testGettingStreams];
-
-   
     NOT_DONE(done1);
     
     __block NSString *createdStreamIdFromServer;
@@ -114,11 +135,9 @@
 
 - (void)tearDown
 {
-    [super tearDown];
-    
     // we are NOT having assertions here
     // if we need the response
-    
+
     NOT_DONE(done3);
     [self.connection trashOrDeleteStream:self.stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
         [self.connection trashOrDeleteStream:self.stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
@@ -134,6 +153,8 @@
     }];
     
     WAIT_FOR_DONE(done3);
+    
+    [super tearDown];
 }
 
 
