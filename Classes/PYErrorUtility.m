@@ -64,10 +64,15 @@
     }
     
     NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
-    
-    [userInfo setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
+
+    if ([[JSONerror objectForKey:@"error"] isKindOfClass:[NSDictionary class]]) {
+        [userInfo setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
+        [userInfo setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
+    } else {
+        [userInfo setObject:[JSONerror valueForKeyPath:@"id"] forKey:PryvErrorJSONResponseId];
+        [userInfo setObject:[JSONerror valueForKeyPath:@"message"] forKey:NSLocalizedDescriptionKey];
+    }
     [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
-    [userInfo setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
     [userInfo setObject:request forKey:PryvRequestKey];
     
     NSArray *arrayOfErrros = [JSONerror objectForKey:@"subErrors"];
@@ -75,8 +80,13 @@
         NSMutableDictionary *userInfoSuberrors = [[NSMutableDictionary alloc] init];
         NSMutableArray *arrayOfSubErrors = [[NSMutableArray alloc] initWithCapacity:arrayOfErrros.count];
         for (NSDictionary *error in arrayOfErrros) {
-            [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
-            [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
+            if ([[JSONerror objectForKey:@"error"] isKindOfClass:[NSDictionary class]]) {
+                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
+                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
+            } else {
+                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"id"] forKey:PryvErrorJSONResponseId];
+                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"message"] forKey:NSLocalizedDescriptionKey];
+            }
             [arrayOfSubErrors addObject:userInfoSuberrors];
         }
         
