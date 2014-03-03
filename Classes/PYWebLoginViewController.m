@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, copy) NSString *appID;
 @property (nonatomic, retain) NSTimer *pollTimer;
+@property (nonatomic, copy) NSString *pollURL;
 @property (nonatomic, assign) id  delegate;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @property (nonatomic, assign) WebView *webView;
@@ -38,6 +39,7 @@
 
 @synthesize delegate;
 @synthesize pollTimer;
+@synthesize pollURL;
 @synthesize appID;
 @synthesize permissions;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
@@ -134,6 +136,7 @@ BOOL closing;
     self.delegate = nil;
     [pollTimer invalidate];
     [pollTimer release];
+    [pollURL release];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     //[[NSNotificationCenter defaultCenter] removeObserver:self];
     #else
@@ -319,33 +322,35 @@ static BOOL s_requestedLoginView = NO;
     // reset previous timer if one existed
     [self.pollTimer invalidate];
     
+    //update url to poll
+    self.pollURL = pollURLString;
+    
     // schedule a GET reqest in seconds amount stored in pollTimeInterval
-    __block __typeof__(self) bself = self;
+    //__block __typeof__(self) bself = self;
     self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
-                                                      target:[NSBlockOperation blockOperationWithBlock:
-                                                              ^{
-                                                                  [PYClient apiRequest:pollURLString
-                                                                                headers:nil
-                                                                           requestType:PYRequestTypeAsync
-                                                                                method:PYRequestMethodGET
-                                                                              postData:nil
-                                                                           attachments:nil
-                                                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                                                                                   if (!bself) return;
-                                                                                   [bself handlePollSuccess:responseDict];
-                                                                              } failure:^(NSError *error) {
-                                                                                   if (!bself) return;
-                                                                                   [bself handleFailure:error];
-                                                                               }];
-                                                                  
-                                                              }]
-                                                    selector:@selector(main) // send message main to NSBLockOperation
+                                                      target:self
+                                                    selector:@selector(timerBlock:)
                                                     userInfo:nil
                                                      repeats:NO
                       ];
     
     
-    
+}
+
+- (void)timerBlock:(NSTimer *)timer {
+    [PYClient apiRequest:pollURL
+                 headers:nil
+             requestType:PYRequestTypeAsync
+                  method:PYRequestMethodGET
+                postData:nil
+             attachments:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                if (!self) return;
+                                     [self handlePollSuccess:JSON];
+                                } failure:^(NSError *error) {
+                                    if (!self) return;
+                                    [self handleFailure:error];
+                                }];
 }
 
 - (void)handlePollSuccess:(NSDictionary*) jsonDictionary

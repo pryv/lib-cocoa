@@ -37,6 +37,7 @@
     NSArray *permissions;
     NSString *appID;
     NSTimer *pollTimer;
+    NSString *pollURL;
     id  delegate;
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     WebView *webView;
@@ -53,5 +54,7 @@
                                              withWebView:(WebView **)webView
                                 #endif
                                             ;
+    
+- (void)timerBlock;
 
 @end
