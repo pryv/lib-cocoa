@@ -87,7 +87,9 @@
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for (NSDictionary *streamDictionary in JSON) {
-                     [streamList addObject:[PYStream streamFromJSON:streamDictionary]];
+                     PYStream *stream = [PYStream streamFromJSON:streamDictionary];
+                     [self setupConnectionOnStreamAndChildren:stream];
+                     [streamList addObject:stream];
                  }
                  
                  if (syncAndCache == YES) {
@@ -106,7 +108,15 @@
              }];
 }
 
-
+- (void)setupConnectionOnStreamAndChildren:(PYStream *)stream
+{
+    [stream setConnection:self];
+    if (stream.children != nil) {
+        for (int i = 0; i < stream.children.count; i++) {
+            [self setupConnectionOnStreamAndChildren:[stream.children objectAtIndex:i]];
+        }
+    }
+}
 
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
