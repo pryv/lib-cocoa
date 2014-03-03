@@ -1,7 +1,5 @@
 PODS:
   - AnyJSON (0.1.0)
-  - Mocktail (1.2)
-  - OCMock (2.2.3)
   - PryvApiKit (0.0.1):
     - AnyJSON
     - PryvApiKit/CWLSynthesizeSingleton
@@ -12,8 +10,6 @@ PODS:
     - AnyJSON
 
 DEPENDENCIES:
-  - Mocktail
-  - OCMock
   - PryvApiKit (from `../../PryvApiKit.podspec`)
 
 EXTERNAL SOURCES:
@@ -22,8 +18,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AnyJSON: 693e7998be311cb6b77790fd46ce2bec64f1f853
-  Mocktail: eac066c98e4202b263f30db95c156f2a6e5e538c
-  OCMock: 74e4ddbcef134170dcc844f91c691f13868075d7
   PryvApiKit: 5d71dec0b0d88115dcae906f916f3f55d1a9adf5
 
 COCOAPODS: 0.29.0
