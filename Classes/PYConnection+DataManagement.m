@@ -292,10 +292,19 @@
     
     //This method should get particular stream and return it, not to cache it
     [self getOnlineStreamsWithRequestType:reqType filter:nil successHandler:^(NSArray *streamsList) {
+        __block BOOL found = NO;
         for (PYStream *currentStream in streamsList) {
-            if ([currentStream.streamId compare:streamId] == NSOrderedSame) {
-                onlineStream(currentStream);
+            if ([currentStream.streamId isEqualToString:streamId]) {
+                found = YES;
+                if (onlineStream) {
+                    onlineStream(currentStream);
+                }
                 break;
+            }
+        }
+        if (!found) {
+            if (onlineStream) {
+                onlineStream(nil);
             }
         }
     } errorHandler:errorHandler];
