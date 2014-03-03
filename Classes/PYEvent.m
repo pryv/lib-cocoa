@@ -188,9 +188,9 @@
     
     
     if (_attachments && _attachments.count > 0) {
-        NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
+        NSMutableArray *attachments = [[NSMutableArray alloc] init];
         [_attachments enumerateObjectsUsingBlock:^(PYAttachment *attachment, NSUInteger idx, BOOL *stop) {
-            [attachments setObject:[attachment cachingDictionary] forKey:attachment.fileName];
+            [attachments addObject:[attachment cachingDictionary]];
         }];
         
         [dic setObject:attachments forKey:@"attachments"];

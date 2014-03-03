@@ -28,11 +28,11 @@
 - (PYImage *) imageFromData:(NSData*)imageData;
 
 /** 
- * get attachment data
+ * Get attachment data
  * REVIEW and eventually move it from Utils to PYAttachment or directly in PYEvent
  **/
-- (void)dataForAttachment:(PYAttachment*)attachment
-           successHandler:(void (^) (NSData *data))attachmentData
-             errorHandler:(void(^) (NSError *error))failure;
+- (void)dataForAttachment:(PYAttachment *)attachment
+           successHandler:(void (^)(NSData *data))attachmentData
+             errorHandler:(void(^)(NSError *error))failure;
 
 @end

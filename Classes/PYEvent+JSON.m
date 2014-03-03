@@ -96,11 +96,11 @@
     
     self.eventDescription = [JSON objectForKey:@"description"];
     
-    NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
-    if (attachmentsDic) {
-        NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
+    NSArray *attachmentsArray = [JSON objectForKey:@"attachments"];
+    if (attachmentsArray) {
+        NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:[attachmentsArray count]];
         
-        [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
+        [attachmentsArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
             [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
         }];
         

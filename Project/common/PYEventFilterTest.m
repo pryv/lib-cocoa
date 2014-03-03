@@ -23,10 +23,10 @@
     
 }
 
+// FIXME this test should create the events necessary for the filter
 - (void)testEventFilter
 {
     STAssertNotNil(self.connection, @"Connection isn't created");
-    
     
     PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
                                                                fromTime:PYEventFilter_UNDEFINED_FROMTIME

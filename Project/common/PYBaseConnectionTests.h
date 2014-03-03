@@ -16,7 +16,7 @@
                     while (!done) {\
                         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode\
                         beforeDate:[NSDate distantFuture]];\
-                        usleep(10000);\
+                        sleep(10);\
                     }
 
 

@@ -82,7 +82,7 @@
     
     NOT_DONE(done1);
     
-    __block NSString *createdStreamIdFromServer;
+    __block NSString *createdStreamIdFromServer = nil;
     [self.connection createStream:self.stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
         createdStreamIdFromServer = [NSString stringWithString:createdStreamId];
@@ -131,6 +131,20 @@
     }];
      
     WAIT_FOR_DONE(done2);
+    
+    
+    NOT_DONE(done3);
+    [self.connection getOnlineStreamWithId:createdStreamIdFromServer
+                               requestType:PYRequestTypeAsync
+                            successHandler:^(PYStream *stream) {
+                                     STAssertNotNil(stream, @"should return single stream requested by id from the server");
+                                     DONE(done3);
+                                     
+                         } errorHandler:^(NSError *error) {
+                                     NSLog(@"error: %@", error);
+                                     DONE(done3);
+                         }];
+    WAIT_FOR_DONE(done3);
 }
 
 - (void)tearDown
