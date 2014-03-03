@@ -261,7 +261,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             
             [self createEvent:event
                   requestType:PYRequestTypeAsync
-               successHandler:^(NSString *newEventId, NSString *stoppedId) {
+               successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
                    event.isSyncTriedNow = NO;
                    dispatch_group_leave(group);
                    successCounter++;

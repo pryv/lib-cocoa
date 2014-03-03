@@ -11,6 +11,7 @@
 		EEE2913A71AC4BFD8DE0FC78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229784B4DC274BB7947EF0E8 /* libPods.a */; };
 		FB1CEF3A18C4B1AB002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */; };
 		FB1CEF3C18C4B416002584F7 /* PYBaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3B18C4B416002584F7 /* PYBaseConnectionTests.m */; };
+		FB1CEF4918C4F22F002584F7 /* 350x150.png in Resources */ = {isa = PBXBuildFile; fileRef = FB1CEF4818C4F22F002584F7 /* 350x150.png */; };
 		FB51394018B21678000F9BED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB51393F18B21678000F9BED /* Foundation.framework */; };
 		FB51394218B21678000F9BED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB51394118B21678000F9BED /* CoreGraphics.framework */; };
 		FB51394418B21678000F9BED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB51394318B21678000F9BED /* UIKit.framework */; };
@@ -58,6 +59,7 @@
 		FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
 		FB1CEF3B18C4B416002584F7 /* PYBaseConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYBaseConnectionTests.m; path = ../common/PYBaseConnectionTests.m; sourceTree = "<group>"; };
 		FB1CEF3D18C4B461002584F7 /* PYBaseConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYBaseConnectionTests.h; path = ../common/PYBaseConnectionTests.h; sourceTree = "<group>"; };
+		FB1CEF4818C4F22F002584F7 /* 350x150.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 350x150.png; sourceTree = "<group>"; };
 		FB51393C18B21678000F9BED /* PrYv-iOS-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PrYv-iOS-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB51393F18B21678000F9BED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FB51394118B21678000F9BED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -121,6 +123,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FB1CEF4718C4F22F002584F7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FB1CEF4818C4F22F002584F7 /* 350x150.png */,
+			);
+			name = Resources;
+			path = ../common/Resources;
+			sourceTree = "<group>";
+		};
 		FB51393318B21678000F9BED = {
 			isa = PBXGroup;
 			children = (
@@ -217,8 +228,9 @@
 				FB51398118B2185F000F9BED /* PryvCachingTests.m */,
 				FB51398518B2185F000F9BED /* PYEventFilterTest.m */,
 				FB51398718B2185F000F9BED /* PYEventsTests.m */,
-				FB51398D18B2185F000F9BED /* PYStreamsTests.m */,
 				FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */,
+				FB51398D18B2185F000F9BED /* PYStreamsTests.m */,
+				FB1CEF4718C4F22F002584F7 /* Resources */,
 				FB51399018B2185F000F9BED /* Utils */,
 			);
 			name = "PrYv-Common";
@@ -325,6 +337,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1CEF4918C4F22F002584F7 /* 350x150.png in Resources */,
 				FB51396318B21679000F9BED /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

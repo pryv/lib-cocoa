@@ -486,7 +486,7 @@
 //POST /events
 - (void)createEvent:(PYEvent *)event
         requestType:(PYRequestType)reqType
-     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
+     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
     
@@ -535,10 +535,6 @@
                  [event clearModifiedProperties]; // clear modified properties
                  [self.cache cacheEvent:event andCleanTempData:YES]; //-- remove eventual 
                  
-                 if (successHandler) {
-                     successHandler(createdEventId, stoppedId);
-                 }
-                 
                  // notification
                  
                  // event is synchonized.. this mean it is already known .. so we advertise a modification..
@@ -547,6 +543,11 @@
                   postNotificationName:kPYNotificationEvents
                   object:self
                   userInfo:@{notificationKey: @[event]}];
+                 
+                 if (successHandler) {
+                     successHandler(createdEventId, stoppedId, event);
+                 }
+
                  
              } failure:^(NSError *error) {
                  if (event.isSyncTriedNow == YES) {
@@ -575,7 +576,9 @@
                   object:self
                   userInfo:@{kPYNotificationKeyAdd: @[event]}];
                  
-                 successHandler (nil, @"");
+                 if (successHandler) {
+                     successHandler (nil, @"", event);
+                 }
              }
      
      ];
