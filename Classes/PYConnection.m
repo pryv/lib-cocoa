@@ -373,6 +373,12 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             failure:(PYClientFailureBlock)failureHandler {
     
     if (path == nil) path = @"";
+    if (!self.accessToken) {
+        if (failureHandler) {
+            failureHandler([NSError errorWithDomain:@"PYConnection.accessToken is nil" code:1000 userInfo:nil]);
+        }
+        return;
+    }
     NSString* fullPath = [NSString stringWithFormat:@"%@%@",[self apiBaseUrl],path];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
