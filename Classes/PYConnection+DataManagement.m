@@ -529,6 +529,9 @@
                      [event setEventDate:[NSDate date]]; // now
                  }
                  
+                 //--
+                 [event resetFromDictionary:JSON];
+                 
                  
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
@@ -842,7 +845,7 @@
     
     
     
-    NSString *path = [NSString stringWithFormat:@"%@/%@.jpg",kROUTE_EVENTS, event.eventId];
+    NSString *path = [NSString stringWithFormat:@"%@/%@?w=512",kROUTE_EVENTS, event.eventId];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
     

@@ -96,8 +96,21 @@
     
     self.eventDescription = [JSON objectForKey:@"description"];
     
-    NSArray *attachmentsArray = [JSON objectForKey:@"attachments"];
-    if (attachmentsArray) {
+   
+    id tempAtts = [JSON objectForKey:@"attachments"];
+   
+    
+   
+    if (tempAtts) {
+        //**** v0.6 to 0.7 switch
+        NSArray *attachmentsArray = nil;
+        if([[tempAtts class] isSubclassOfClass:[NSDictionary class]]) {
+            attachmentsArray = [tempAtts allValues];
+        } else {
+            attachmentsArray = tempAtts;
+        }
+        
+        
         NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:[attachmentsArray count]];
         
         [attachmentsArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {

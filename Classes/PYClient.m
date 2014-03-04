@@ -263,7 +263,7 @@ static NSString *s_myLanguageCodePrefered;
     //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
     [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
         if (successHandler) {
-            NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+            NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not NSDictionary");
             successHandler(req, resp,(NSDictionary*) JSON);
         }
     } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
