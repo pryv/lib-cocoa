@@ -65,7 +65,7 @@
     if(self.attachmentId)
     {
         [objects addObject:self.attachmentId];
-        [keys addObject:@"attachmentId"];
+        [keys addObject:@"id"];
     }
     if(self.fileName)
     {
