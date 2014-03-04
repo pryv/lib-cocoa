@@ -54,7 +54,6 @@
                                              withWebView:(WebView **)webView
                                 #endif
                                             ;
-    
-- (void)timerBlock;
+- (void)timerBlock:(NSTimer*)timer;
 
 @end

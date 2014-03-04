@@ -39,7 +39,7 @@
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects
                                                                                 forKeys:keys]];
     
-    [PYClient setDefaultDomainStaging];
+    //[PYClient setDefaultDomainStaging];
     [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-macosx-example"
                                       andPermissions:permissions
                                             delegate:self
@@ -66,7 +66,7 @@
     
 }
 
-- (void) pyWebLoginAborded:(NSString*)reason {
+- (void) pyWebLoginAborted:(NSString*)reason {
     NSLog(@"Signin Aborded: %@",reason);
 }
 

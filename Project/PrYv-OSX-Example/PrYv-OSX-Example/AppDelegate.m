@@ -25,7 +25,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    BOOL staging = YES;
+    BOOL staging = NO;
     if (staging) {
         self = [AppDelegate sharedInstance];
         self.user = [[User alloc] initWithUsername:@"perkikiki" andToken:@"Ve-U8SCASM"];

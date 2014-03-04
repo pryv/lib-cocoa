@@ -333,8 +333,6 @@ static BOOL s_requestedLoginView = NO;
                                                     userInfo:nil
                                                      repeats:NO
                       ];
-    
-    
 }
 
 - (void)timerBlock:(NSTimer *)timer {

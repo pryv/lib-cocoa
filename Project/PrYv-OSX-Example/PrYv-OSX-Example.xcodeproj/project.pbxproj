@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C095FAA18C4CE23009A820F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C095FA918C4CE23009A820F /* WebKit.framework */; };
 		10EA2E43C717413482574C84 /* libPods-PrYv-OSX-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E47ECFEDCCA24CC79C5B337B /* libPods-PrYv-OSX-ExampleTests.a */; };
 		ED92786559A14D09A71E2B68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2F2D28C27B492D82FAB4BB /* libPods.a */; };
 		FB1CEF4018C4BC9F002584F7 /* PYBaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C095FA918C4CE23009A820F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		4E0F0C22CAF54046A17382CB /* Pods-PrYv-OSX-ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.xcconfig"; path = "Pods/Pods-PrYv-OSX-ExampleTests.xcconfig"; sourceTree = "<group>"; };
 		89AEA2EA23974EB299548FC2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		8E2F2D28C27B492D82FAB4BB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C095FAA18C4CE23009A820F /* WebKit.framework in Frameworks */,
 				FBE2E8DB18B225150059691E /* Cocoa.framework in Frameworks */,
 				ED92786559A14D09A71E2B68 /* libPods.a in Frameworks */,
 			);
@@ -149,6 +152,7 @@
 		FBE2E8D918B225150059691E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0C095FA918C4CE23009A820F /* WebKit.framework */,
 				FBE2E90E18B225520059691E /* SenTestingKit.framework */,
 				FBE2E8DA18B225150059691E /* Cocoa.framework */,
 				FBE2E8DC18B225150059691E /* Other Frameworks */,
