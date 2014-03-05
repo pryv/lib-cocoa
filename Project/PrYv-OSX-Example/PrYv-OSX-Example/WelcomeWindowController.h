@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 @class SigninWindowController,PYEvent,PYStream;
 
-@interface WelcomeWindowController : NSWindowController {
+@interface WelcomeWindowController : NSWindowController <NSWindowDelegate>{
     @private
     NSButton *signinButton;
     IBOutlet NSTextField *eventID;

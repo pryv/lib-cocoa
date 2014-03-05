@@ -21,7 +21,15 @@
 
 - (void)awakeFromNib{
     webViewController = [[WebViewController alloc] initWithNibName:nil bundle:nil];
-    [[self window] setDelegate:webViewController];
 }
+
+-(void)dealloc{
+    
+    [webViewController release];
+    webViewController = nil;
+    
+    [super dealloc];
+}
+
 
 @end

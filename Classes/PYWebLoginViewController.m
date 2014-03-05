@@ -79,11 +79,11 @@ BOOL closing;
     
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(viewHidden:)
-//                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewHidden:)
+                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
     
-    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
+    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>Pryv Signin</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
     [self requestLoginView];
     #else
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
@@ -108,7 +108,7 @@ BOOL closing;
     webView = [[UIWebView alloc] initWithFrame:applicationFrame];
     [webView setDelegate:self];
     [webView setBackgroundColor:[UIColor grayColor]];
-    [webView loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
+    [webView loadHTMLString:@"<html><center><h1>Pryv Signin</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
     
     self.view = webView;
     
@@ -138,7 +138,7 @@ BOOL closing;
     [pollTimer release];
     [pollURL release];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    //[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -189,8 +189,8 @@ BOOL closing;
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 - (void)viewHidden:(NSNotification *)notification{
-    NSLog(@"Notification received : %@",notification);
-    [self close];
+    //NSLog(@"Notification received : %@",notification);
+    [self abortedWithReason:@"Canceled by user"];
 }
 
 #else
@@ -271,7 +271,8 @@ static BOOL s_requestedLoginView = NO;
     
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
     
-    __block __typeof__(self) bself = self;
+    //block typeof trick doesn't work on Mac OS X, but using self does not create memory leak
+    //__block __typeof__(self) bself = self;
     [PYClient apiRequest:fullPathString
                  headers:nil
              requestType:PYRequestTypeAsync
@@ -279,11 +280,11 @@ static BOOL s_requestedLoginView = NO;
                 postData:postData
              attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                     if (!bself) return;
-                     [bself handlePollSuccess:responseDict];
+                     if (!self) return;
+                     [self handlePollSuccess:responseDict];
                  } failure:^(NSError *error) {
-                     if (!bself) return;
-                     [bself handleFailure:error];
+                     if (!self) return;
+                     [self handleFailure:error];
                  }];
     
 }

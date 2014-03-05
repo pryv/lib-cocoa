@@ -42,8 +42,19 @@
 - (IBAction)signinButtonPressed:(id)sender {
     if(!signinWindowController)
         signinWindowController = [[SigninWindowController alloc] initWithWindowNibName:@"SigninWindowController"];
+    
+    [signinWindowController.window setDelegate:self];
     [signinWindowController showWindow:self];    
 }
+
+-(void)windowWillClose:(NSNotification *)notification{
+    if ([[notification.object identifier] isEqualToString:@"SigninWindow"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
+        [signinWindowController release];
+        signinWindowController = nil;
+    }
+}
+
 
 //#####################################################################################
 //########## THE FOLLOWING METHODS MUST BE UPDATED IF WE WANT AN APPLICATION ##########
