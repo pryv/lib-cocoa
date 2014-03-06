@@ -276,7 +276,9 @@ static NSString *s_myLanguageCodePrefered;
             } else {
                 errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
             }
-             NSLog(@"** PYClient.sendJSONDictRequest Async ** : %@", errorToReturn);
+             NSLog(@"** PYClient.sendJSONDictRequest Async \n** Error: %@, \n** requestUrl: %@,\n** body: %@ ",
+                   errorToReturn, [[request URL] absoluteString],
+                   [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
             failureHandler(errorToReturn);
         }
     }];

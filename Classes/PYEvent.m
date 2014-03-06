@@ -10,6 +10,7 @@
 #import "PYEvent+JSON.h"
 #import "PYAttachment.h"
 
+#import "PYEventType.h"
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
@@ -227,7 +228,16 @@
     }
     
     if (_eventContent) {
+        
+        if ([[self pyType] isNumerical] && ! [_eventContent isKindOfClass:[NSNumber class]]) {
+            if ([_eventContent isKindOfClass:[NSString class]]) {
+                _eventContent = [NSNumber numberWithDouble: [(NSString*)_eventContent doubleValue]] ;
+            } else {
+                NSLog(@"<WARNING> invalid value for numerical event %@", [self clientId]);
+            }
+        }
         [dic setObject:_eventContent forKey:@"content"];
+        
     }
     
     if (_streamId && _streamId.length > 0) {

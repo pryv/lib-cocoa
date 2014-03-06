@@ -10,6 +10,7 @@
 #import "PYAttachment.h"
 #import "PYCachingController.h"
 #import "PYConnection.h"
+#import "PYEventType.h"
 
 @implementation PYEvent (JSON)
 
@@ -73,17 +74,27 @@
     if([[eventType class] isSubclassOfClass:[NSDictionary class]])
     {
         NSDictionary *eventTypeDic = (NSDictionary*)eventType;
-        self.type = [NSString stringWithFormat:@"%@/%@",[eventTypeDic objectForKey:@"class"],[eventTypeDic objectForKey:@"type"]];
+        self.type = [NSString stringWithFormat:@"%@/%@",
+                     [eventTypeDic objectForKey:@"class"],
+                     [eventTypeDic objectForKey:@"type"]];
     }
     else
     {
         self.type = eventType;
     }
     
-    if ([JSON objectForKey:@"content"] == [NSNull null]) {
+    id _tempcontent = [JSON objectForKey:@"content"];
+    if (_tempcontent == [NSNull null]) {
         self.eventContent = nil;
     }else{
-        self.eventContent = [JSON objectForKey:@"content"];;
+        if ([[self pyType] isNumerical] && [_tempcontent isKindOfClass:[NSNumber class]]) {
+            
+#warning @dkonst please may you have a look to the following lines ..
+            _eventContent = [NSNumber numberWithDouble:[[(NSNumber*)_tempcontent description] doubleValue]];
+            [_eventContent retain];
+        } else {
+            self.eventContent = _tempcontent;
+        }
     }
     
     
