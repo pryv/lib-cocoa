@@ -231,7 +231,7 @@
         
         if ([[self pyType] isNumerical] && ! [_eventContent isKindOfClass:[NSNumber class]]) {
             if ([_eventContent isKindOfClass:[NSString class]]) {
-                _eventContent = [NSNumber numberWithDouble: [(NSString*)_eventContent doubleValue]] ;
+                self.eventContent = [NSNumber numberWithDouble: [(NSString*)_eventContent doubleValue]] ;
             } else {
                 NSLog(@"<WARNING> invalid value for numerical event %@", [self clientId]);
             }

@@ -87,14 +87,7 @@
     if (_tempcontent == [NSNull null]) {
         self.eventContent = nil;
     }else{
-        if ([[self pyType] isNumerical] && [_tempcontent isKindOfClass:[NSNumber class]]) {
-            
-#warning @dkonst please may you have a look to the following lines ..
-            _eventContent = [NSNumber numberWithDouble:[[(NSNumber*)_tempcontent description] doubleValue]];
-            [_eventContent retain];
-        } else {
-            self.eventContent = _tempcontent;
-        }
+         self.eventContent = _tempcontent;
     }
     
     
