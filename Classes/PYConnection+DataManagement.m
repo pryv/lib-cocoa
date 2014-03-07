@@ -166,12 +166,13 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                  NSDictionary* JSON = responseDict[kPYAPIResponseStream];
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
-                 if (successHandler) {
-                     successHandler(createdStreamId);
-                 }
+                 
                  [self.cache findAndCacheStream:stream
                                    withServerId:createdStreamId
                                     requestType:reqType];
+                 if (successHandler) {
+                     successHandler(createdStreamId);
+                 }
              } failure:^(NSError *error) {
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (stream.isSyncTriedNow == NO) {
