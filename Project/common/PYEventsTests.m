@@ -84,7 +84,7 @@
 
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
-                  successHandler:^(NSString *newEventId, NSString *stoppedId)
+                  successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event)
      {
          STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
          STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");

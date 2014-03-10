@@ -61,7 +61,7 @@
     __block NSString *unsyncEventCacheKey ;
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
-                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                  successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event) {
                       STAssertNil(newEventId, @"We shouldn't get a new id");
                       STAssertTrue(event.hasTmpId, @"event must have a temp id");
                       STAssertTrue(event.toBeSync, @"event should be known as to be synched");
