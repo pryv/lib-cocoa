@@ -10,6 +10,6 @@ pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
 
 target 'PrYv-iOS-ExampleTests', :exclusive => true do
   #pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
-  #pod 'OCMock'
+  pod 'OCMock'
   #pod 'Mocktail'
 end
