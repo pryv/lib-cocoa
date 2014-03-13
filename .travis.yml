@@ -3,7 +3,7 @@ language: objective-c
 before_script:
    - pod --version
    - gem which cocoapods
-   - gem update cocoapods 
+   - gem update cocoapods --no-ri --no-rdoc
 script:
    - cd Project/PrYv-OSX-Example/
    - pod install
