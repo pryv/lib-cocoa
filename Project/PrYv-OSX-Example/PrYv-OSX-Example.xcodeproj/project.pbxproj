@@ -13,6 +13,7 @@
 		FB1CEF4018C4BC9F002584F7 /* PYBaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */; };
 		FB1CEF4218C4BCC2002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */; };
 		FB31950318D206E8004564C6 /* 350x150.png in Resources */ = {isa = PBXBuildFile; fileRef = FB31950218D206E8004564C6 /* 350x150.png */; };
+		FB31950518D21BE7004564C6 /* 350x150.png in Resources */ = {isa = PBXBuildFile; fileRef = FB31950218D206E8004564C6 /* 350x150.png */; };
 		FBE2E8DB18B225150059691E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE2E8DA18B225150059691E /* Cocoa.framework */; };
 		FBE2E8E518B225150059691E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FBE2E8E318B225150059691E /* InfoPlist.strings */; };
 		FBE2E8E718B225150059691E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E8E618B225150059691E /* main.m */; };
@@ -384,6 +385,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB31950518D21BE7004564C6 /* 350x150.png in Resources */,
 				FBE2E90318B225150059691E /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

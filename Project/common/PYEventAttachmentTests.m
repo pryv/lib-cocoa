@@ -39,6 +39,8 @@
     event.type = @"note/txt";
     
     NSString *imageDataPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"350x150" ofType:@"png"];
+    NSLog(@"imageDataPath: %@", imageDataPath);
+    STAssertNotNil(imageDataPath, @"should have found image in the bundle");
     NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
     STAssertNotNil(imageData, @"could not create nsdata from image");
     
