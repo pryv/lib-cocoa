@@ -50,7 +50,7 @@ NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObje
 ```
 After this preparation, you actually request for an access token using this method :
 	
-```objcective-c
+```objective-c
 [PYClient setDefaultDomainStaging];
 [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-ios-example"
                                  andPermissions:permissions
@@ -59,7 +59,7 @@ After this preparation, you actually request for an access token using this meth
 
 The first line is needed whenever you need to (re-)log a user. Here you are sending the `appId` and an array of permissions. An instance of `UIWebView` will pop up and will ask the user for username and password. If everything went ok, you'll get response in the delegate method.
 
-```objcective-c
+```objective-c
 - (void) pyWebLoginSuccess:(PYConnection*)pyConnection {
     NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
     [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
@@ -78,7 +78,7 @@ Otherwise, you can manage abortion and error using the methods `- (void) pyWebLo
 
 ##### FIXME
 
-```objcective-c
+```objective-c
 /** refresh stream list **/
 [connection refreshStreams:^done]
 ```
@@ -87,7 +87,7 @@ Otherwise, you can manage abortion and error using the methods `- (void) pyWebLo
 
 ##### FIXME
 
-```objcective-c
+```objective-c
 /** get latest stream structure fetched **/
 NSArray *currentStreams = connection.currentStreams;
 ```
@@ -126,7 +126,7 @@ complete structure of streams is accessible thru childrens
 - name: "EVENTS"   
   **userInfo**  
   
-```objcective-c
+```objective-c
 NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents, 
                  kPYNotificationKeyModify : ...
                  kPYNotificationKeyDelete : ... }
@@ -136,7 +136,7 @@ NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents,
 
 ###### streams
 
-```objcective-c
+```objective-c
 [[NSNotificationCenter defaultCenter] addObserverForName:@"STREAMS"
                                                   object:connection
                                                    queue:nil
@@ -154,7 +154,7 @@ NSDictionary = @{ kPYNotificationKeyAdd : NSArray of PYEvents,
 
 ###### events
 
-```objcective-c
+```objective-c
 PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
                                                                fromTime:PYEventFilter_UNDEFINED_FROMTIME
                                                                  toTime:PYEventFilter_UNDEFINED_TOTIME
@@ -195,13 +195,13 @@ PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connect
 
 The user ID and the access token are used for creating PYConnection object.
 
-```objcective-c
+```objective-c
 PYConnection *access = [PYClient createAccessWithUsername:@"username" andAccessToken:@"accessToken"];
 ```
 
 With `PYConnection` objects, you can browse Streams, streams and events with the permissions you have in access token.
 
-```objcective-c
+```objective-c
 [Connection getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamList) {
 
 } gotOnlineStreams:^(NSArray *onlineStreamList) {
@@ -229,7 +229,7 @@ Example of getting all events:
 
 `filter:nil` means **no** filer, so all events.
 
-```objcective-c
+```objective-c
 [connection getEventsWithRequestType:PYRequestTypeAsync filter:nil
 gotCachedEvents:^(NSArray *cachedEventList) {
     
@@ -245,7 +245,7 @@ gotCachedEvents:^(NSArray *cachedEventList) {
 
 Example of creating event on server:
 
-```objcective-c
+```objective-c
 PYEvent *event = [[PYEvent alloc] init];
 event.streamId = @"someStreamId";
 event.value = @"someEventValue";
@@ -265,7 +265,7 @@ event.clientData = @{@"clDataKey": @"clientDataObject"};
                 
 Example of modifying event data on server. You create an event object with the properties you want to modify. In the example below, we are sending events with id "someEventId" to stream with id "someStreamId" and we are changing event `value` property.
 
-```objcective-c
+```objective-c
 PYEvent *event = [[PYEvent alloc] init];
 event.streamId = @"someStreamId";
 event.value = @"someEventValue";
@@ -281,7 +281,7 @@ event.value = @"someEventValue";
 
 Example of getting events from server with filter. This particular filter will search for events recorded in the last 60 days, ones that are in specific `streamId` and tagged with `tag2`. List of events will be limited to 10 results. If caching is enabled for library it will automatically sync events with ones from cache and give you result of synchronization.
 
-```objcective-c
+```objective-c
 NSDate *today = [NSDate date];
 NSCalendar *cal = [NSCalendar currentCalendar];
 NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -309,7 +309,7 @@ In a similar way, you manipulate streams.
 
 Getting all streams from current Stream:
 
-```objcective-c
+```objective-c
 [connection getAllStreamsWithRequestType:PYRequestTypeAsync
                          filterParams:nil
                      gotCachedStreams:^(NSArray *cachedStreamsList) {
@@ -323,7 +323,7 @@ Getting all streams from current Stream:
 
 Creating stream in current Stream:
 
-```objcective-c
+```objective-c
 PYStream *stream = [[PYStream alloc] init];
 stream.name = @"someStreamName";
             
@@ -336,7 +336,7 @@ stream.name = @"someStreamName";
 
 If you want to change name of previously created stream above, you do this :
 
-```objcective-c
+```objective-c
 PYStream *stream = [[PYStream alloc] init];
 stream.name = @"someStreamNameChanged";
 [connec setModifiedStreamAttributesObject:stream
@@ -350,7 +350,7 @@ stream.name = @"someStreamNameChanged";
 
 You can trash/delete stream in this way:
 
-```objcective-c
+```objective-c
 [connection trashOrDeleteStreamWithId:createdStreamId filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
     
 } errorHandler:^(NSError *error) {
