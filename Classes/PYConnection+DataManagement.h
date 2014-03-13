@@ -33,9 +33,9 @@
                         errorHandler:(void (^)(NSError *error))errorHandler;
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                           filter:(NSDictionary*)filterDic
-                   successHandler:(void (^) (NSArray *streamsList))onlineStreamList
-                     errorHandler:(void (^)(NSError *error))errorHandler;
+                                 filter:(NSDictionary*)filterDic
+                         successHandler:(void (^) (NSArray *streamsList))onlineStreamList
+                           errorHandler:(void (^)(NSError *error))errorHandler;
 
 //This is not supposed to be called directly by client app
 /**
@@ -43,10 +43,10 @@
  */
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                     filterParams:(NSDictionary *)filter
-                   successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
-                     errorHandler:(void (^) (NSError *error))errorHandler
-               shouldSyncAndCache:(BOOL)syncAndCache;
+                           filterParams:(NSDictionary *)filter
+                         successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
+                           errorHandler:(void (^) (NSError *error))errorHandler
+                     shouldSyncAndCache:(BOOL)syncAndCache;
 
 /**
  @discussion
@@ -75,10 +75,10 @@
  */
 
 - (void)trashOrDeleteStream:(PYStream *)stream
-                     filterParams:(NSDictionary *)filter
-                  withRequestType:(PYRequestType)reqType
-                   successHandler:(void (^)())successHandler
-                     errorHandler:(void (^)(NSError *error))errorHandler;
+               filterParams:(NSDictionary *)filter
+            withRequestType:(PYRequestType)reqType
+             successHandler:(void (^)())successHandler
+               errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**
  @discussion
@@ -109,18 +109,18 @@
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
 - (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
-                          parameters:(NSDictionary*)filterDic
-                  successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))onlineEventsList
-                    errorHandler:(void (^) (NSError *error))errorHandler
-              shouldSyncAndCache:(BOOL)syncAndCache;
+                            parameters:(NSDictionary*)filterDic
+                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))onlineEventsList
+                          errorHandler:(void (^) (NSError *error))errorHandler
+                    shouldSyncAndCache:(BOOL)syncAndCache;
 
 
 - (void)getEventsWithRequestType:(PYRequestType)reqType
-                      filter:(PYEventFilter *)filter
-                    gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                    gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
-                     onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                       errorHandler:(void (^)(NSError *error))errorHandler;
+                          filter:(PYEventFilter *)filter
+                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
+                 gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
+            onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+                    errorHandler:(void (^)(NSError *error))errorHandler;
 
 #warning - TODO success should return PYEvent references or clientIds or assume "nil" when not synch online
 //POST /events
@@ -150,8 +150,8 @@
  @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set)
  */
 - (void)updateEvent:(PYEvent *)eventObject
-                          successHandler:(void (^)(NSString *stoppedId))successHandler
-                            errorHandler:(void (^)(NSError *error))errorHandler;
+     successHandler:(void (^)(NSString *stoppedId))successHandler
+       errorHandler:(void (^)(NSError *error))errorHandler;
 
 
 //POST /events/start
@@ -186,8 +186,8 @@
  Get preview NSData (jpg image) for event id
  */
 - (void)previewForEvent:(PYEvent *)event
-                      successHandler:(void (^) (NSData * content))success
-                        errorHandler:(void (^) (NSError *error))errorHandler;
+         successHandler:(void (^) (NSData * content))success
+            errorHandler:(void (^) (NSError *error))errorHandler;
 
 
 @end

@@ -77,4 +77,15 @@
  */
 - (NSDictionary *)cachingDictionary;
 
+
+- (id)init;
+
+- (id)initWithConnection:(PYConnection *)connection;
+
+/*! 
+ * designated initializer
+ */
+- (id)initWithConnection:(PYConnection *) connection andClientId:(NSString *) clientId;
+
+
 @end

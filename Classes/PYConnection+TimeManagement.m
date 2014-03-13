@@ -12,13 +12,13 @@
 @implementation PYConnection (TimeManagement)
 
 
-- (NSTimeInterval) serverTimeFromLocalDate:(NSDate*)localDate {
+- (NSTimeInterval)serverTimeFromLocalDate:(NSDate*)localDate {
     if (localDate == nil) { localDate = [NSDate date]; }
     
     return [localDate timeIntervalSince1970] - self.serverTimeInterval;
 }
 
-- (NSDate*) localDateFromServerTime:(NSTimeInterval)serverTime{
+- (NSDate *)localDateFromServerTime:(NSTimeInterval)serverTime{
     return [NSDate dateWithTimeIntervalSince1970:(serverTime + self.serverTimeInterval)];
 }
 

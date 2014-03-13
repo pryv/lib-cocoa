@@ -11,7 +11,7 @@
 
 @interface PYConnection (TimeManagement)
 
-- (NSTimeInterval) serverTimeFromLocalDate:(NSDate*)localDate;
-- (NSDate*) localDateFromServerTime:(NSTimeInterval)serverTime;
+- (NSTimeInterval)serverTimeFromLocalDate:(NSDate *)localDate;
+- (NSDate *)localDateFromServerTime:(NSTimeInterval)serverTime;
 
 @end

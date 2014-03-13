@@ -62,11 +62,6 @@
     return [(NSString *)uuidStringRef autorelease];
 }
 
-- (id) init
-{
-    return [self initWithConnection:nil];
-}
-
 + (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId {
     if (clientId) {
         PYEvent* liveEvent = [PYEvent liveEventForClientId:clientId];
@@ -75,6 +70,10 @@
         }
     }
     return [[[PYEvent alloc] initWithConnection:nil andClientId:clientId] autorelease];
+}
+
+- (id) init {
+    return [self initWithConnection:nil];
 }
 
 - (id) initWithConnection:(PYConnection*) connection {

@@ -71,7 +71,7 @@
 /**
  * Get all event known by cache
  */
-- (NSArray*)allEventsFromCache;
+- (NSArray *)allEventsFromCache;
 
 /**
  Add stream to unsync list. If app tryed to create, modify or trash stream and it fails due to no internet access it will be added to unsync list
@@ -91,13 +91,13 @@
 /**
  Low level method for web service communication
  */
-- (void) apiRequest:(NSString *)path
-        requestType:(PYRequestType)reqType
-             method:(PYRequestMethod)method
-           postData:(NSDictionary *)postData
-        attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlockDict)successHandler
-            failure:(PYClientFailureBlock)failureHandler;
+- (void)apiRequest:(NSString *)path
+       requestType:(PYRequestType)reqType
+            method:(PYRequestMethod)method
+          postData:(NSDictionary *)postData
+       attachments:(NSArray *)attachments
+           success:(PYClientSuccessBlockDict)successHandler
+           failure:(PYClientFailureBlock)failureHandler;
 
 /**
  @discussion
@@ -109,7 +109,7 @@
  
  */
 - (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
-                     errorHandler:(void(^)(NSError *error))errorHandler;
+                             errorHandler:(void(^)(NSError *error))errorHandler;
 
 
 

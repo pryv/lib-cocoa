@@ -113,15 +113,16 @@
 # pragma mark - date
 
 /** get event Date, return "nil" if undefined **/
-- (NSDate*)eventDate;
+- (NSDate *)eventDate;
+
 /** set event Date. "nil" if undefined. If nil will be synched as "NOW" **/
-- (void) setEventDate:(NSDate *)newDate;
+- (void)setEventDate:(NSDate *)newDate;
 
 /** (PRIVATE) set eventTime in "server-Time space" .. for internal user only **/
-- (void) setEventServerTime:(NSTimeInterval)newTimeStamp;
+- (void)setEventServerTime:(NSTimeInterval)newTimeStamp;
 
 /** (PRIVATE) get eventTime in "server-Time space" .. for internal user only **/
-- (NSTimeInterval) getEventServerTime;
+- (NSTimeInterval)getEventServerTime;
 
 # pragma mark - attachment
 
@@ -133,7 +134,7 @@
 /**
  Get PYEvent object from json dictionary representation (JSON representation can include additioanl helper properties for event). It means that this method 'read' event from disk and from server
  */
-+ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
++ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
 /**
  Convert PYEvent object to json-like NSDictionary representation for synching with server
  */
@@ -148,10 +149,10 @@
 /**
  Reset all the fields from the cache. Can be used to rollback an edit change
  */
-- (void) resetFromCache;
+- (void)resetFromCache;
 
 
-- (NSMutableSet*) listModifiedPropertiesAgainstCachedVersion;
+- (NSMutableSet *)listModifiedPropertiesAgainstCachedVersion;
 
 # pragma mark - event Types accessors
 

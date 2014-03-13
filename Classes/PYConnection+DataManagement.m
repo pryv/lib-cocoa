@@ -118,7 +118,6 @@
     }
 }
 
-
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                                  filter:(NSDictionary*)filterDic
                          successHandler:(void (^) (NSArray *streamsList))onlineStreamList
@@ -289,7 +288,7 @@
                  errorHandler:(void (^) (NSError *error))errorHandler
 {
     //Method below automatically cache (overwrite) all streams, so this is bad
-    //When API support separate method of getting only one stream by its id this will be implemneted here
+    //When API support separate method of getting only one stream by its id this will be implemented here
     
     //This method should get particular stream and return it, not to cache it
     [self getOnlineStreamsWithRequestType:reqType filter:nil successHandler:^(NSArray *streamsList) {
