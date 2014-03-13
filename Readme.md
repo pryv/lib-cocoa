@@ -70,7 +70,7 @@ Otherwise, you can manage abortion and error using the methods `- (void) pyWebLo
 
 
 
-##PryvApiKit 
+## PryvApiKit 
 
 *Compatible with iOS and Mac OS X.*
 
@@ -223,7 +223,7 @@ You can manipulate streams and events. For example, you can create, delete, modi
 
 
 
-###Some useful `PYConnection` methods:
+### Some useful `PYConnection` methods:
 
 Example of getting all events:
 
@@ -358,7 +358,7 @@ You can trash/delete stream in this way:
 }];
 ```
 
-###Some words about caching
+### Some words about caching
 If caching is enabled for library, Streams, streams or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All Streams, streams or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, streams or Streams will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedStreams` `gotCachedEvents` and `gotCachedStreams` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
 
 Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode. 
@@ -368,7 +368,7 @@ Also, there are some testing classes that are testing whether or not Objective-C
 
 ## Editing an event with an eventual rollback
 
-#### If the event is a draft `event.isDraft` (ie `event.hasTempId && !event.toBeSync`)
+#### If the event is a draft `event.isDraft` (ie `event.hasTempId && !event.toBeSync`)
 
 - Rollback: Event just have to be thrown away in case of cancel.
 - Save: `[connection createEvent:event ......]`  
