@@ -26,8 +26,6 @@
     self.stream = [[PYStream alloc] initWithConnection:self.connection];
     self.stream.streamId = @"pystreamstest";
     self.stream.name = @"PYStreamsTests123";
-    
-    [self deleteStream:self.stream];
 }
 
 - (void)tearDown
@@ -116,12 +114,14 @@
 {
     STAssertNotNil(self.connection, @"Access isn't created");
     
+    [self deleteStream:self.stream];
+    
     NOT_DONE(done1);
     
     __block NSString *createdStreamIdFromServer = nil;
     [self.connection createStream:self.stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
-        createdStreamIdFromServer = [NSString stringWithString:createdStreamId];
+        createdStreamIdFromServer = [[NSString stringWithString:createdStreamId] retain];
         NSLog(@"New stream ID : %@",createdStreamIdFromServer);
         [self.connection.cache cacheStream:self.stream];
    

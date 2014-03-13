@@ -77,6 +77,7 @@
 
 - (void)dealloc
 {
+    [self superviseOut];
     [_clientId release];
     [_streamId release];
     [_name release];
