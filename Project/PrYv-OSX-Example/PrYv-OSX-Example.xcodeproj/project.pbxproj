@@ -12,6 +12,7 @@
 		ED92786559A14D09A71E2B68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2F2D28C27B492D82FAB4BB /* libPods.a */; };
 		FB1CEF4018C4BC9F002584F7 /* PYBaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */; };
 		FB1CEF4218C4BCC2002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */; };
+		FB31950318D206E8004564C6 /* 350x150.png in Resources */ = {isa = PBXBuildFile; fileRef = FB31950218D206E8004564C6 /* 350x150.png */; };
 		FBE2E8DB18B225150059691E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE2E8DA18B225150059691E /* Cocoa.framework */; };
 		FBE2E8E518B225150059691E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FBE2E8E318B225150059691E /* InfoPlist.strings */; };
 		FBE2E8E718B225150059691E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E8E618B225150059691E /* main.m */; };
@@ -60,6 +61,7 @@
 		FB1CEF3E18C4BC9F002584F7 /* PYBaseConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYBaseConnectionTests.h; path = ../common/PYBaseConnectionTests.h; sourceTree = "<group>"; };
 		FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYBaseConnectionTests.m; path = ../common/PYBaseConnectionTests.m; sourceTree = "<group>"; };
 		FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
+		FB31950218D206E8004564C6 /* 350x150.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 350x150.png; sourceTree = "<group>"; };
 		FBE2E8D718B225150059691E /* PrYv-OSX-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PrYv-OSX-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE2E8DA18B225150059691E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FBE2E8DD18B225150059691E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -127,6 +129,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FB31950118D206E8004564C6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FB31950218D206E8004564C6 /* 350x150.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		FBE2E8CE18B225150059691E = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +242,7 @@
 				FBE2E92218B227C10059691E /* PYStreamsTests.m */,
 				FBE2E92318B227C10059691E /* PYTestConstants.h */,
 				FBE2E92418B227C10059691E /* PYTestConstants.m */,
+				FB31950118D206E8004564C6 /* Resources */,
 				FBE2E92518B227C10059691E /* Utils */,
 			);
 			name = "PrYv-Common";
@@ -361,6 +372,7 @@
 			files = (
 				FBE2E8E518B225150059691E /* InfoPlist.strings in Resources */,
 				FBE2E8F318B225150059691E /* Images.xcassets in Resources */,
+				FB31950318D206E8004564C6 /* 350x150.png in Resources */,
 				FBE2E8EB18B225150059691E /* Credits.rtf in Resources */,
 				FBE2E95118B228640059691E /* SigninWindowController.xib in Resources */,
 				FBE2E95518B229D60059691E /* MainMenu.xib in Resources */,

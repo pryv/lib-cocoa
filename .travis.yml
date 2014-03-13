@@ -1,7 +1,8 @@
 rvm: 1.9.3
 language: objective-c
 before_script:
-   - gem cocoapod --version
+   - pod --version
+   - gem which cocoapods
 script:
    - cd Project/PrYv-OSX-Example/
    - pod install
