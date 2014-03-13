@@ -1,7 +1,8 @@
 rvm: 1.9.3
 language: objective-c
-script:
+before_script:
    - gem cocoapod --version
+script:
    - cd Project/PrYv-OSX-Example/
    - pod install
    - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Debug
