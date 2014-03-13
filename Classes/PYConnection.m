@@ -55,7 +55,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         self.apiExtraPath = @"";
         self.apiPort = 443;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
-        self.connectionReachability = [Reachability reachabilityForInternetConnection];
+        self.connectionReachability = [PYReachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
         [self pyAccessStatus:self.connectionReachability];
@@ -301,8 +301,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)reachabilityChanged:(NSNotification *)notif
 {
-	Reachability* curReach = [notif object];
-	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+	PYReachability* curReach = [notif object];
+	NSParameterAssert([curReach isKindOfClass:[PYReachability class]]);
     NetworkStatus netStatus = [curReach currentReachabilityStatus];
     if (netStatus == NotReachable) {
         //No internet

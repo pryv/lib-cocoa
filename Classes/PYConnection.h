@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
-@class Reachability;
+@class PYReachability;
 @class PYEvent;
 @class PYStream;
 @class PYCachingController;
@@ -25,7 +25,7 @@
     
     NSTimeInterval _lastTimeServerContact;
     
-    Reachability *_connectionReachability;
+    PYReachability *_connectionReachability;
     BOOL _online;
     NSMutableSet *_streamsNotSync;
     NSUInteger _attachmentsCountNotSync;
@@ -44,7 +44,7 @@
 @property (nonatomic) NSUInteger apiPort;
 @property (nonatomic, copy) NSString *apiExtraPath;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
-@property (nonatomic, retain) Reachability *connectionReachability;
+@property (nonatomic, retain) PYReachability *connectionReachability;
 @property (nonatomic, retain) PYCachingController *cache;
 
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;

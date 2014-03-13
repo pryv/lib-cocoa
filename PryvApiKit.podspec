@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   #s.dependency 'CWLSynthesizeSingleton', '~> 0.0.2'
   #s.compiler_flags = '-Wno-deprecated-objc-isa-usage'
   
-  s.subspec 'PYReachability' do |rsp|
+  s.subspec 'Reachability' do |rsp|
     rsp.source_files = 'Classes/Reachability/PYReachability.{h,m}'
     rsp.requires_arc = false
   end
