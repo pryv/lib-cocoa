@@ -18,7 +18,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYAttachment.h"
 #import "PYConnection+DataManagement.h"
 #import "PYCachingController.h"
-#import "Reachability.h"
+#import "PYReachability.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
 #import "PYUtils.h"
@@ -319,7 +319,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
 }
 
-- (void)pyAccessStatus:(Reachability *)currReach
+- (void)pyAccessStatus:(PYReachability *)currReach
 {
     if (currReach == self.connectionReachability) {
         if (currReach.currentReachabilityStatus == NotReachable) {

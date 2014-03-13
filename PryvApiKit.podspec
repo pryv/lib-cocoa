@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'Revised BSD license', :file => 'LICENSE' }
 
   s.source_files = 'Classes/**/*.{h,m}'
-  s.exclude_files = 'Classes/Reachability/Reachability.{h,m}', 'Classes/CWLSynthesizeSingleton.h'
+  s.exclude_files = 'Classes/Reachability/PYReachability.{h,m}', 'Classes/CWLSynthesizeSingleton.h'
 
   s.ios.deployment_target = "5.1"
   s.osx.deployment_target = "10.6"
@@ -20,8 +20,8 @@ Pod::Spec.new do |s|
   #s.dependency 'CWLSynthesizeSingleton', '~> 0.0.2'
   #s.compiler_flags = '-Wno-deprecated-objc-isa-usage'
   
-  s.subspec 'Reachability' do |rsp|
-    rsp.source_files = 'Classes/Reachability/Reachability.{h,m}'
+  s.subspec 'PYReachability' do |rsp|
+    rsp.source_files = 'Classes/Reachability/PYReachability.{h,m}'
     rsp.requires_arc = false
   end
   
