@@ -96,6 +96,10 @@
                      [self.cache cacheStreams:JSON];
                  }
                  
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                     object:self
+                                                                   userInfo:nil];
+                 
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
                      onlineStreamsList(streamList);
@@ -120,7 +124,7 @@
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                                  filter:(NSDictionary*)filterDic
-                         successHandler:(void (^) (NSArray *streamsList))onlineStreamList
+                         successHandler:(void (^) (NSArray *streamsList))onlineStreamListHandler
                            errorHandler:(void (^)(NSError *error))errorHandler
 {
     //This method should retrieve always online streams and need to cache (sync) online streams
@@ -139,9 +143,14 @@
                      streamObject.connection = self;
                      [streamList addObject:streamObject];
                  }
-                 if(onlineStreamList){
+                 
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                     object:self
+                                                                   userInfo:nil];
+
+                 if(onlineStreamListHandler){
                      [self.cache cacheStreams:JSON];
-                     onlineStreamList(streamList);
+                     onlineStreamListHandler(streamList);
                  }
              } failure:^(NSError *error){
                  if(errorHandler){
@@ -169,6 +178,10 @@
                  [self.cache findAndCacheStream:stream
                                    withServerId:createdStreamId
                                     requestType:reqType];
+                 
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                     object:self
+                                                                   userInfo:nil];
                  if (successHandler) {
                      successHandler(createdStreamId);
                  }
@@ -284,7 +297,7 @@
 
 - (void)getOnlineStreamWithId:(NSString *)streamId
                   requestType:(PYRequestType)reqType
-               successHandler:(void (^) (PYStream *stream))onlineStream
+               successHandler:(void (^) (PYStream *stream))onlineStreamHandler
                  errorHandler:(void (^) (NSError *error))errorHandler
 {
     //Method below automatically cache (overwrite) all streams, so this is bad
@@ -296,15 +309,20 @@
         for (PYStream *currentStream in streamsList) {
             if ([currentStream.streamId isEqualToString:streamId]) {
                 found = YES;
-                if (onlineStream) {
-                    onlineStream(currentStream);
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                    object:self
+                                                                  userInfo:nil];
+
+                if (onlineStreamHandler) {
+                    onlineStreamHandler(currentStream);
                 }
                 break;
             }
         }
         if (!found) {
-            if (onlineStream) {
-                onlineStream(nil);
+            if (onlineStreamHandler) {
+                onlineStreamHandler(nil);
             }
         }
     } errorHandler:errorHandler];
@@ -366,27 +384,25 @@
                      
                      [eventsArray addObject:myEvent];
                  }
+
+                 //cacheEvents method will overwrite contents of currently cached file
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
                  
+                 NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
+                                           kPYNotificationKeyModify: modifyArray,
+                                           kPYNotificationKeyUnchanged: sameArray};
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyAdd: addArray,
+                                                                              kPYNotificationKeyModify: modifyArray}];
+
                  if (successBlock) {
-                     //cacheEvents method will overwrite contents of currently cached file
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
-                     
-                     NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
-                                               kPYNotificationKeyModify: modifyArray,
-                                               kPYNotificationKeyUnchanged: sameArray};
                      successBlock(eventsArray, serverTime, details);
-                     
-                     
-                     
-                     [[NSNotificationCenter defaultCenter]
-                      postNotificationName:kPYNotificationEvents
-                      object:self
-                      userInfo:@{kPYNotificationKeyAdd: addArray, kPYNotificationKeyModify: modifyArray}];
                      
                  }
                  
@@ -542,10 +558,9 @@
                  
                  // event is synchonized.. this mean it is already known .. so we advertise a modification..
                  NSString* notificationKey = event.isSyncTriedNow ? kPYNotificationKeyModify : kPYNotificationKeyAdd;
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{notificationKey: @[event]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{notificationKey: @[event]}];
                  
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId, event);
@@ -570,14 +585,13 @@
                  if (event.attachments.count > 0) {
                      for (PYAttachment *attachment in event.attachments) {
                          //  attachment.mimeType = @"mimeType";
-                         attachment.size = [NSNumber numberWithInt:attachment.fileData.length];
+                         attachment.size = [NSNumber numberWithUnsignedInteger:attachment.fileData.length];
                      }
                  }
                  [self.cache cacheEvent:event];
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{kPYNotificationKeyAdd: @[event]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyAdd: @[event]}];
                  
                  if (successHandler) {
                      successHandler (nil, @"", event);
@@ -614,10 +628,9 @@
                      successHandler();
                  }
                  
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyDelete: @[event]}];
                  
                  
              } failure:^(NSError *error) {
@@ -634,10 +647,9 @@
                              [self.cache removeEvent:event];
                          }
                          
-                         [[NSNotificationCenter defaultCenter]
-                          postNotificationName:kPYNotificationEvents
-                          object:self
-                          userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                         [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                             object:self
+                                                                           userInfo:@{kPYNotificationKeyDelete: @[event]}];
                          
                      }else{
                          NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
@@ -672,15 +684,13 @@
                  NSDictionary *JSON = responseDict[kPYAPIResponseEvent];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                
-                 
                  eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
                  [eventObject clearModifiedProperties];
                  [self.cache cacheEvent:eventObject ];
                  
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -699,10 +709,9 @@
                      //Get current event with id from cache
                      [self.cache cacheEvent:eventObject];
                      
-                     [[NSNotificationCenter defaultCenter]
-                      postNotificationName:kPYNotificationEvents
-                      object:self
-                      userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
+                     [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                         object:self
+                                                                       userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
                      
                      if (successHandler) {
                          NSString *stoppedIdToReturn = @"";
