@@ -29,7 +29,7 @@
 		FBE2E93618B227E20059691E /* PYConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91818B227C10059691E /* PYConnectionTests.m */; };
 		FBE2E93718B227E20059691E /* PYEventFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91A18B227C10059691E /* PYEventFilterTest.m */; };
 		FBE2E93818B227E20059691E /* PYEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91C18B227C10059691E /* PYEventsTests.m */; };
-		FBE2E93918B227E20059691E /* PYEventSupervisorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91E18B227C10059691E /* PYEventSupervisorTest.m */; };
+		FBE2E93918B227E20059691E /* PYSupervisorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91E18B227C10059691E /* PYSupervisorTest.m */; };
 		FBE2E93A18B227E20059691E /* PYEventTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E92018B227C10059691E /* PYEventTypesTests.m */; };
 		FBE2E93B18B227E20059691E /* PYStreamsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E92218B227C10059691E /* PYStreamsTests.m */; };
 		FBE2E93C18B227E20059691E /* PYTestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E92418B227C10059691E /* PYTestConstants.m */; };
@@ -86,7 +86,7 @@
 		FBE2E91818B227C10059691E /* PYConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYConnectionTests.m; path = ../common/PYConnectionTests.m; sourceTree = "<group>"; };
 		FBE2E91A18B227C10059691E /* PYEventFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventFilterTest.m; path = ../common/PYEventFilterTest.m; sourceTree = "<group>"; };
 		FBE2E91C18B227C10059691E /* PYEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventsTests.m; path = ../common/PYEventsTests.m; sourceTree = "<group>"; };
-		FBE2E91E18B227C10059691E /* PYEventSupervisorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventSupervisorTest.m; path = ../common/PYEventSupervisorTest.m; sourceTree = "<group>"; };
+		FBE2E91E18B227C10059691E /* PYSupervisorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYSupervisorTest.m; path = ../common/PYSupervisorTest.m; sourceTree = "<group>"; };
 		FBE2E92018B227C10059691E /* PYEventTypesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventTypesTests.m; path = ../common/PYEventTypesTests.m; sourceTree = "<group>"; };
 		FBE2E92218B227C10059691E /* PYStreamsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYStreamsTests.m; path = ../common/PYStreamsTests.m; sourceTree = "<group>"; };
 		FBE2E92318B227C10059691E /* PYTestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYTestConstants.h; path = ../common/PYTestConstants.h; sourceTree = "<group>"; };
@@ -238,7 +238,7 @@
 				FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */,
 				FBE2E91A18B227C10059691E /* PYEventFilterTest.m */,
 				FBE2E91C18B227C10059691E /* PYEventsTests.m */,
-				FBE2E91E18B227C10059691E /* PYEventSupervisorTest.m */,
+				FBE2E91E18B227C10059691E /* PYSupervisorTest.m */,
 				FBE2E92018B227C10059691E /* PYEventTypesTests.m */,
 				FBE2E92218B227C10059691E /* PYStreamsTests.m */,
 				FBE2E92318B227C10059691E /* PYTestConstants.h */,
@@ -485,7 +485,7 @@
 				FBE2E93418B227E20059691E /* offLineTests.m in Sources */,
 				FBE2E93B18B227E20059691E /* PYStreamsTests.m in Sources */,
 				FBE2E93D18B227E20059691E /* PYTestsUtils.m in Sources */,
-				FBE2E93918B227E20059691E /* PYEventSupervisorTest.m in Sources */,
+				FBE2E93918B227E20059691E /* PYSupervisorTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,6 +599,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;

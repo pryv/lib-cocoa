@@ -7,7 +7,12 @@
 #import "PYStream.h"
 #import "PYConnection.h"
 #import "PYClient.h"
-#import "PYStream+Supervisor.h"
+#import "NSObject+Supervisor.h"
+#import "PYSupervisable.h"
+
+@interface PYStream ()<PYSupervisable>
+@end
+
 
 @implementation PYStream
 
@@ -74,6 +79,13 @@
     return self;
 }
 
+#pragma mark - PYSupervisable
+
+- (NSString *)supervisableKey {
+    return self.clientId;
+}
+
+#pragma mark -
 
 - (void)dealloc
 {

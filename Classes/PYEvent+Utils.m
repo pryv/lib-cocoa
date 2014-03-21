@@ -21,7 +21,7 @@
     [self.connection previewForEvent:self successHandler:^(NSData *filedata) {
         previewImage([self imageFromData:filedata]);
     } errorHandler:^(NSError *error) {
-        // if event is a picture get the data from memoroy or cache
+        // if event is a picture get the data from memory or cache
         if ([self.type isEqualToString:@"picture/attached"]) {
             if (self.attachments && self.attachments.count > 0) {
                 PYAttachment* attachment = [self.attachments firstObject];

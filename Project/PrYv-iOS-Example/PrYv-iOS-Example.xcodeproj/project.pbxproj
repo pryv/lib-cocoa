@@ -33,12 +33,12 @@
 		FB51399618B2185F000F9BED /* PYConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398318B2185F000F9BED /* PYConnectionTests.m */; };
 		FB51399718B2185F000F9BED /* PYEventFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398518B2185F000F9BED /* PYEventFilterTest.m */; };
 		FB51399818B2185F000F9BED /* PYEventsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398718B2185F000F9BED /* PYEventsTests.m */; };
-		FB51399918B2185F000F9BED /* PYEventSupervisorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398918B2185F000F9BED /* PYEventSupervisorTest.m */; };
 		FB51399A18B2185F000F9BED /* PYEventTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398B18B2185F000F9BED /* PYEventTypesTests.m */; };
 		FB51399B18B2185F000F9BED /* PYStreamsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398D18B2185F000F9BED /* PYStreamsTests.m */; };
 		FB51399C18B2185F000F9BED /* PYTestConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51398F18B2185F000F9BED /* PYTestConstants.m */; };
 		FB51399D18B2185F000F9BED /* PYTestsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51399218B2185F000F9BED /* PYTestsUtils.m */; };
 		FB51399E18B21864000F9BED /* PYTestsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FB51399218B2185F000F9BED /* PYTestsUtils.m */; };
+		FBB2D37C18DC8844006B063C /* PYSupervisorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB2D37B18DC8844006B063C /* PYSupervisorTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,13 +87,13 @@
 		FB51398318B2185F000F9BED /* PYConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYConnectionTests.m; path = ../common/PYConnectionTests.m; sourceTree = "<group>"; };
 		FB51398518B2185F000F9BED /* PYEventFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventFilterTest.m; path = ../common/PYEventFilterTest.m; sourceTree = "<group>"; };
 		FB51398718B2185F000F9BED /* PYEventsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventsTests.m; path = ../common/PYEventsTests.m; sourceTree = "<group>"; };
-		FB51398918B2185F000F9BED /* PYEventSupervisorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventSupervisorTest.m; path = ../common/PYEventSupervisorTest.m; sourceTree = "<group>"; };
 		FB51398B18B2185F000F9BED /* PYEventTypesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventTypesTests.m; path = ../common/PYEventTypesTests.m; sourceTree = "<group>"; };
 		FB51398D18B2185F000F9BED /* PYStreamsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYStreamsTests.m; path = ../common/PYStreamsTests.m; sourceTree = "<group>"; };
 		FB51398E18B2185F000F9BED /* PYTestConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYTestConstants.h; path = ../common/PYTestConstants.h; sourceTree = "<group>"; };
 		FB51398F18B2185F000F9BED /* PYTestConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYTestConstants.m; path = ../common/PYTestConstants.m; sourceTree = "<group>"; };
 		FB51399118B2185F000F9BED /* PYTestsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYTestsUtils.h; sourceTree = "<group>"; };
 		FB51399218B2185F000F9BED /* PYTestsUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYTestsUtils.m; sourceTree = "<group>"; };
+		FBB2D37B18DC8844006B063C /* PYSupervisorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYSupervisorTest.m; sourceTree = "<group>"; };
 		FC6108598D0D4E12A47FF121 /* libPods-PrYv-iOS-ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-iOS-ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -220,7 +220,7 @@
 				FB51398E18B2185F000F9BED /* PYTestConstants.h */,
 				FB51398F18B2185F000F9BED /* PYTestConstants.m */,
 				FB51398B18B2185F000F9BED /* PYEventTypesTests.m */,
-				FB51398918B2185F000F9BED /* PYEventSupervisorTest.m */,
+				FBB2D37B18DC8844006B063C /* PYSupervisorTest.m */,
 				FB1CEF3D18C4B461002584F7 /* PYBaseConnectionTests.h */,
 				FB1CEF3B18C4B416002584F7 /* PYBaseConnectionTests.m */,
 				FB51398318B2185F000F9BED /* PYConnectionTests.m */,
@@ -434,9 +434,9 @@
 				FB51399418B2185F000F9BED /* offLineTests.m in Sources */,
 				FB51399B18B2185F000F9BED /* PYStreamsTests.m in Sources */,
 				FB1CEF3C18C4B416002584F7 /* PYBaseConnectionTests.m in Sources */,
+				FBB2D37C18DC8844006B063C /* PYSupervisorTest.m in Sources */,
 				FB51399D18B2185F000F9BED /* PYTestsUtils.m in Sources */,
 				FB1CEF3A18C4B1AB002584F7 /* PYEventAttachmentTests.m in Sources */,
-				FB51399918B2185F000F9BED /* PYEventSupervisorTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

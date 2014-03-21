@@ -14,11 +14,12 @@
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
-#import "PYEvent+Supervisor.h"
+#import "NSObject+Supervisor.h"
+#import "PYSupervisable.h"
 #import "PYConnection.h"
 #import "PYCachingController+Event.h"
 
-@interface PYEvent ()
+@interface PYEvent () <PYSupervisable>
 
 
 @property (nonatomic) NSTimeInterval time;
@@ -64,7 +65,7 @@
 
 + (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId {
     if (clientId) {
-        PYEvent* liveEvent = [PYEvent liveEventForClientId:clientId];
+        PYEvent *liveEvent = [PYEvent liveObjectForSupervisableKey:clientId];
         if (liveEvent) {
             return liveEvent;
         }
@@ -103,9 +104,13 @@
     return self;
 }
 
+#pragma mark - Supervisable
 
+- (NSString *)supervisableKey {
+    return self.clientId;
+}
 
-
+#pragma mark -
 
 - (BOOL) hasTmpId {
     return (self.eventId == nil || [self.eventId isEqualToString:self.clientId]);

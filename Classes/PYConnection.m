@@ -277,13 +277,11 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [self updateEvent:event
                                     successHandler:^(NSString *stoppedId) {
                                         event.isSyncTriedNow = NO;
-                                        dispatch_group_leave(group);
                                         successCounter++;
-                                        
+                                        dispatch_group_leave(group);
                                     } errorHandler:^(NSError *error) {
                                         event.isSyncTriedNow = NO;
                                        dispatch_group_leave(group);
-                                        
                                     }];
         }
     }
