@@ -93,7 +93,7 @@
                  }
                  
                  if (syncAndCache == YES) {
-                     [self.cache cacheStreams:serverStreams];
+                     [self.cache cacheStreams:JSON];
                  }
                  
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
@@ -366,9 +366,8 @@
                  __block NSMutableArray* modifyArray = [[[NSMutableArray alloc] init] autorelease];
                  __block NSMutableArray* sameArray = [[[NSMutableArray alloc] init] autorelease];
                  
-                 NSArray *serverEvents = JSON[@"events"];
-                 for (int i = 0; i < [serverEvents count]; i++) {
-                     NSDictionary *eventDic = [serverEvents objectAtIndex:i];
+                 for (int i = 0; i < [JSON count]; i++) {
+                     NSDictionary *eventDic = [JSON objectAtIndex:i];
                      
                      __block PYEvent* myEvent;
                      [self eventFromReceivedDictionary:eventDic

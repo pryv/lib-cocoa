@@ -46,7 +46,7 @@
     // --------------- notification
     
     NOT_DONE(eventCreationReceived);
-    //NOT_DONE(eventModificationReceived);
+    NOT_DONE(eventModificationReceived);
     id connectionEventObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationEvents
                                                                                    object:self.connection
                                                                                     queue:nil
@@ -71,7 +71,7 @@
                                           STAssertEquals(1u,modify.count , @"Array should contain just one event");
                                           STAssertEquals([modify firstObject], event, @"Event should be the same than the one created");
                                            **/
-                                          DONE(eventCreationReceived);
+                                          DONE(eventModificationReceived);
                                           
                                       }
                                   }];
@@ -143,7 +143,7 @@
     
     WAIT_FOR_DONE(done);
     WAIT_FOR_DONE(eventCreationReceived);
-    //WAIT_FOR_DONE(eventModificationReceived);
+    WAIT_FOR_DONE(eventModificationReceived);
     
     
     [[NSNotificationCenter defaultCenter] removeObserver:connectionEventObserver];
