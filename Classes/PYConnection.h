@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
-@class Reachability;
+@class PYReachability;
 @class PYEvent;
 @class PYStream;
 @class PYCachingController;
@@ -25,7 +25,7 @@
     
     NSTimeInterval _lastTimeServerContact;
     
-    Reachability *_connectionReachability;
+    PYReachability *_connectionReachability;
     BOOL _online;
     NSMutableSet *_streamsNotSync;
     NSUInteger _attachmentsCountNotSync;
@@ -44,7 +44,7 @@
 @property (nonatomic) NSUInteger apiPort;
 @property (nonatomic, copy) NSString *apiExtraPath;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
-@property (nonatomic, retain) Reachability *connectionReachability;
+@property (nonatomic, retain) PYReachability *connectionReachability;
 @property (nonatomic, retain) PYCachingController *cache;
 
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
@@ -71,7 +71,7 @@
 /**
  * Get all event known by cache
  */
-- (NSArray*)allEventsFromCache;
+- (NSArray *)allEventsFromCache;
 
 /**
  Add stream to unsync list. If app tryed to create, modify or trash stream and it fails due to no internet access it will be added to unsync list
@@ -91,24 +91,25 @@
 /**
  Low level method for web service communication
  */
-- (void) apiRequest:(NSString *)path
-        requestType:(PYRequestType)reqType
-             method:(PYRequestMethod)method
-           postData:(NSDictionary *)postData
-        attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlock)successHandler
-            failure:(PYClientFailureBlock)failureHandler;
+- (void)apiRequest:(NSString *)path
+       requestType:(PYRequestType)reqType
+            method:(PYRequestMethod)method
+          postData:(NSDictionary *)postData
+       attachments:(NSArray *)attachments
+           success:(PYClientSuccessBlockDict)successHandler
+           failure:(PYClientFailureBlock)failureHandler;
 
 /**
  @discussion
- this method simply connect to the PrYv API to retrive the server time in the returned header
+ this method simply connect to the Pryv API and synchronize with the localTime
+ Delta time in seconds between server and machine is returned
  This method will be called when you start the manager
  
  GET /
  
  */
-- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
-                     errorHandler:(void(^)(NSError *error))errorHandler;
+- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
+                             errorHandler:(void(^)(NSError *error))errorHandler;
 
 
 

@@ -6,16 +6,18 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PryvCachingTests.h"
+#import "PYBaseConnectionTests.h"
 #import "PYCachingController.h"
 #import "PryvApiKit.h"
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYTestsUtils.h"
 
-@interface PryvCachingTests ()
+
+@interface PryvCachingTests : PYBaseConnectionTests
 @property (nonatomic, retain) NSData *imageData;
 @end
+
 
 @implementation PryvCachingTests
 @synthesize imageData = _imageData;
@@ -69,14 +71,15 @@
          
          NSTimeInterval previousDate = [[event eventDate] timeIntervalSince1970];
          [event setEventDate:nil];
-         STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
+         STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
          [event resetFromCache];
-         STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
-         
-     }onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
-         
+         STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
+         done = YES;
+     } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+
      } errorHandler:^(NSError *error) {
          STFail(@"Failed fetching event.");
+         done = YES;
      }];
     
     [PYTestsUtils waitForBOOL:&done forSeconds:10];

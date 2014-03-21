@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+
 @class WelcomeWindowController, User;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {

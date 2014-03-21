@@ -18,7 +18,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYAttachment.h"
 #import "PYConnection+DataManagement.h"
 #import "PYCachingController.h"
-#import "Reachability.h"
+#import "PYReachability.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
 #import "PYUtils.h"
@@ -55,7 +55,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         self.apiExtraPath = @"";
         self.apiPort = 443;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
-        self.connectionReachability = [Reachability reachabilityForInternetConnection];
+        self.connectionReachability = [PYReachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
         [self pyAccessStatus:self.connectionReachability];
@@ -261,7 +261,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             
             [self createEvent:event
                   requestType:PYRequestTypeAsync
-               successHandler:^(NSString *newEventId, NSString *stoppedId) {
+               successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
                    event.isSyncTriedNow = NO;
                    dispatch_group_leave(group);
                    successCounter++;
@@ -277,13 +277,11 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             [self updateEvent:event
                                     successHandler:^(NSString *stoppedId) {
                                         event.isSyncTriedNow = NO;
-                                        dispatch_group_leave(group);
                                         successCounter++;
-                                        
+                                        dispatch_group_leave(group);
                                     } errorHandler:^(NSError *error) {
                                         event.isSyncTriedNow = NO;
                                        dispatch_group_leave(group);
-                                        
                                     }];
         }
     }
@@ -301,8 +299,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 - (void)reachabilityChanged:(NSNotification *)notif
 {
-	Reachability* curReach = [notif object];
-	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+	PYReachability* curReach = [notif object];
+	NSParameterAssert([curReach isKindOfClass:[PYReachability class]]);
     NetworkStatus netStatus = [curReach currentReachabilityStatus];
     if (netStatus == NotReachable) {
         //No internet
@@ -319,7 +317,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
 }
 
-- (void)pyAccessStatus:(Reachability *)currReach
+- (void)pyAccessStatus:(PYReachability *)currReach
 {
     if (currReach == self.connectionReachability) {
         if (currReach.currentReachabilityStatus == NotReachable) {
@@ -369,10 +367,16 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
-            success:(PYClientSuccessBlock)successHandler
+            success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler {
     
     if (path == nil) path = @"";
+    if (!self.accessToken) {
+        if (failureHandler) {
+            failureHandler([NSError errorWithDomain:@"PYConnection.accessToken is nil" code:1000 userInfo:nil]);
+        }
+        return;
+    }
     NSString* fullPath = [NSString stringWithFormat:@"%@%@",[self apiBaseUrl],path];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
@@ -382,13 +386,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                   method:method
                 postData:postData
              attachments:attachments
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                      
                      
-                     NSDictionary* headerFields = [response allHeaderFields];
+                     NSDictionary* metas = responseDict[kPYAPIResponseMeta];
                      NSNumber* serverTime = nil;
-                     if (headerFields != nil ) {
-                         serverTime = [NSNumber numberWithDouble:[[headerFields objectForKey:@"Server-Time"] doubleValue]] ;
+                     if (metas != nil ) {
+                         serverTime = [NSNumber numberWithDouble:[metas[kPYAPIResponseMetaServerTime] doubleValue]] ;
                      }
                      
                      if (serverTime == nil) {
@@ -410,7 +414,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                      }
                      
                      if (successHandler) {
-                         successHandler(request,response,JSON);
+                         successHandler(request, response, responseDict);
                      }
                      
                  }
@@ -423,7 +427,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 /**
  * probably useless as now all requests synchronize
  */
-- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTime))successHandler
+- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
                              errorHandler:(void(^)(NSError *error))errorHandler{
     
     [self apiRequest:@"/profile/app" //TODO: handle app profiles for improved user experience
@@ -431,7 +435,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  NSLog(@"Successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
                  if (successHandler)
                      successHandler(_serverTimeInterval);

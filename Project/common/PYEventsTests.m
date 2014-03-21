@@ -6,18 +6,12 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventsTests.h"
+#import "PYBaseConnectionTests.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
 
-#define NOT_DONE(done) __block BOOL done = NO;
-#define DONE(done) done = YES;
-#define WAIT_FOR_DONE(done)     \
-                    while (!done) {\
-                        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode\
-                        beforeDate:[NSDate distantFuture]];\
-                        usleep(10000);\
-                    }
+@interface PYEventsTests : PYBaseConnectionTests
+@end
 
 @implementation PYEventsTests
 
@@ -33,10 +27,6 @@
 - (void)testEvents
 {
     STAssertNotNil(self.connection, @"Connection isn't created");
-    
-    [self testGettingStreams];
-    
-    
     
     
     
@@ -67,7 +57,7 @@
                                           NSDictionary *message = (NSDictionary*) note.userInfo;
                                           NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
                                           STAssertNotNil(toAdd, @"We should get toAdd Array");
-                                          STAssertEquals(1u,toAdd.count , @"Array should contain just one event");
+                                          STAssertEquals((NSUInteger)1, toAdd.count , @"Array should contain just one event");
                                           STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
                                           DONE(eventCreationReceived);
                                       } else {
@@ -94,7 +84,7 @@
 
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
-                  successHandler:^(NSString *newEventId, NSString *stoppedId)
+                  successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event)
      {
          STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
          STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");

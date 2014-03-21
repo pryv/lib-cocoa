@@ -82,19 +82,23 @@
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not NSDictionary");
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *resultDict) {
+                 NSArray *JSON = resultDict[kPYAPIResponseStreams];
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
-                 NSArray *serverStreams = JSON[@"streams"];
-                 
-                 for (NSDictionary *streamDictionary in serverStreams) {
-                     [streamList addObject:[PYStream streamFromJSON:streamDictionary]];
+                 for (NSDictionary *streamDictionary in JSON) {
+                     PYStream *stream = [PYStream streamFromJSON:streamDictionary];
+                     [self setupConnectionOnStreamAndChildren:stream];
+                     [streamList addObject:stream];
                  }
                  
                  if (syncAndCache == YES) {
                      [self.cache cacheStreams:serverStreams];
                  }
+                 
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                     object:self
+                                                                   userInfo:nil];
                  
                  if (onlineStreamsList) {
                      //cacheEvents method will overwrite contents of currently cached file
@@ -108,12 +112,19 @@
              }];
 }
 
-
-
+- (void)setupConnectionOnStreamAndChildren:(PYStream *)stream
+{
+    [stream setConnection:self];
+    if (stream.children != nil) {
+        for (int i = 0; i < stream.children.count; i++) {
+            [self setupConnectionOnStreamAndChildren:[stream.children objectAtIndex:i]];
+        }
+    }
+}
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
                                  filter:(NSDictionary*)filterDic
-                         successHandler:(void (^) (NSArray *streamsList))onlineStreamList
+                         successHandler:(void (^) (NSArray *streamsList))onlineStreamListHandler
                            errorHandler:(void (^)(NSError *error))errorHandler
 {
     //This method should retrieve always online streams and need to cache (sync) online streams
@@ -123,8 +134,8 @@
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray"); // Fail if not an NSArray
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSArray* JSON = responseDict[kPYAPIResponseStreams];
                  
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for(NSDictionary *streamDictionary in JSON){
@@ -132,9 +143,14 @@
                      streamObject.connection = self;
                      [streamList addObject:streamObject];
                  }
-                 if(onlineStreamList){
+                 
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                     object:self
+                                                                   userInfo:nil];
+
+                 if(onlineStreamListHandler){
                      [self.cache cacheStreams:JSON];
-                     onlineStreamList(streamList);
+                     onlineStreamListHandler(streamList);
                  }
              } failure:^(NSError *error){
                  if(errorHandler){
@@ -155,16 +171,20 @@
               method:PYRequestMethodPOST
             postData:[stream dictionary]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary"); // Fail if not an NotNSDictionary
-                 
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary* JSON = responseDict[kPYAPIResponseStream];
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
-                 if (successHandler) {
-                     successHandler(createdStreamId);
-                 }
+                 
                  [self.cache findAndCacheStream:stream
                                    withServerId:createdStreamId
                                     requestType:reqType];
+                 
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                     object:self
+                                                                   userInfo:nil];
+                 if (successHandler) {
+                     successHandler(createdStreamId);
+                 }
              } failure:^(NSError *error) {
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (stream.isSyncTriedNow == NO) {
@@ -205,7 +225,7 @@
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  if (successHandler) {
                      successHandler();
                  }
@@ -215,52 +235,6 @@
                  }
              }];
 }
-
-//- (void)trashOrDeleteStream:(PYStream *)stream
-//               filterParams:(NSDictionary *)filter
-//           withRequestType:(PYRequestType)reqType
-//            successHandler:(void (^)())successHandler
-//              errorHandler:(void (^)(NSError *error))errorHandler
-//{
-//    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
-//         requestType:reqType
-//              method:PYRequestMethodDELETE
-//            postData:nil
-//         attachments:nil
-//             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//                 NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
-//                 if (successHandler) {
-//                     successHandler();
-//                 }
-//             } failure:^(NSError *error) {
-//                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
-//                     if (stream.isSyncTriedNow == NO) {
-//
-//                         //stream.notSyncTrashOrDelete = YES;
-//
-//                         if (stream.trashed == NO) {
-//                             stream.trashed = YES;
-//                             [self.cache cacheStream:stream];
-//                         }else{
-//                             //if event has trashed = yes flag it needs to be deleted from cache
-//                             NSLog(@"Stream removed from cache.");
-//                             [self.cache removeStream:stream];
-//                             [self.streamsNotSync removeObject:stream];
-//                         }
-//
-//
-//                     }else{
-//                         NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
-//                     }
-//
-//                 }else{
-//                     if (errorHandler) {
-//                         errorHandler (error);
-//                     }
-//                 }
-//             }];
-//}
-
 
 - (void)setModifiedStreamAttributesObject:(PYStream *)stream
                               forStreamId:(NSString *)streamId
@@ -273,7 +247,7 @@
               method:PYRequestMethodPUT
             postData:[stream dictionary]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
                  //Cache modified stream - We cache stream
                  NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
@@ -323,18 +297,32 @@
 
 - (void)getOnlineStreamWithId:(NSString *)streamId
                   requestType:(PYRequestType)reqType
-               successHandler:(void (^) (PYStream *stream))onlineStream
+               successHandler:(void (^) (PYStream *stream))onlineStreamHandler
                  errorHandler:(void (^) (NSError *error))errorHandler
 {
     //Method below automatically cache (overwrite) all streams, so this is bad
-    //When API support separate method of getting only one stream by its id this will be implemneted here
+    //When API support separate method of getting only one stream by its id this will be implemented here
     
     //This method should get particular stream and return it, not to cache it
     [self getOnlineStreamsWithRequestType:reqType filter:nil successHandler:^(NSArray *streamsList) {
+        __block BOOL found = NO;
         for (PYStream *currentStream in streamsList) {
-            if ([currentStream.streamId compare:streamId] == NSOrderedSame) {
-                onlineStream(currentStream);
+            if ([currentStream.streamId isEqualToString:streamId]) {
+                found = YES;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                    object:self
+                                                                  userInfo:nil];
+
+                if (onlineStreamHandler) {
+                    onlineStreamHandler(currentStream);
+                }
                 break;
+            }
+        }
+        if (!found) {
+            if (onlineStreamHandler) {
+                onlineStreamHandler(nil);
             }
         }
     } errorHandler:errorHandler];
@@ -370,8 +358,8 @@
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not dictionary"); // Fail if not a dictionary
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSArray *JSON = responseDict[kPYAPIResponseEvents];
                  
                  NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
                  __block NSMutableArray* addArray = [[[NSMutableArray alloc] init] autorelease];
@@ -397,27 +385,25 @@
                      
                      [eventsArray addObject:myEvent];
                  }
+
+                 //cacheEvents method will overwrite contents of currently cached file
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
+                 [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
                  
+                 NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
+                                           kPYNotificationKeyModify: modifyArray,
+                                           kPYNotificationKeyUnchanged: sameArray};
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyAdd: addArray,
+                                                                              kPYNotificationKeyModify: modifyArray}];
+
                  if (successBlock) {
-                     //cacheEvents method will overwrite contents of currently cached file
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
-                     [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
-                     
-                     NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
-                                               kPYNotificationKeyModify: modifyArray,
-                                               kPYNotificationKeyUnchanged: sameArray};
                      successBlock(eventsArray, serverTime, details);
-                     
-                     
-                     
-                     [[NSNotificationCenter defaultCenter]
-                      postNotificationName:kPYNotificationEvents
-                      object:self
-                      userInfo:@{kPYNotificationKeyAdd: addArray, kPYNotificationKeyModify: modifyArray}];
                      
                  }
                  
@@ -476,6 +462,9 @@
     
     __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                    withFilter:filter];
+#warning - check that retain ... without it was crashing in the subblock ..
+    [filteredCachedEventList retain];
+    
     
     if (cachedEvents) {
         if ([eventsFromCache count] > 0) {
@@ -488,7 +477,6 @@
     [self getOnlineEventsWithRequestType:reqType
                               parameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
                           successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
-                              
                               
                               
                               if (onlineEvents) {
@@ -505,6 +493,7 @@
                         
                                   syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
                                               [details objectForKey:kPYNotificationKeyModify]);
+                                  filteredCachedEventList = nil;
                               }
                           }
                             errorHandler:errorHandler
@@ -514,7 +503,7 @@
 //POST /events
 - (void)createEvent:(PYEvent *)event
         requestType:(PYRequestType)reqType
-     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId))successHandler
+     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
     
@@ -546,9 +535,9 @@
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary* JSON = responseDict[kPYAPIResponseEvent];
+                
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -557,24 +546,27 @@
                      [event setEventDate:[NSDate date]]; // now
                  }
                  
+                 //--
+                 [event resetFromDictionary:JSON];
+                 
                  
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
                  [event clearModifiedProperties]; // clear modified properties
                  [self.cache cacheEvent:event andCleanTempData:YES]; //-- remove eventual 
                  
-                 if (successHandler) {
-                     successHandler(createdEventId, stoppedId);
-                 }
-                 
                  // notification
                  
                  // event is synchonized.. this mean it is already known .. so we advertise a modification..
                  NSString* notificationKey = event.isSyncTriedNow ? kPYNotificationKeyModify : kPYNotificationKeyAdd;
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{notificationKey: @[event]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{notificationKey: @[event]}];
+                 
+                 if (successHandler) {
+                     successHandler(createdEventId, stoppedId, event);
+                 }
+
                  
              } failure:^(NSError *error) {
                  if (event.isSyncTriedNow == YES) {
@@ -594,16 +586,17 @@
                  if (event.attachments.count > 0) {
                      for (PYAttachment *attachment in event.attachments) {
                          //  attachment.mimeType = @"mimeType";
-                         attachment.size = [NSNumber numberWithInt:attachment.fileData.length];
+                         attachment.size = [NSNumber numberWithUnsignedInteger:attachment.fileData.length];
                      }
                  }
                  [self.cache cacheEvent:event];
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{kPYNotificationKeyAdd: @[event]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyAdd: @[event]}];
                  
-                 successHandler (nil, @"");
+                 if (successHandler) {
+                     successHandler (nil, @"", event);
+                 }
              }
      
      ];
@@ -622,7 +615,7 @@
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
                  if (event.trashed == YES) {
                     [self.cache removeEvent:event];
@@ -636,10 +629,9 @@
                      successHandler();
                  }
                  
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyDelete: @[event]}];
                  
                  
              } failure:^(NSError *error) {
@@ -656,10 +648,9 @@
                              [self.cache removeEvent:event];
                          }
                          
-                         [[NSNotificationCenter defaultCenter]
-                          postNotificationName:kPYNotificationEvents
-                          object:self
-                          userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                         [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                             object:self
+                                                                           userInfo:@{kPYNotificationKeyDelete: @[event]}];
                          
                      }else{
                          NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
@@ -690,19 +681,17 @@
               method:PYRequestMethodPUT
             postData:[eventObject dictionaryForUpdate]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary *JSON = responseDict[kPYAPIResponseEvent];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                
-                 
                  eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
                  [eventObject clearModifiedProperties];
                  [self.cache cacheEvent:eventObject ];
                  
-                 [[NSNotificationCenter defaultCenter]
-                  postNotificationName:kPYNotificationEvents
-                  object:self
-                  userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -721,10 +710,9 @@
                      //Get current event with id from cache
                      [self.cache cacheEvent:eventObject];
                      
-                     [[NSNotificationCenter defaultCenter]
-                      postNotificationName:kPYNotificationEvents
-                      object:self
-                      userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
+                     [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                         object:self
+                                                                       userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
                      
                      if (successHandler) {
                          NSString *stoppedIdToReturn = @"";
@@ -754,9 +742,8 @@
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSDictionary* JSON = responseDict[kPYAPIResponseEvent];
                  NSString *startedEventId = [JSON objectForKey:@"id"];
                  
                  if (successHandler) {
@@ -793,10 +780,8 @@
               method:PYRequestMethodPOST
             postData:[postData autorelease]
          attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                 
-                 NSString *stoppedEventId = [JSON objectForKey:@"stoppedId"];
+             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 NSString *stoppedEventId = responseDict[@"stoppedId"];
                  
                  if (successHandler) {
                      successHandler(stoppedEventId);
@@ -807,39 +792,6 @@
                      errorHandler (error);
                  }
              }];
-    
-}
-
-//GET /events/running
-- (void)getRunningPeriodEventsWithRequestType:(PYRequestType)reqType
-                                   parameters:(NSDictionary *)filter
-                               successHandler:(void (^)(NSArray *arrayOfEvents))successHandler
-                                 errorHandler:(void (^)(NSError *error))errorHandler
-
-{
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:filter];
-    [parameters setValue:@"true" forKey:@"running"];
-    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:parameters]
-         requestType:reqType
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                 NSAssert([JSON isKindOfClass:[NSArray class]],@"result is not NSArray");
-                 
-                 NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
-                 for (NSDictionary *eventDic in JSON) {
-                     [eventsArray addObject:[PYEvent eventFromDictionary:eventDic onConnection:self]];
-                 }
-                 if (successHandler) {
-                     successHandler(eventsArray);
-                 }
-             } failure:^(NSError *error) {
-                 if (errorHandler) {
-                     errorHandler (error);
-                 }
-             }
-     ];
     
 }
 
@@ -862,7 +814,7 @@
     }
     
     
-    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, event.eventId, attachment.fileName];
+    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",kROUTE_EVENTS, event.eventId, attachment.attachmentId];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
     
@@ -903,7 +855,7 @@
     
     
     
-    NSString *path = [NSString stringWithFormat:@"%@/%@.jpg",kROUTE_EVENTS, event.eventId];
+    NSString *path = [NSString stringWithFormat:@"%@/%@?w=512",kROUTE_EVENTS, event.eventId];
     NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
     

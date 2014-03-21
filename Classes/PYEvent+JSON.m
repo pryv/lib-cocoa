@@ -10,6 +10,7 @@
 #import "PYAttachment.h"
 #import "PYCachingController.h"
 #import "PYConnection.h"
+#import "PYEventType.h"
 
 @implementation PYEvent (JSON)
 
@@ -73,17 +74,20 @@
     if([[eventType class] isSubclassOfClass:[NSDictionary class]])
     {
         NSDictionary *eventTypeDic = (NSDictionary*)eventType;
-        self.type = [NSString stringWithFormat:@"%@/%@",[eventTypeDic objectForKey:@"class"],[eventTypeDic objectForKey:@"type"]];
+        self.type = [NSString stringWithFormat:@"%@/%@",
+                     [eventTypeDic objectForKey:@"class"],
+                     [eventTypeDic objectForKey:@"type"]];
     }
     else
     {
         self.type = eventType;
     }
     
-    if ([JSON objectForKey:@"content"] == [NSNull null]) {
+    id _tempcontent = [JSON objectForKey:@"content"];
+    if (_tempcontent == [NSNull null]) {
         self.eventContent = nil;
     }else{
-        self.eventContent = [JSON objectForKey:@"content"];;
+         self.eventContent = _tempcontent;
     }
     
     
@@ -96,11 +100,24 @@
     
     self.eventDescription = [JSON objectForKey:@"description"];
     
-    NSDictionary *attachmentsDic = [JSON objectForKey:@"attachments"];
-    if (attachmentsDic) {
-        NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:attachmentsDic.count];
+   
+    id tempAtts = [JSON objectForKey:@"attachments"];
+   
+    
+   
+    if (tempAtts) {
+        //**** v0.6 to 0.7 switch
+        NSArray *attachmentsArray = nil;
+        if([[tempAtts class] isSubclassOfClass:[NSDictionary class]]) {
+            attachmentsArray = [tempAtts allValues];
+        } else {
+            attachmentsArray = tempAtts;
+        }
         
-        [attachmentsDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *obj, BOOL *stop) {
+        
+        NSMutableArray *attachmentObjects = [[NSMutableArray alloc] initWithCapacity:[attachmentsArray count]];
+        
+        [attachmentsArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
             [attachmentObjects addObject:[PYAttachment attachmentFromDictionary:obj]];
         }];
         

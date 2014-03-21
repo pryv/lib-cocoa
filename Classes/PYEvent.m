@@ -10,14 +10,16 @@
 #import "PYEvent+JSON.h"
 #import "PYAttachment.h"
 
+#import "PYEventType.h"
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
-#import "PYEvent+Supervisor.h"
+#import "NSObject+Supervisor.h"
+#import "PYSupervisable.h"
 #import "PYConnection.h"
 #import "PYCachingController+Event.h"
 
-@interface PYEvent ()
+@interface PYEvent () <PYSupervisable>
 
 
 @property (nonatomic) NSTimeInterval time;
@@ -61,19 +63,18 @@
     return [(NSString *)uuidStringRef autorelease];
 }
 
-- (id) init
-{
-    return [self initWithConnection:nil];
-}
-
 + (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId {
     if (clientId) {
-        PYEvent* liveEvent = [PYEvent liveEventForClientId:clientId];
+        PYEvent *liveEvent = [PYEvent liveObjectForSupervisableKey:clientId];
         if (liveEvent) {
             return liveEvent;
         }
     }
     return [[[PYEvent alloc] initWithConnection:nil andClientId:clientId] autorelease];
+}
+
+- (id) init {
+    return [self initWithConnection:nil];
 }
 
 - (id) initWithConnection:(PYConnection*) connection {
@@ -103,9 +104,13 @@
     return self;
 }
 
+#pragma mark - Supervisable
 
+- (NSString *)supervisableKey {
+    return self.clientId;
+}
 
-
+#pragma mark -
 
 - (BOOL) hasTmpId {
     return (self.eventId == nil || [self.eventId isEqualToString:self.clientId]);
@@ -188,9 +193,9 @@
     
     
     if (_attachments && _attachments.count > 0) {
-        NSMutableDictionary *attachments = [[NSMutableDictionary alloc] init];
+        NSMutableArray *attachments = [[NSMutableArray alloc] init];
         [_attachments enumerateObjectsUsingBlock:^(PYAttachment *attachment, NSUInteger idx, BOOL *stop) {
-            [attachments setObject:[attachment cachingDictionary] forKey:attachment.fileName];
+            [attachments addObject:[attachment cachingDictionary]];
         }];
         
         [dic setObject:attachments forKey:@"attachments"];
@@ -227,7 +232,16 @@
     }
     
     if (_eventContent) {
+        
+        if ([[self pyType] isNumerical] && ! [_eventContent isKindOfClass:[NSNumber class]]) {
+            if ([_eventContent isKindOfClass:[NSString class]]) {
+                self.eventContent = [NSNumber numberWithDouble: [(NSString*)_eventContent doubleValue]] ;
+            } else {
+                NSLog(@"<WARNING> invalid value for numerical event %@", [self clientId]);
+            }
+        }
         [dic setObject:_eventContent forKey:@"content"];
+        
     }
     
     if (_streamId && _streamId.length > 0) {

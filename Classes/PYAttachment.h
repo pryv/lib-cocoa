@@ -9,7 +9,7 @@
 
 @interface PYAttachment : NSObject
 {
-
+    NSString *_attachmentId;
     NSString *_name;
     NSString *_fileName;
     NSString *_mimeType;
@@ -17,6 +17,7 @@
     NSData *_fileData;
 }
 
+@property (nonatomic, copy) NSString *attachmentId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSString *mimeType;

@@ -166,7 +166,7 @@
     /**
      NSURL *measurementSetsURL = [NSURL URLWithString:kMeasurementSetsUrl];
      NSURLRequest *request = [[NSURLRequest alloc] initWithURL:measurementSetsURL];
-    [PYClient sendJSONRequest:request withReqType:PYRequestTypeSync success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+    [PYClient sendJSONDictRequest:request withReqType:PYRequestTypeSync success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
         
     }
       [self executeCompletionBlockOnMainQueue:completionBlock withObject:result andError:nil];

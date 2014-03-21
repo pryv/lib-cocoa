@@ -6,10 +6,16 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYStreamsTests.h"
+#import "PYBaseConnectionTests.h"
+
 #import "PYConnection+DataManagement.h"
 #import "PYStream.h"
 #import "PYCachingController+Stream.h"
+#import "PYTestsUtils.h"
+
+@interface PYStreamsTests : PYBaseConnectionTests
+@property (nonatomic, strong) PYStream *stream;
+@end
 
 @implementation PYStreamsTests
 
@@ -17,11 +23,44 @@
 {
     [super setUp];
     
+    self.stream = [[PYStream alloc] initWithConnection:self.connection];
+    self.stream.streamId = @"pystreamstest";
+    self.stream.name = @"PYStreamsTests123";
 }
 
-- (void)validateStream:(PYStream*)stream
-        withConnection:(PYConnection*)connection
-             andParent:(PYStream*)parentStream
+- (void)tearDown
+{
+    // insert teardown here
+    
+    [super tearDown];
+}
+
+
+- (void)testGettingStreams
+{
+    __block BOOL finished1 = NO;
+    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
+     
+                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
+                                     
+                                 } gotOnlineStreams:^(NSArray *onlineStreamList) {
+                                     
+                                     STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
+                                     
+                                     finished1 = YES;
+                                 } errorHandler:^(NSError *error) {
+                                     STFail(@"error fetching streams");
+                                     finished1 = YES;
+                                 }];
+    [PYTestsUtils execute:^{
+        STFail(@"Cannot get streams within 10 seconds");
+    } ifNotTrue:&finished1 afterSeconds:10];
+    
+}
+
+- (void)validateStream:(PYStream *)stream
+        withConnection:(PYConnection *)connection
+             andParent:(PYStream *)parentStream
 {
     NSString *streamInfo = [NSString stringWithFormat:@"streamID: %@", stream.streamId];
     //NSLog(@"tested %@", streamInfo);
@@ -41,27 +80,73 @@
                     andParent:stream];
         }
     }
-    
 }
 
-- (void)testStreams
+// create stream locally
+// check stream
+- (void)testStreamFactory
+{
+    //
+    PYStream *newStream = [[PYStream alloc] initWithConnection:self.connection];
+    newStream.streamId = @"pystreamstestcreate";
+    newStream.name = @"PYStreamsTests321";
+    
+    [self deleteStream:newStream];
+    
+    //STAssertTrue(newStream.connection, @"");
+    
+    NOT_DONE(done1);
+    [self.connection createStream:newStream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
+        //
+        DONE(done1);
+    } errorHandler:^(NSError *error) {
+        STFail(@"could not create stream");
+        DONE(done1);
+    }];
+    
+    WAIT_FOR_DONE(done1);
+    
+    STAssertTrue(newStream.connection == self.connection, @"connection is not set and not equal to original connection");
+}
+
+
+- (void)testStreamCreation
 {
     STAssertNotNil(self.connection, @"Access isn't created");
     
-    [self testGettingStreams];
+    [self deleteStream:self.stream];
     
+    NOT_DONE(streamNotificationReceived);
+
+    id connectionStreamObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kPYNotificationStreams
+                                                                                    object:self.connection
+                                                                                     queue:nil
+    usingBlock:^(NSNotification *note) {
+//        if (! eventCreationReceived) {
+//              NSDictionary *message = (NSDictionary*) note.userInfo;
+//              NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
+//              STAssertNotNil(toAdd, @"We should get toAdd Array");
+//              STAssertEquals((NSUInteger)1, toAdd.count , @"Array should contain just one event");
+//              STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
+//              DONE(streamNotificationReceived);
+//        } else {
+        NSLog(@"stream notification received");
+              DONE(streamNotificationReceived);
+//        }
+    }];
+    [connectionStreamObserver retain];
     
-    PYStream *stream = [[PYStream alloc] init];
-    stream.streamId = @"pystreamstest";
-    stream.name = @"PYStreamsTests123";
-   
+    NOT_DONE(done1);
     
-    __block NSString *createdStreamIdFromServer;
-    [self.connection createStream:stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
+    __block NSString *createdStreamIdFromServer = nil;
+    [self.connection createStream:self.stream
+                  withRequestType:PYRequestTypeAsync
+    successHandler:^(NSString *createdStreamId) {
+                       
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
-        createdStreamIdFromServer = [NSString stringWithString:createdStreamId];
+        createdStreamIdFromServer = [[NSString stringWithString:createdStreamId] retain];
         NSLog(@"New stream ID : %@",createdStreamIdFromServer);
-        [self.connection.cache cacheStream:stream];
+        [self.connection.cache cacheStream:self.stream];
    
     
         NSString *fakeStreamId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
@@ -70,13 +155,20 @@
         
         PYStream *streamFromCache = [self.connection.cache streamFromCacheWithStreamId:createdStreamIdFromServer];
         STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
-        
+
+        DONE(done1);
     } errorHandler:^(NSError *error) {
         
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
+        DONE(done1);
     }];
     
+    WAIT_FOR_DONE(done1);
+    WAIT_FOR_DONE(streamNotificationReceived);
+
     
+    
+    NOT_DONE(done2);
     
     [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
                                  gotCachedStreams:^(NSArray *cachedStreamsList) {
@@ -92,28 +184,48 @@
                        andParent:nil];
         }
         
-        
+        DONE(done2);
         
     } errorHandler:^(NSError *error) {
-        
+        NSLog(@"error: %@", error);
+        DONE(done2);
     }];
      
+    WAIT_FOR_DONE(done2);
     
-    [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
-        [self.connection trashOrDeleteStream:stream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
-            NSLog(@"Test stream deleted.");
-        } errorHandler:^(NSError *error) {
-            STFail(@"Failed while deleting stream : %@",error);
-        }];
-    } errorHandler:^(NSError *error) {
-        STFail(@"Failed while trashing stream : %@",error);
-    }];
     
+    NOT_DONE(done3);
+    [self.connection getOnlineStreamWithId:createdStreamIdFromServer
+                               requestType:PYRequestTypeAsync
+                            successHandler:^(PYStream *stream) {
+                                     STAssertNotNil(stream, @"should return single stream requested by id from the server");
+                                     DONE(done3);
+                                     
+                         } errorHandler:^(NSError *error) {
+                                     NSLog(@"error: %@", error);
+                                     DONE(done3);
+                         }];
+    WAIT_FOR_DONE(done3);
 }
 
-- (void)tearDown
+- (void)deleteStream:(PYStream *)testStream
 {
-    [super tearDown];
+    NSLog(@"deleting stream: %@", testStream);
+    NOT_DONE(done3);
+    [self.connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+        [self.connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+            NSLog(@"Test stream deleted. %@", testStream);
+            DONE(done3);
+        } errorHandler:^(NSError *error) {
+            //NSLog(@"Failed while deleting stream : %@",error);
+            DONE(done3);
+        }];
+    } errorHandler:^(NSError *error) {
+        //NSLog(@"Failed while trashing stream : %@",error);
+        DONE(done3);
+    }];
+    
+    WAIT_FOR_DONE(done3);
 }
 
 

@@ -52,7 +52,7 @@
  * @param tags array of strings with tags, nil for no match
  * @param limit number of events may be 2x > to the limit if cached events are totally differents than online events, 0 or negative for ALL
  */
-- (id)initWithConnection:(PYConnection*)connection
+- (id)initWithConnection:(PYConnection *)connection
              fromTime:(NSTimeInterval)fromTime
                toTime:(NSTimeInterval)toTime
                 limit:(NSUInteger)limit
@@ -68,7 +68,7 @@
 /**
  * get all events in this dictionary
  */
-- (NSArray*)currentEventsSet;
+- (NSArray *)currentEventsSet;
 
 
 /**

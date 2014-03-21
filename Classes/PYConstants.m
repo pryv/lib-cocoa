@@ -19,6 +19,15 @@ NSString *const kPYAPIDomainStaging = @".pryv.in";
 NSString *const kROUTE_EVENTS = @"events";
 NSString *const kROUTE_STREAMS = @"streams";
 
+NSString *const kPYAPIResponseEvents = @"events";
+NSString *const kPYAPIResponseEvent = @"event";
+NSString *const kPYAPIResponseStreams = @"streams";
+NSString *const kPYAPIResponseStream = @"stream";
+
+NSString *const kPYAPIResponseMeta = @"meta";
+NSString *const kPYAPIResponseMetaServerTime = @"serverTime";
+
+
 NSString *const kPYAPIConnectionRequestStreamId = @"streamId";
 NSString *const kPYAPIConnectionRequestAllStreams = @"*";
 NSString *const kPYAPIConnectionRequestLevel = @"level";
@@ -38,6 +47,7 @@ NSString *const kPYAPIEventFilterTags = @"tags[]";
 //Notifications
 NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisibleNotification";
 
+NSString *const kPYNotificationStreams = @"pySTREAMS";
 NSString *const kPYNotificationEvents = @"pyEVENTS";
 NSString *const kPYNotificationKeyAdd = @"ADD";
 NSString *const kPYNotificationKeyModify = @"MODIFY";

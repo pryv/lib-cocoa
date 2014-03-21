@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventTypesTests.h"
+#import <SenTestingKit/SenTestingKit.h>
 #import <PryvApiKit/PYEventTypes.h>
 #import "PYEventType.h"
 #import "PYEventClass.h"
@@ -14,8 +14,12 @@
 #import "PYClient.h"
 #import "PYMeasurementSet.h"
 
-@implementation PYEventTypesTests
 
+@interface PYEventTypesTests : SenTestCase
+@end
+
+
+@implementation PYEventTypesTests
 
 - (void)setUp
 {
@@ -165,8 +169,8 @@
     
     [PYClient setLanguageCodePrefered:@"fr"];
     
-    if (! [@"Ensemble des mesures" isEqualToString:testSet.localizedName]) {
-        STFail(@"Failed testing if 'all-measure' measurementSets  event localizedName in french is 'Ensemble des mesures': %@",
+    if (! [@"Toutes les mesures" isEqualToString:testSet.localizedName]) {
+        STFail(@"Failed testing if 'all-measure' measurementSets  event localizedName in french is 'Toutes les mesures': %@",
                testSet.localizedName);
     }
     

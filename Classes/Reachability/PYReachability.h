@@ -55,26 +55,26 @@ typedef enum {
 	ReachableViaWiFi,
 	ReachableViaWWAN
 } NetworkStatus;
-#define kReachabilityChangedNotification @"kNetworkReachabilityChangedNotification"
+#define kReachabilityChangedNotification @"kPYNetworkReachabilityChangedNotification"
 
-@interface Reachability: NSObject
+@interface PYReachability: NSObject
 {
 	BOOL localWiFiRef;
 	SCNetworkReachabilityRef reachabilityRef;
 }
 
 //reachabilityWithHostName- Use to check the reachability of a particular host name. 
-+ (Reachability*) reachabilityWithHostName: (NSString*) hostName;
++ (PYReachability*) reachabilityWithHostName: (NSString*) hostName;
 
 //reachabilityWithAddress- Use to check the reachability of a particular IP address. 
-+ (Reachability*) reachabilityWithAddress: (const struct sockaddr_in*) hostAddress;
++ (PYReachability*) reachabilityWithAddress: (const struct sockaddr_in*) hostAddress;
 
 //reachabilityForInternetConnection- checks whether the default route is available.  
 //  Should be used by applications that do not connect to a particular host
-+ (Reachability*) reachabilityForInternetConnection;
++ (PYReachability*) reachabilityForInternetConnection;
 
 //reachabilityForLocalWiFi- checks whether a local wifi connection is available.
-+ (Reachability*) reachabilityForLocalWiFi;
++ (PYReachability*) reachabilityForLocalWiFi;
 
 //Start listening for reachability notifications on the current run loop
 - (BOOL) startNotifier;

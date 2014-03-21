@@ -7,6 +7,11 @@
 #import "PYStream.h"
 #import "PYConnection.h"
 #import "PYClient.h"
+#import "NSObject+Supervisor.h"
+#import "PYSupervisable.h"
+
+@interface PYStream ()<PYSupervisable>
+@end
 
 
 @implementation PYStream
@@ -38,18 +43,53 @@
 }
 
 
-- (id)init
-{
+//- (id)init
+//{
+//    self = [super init];
+//    if (self) {
+//        self.clientId = [PYStream createClientId];
+//    }
+//    
+//    return self;
+//}
+
+- (id)init {
+    return [self initWithConnection:nil];
+}
+
+- (id)initWithConnection:(PYConnection *)connection {
+    return [self initWithConnection:connection andClientId:nil];
+}
+
+- (id)initWithConnection:(PYConnection *) connection andClientId:(NSString *) clientId {
     self = [super init];
-    if (self) {
-        self.clientId = [PYStream createClientId];
+    if (self)
+    {
+        if (clientId) {
+            _clientId = clientId;
+        } else {
+            _clientId = [PYStream createClientId];
+        }
+#warning fixme
+        [_clientId retain]; // should we retain?
+        
+        [self superviseIn];
+        self.connection = connection;
     }
-    
     return self;
 }
 
+#pragma mark - PYSupervisable
+
+- (NSString *)supervisableKey {
+    return self.clientId;
+}
+
+#pragma mark -
+
 - (void)dealloc
 {
+    [self superviseOut];
     [_clientId release];
     [_streamId release];
     [_name release];

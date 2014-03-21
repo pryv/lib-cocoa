@@ -5,16 +5,16 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>FAFEF2D9-B87A-45B3-BFF4-F014F788BDF0</string>
+	<string>45B0AFDF-573C-4C82-BE33-A93761E60307</string>
 	<key>IDESourceControlProjectName</key>
-	<string>PrYv-iOS-Example</string>
+	<string>PrYv-OSX-Example</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>A85FA0E2-411A-45AF-9DC9-9A5B873E6D9A</key>
 		<string>ssh://github.com/pryv/sdk-objectivec-apple.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Project/PrYv-iOS-Example/PrYv-iOS-Example.xcworkspace</string>
+	<string>Project/PrYv-OSX-Example/PrYv-OSX-Example.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>A85FA0E2-411A-45AF-9DC9-9A5B873E6D9A</key>

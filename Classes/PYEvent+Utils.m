@@ -21,7 +21,7 @@
     [self.connection previewForEvent:self successHandler:^(NSData *filedata) {
         previewImage([self imageFromData:filedata]);
     } errorHandler:^(NSError *error) {
-        // if event is a picture get the data from memoroy or cache
+        // if event is a picture get the data from memory or cache
         if ([self.type isEqualToString:@"picture/attached"]) {
             if (self.attachments && self.attachments.count > 0) {
                 PYAttachment* attachment = [self.attachments firstObject];
@@ -55,7 +55,7 @@
  * get attachment data
  * REVIEW and eventually move it from Utils to PYAttachment or directly in PYEvent
  **/
-- (void)dataForAttachment:(PYAttachment*)attachment
+- (void)dataForAttachment:(PYAttachment *)attachment
            successHandler:(void (^) (NSData *data))success
              errorHandler:(void(^) (NSError *error))failure
 {
@@ -71,7 +71,9 @@
                             successHandler:success
                               errorHandler:failure];
     } else {
-        if (failure) failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);
+        if (failure) {
+            failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);
+        }
     }
 }
 

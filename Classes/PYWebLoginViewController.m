@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, copy) NSString *appID;
 @property (nonatomic, retain) NSTimer *pollTimer;
+@property (nonatomic, copy) NSString *pollURL;
 @property (nonatomic, assign) id  delegate;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @property (nonatomic, assign) WebView *webView;
@@ -38,6 +39,7 @@
 
 @synthesize delegate;
 @synthesize pollTimer;
+@synthesize pollURL;
 @synthesize appID;
 @synthesize permissions;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
@@ -77,11 +79,11 @@ BOOL closing;
     
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(viewHidden:)
-//                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewHidden:)
+                                                 name:kPYWebViewLoginNotVisibleNotification object:nil];
     
-    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
+    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>Pryv Signin</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
     [self requestLoginView];
     #else
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
@@ -106,7 +108,7 @@ BOOL closing;
     webView = [[UIWebView alloc] initWithFrame:applicationFrame];
     [webView setDelegate:self];
     [webView setBackgroundColor:[UIColor grayColor]];
-    [webView loadHTMLString:@"<html><center><h1>PrYv Signup</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
+    [webView loadHTMLString:@"<html><center><h1>Pryv Signin</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
     
     self.view = webView;
     
@@ -134,8 +136,9 @@ BOOL closing;
     self.delegate = nil;
     [pollTimer invalidate];
     [pollTimer release];
+    [pollURL release];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    //[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     #else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -186,8 +189,8 @@ BOOL closing;
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 - (void)viewHidden:(NSNotification *)notification{
-    NSLog(@"Notification received : %@",notification);
-    [self close];
+    //NSLog(@"Notification received : %@",notification);
+    [self abortedWithReason:@"Canceled by user"];
 }
 
 #else
@@ -268,20 +271,20 @@ static BOOL s_requestedLoginView = NO;
     
     NSString *fullPathString = [NSString stringWithFormat:@"%@://access%@/access", kPYAPIScheme, [PYClient defaultDomain]];
     
-    __block __typeof__(self) bself = self;
+    //block typeof trick doesn't work on Mac OS X, but using self does not create memory leak
+    //__block __typeof__(self) bself = self;
     [PYClient apiRequest:fullPathString
                  headers:nil
              requestType:PYRequestTypeAsync
                   method:PYRequestMethodPOST
                 postData:postData
              attachments:nil
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     if (!bself) return;
-                     NSAssert([JSON isKindOfClass:[NSDictionary class]],@"result is not NSDictionary");
-                     [bself handlePollSuccess:JSON];
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                     if (!self) return;
+                     [self handlePollSuccess:responseDict];
                  } failure:^(NSError *error) {
-                     if (!bself) return;
-                     [bself handleFailure:error];
+                     if (!self) return;
+                     [self handleFailure:error];
                  }];
     
 }
@@ -320,33 +323,33 @@ static BOOL s_requestedLoginView = NO;
     // reset previous timer if one existed
     [self.pollTimer invalidate];
     
+    //update url to poll
+    self.pollURL = pollURLString;
+    
     // schedule a GET reqest in seconds amount stored in pollTimeInterval
-    __block __typeof__(self) bself = self;
+    //__block __typeof__(self) bself = self;
     self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
-                                                      target:[NSBlockOperation blockOperationWithBlock:
-                                                              ^{
-                                                                  [PYClient apiRequest:pollURLString
-                                                                                headers:nil
-                                                                           requestType:PYRequestTypeAsync
-                                                                                method:PYRequestMethodGET
-                                                                              postData:nil
-                                                                           attachments:nil
-                                                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                   if (!bself) return;
-                                                                                   [bself handlePollSuccess:JSON];
-                                                                              } failure:^(NSError *error) {
-                                                                                   if (!bself) return;
-                                                                                   [bself handleFailure:error];
-                                                                               }];
-                                                                  
-                                                              }]
-                                                    selector:@selector(main) // send message main to NSBLockOperation
+                                                      target:self
+                                                    selector:@selector(timerBlock:)
                                                     userInfo:nil
                                                      repeats:NO
                       ];
-    
-    
-    
+}
+
+- (void)timerBlock:(NSTimer *)timer {
+    [PYClient apiRequest:pollURL
+                 headers:nil
+             requestType:PYRequestTypeAsync
+                  method:PYRequestMethodGET
+                postData:nil
+             attachments:nil
+                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                if (!self) return;
+                                     [self handlePollSuccess:JSON];
+                                } failure:^(NSError *error) {
+                                    if (!self) return;
+                                    [self handleFailure:error];
+                                }];
 }
 
 - (void)handlePollSuccess:(NSDictionary*) jsonDictionary

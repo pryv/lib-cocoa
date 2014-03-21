@@ -7,12 +7,12 @@
 //
 
 #import "PYTestConstants.h"
-#import "PYConnectionTests.h"
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYTestsUtils.h"
+#import "PYBaseConnectionTests.h"
 
-/*
+
 #if TARGET_IPHONE_SIMULATOR
 @interface NSURLRequest (IgnoreSSL)
 + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host;
@@ -28,22 +28,13 @@
 }
 @end
 #endif
-*/
+
+
+@interface PYConnectionTests : PYBaseConnectionTests
+@end
+
 
 @implementation PYConnectionTests
-
-@synthesize connection = _connection;
-
-
-- (void)setUp
-{
-    [super setUp];
-    [PYClient setDefaultDomainStaging];
-    self.connection = [PYClient createConnectionWithUsername:kPYAPITestAccount
-                                              andAccessToken:kPYAPITestAccessToken];
-    STAssertNotNil(self.connection, @"Connection not created.");
-   
-}
 
 - (void)testConnection
 {
@@ -55,12 +46,11 @@
                  @"id caching is unexpected, %@", self.connection.idCaching);
 }
 
-
 - (void)testSynchronizeTime
 {
     __block BOOL finished = NO;
-    [self.connection synchronizeTimeWithSuccessHandler:^(NSTimeInterval serverTime) {
-        NSLog(@"ServerTime %f", serverTime);
+    [self.connection synchronizeTimeWithSuccessHandler:^(NSTimeInterval serverTimeInteval) {
+        NSLog(@"ServerTime Delta (s) %f", serverTimeInteval);
         finished = YES;
     } errorHandler:^(NSError *error) {
         STFail(@"Cannot get ServerTime %@", error);
@@ -73,35 +63,5 @@
     
 }
 
-
-- (void)testGettingStreams
-{
-    __block BOOL finished1 = NO;
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
-     
-                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
-                                     
-                                 } gotOnlineStreams:^(NSArray *onlineStreamList) {
-                                     
-                                     STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
-                                     
-                                     finished1 = YES;
-                                 } errorHandler:^(NSError *error) {
-                                     
-                                 }];
-    [PYTestsUtils execute:^{
-        STFail(@"Cannot get streams within 10 seconds");
-    } ifNotTrue:&finished1 afterSeconds:10]; 
-    
-}
-
-
-
-- (void)tearDown
-{
-    [_connection release];
-    [super tearDown];
-    
-}
 
 @end

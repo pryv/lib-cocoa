@@ -6,10 +6,13 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYEventFilterTest.h"
+#import "PYBaseConnectionTests.h"
 
 #import "PYEventFilter.h"
 #import "PYTestsUtils.h"
+
+@interface PYEventFilterTest : PYBaseConnectionTests
+@end
 
 @implementation PYEventFilterTest
 
@@ -20,13 +23,10 @@
     
 }
 
+// FIXME this test should create the events necessary for the filter
 - (void)testEventFilter
 {
     STAssertNotNil(self.connection, @"Connection isn't created");
-    
-    [self testGettingStreams];
-    
-    
     
     PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
                                                                fromTime:PYEventFilter_UNDEFINED_FROMTIME
@@ -50,12 +50,12 @@
          NSLog(@"*162 ADD %@", @(toAdd.count));
          
          if (! finished1) {
-             STAssertEquals(@(20), @(toAdd.count), @"Got wrong number of events");
+             STAssertEquals((NSUInteger)20, toAdd.count, @"Got wrong number of events");
              pyFilter.limit = 30;
              finished1 = YES;
              [pyFilter update];
          } else {
-             STAssertEquals(10u, toAdd.count, @"Got wrong number of events");
+             STAssertEquals((NSUInteger)10, (NSUInteger)toAdd.count, @"Got wrong number of events");
          }
          
          NSArray* toRemove = [message objectForKey:kPYNotificationKeyDelete];

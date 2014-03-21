@@ -6,16 +6,17 @@
 //  Copyright (c) 2014 Pryv. All rights reserved.
 //
 
-#import "offLineTests.h"
+#import "PYBaseConnectionTests.h"
 #import "PYTestsUtils.h"
 #import "PYCachingController+Event.h"
 
-@interface offLineTests ()
+
+@interface offLineTests : PYBaseConnectionTests
 {
     NSUInteger originalApiPort;
 }
-
 @end
+
 
 
 @implementation offLineTests
@@ -60,7 +61,7 @@
     __block NSString *unsyncEventCacheKey ;
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
-                  successHandler:^(NSString *newEventId, NSString *stoppedId) {
+                  successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event) {
                       STAssertNil(newEventId, @"We shouldn't get a new id");
                       STAssertTrue(event.hasTmpId, @"event must have a temp id");
                       STAssertTrue(event.toBeSync, @"event should be known as to be synched");

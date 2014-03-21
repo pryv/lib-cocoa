@@ -39,21 +39,13 @@
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects
                                                                                 forKeys:keys]];
     
-    [PYClient setDefaultDomainStaging];
-    [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-macosx-example"
+    //[PYClient setDefaultDomainStaging];
+    __unused
+    PYWebLoginViewController *webLoginController = [PYWebLoginViewController requestConnectionWithAppId:@"pryv-sdk-macosx-example"
                                       andPermissions:permissions
                                             delegate:self
                                          withWebView:&webView];
 }
-
--(void)windowWillClose:(NSNotification *)notification{
-    //[self pyWebLoginNotVisible:notification];
-    //NSLog(@"Notification posted");
-}
-
-//- (void) pyWebLoginNotVisible:(NSNotification *)notification {
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kPYWebViewLoginNotVisibleNotification object:self];
-//}
 
 - (void) pyWebLoginSuccess:(PYConnection*)pyConnection {
     AppDelegate *app =[AppDelegate sharedInstance];
@@ -66,8 +58,8 @@
     
 }
 
-- (void) pyWebLoginAborded:(NSString*)reason {
-    NSLog(@"Signin Aborded: %@",reason);
+- (void) pyWebLoginAborted:(NSString*)reason {
+    NSLog(@"Signin Aborted: %@",reason);
 }
 
 - (void) pyWebLoginError:(NSError*)error {
