@@ -41,6 +41,9 @@
                <Test
                   Identifier = "PYBaseConnectionTests">
                </Test>
+               <Test
+                  Identifier = "PYEventFilterTest/testEventFilter">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
