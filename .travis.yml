@@ -15,5 +15,5 @@ script:
 
 after_success:
    - echo `pwd`
-   - find `pwd`/Library/Developer/Xcode/DerivedData/ | grep gcda
+   - find /Users/travis/Library/Developer/Xcode/DerivedData/ | grep gcda
    - ruby ../../coveralls.rb --extension m --exclude-folder PrYv-OSX-Example/
