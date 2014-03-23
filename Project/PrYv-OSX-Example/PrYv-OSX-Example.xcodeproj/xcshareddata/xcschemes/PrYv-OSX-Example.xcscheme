@@ -26,7 +26,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      buildConfiguration = "Coverage">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -37,6 +37,11 @@
                BlueprintName = "PrYv-OSX-ExampleTests"
                ReferencedContainer = "container:PrYv-OSX-Example.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "PYBaseConnectionTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
