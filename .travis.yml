@@ -2,6 +2,8 @@ rvm: 1.9.3
 
 language: objective-c
 
+before_install: export LANG=en_US.UTF-8
+
 before_script:
    - pod --version
    - gem which cocoapods
@@ -16,4 +18,5 @@ script:
 after_success:
    - echo `pwd`
    - find /Users/travis/Library/Developer/Xcode/DerivedData/ | grep gcda
-   - ruby ../../coveralls.rb --extension m --exclude-folder PrYv-OSX-Example/
+   - cd ../../
+   - ./coveralls.rb --extension m
