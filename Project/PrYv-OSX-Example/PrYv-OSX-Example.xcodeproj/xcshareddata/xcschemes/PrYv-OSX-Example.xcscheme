@@ -41,6 +41,18 @@
                <Test
                   Identifier = "PYBaseConnectionTests">
                </Test>
+               <Test
+                  Identifier = "PYEventFilterTest">
+               </Test>
+               <Test
+                  Identifier = "PYEventsTests">
+               </Test>
+               <Test
+                  Identifier = "PYStreamsTests">
+               </Test>
+               <Test
+                  Identifier = "PrYv_OSX_ExampleTests">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
