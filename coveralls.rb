@@ -103,6 +103,7 @@ Find.find(derivedDataDir) do |gcda_file|
             exclusionMsg =""
             
             puts "DDDD: incl path #{path_comps[0]}"
+            puts "DDDD: incl path #{relative_path}"
             
             if (excludedFolders.include?(path_comps[0]))
               exclusionMsg = "excluded via option"
@@ -111,7 +112,6 @@ Find.find(derivedDataDir) do |gcda_file|
                 exclusionMsg = "excluded header"
               else
                 if (extensionsToProcess.count == 0 || extensionsToProcess.include?(extension))
-                  puts "DDDDAAAA: ext #{extension}"
                   shouldProcess = true
                 else
                    exclusionMsg = "excluded extension"
