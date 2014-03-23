@@ -19,4 +19,4 @@ after_success:
    - echo `pwd`
    - find /Users/travis/Library/Developer/Xcode/DerivedData/ | grep gcda
    - cd ../../
-   - ./coveralls.rb --extension m
+   - ./coveralls.rb --extension m --exclude-folder Project

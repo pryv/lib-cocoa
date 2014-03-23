@@ -102,8 +102,8 @@ Find.find(derivedDataDir) do |gcda_file|
             shouldProcess = false
             exclusionMsg =""
             
-            puts "DDDD: incl path #{path_comps[0]}"
-            puts "DDDD: incl path #{relative_path}"
+            #puts "DDDD: incl path #{path_comps[0]}"
+            #puts "DDDD: incl path #{relative_path}"
             
             if (excludedFolders.include?(path_comps[0]))
               exclusionMsg = "excluded via option"
