@@ -6,7 +6,6 @@ before_install: export LANG=en_US.UTF-8
 
 before_script:
    - pod --version
-   - gem which cocoapods
    - gem update cocoapods --no-ri --no-rdoc
    - sudo easy_install cpp-coveralls
 
@@ -16,7 +15,5 @@ script:
    - xcodebuild test -workspace PrYv-OSX-Example.xcworkspace -scheme PrYv-OSX-Example -verbose -configuration Coverage
 
 after_success:
-   - echo `pwd`
-   - find /Users/travis/Library/Developer/Xcode/DerivedData/ | grep gcda
    - cd ../../
    - ./coveralls.rb --extension m --exclude-folder Project
