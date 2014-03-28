@@ -71,6 +71,15 @@
         STAssertEqualObjects(eventAtt.fileName, @"SomeFileName123", @"unexpected attachment fileName");
     }
     
+    NOT_DONE(done);
+    [event preview:^(NSImage *img) {
+        STFail(@"when there is no connection there is no preview");
+        DONE(done);
+    } failure:^(NSError *error) {
+        DONE(done);
+    }];
+    WAIT_FOR_DONE(done);
+    
     for (PYAttachment *a in event.attachments) {
         [event removeAttachment:a];
     }
@@ -126,28 +135,94 @@
     NOT_DONE(done);
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
-      successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
-          STAssertTrue(newEventId == nil, @"new event id should not be nil %@", newEventId);
-          
-          PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
-          STAssertNil(createdAttachment, @"");
-          
-          [createdOrUpdatedEvent preview:^(NSImage *img) {
-              STFail(@"there should not be an image");
-              STAssertNil(img, @"");
-              DONE(done);
-          } failure:^(NSError *error) {
-              STAssertEquals(error.code, 404l, @"");
-              DONE(done);
-          }];
-          //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
-      }
-        errorHandler:^(NSError *error) {
+    successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
+      STAssertTrue(newEventId == nil, @"new event id should not be nil %@", newEventId);
+      
+      PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
+      STAssertNil(createdAttachment, @"");
+      
+      [createdOrUpdatedEvent preview:^(NSImage *img) {
+          STFail(@"there should not be an image");
+          STAssertNil(img, @"");
+          DONE(done);
+      } failure:^(NSError *error) {
+          STAssertEquals(error.code, (NSUInteger)404, @"");
+          DONE(done);
+      }];
+      //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
+    }
+    errorHandler:^(NSError *error) {
             NSLog(@"error: %@", error);
             DONE(done);
-        }];
+    }];
     
     WAIT_FOR_DONE(done);
+}
+
+
+- (void)testImageAttachment
+{
+    PYEvent *event = [[PYEvent alloc] init];
+    event.streamId = @"TVKoK036of";
+    event.type = @"picture/attached";
+    
+    NSString *imageDataPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"350x150" ofType:@"png"];
+    NSLog(@"imageDataPath: %@", imageDataPath);
+    STAssertNotNil(imageDataPath, @"should have found image in the bundle");
+    NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
+    STAssertNotNil(imageData, @"could not create nsdata from image");
+    
+    STAssertEquals([event.attachments count], (NSUInteger)0, @"there should be zero attachments");
+    
+    PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
+    [event addAttachment:att];
+    
+    NOT_DONE(done2);
+    [event preview:^(NSImage *img) {
+        STFail(@"there should not be an image if there is no connection");
+        DONE(done2);
+    } failure:^(NSError *error) {
+        DONE(done2);
+    }];
+    WAIT_FOR_DONE(done2);
+    
+    
+    NOT_DONE(done);
+    [self.connection createEvent:event
+                     requestType:PYRequestTypeAsync
+    successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
+      STAssertTrue(newEventId != nil, @"new event id should not be nil %@", newEventId);
+      
+      PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
+      STAssertNotNil(createdAttachment, @"");
+      
+      [createdOrUpdatedEvent preview:^(NSImage *img) {
+          //STFail(@"there should not be an image");
+          STAssertNotNil(img, @"");
+          DONE(done);
+      } failure:^(NSError *error) {
+          STFail(@"there should be an preview at this point");
+          DONE(done);
+      }];
+      //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
+    }
+    errorHandler:^(NSError *error) {
+            NSLog(@"error: %@", error);
+            DONE(done);
+    }];
+    
+    WAIT_FOR_DONE(done);
+    
+    NOT_DONE(done3);
+    [event preview:^(NSImage *img) {
+        STAssertNotNil(img, @"there should be an image after it was downloaded");
+        DONE(done3);
+    } failure:^(NSError *error) {
+        STFail(@"there should be an image after it was downloaded");
+        DONE(done3);
+    }];
+    WAIT_FOR_DONE(done3);
+
 }
 
 - (void)eventCreated:(NSNotification *)notification
