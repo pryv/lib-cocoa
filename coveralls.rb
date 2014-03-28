@@ -108,14 +108,19 @@ Find.find(derivedDataDir) do |gcda_file|
             if (excludedFolders.include?(path_comps[0]))
               exclusionMsg = "excluded via option"
             else
-              if (excludeHeaders == true && extension == 'h')
-                exclusionMsg = "excluded header"
+              if relative_path.match(/PYReachability/)
+                exclusionMsg = "excluded Reachability"
+                shouldProcess = false
               else
-                if (extensionsToProcess.count == 0 || extensionsToProcess.include?(extension))
-                  shouldProcess = true
+                if (excludeHeaders == true && extension == 'h')
+                  exclusionMsg = "excluded header"
                 else
-                   exclusionMsg = "excluded extension"
-                   shouldProcess = false
+                  if (extensionsToProcess.count == 0 || extensionsToProcess.include?(extension))
+                    shouldProcess = true
+                  else
+                     exclusionMsg = "excluded extension"
+                     shouldProcess = false
+                  end
                 end
               end
             end
