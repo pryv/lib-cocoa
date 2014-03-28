@@ -177,6 +177,18 @@
     PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
     [event addAttachment:att];
     
+    
+    NOT_DONE(done00);
+    [event dataForAttachment:att
+      successHandler:^(NSData *data) {
+          DONE(done00);
+      } errorHandler:^(NSError *error) {
+          STFail(@"should not fail %@", error);
+          DONE(done00);
+      }];
+    WAIT_FOR_DONE(done00);
+    
+    
     NOT_DONE(done2);
     [event preview:^(NSImage *img) {
         STFail(@"there should not be an image if there is no connection");
@@ -210,8 +222,9 @@
             NSLog(@"error: %@", error);
             DONE(done);
     }];
-    
     WAIT_FOR_DONE(done);
+    
+    
     
     NOT_DONE(done3);
     [event preview:^(NSImage *img) {
@@ -222,6 +235,7 @@
         DONE(done3);
     }];
     WAIT_FOR_DONE(done3);
+    
 
 }
 
