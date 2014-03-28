@@ -146,7 +146,7 @@
           STAssertNil(img, @"");
           DONE(done);
       } failure:^(NSError *error) {
-          STAssertEquals(error.code, (NSUInteger)404, @"");
+          STAssertEquals(error.code, (NSInteger)404, @"");
           DONE(done);
       }];
       //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
