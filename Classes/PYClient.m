@@ -227,6 +227,7 @@ static NSString *s_myLanguageCodePrefered;
         // end
         [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundaryIdentifier] dataUsingEncoding:NSUTF8StringEncoding]];
         [request setHTTPBody:bodyData];
+        request.timeoutInterval = 60.0f;
         
         //####### DISPLAY SENT REQUEST (use with plain text attachment(s) only)#########
         
