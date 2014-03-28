@@ -245,14 +245,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;
         
-        
         if ([event toBeDeleteOnSync]) {
             [self trashOrDeleteEvent:event
                      withRequestType:PYRequestTypeAsync
                       successHandler:^{
                           event.isSyncTriedNow = NO;
-                          dispatch_group_leave(group);
                           successCounter++;
+                          dispatch_group_leave(group);
                       } errorHandler:^(NSError *error) {
                           event.isSyncTriedNow = NO;
                           dispatch_group_leave(group);
@@ -263,31 +262,33 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                   requestType:PYRequestTypeAsync
                successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
                    event.isSyncTriedNow = NO;
-                   dispatch_group_leave(group);
                    successCounter++;
+                   dispatch_group_leave(group);
                } errorHandler:^(NSError *error) {
                    //reset flag if fail, very IMPORTANT
                    event.isSyncTriedNow = NO;
-                   dispatch_group_leave(group);
                    NSLog(@"SYNC error: creating event failed");
                    NSLog(@"%@",error);
+                   dispatch_group_leave(group);
                }];
         } else { // update
             NSLog(@"In this case event has server id");
             [self updateEvent:event
-                                    successHandler:^(NSString *stoppedId) {
-                                        event.isSyncTriedNow = NO;
-                                        successCounter++;
-                                        dispatch_group_leave(group);
-                                    } errorHandler:^(NSError *error) {
-                                        event.isSyncTriedNow = NO;
-                                       dispatch_group_leave(group);
-                                    }];
+                successHandler:^(NSString *stoppedId) {
+                    event.isSyncTriedNow = NO;
+                    successCounter++;
+                    dispatch_group_leave(group);
+                } errorHandler:^(NSError *error) {
+                    event.isSyncTriedNow = NO;
+                    dispatch_group_leave(group);
+                }];
         }
     }
     
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        done(successCounter, eventCounter);
+        if (done) {
+            done(successCounter, eventCounter);
+        }
     });
     dispatch_release(group);
 }
