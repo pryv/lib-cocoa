@@ -88,6 +88,7 @@
         
         //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
         
+        DONE(done);
     }
     errorHandler:^(NSError *error) {
         NSLog(@"error: %@", error);
