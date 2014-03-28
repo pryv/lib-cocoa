@@ -37,6 +37,9 @@
     event.streamId = @"TVKoK036of";
     event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
     event.type = @"note/txt";
+    
+    STAssertTrue([[event description] length] > 0, @"poke description");
+    
     //    NSString *imageDataPath = [[NSBundle mainBundle] pathForResource:@"Default" ofType:@"png"];
     //    NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
     //    PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
