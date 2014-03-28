@@ -43,12 +43,21 @@
     STAssertNotNil(imageDataPath, @"should have found image in the bundle");
     NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
     STAssertNotNil(imageData, @"could not create nsdata from image");
+
+    STAssertEquals([event.attachments count], 0UL, @"there should be zero attachments");
     
     PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
     [event addAttachment:att];
     
-    STAssertTrue([event.attachments count] == 1, @"");
+    STAssertEquals([event.attachments count], 1UL, @"there should be just one attachment");
     STAssertTrue([event.attachments firstObject] == att, @"attachment not found");
+    
+    [event removeAttachment:att];
+    STAssertEquals([event.attachments count], 0UL, @"there should be zero attachments after attachment remove");
+
+    [event addAttachment:att];
+    
+    STAssertEquals([event.attachments count], 1UL, @"there should be just one attachment");
     
     {
         PYAttachment *eventAtt = [event.attachments firstObject];
@@ -58,6 +67,10 @@
         STAssertNotNil(eventAtt.fileData, @"fileData should not be nil");
         STAssertEqualObjects(eventAtt.name, @"Name", @"unexpected attachment name");
         STAssertEqualObjects(eventAtt.fileName, @"SomeFileName123", @"unexpected attachment fileName");
+    }
+    
+    for (PYAttachment *a in event.attachments) {
+        [event removeAttachment:a];
     }
 }
 
