@@ -99,50 +99,36 @@
 }
 
 
-- (void)testImageAttachmentCreationOnImageEvent
+- (void)testImageAttachmentNotCreatedOnImageEvent
 {
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
-    //event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
+    event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
     event.type = @"picture/attached";
-    
-    NSString *imageDataPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"350x150" ofType:@"png"];
-    NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
-    STAssertNotNil(imageData, @"could not create nsdata from image");
-    
-    PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
-    [event addAttachment:att];
-    
     
     NOT_DONE(done);
     [self.connection createEvent:event
                      requestType:PYRequestTypeAsync
       successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
-          STAssertTrue(newEventId != nil, @"new event id should not be nil %@", newEventId);
-          //STAssertTrue([stoppedId length] > 0, @"stopped event id should not be nil %@", stoppedId);
+          STAssertTrue(newEventId == nil, @"new event id should not be nil %@", newEventId);
           
           PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
-          STAssertNotNil(createdAttachment, @"");
+          STAssertNil(createdAttachment, @"");
           
           [createdOrUpdatedEvent preview:^(NSImage *img) {
-              
-              STAssertNotNil(img, @"");
-              
+              STFail(@"there should not be an image");
+              STAssertNil(img, @"");
               DONE(done);
-              
           } failure:^(NSError *error) {
-              STFail(@"unexpected %@", error);
-              
+              STAssertEquals(error.code, 404l, @"");
               DONE(done);
           }];
-          
           //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
-          
       }
-    errorHandler:^(NSError *error) {
-        NSLog(@"error: %@", error);
-        DONE(done);
-    }];
+        errorHandler:^(NSError *error) {
+            NSLog(@"error: %@", error);
+            DONE(done);
+        }];
     
     WAIT_FOR_DONE(done);
 }
