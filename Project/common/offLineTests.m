@@ -10,6 +10,14 @@
 #import "PYTestsUtils.h"
 #import "PYCachingController+Event.h"
 
+#import <PYConnection.h>
+
+@interface PYConnection (Testing)
+- (NSArray *)eventsNotSync;
+@end
+@implementation PYConnection (Testing)
+@end
+
 
 @interface offLineTests : PYBaseConnectionTests
 {
@@ -104,7 +112,8 @@
         step_2_SynchEvents = YES;
     }];
     
-    [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];
+    // wait for timeout times number of unsynced events secods
+    [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:(int)(61 * [[self.connection eventsNotSync] count])];
     if (!step_2_SynchEvents) {
         STFail(@"Timeout synching events.");
         return;
