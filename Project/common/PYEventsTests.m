@@ -108,6 +108,22 @@
          pyFilter.modifiedSince = [self.connection serverTimeFromLocalDate:nil] - 120; // last 120 seconds
          
          
+         // -- test event modification
+         
+         
+         NOT_DONE(event_modify);
+         event.eventContent = [NSString stringWithFormat:@"Test Modificaton %@", [NSDate date]];
+         [self.connection updateEvent:event
+               successHandler:^(NSString *stoppedId) {
+                   
+                   DONE(event_modify);
+               } errorHandler:^(NSError *error) {
+                   STFail(@"not expected error on event modification %@", error);
+                   DONE(event_modify);
+               }];
+         WAIT_FOR_DONE(event_modify);
+         
+         
          __block NSString* createdEventIdCopy = [newEventId copy];
          __block BOOL foundEventOnServer;
          [self.connection getEventsWithRequestType:PYRequestTypeAsync
@@ -120,6 +136,10 @@
               for (PYEvent *eventTemp in onlineEventList) {
                   if ([eventTemp.eventId isEqualToString:createdEventIdCopy]) {
                       foundEventOnServer = YES;
+                      
+                      
+                      STAssertTrue([eventTemp.eventContent rangeOfString:@"Modificaton"].location != NSNotFound, @"modification of event didn't work out");
+                      
                       break;
                   }
               }
@@ -151,6 +171,7 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:connectionEventObserver];
     [connectionEventObserver release];
+
     
 }
 
