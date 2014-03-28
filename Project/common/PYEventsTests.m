@@ -37,6 +37,12 @@
     event.streamId = @"TVKoK036of";
     event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
     event.type = @"note/txt";
+    NSString *imageDataPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"350x150" ofType:@"png"];
+    NSData *imageData = [NSData dataWithContentsOfFile:imageDataPath];
+    STAssertNotNil(imageData, @"could not create nsdata from image");
+    
+    PYAttachment *att = [[PYAttachment alloc] initWithFileData:imageData name:@"Name" fileName:@"SomeFileName123"];
+    [event addAttachment:att];
     
     STAssertTrue([[event description] length] > 0, @"poke description");
     
@@ -145,16 +151,26 @@
               }
               STAssertTrue(foundEventOnServer, @"Event hasn't been found on server");
               
-              //-- delete event found
+              //-- trash and delete event found
               [self.connection trashOrDeleteEvent:event
                                   withRequestType:PYRequestTypeAsync
-                                   successHandler:^{
-                                       DONE(done);
-                                   }
-                                     errorHandler:^(NSError *error) {
-                                         STFail(@"Error occured when deleting.");
-                                         DONE(done);
-                                     }];
+               successHandler:^{
+                   [self.connection trashOrDeleteEvent:event
+                                       withRequestType:PYRequestTypeAsync
+                    successHandler:^{
+                        DONE(done);
+                    }
+                    errorHandler:^(NSError *error) {
+                        DONE(done);
+                    }];
+               }
+               errorHandler:^(NSError *error) {
+                   STFail(@"Error occured when deleting.");
+                   DONE(done);
+               }];
+              
+              
+              
           } onlineDiffWithCached:NULL errorHandler:^(NSError *error) {
               STFail(@"Error occured when checking.");
               DONE(done);
