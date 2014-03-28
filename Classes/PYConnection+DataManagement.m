@@ -629,20 +629,19 @@
                  }
                  
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
-                 if (successHandler) {
-                     successHandler();
-                 }
-                 
+
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                      object:self
                                                                    userInfo:@{kPYNotificationKeyDelete: @[event]}];
-                 
+
+                 if (successHandler) {
+                     successHandler();
+                 }
                  
              } failure:^(NSError *error) {
                  
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
                      if (event.isSyncTriedNow == NO) {
-                         
                          
                          if (event.trashed == NO) {
                              event.trashed = YES;
@@ -655,15 +654,17 @@
                          [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                              object:self
                                                                            userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                         if (successHandler) {
+                             successHandler();
+                         }
+                         return;
                          
-                     }else{
+                     } else {
                          NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
                      }
-                     
-                 }else{
-                     if (errorHandler) {
-                         errorHandler (error);
-                     }
+                 }
+                 if (errorHandler) {
+                     errorHandler (error);
                  }
              }];
 }
