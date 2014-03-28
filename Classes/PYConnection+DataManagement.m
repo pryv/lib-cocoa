@@ -569,7 +569,12 @@
                  
              } failure:^(NSError *error) {
                  if (event.isSyncTriedNow == YES) {
-                     NSLog(@"Event wants to be synchronized on server from unsync list but there is no internet");
+                     NSLog(@"Event wants to be synchronized on server from unsync list but there is no internet %@", error);
+                     
+                     if (successHandler) {
+                         successHandler (nil, @"", event);
+                     }
+                     
                      return ;
                  }
                  
@@ -666,8 +671,8 @@
 //PUT /events/{event-id}
 
 - (void)updateEvent:(PYEvent *)eventObject
-                          successHandler:(void (^)(NSString *stoppedId))successHandler
-                            errorHandler:(void (^)(NSError *error))errorHandler
+     successHandler:(void (^)(NSString *stoppedId))successHandler
+       errorHandler:(void (^)(NSError *error))errorHandler
 {
     
     
