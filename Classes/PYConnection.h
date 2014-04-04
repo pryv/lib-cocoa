@@ -104,6 +104,11 @@
            failure:(PYClientFailureBlock)failureHandler;
 
 /**
+ Be sure that some structure of the stream as been fetched
+ */
+-(void) ensureStreamAreFetched:(void(^)(NSError *error))done;
+
+/**
  @discussion
  this method simply connect to the Pryv API and synchronize with the localTime
  Delta time in seconds between server and machine is returned

@@ -58,6 +58,36 @@
     
 }
 
+
+- (void)testStreamFetching
+{
+    __block BOOL finished1 = NO;
+    [self.connection ensureStreamAreFetched:^(NSError *error) {
+        if (error) {
+            STFail(@"should have no error");
+        }
+        
+        __block PYEvent *event = [[PYEvent alloc] initWithConnection:self.connection];
+        event.streamId = @"TVKoK036of";
+        event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
+        event.type = @"note/txt";
+        
+        PYStream* stream = [event stream];
+        STAssertNotNil(stream, @"stream shouldn't be nil");
+        
+        
+        
+        finished1 = YES;
+     }];
+    
+    
+    [PYTestsUtils execute:^{
+        STFail(@"Cannot get streams within 10 seconds");
+    } ifNotTrue:&finished1 afterSeconds:10];
+    
+}
+
+
 - (void)validateStream:(PYStream *)stream
         withConnection:(PYConnection *)connection
              andParent:(PYStream *)parentStream

@@ -34,6 +34,7 @@
 
 #pragma mark - Pryv API Streams
 
+
 - (void)getAllStreamsWithRequestType:(PYRequestType)reqType
                     gotCachedStreams:(void (^) (NSArray *cachedStreamsList))cachedStreams
                     gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
@@ -61,6 +62,7 @@
                              errorHandler:errorHandler
                        shouldSyncAndCache:YES];
 }
+
 
 
 - (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType

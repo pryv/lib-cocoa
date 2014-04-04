@@ -94,6 +94,21 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return _online;
 }
 
+/**
+ Be sure that some structure of the stream as been fetched
+ */
+-(void) ensureStreamAreFetched:(void(^)(NSError *error))done {
+    if (_fetchedStreams) {
+        return done(nil);
+    }
+    [self getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamsList) {
+        
+    } gotOnlineStreams:^(NSArray *onlineStreamList) {
+        done(nil);
+    } errorHandler:^(NSError *error) {
+        done(error);
+    }];
+}
 
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
 {
