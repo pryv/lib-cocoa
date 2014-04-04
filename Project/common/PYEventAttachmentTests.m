@@ -72,7 +72,7 @@
     }
     
     NOT_DONE(done);
-    [event preview:^(NSImage *img) {
+    [event preview:^(PYImage *img) {
         STFail(@"when there is no connection there is no preview");
         DONE(done);
     } failure:^(NSError *error) {
@@ -141,7 +141,7 @@
       PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
       STAssertNil(createdAttachment, @"");
       
-      [createdOrUpdatedEvent preview:^(NSImage *img) {
+      [createdOrUpdatedEvent preview:^(PYImage *img) {
           STFail(@"there should not be an image");
           STAssertNil(img, @"");
           DONE(done);
@@ -190,7 +190,7 @@
     
     
     NOT_DONE(done2);
-    [event preview:^(NSImage *img) {
+    [event preview:^(PYImage *img) {
         STFail(@"there should not be an image if there is no connection");
         DONE(done2);
     } failure:^(NSError *error) {
@@ -208,7 +208,7 @@
       PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
       STAssertNotNil(createdAttachment, @"");
       
-      [createdOrUpdatedEvent preview:^(NSImage *img) {
+      [createdOrUpdatedEvent preview:^(PYImage *img) {
           //STFail(@"there should not be an image");
           STAssertNotNil(img, @"");
           DONE(done);
@@ -227,7 +227,7 @@
     
     
     NOT_DONE(done3);
-    [event preview:^(NSImage *img) {
+    [event preview:^(PYImage *img) {
         STAssertNotNil(img, @"there should be an image after it was downloaded");
         DONE(done3);
     } failure:^(NSError *error) {
