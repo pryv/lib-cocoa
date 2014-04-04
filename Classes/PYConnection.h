@@ -106,7 +106,13 @@
 /**
  Be sure that some structure of the stream as been fetched
  */
--(void) ensureStreamAreFetched:(void(^)(NSError *error))done;
+-(void) streamsEnsureFetched:(void(^)(NSError *error))done;
+
+/**
+ Get all root streams from fetched Streams
+ */
+-(NSArray*) streamsRoots;
+
 
 /**
  @discussion

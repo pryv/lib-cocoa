@@ -94,10 +94,12 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return _online;
 }
 
+#pragma mark streams
+
 /**
  Be sure that some structure of the stream as been fetched
  */
--(void) ensureStreamAreFetched:(void(^)(NSError *error))done {
+-(void) streamsEnsureFetched:(void(^)(NSError *error))done {
     if (_fetchedStreams) {
         return done(nil);
     }
@@ -110,6 +112,11 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }];
 }
 
+-(NSArray*) streamsRoots {
+    //TODO
+    return nil;
+}
+
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
 {
     /*When we deserialize unsync list (when app starts) we will know what streams are not sync with these informations:
@@ -120,6 +127,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     [self.streamsNotSync addObject:stream];
     
 }
+
+#pragma mark streams
 
 - (NSArray*)allEventsFromCache
 {

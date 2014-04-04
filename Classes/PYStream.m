@@ -9,6 +9,7 @@
 #import "PYClient.h"
 #import "NSObject+Supervisor.h"
 #import "PYSupervisable.h"
+#import "PYConnection+FetchedStreams.h"
 
 @interface PYStream ()<PYSupervisable>
 @end
@@ -187,6 +188,11 @@
     }
     [description appendString:@">"];
     return description;
+}
+
+- (PYStream*)parent {
+    if (self.parentId == nil) return nil;
+    return [self.connection streamWithStreamId:self.parentId];
 }
 
 @end

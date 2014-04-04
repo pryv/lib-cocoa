@@ -77,6 +77,8 @@
  */
 - (NSDictionary *)cachingDictionary;
 
+/** return parent stream if fetched on pyConnection**/
+- (PYStream*)parent;
 
 - (id)init;
 

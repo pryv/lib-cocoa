@@ -75,8 +75,6 @@
         PYStream* stream = [event stream];
         STAssertNotNil(stream, @"stream shouldn't be nil");
         
-        
-        
         finished1 = YES;
      }];
     
