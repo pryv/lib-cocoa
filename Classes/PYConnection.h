@@ -32,9 +32,12 @@
     NSInteger _attachmentSizeNotSync;
     
     PYCachingController *_cache;
-
+    
+    
+    
 @private
     NSTimeInterval _serverTimeInterval;
+    NSMutableDictionary* _fetchedStreams;
 }
 
 @property (nonatomic, copy) NSString *userID;
@@ -48,6 +51,7 @@
 @property (nonatomic, retain) PYCachingController *cache;
 
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
+@property (nonatomic, retain, readonly) NSMutableDictionary* fetchedStreams;
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;

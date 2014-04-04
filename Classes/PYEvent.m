@@ -14,6 +14,7 @@
 #import "PYEventTypes.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
+#import "PYConnection+FetchedStreams.h"
 #import "NSObject+Supervisor.h"
 #import "PYSupervisable.h"
 #import "PYConnection.h"
@@ -315,6 +316,12 @@
     [_clientData release];
     [_modifiedEventPropertiesToBeSync release];
     [super dealloc];
+}
+
+#pragma mark - stream
+
+- (PYStream*) stream {
+    return [self.connection streamWithStreamId:self.streamId];
 }
 
 #pragma mark - date

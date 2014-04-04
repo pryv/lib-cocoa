@@ -8,6 +8,7 @@
 
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
+#import "PYConnection+FetchedStreams.h"
 #import "PYStream+JSON.h"
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"
@@ -16,6 +17,7 @@
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
+
 
 
 @interface PYConnection ()
@@ -41,6 +43,9 @@
     NSArray *allStreamsFromCache = [self.cache streamsFromCache];
     //    [allStreamsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedStreams) {
+        [self updateFetchedStreams:allStreamsFromCache];
+        
+        
         NSUInteger currentNumberOfStreamsInCache = allStreamsFromCache.count;
         if (currentNumberOfStreamsInCache > 0) {
             //if there are cached streams return it, when get response return in onlineList
@@ -95,6 +100,9 @@
                  if (syncAndCache == YES) {
                      [self.cache cacheStreams:JSON];
                  }
+                 
+                 //---- save the streams in the fetchedStream object
+                 [self updateFetchedStreams:streamList];
                  
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
                                                                      object:self

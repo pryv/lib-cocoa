@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>61752AE7-E5B2-414A-A266-F6518F7C458D</string>
+	<string>B243105C-6809-4EA8-9C79-742F070FC535</string>
 	<key>IDESourceControlProjectName</key>
 	<string>PrYv-OSX-Example</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>05A7E3F6-7A09-442A-9516-2B0AF0C5EBB2</key>
-		<string>ssh://github.com/dkonst/sdk-objectivec-apple.git</string>
+		<key>201AB875-427E-4ADB-B815-CD63CDC5A3AC</key>
+		<string>ssh://github.com/pryv/sdk-objectivec-apple.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Project/PrYv-OSX-Example/PrYv-OSX-Example.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>05A7E3F6-7A09-442A-9516-2B0AF0C5EBB2</key>
+		<key>201AB875-427E-4ADB-B815-CD63CDC5A3AC</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/dkonst/sdk-objectivec-apple.git</string>
+	<string>ssh://github.com/pryv/sdk-objectivec-apple.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>05A7E3F6-7A09-442A-9516-2B0AF0C5EBB2</string>
+	<string>201AB875-427E-4ADB-B815-CD63CDC5A3AC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>05A7E3F6-7A09-442A-9516-2B0AF0C5EBB2</string>
+			<string>201AB875-427E-4ADB-B815-CD63CDC5A3AC</string>
 			<key>IDESourceControlWCCName</key>
-			<string>dkonst-pryvsdk</string>
+			<string>sdk-objectivec-apple</string>
 		</dict>
 	</array>
 </dict>

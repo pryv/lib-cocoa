@@ -15,7 +15,7 @@
 #define PYEvent_UNDEFINED_DURATION -DBL_MAX
 
 #import <Foundation/Foundation.h>
-
+#import "PYStream.h"
 
 @interface PYEvent : NSObject
 {
@@ -109,6 +109,13 @@
  @property synchedAt - (PRIVATE) Timestamp in serverTime when event is synced with server
  */
 @property NSTimeInterval synchedAt;
+
+
+# pragma mark - stream
+
+/** return the stream linked to this object of nil if unkown or not fetched **/
+- (PYStream*)stream;
+
 
 # pragma mark - date
 

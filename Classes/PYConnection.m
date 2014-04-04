@@ -27,6 +27,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 @property (nonatomic, readwrite) NSTimeInterval serverTimeInterval;
 
+
 @end
 
 @implementation PYConnection
@@ -44,6 +45,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
 @synthesize cache = _cache;
+@synthesize fetchedStreams = _fetchedStreams;
+
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
