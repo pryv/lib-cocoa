@@ -48,8 +48,7 @@
  POST /streams/
  
  */
-- (void)createStream:(PYStream *)stream
-     withRequestType:(PYRequestType)reqType
+- (void)streamCreate:(PYStream *)stream
       successHandler:(void (^)(NSString *createdStreamId))successHandler
         errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -66,9 +65,8 @@
  DELETE /streams/{stream-id}
  */
 
-- (void)trashOrDeleteStream:(PYStream *)stream
+- (void)streamTrashOrDelete:(PYStream *)stream
                filterParams:(NSDictionary *)filter
-            withRequestType:(PYRequestType)reqType
              successHandler:(void (^)())successHandler
                errorHandler:(void (^)(NSError *error))errorHandler;
 

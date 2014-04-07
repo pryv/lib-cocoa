@@ -207,8 +207,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             if (stream.notSyncAdd) {
                 NSString *tempId = [NSString stringWithString:stream.streamId];
                 stream.streamId = @"";
-                [self createStream:stream
-                   withRequestType:PYRequestTypeAsync
+                [self streamCreate:stream
                     successHandler:^(NSString *createdStreamId) {
                         //If succedded remove from unsyncSet and add call syncStreamWithServer
                         //In that method we were search for stream with <createdStreamId> and we should done mapping between server and temp id in cache
@@ -216,7 +215,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                         stream.streamId = [NSString stringWithString:tempId];
                         
                         [self.streamsNotSync removeObject:stream];
-                        //We have success here. Stream is cached in createStream:withRequestType: method, remove old stream with tmpId from cache
+                        //We have success here. Stream is cached in streamCreate:withRequestType: method, remove old stream with tmpId from cache
                         //He will always have tmpId here but just in case for testing (defensive programing)
                         [self.cache removeStream:stream];
                         

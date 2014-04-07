@@ -92,7 +92,7 @@
                  NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
                  for (NSDictionary *streamDictionary in JSON) {
                      PYStream *stream = [PYStream streamFromJSON:streamDictionary];
-                     [self setupConnectionOnStreamAndChildren:stream];
+                     [self streamAndChildrenSetConnection:stream];
                      [streamList addObject:stream];
                  }
                  
@@ -151,23 +151,26 @@
     } errorHandler:errorHandler];
 }
 
-- (void)setupConnectionOnStreamAndChildren:(PYStream *)stream
+/**
+ * Utility to set connection to all Streams
+ * @private
+ */
+- (void)streamAndChildrenSetConnection:(PYStream *)stream
 {
     [stream setConnection:self];
     if (stream.children != nil) {
         for (int i = 0; i < stream.children.count; i++) {
-            [self setupConnectionOnStreamAndChildren:[stream.children objectAtIndex:i]];
+            [self streamAndChildrenSetConnection:[stream.children objectAtIndex:i]];
         }
     }
 }
 
-- (void)createStream:(PYStream *)stream
-     withRequestType:(PYRequestType)reqType
+- (void)streamCreate:(PYStream *)stream
       successHandler:(void (^)(NSString *createdStreamId))successHandler
         errorHandler:(void (^)(NSError *error))errorHandler;
 {
     [self apiRequest:kROUTE_STREAMS
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[stream dictionary]
          attachments:nil
@@ -177,7 +180,7 @@
                  
                  [self.cache findAndCacheStream:stream
                                    withServerId:createdStreamId
-                                    requestType:reqType];
+                                    requestType:PYRequestTypeAsync];
                  
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
                                                                      object:self
@@ -214,14 +217,13 @@
              }];
 }
 
--(void)trashOrDeleteStream:(PYStream *)stream
+-(void)streamTrashOrDelete:(PYStream *)stream
               filterParams:(NSDictionary *)filter
-           withRequestType:(PYRequestType)reqType
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *))errorHandler
 {
     [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil

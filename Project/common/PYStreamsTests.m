@@ -123,7 +123,7 @@
     //STAssertTrue(newStream.connection, @"");
     
     NOT_DONE(done1);
-    [self.connection createStream:newStream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
+    [self.connection streamCreate:newStream successHandler:^(NSString *createdStreamId) {
         //
         DONE(done1);
     } errorHandler:^(NSError *error) {
@@ -166,8 +166,7 @@
     NOT_DONE(done1);
     
     __block NSString *createdStreamIdFromServer = nil;
-    [self.connection createStream:self.stream
-                  withRequestType:PYRequestTypeAsync
+    [self.connection streamCreate:self.stream
     successHandler:^(NSString *createdStreamId) {
                        
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
@@ -237,8 +236,8 @@
 {
     NSLog(@"deleting stream: %@", testStream);
     NOT_DONE(done3);
-    [self.connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
-        [self.connection trashOrDeleteStream:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+    [self.connection streamTrashOrDelete:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+        [self.connection streamTrashOrDelete:testStream filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
             NSLog(@"Test stream deleted. %@", testStream);
             DONE(done3);
         } errorHandler:^(NSError *error) {
