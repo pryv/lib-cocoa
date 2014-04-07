@@ -109,7 +109,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     if (allStreamsFromCache.count > 0) {
         [self updateFetchedStreams:allStreamsFromCache];
     }
-    [self getOnlineStreamsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *streamsList) {
+    [self streamsOnlineWithFilterParams:nil successHandler:^(NSArray *streamsList) {
         done(nil);
     } errorHandler:^(NSError *error) {
         done(error);

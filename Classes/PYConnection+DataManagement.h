@@ -27,9 +27,8 @@
  
  */
 
-- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedStreams:(void (^) (NSArray *cachedStreamsList))cachedStreams
-                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
+- (void)streamsFromCache:(void (^) (NSArray *cachedStreamsList))cachedStreams
+                    andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
                         errorHandler:(void (^)(NSError *error))errorHandler;
 
 //This is not supposed to be called directly by client app
@@ -37,8 +36,7 @@
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
 
-- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                           filterParams:(NSDictionary *)filter
+- (void)streamsOnlineWithFilterParams:(NSDictionary *)filter
                          successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
                            errorHandler:(void (^) (NSError *error))errorHandler;
 
@@ -90,8 +88,7 @@
 /**
  Get online stream with id from server. This methos mustn't cache stream
  */
-- (void)getOnlineStreamWithId:(NSString *)streamId
-                  requestType:(PYRequestType)reqType
+- (void)streamOnlineWithId:(NSString *)streamId
                successHandler:(void (^) (PYStream *stream))onlineStream
                  errorHandler:(void (^) (NSError *error))errorHandler;
 

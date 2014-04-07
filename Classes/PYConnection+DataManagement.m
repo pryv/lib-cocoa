@@ -35,9 +35,8 @@
 #pragma mark - Pryv API Streams
 
 
-- (void)getAllStreamsWithRequestType:(PYRequestType)reqType
-                    gotCachedStreams:(void (^) (NSArray *cachedStreamsList))cachedStreams
-                    gotOnlineStreams:(void (^) (NSArray *onlineStreamList))onlineStreams
+- (void)streamsFromCache:(void (^) (NSArray *cachedStreamsList))cachedStreams
+                    andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
                         errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
@@ -53,7 +52,7 @@
         }
     }
     
-    [self getOnlineStreamsWithRequestType:reqType filterParams:nil successHandler:^(NSArray *streamsList) {
+    [self streamsOnlineWithFilterParams:nil successHandler:^(NSArray *streamsList) {
         if (onlineStreams) {
             onlineStreams(streamsList);
         }
@@ -63,8 +62,7 @@
 
 
 
-- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                           filterParams:(NSDictionary *)filter
+- (void)streamsOnlineWithFilterParams:(NSDictionary *)filter
                          successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
                            errorHandler:(void (^) (NSError *error))errorHandler
 {
@@ -84,7 +82,7 @@
     }
     
     [self apiRequest:[PYClient getURLPath:kROUTE_STREAMS withParams:filter]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
@@ -121,8 +119,7 @@
              }];
 }
 
-- (void)getOnlineStreamWithId:(NSString *)streamId
-                  requestType:(PYRequestType)reqType
+- (void)streamOnlineWithId:(NSString *)streamId
                successHandler:(void (^) (PYStream *stream))onlineStreamHandler
                  errorHandler:(void (^) (NSError *error))errorHandler
 {
@@ -130,7 +127,7 @@
     //When API support separate method of getting only one stream by its id this will be implemented here
     
     //This method should get particular stream and return it, not to cache it
-    [self getOnlineStreamsWithRequestType:reqType filterParams:nil successHandler:^(NSArray *streamsList) {
+    [self streamsOnlineWithFilterParams:nil successHandler:^(NSArray *streamsList) {
         __block BOOL found = NO;
         for (PYStream *currentStream in streamsList) {
             if ([currentStream.streamId isEqualToString:streamId]) {

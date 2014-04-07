@@ -31,8 +31,7 @@
              withServerId:(NSString *)serverId
               requestType:(PYRequestType)reqType
 {
-        [stream.connection getOnlineStreamWithId:serverId
-                                 requestType:reqType
+        [stream.connection streamOnlineWithId:serverId
                               successHandler:^(PYStream *stream) {
         [self cacheStream:stream];
     } errorHandler:^(NSError *error) {

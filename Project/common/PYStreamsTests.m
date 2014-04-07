@@ -40,11 +40,9 @@
 - (void)testGettingStreams
 {
     __block BOOL finished1 = NO;
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
-     
-                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
+    [self.connection streamsFromCache:^(NSArray *cachedStreamsList) {
                                      
-                                 } gotOnlineStreams:^(NSArray *onlineStreamList) {
+                                 } andOnline:^(NSArray *onlineStreamList) {
                                      
                                      STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
                                      
@@ -199,10 +197,9 @@
     
     NOT_DONE(done2);
     
-    [self.connection getAllStreamsWithRequestType:PYRequestTypeAsync
-                                 gotCachedStreams:^(NSArray *cachedStreamsList) {
+    [self.connection streamsFromCache:^(NSArray *cachedStreamsList) {
         
-    } gotOnlineStreams:^(NSArray *onlineStreamList) {
+    } andOnline:^(NSArray *onlineStreamList) {
         STAssertTrue(onlineStreamList.count > 0, @"Didn't retrieve any stream online.");
         
         //TODO test stream structure
@@ -224,8 +221,7 @@
     
     
     NOT_DONE(done3);
-    [self.connection getOnlineStreamWithId:createdStreamIdFromServer
-                               requestType:PYRequestTypeAsync
+    [self.connection streamOnlineWithId:createdStreamIdFromServer
                             successHandler:^(PYStream *stream) {
                                      STAssertNotNil(stream, @"should return single stream requested by id from the server");
                                      DONE(done3);
