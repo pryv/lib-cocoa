@@ -36,8 +36,8 @@
 
 
 - (void)streamsFromCache:(void (^) (NSArray *cachedStreamsList))cachedStreams
-                    andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
-                        errorHandler:(void (^)(NSError *error))errorHandler
+               andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
+            errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
     NSArray *allStreamsFromCache = [self.cache streamsFromCache];
@@ -57,14 +57,14 @@
             onlineStreams(streamsList);
         }
     }
-                             errorHandler:errorHandler];
+                           errorHandler:errorHandler];
 }
 
 
 
 - (void)streamsOnlineWithFilterParams:(NSDictionary *)filter
-                         successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
-                           errorHandler:(void (^) (NSError *error))errorHandler
+                       successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
+                         errorHandler:(void (^) (NSError *error))errorHandler
 {
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
@@ -120,8 +120,8 @@
 }
 
 - (void)streamOnlineWithId:(NSString *)streamId
-               successHandler:(void (^) (PYStream *stream))onlineStreamHandler
-                 errorHandler:(void (^) (NSError *error))errorHandler
+            successHandler:(void (^) (PYStream *stream))onlineStreamHandler
+              errorHandler:(void (^) (NSError *error))errorHandler
 {
     //Method below automatically cache (overwrite) all streams, so this is bad
     //When API support separate method of getting only one stream by its id this will be implemented here
@@ -218,11 +218,11 @@
 }
 
 -(void)streamTrashOrDelete:(PYStream *)stream
-              filterParams:(NSDictionary *)filter
+     mergeEventsWithParent:(BOOL)mergeEventsWithParents
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *))errorHandler
 {
-    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:filter]
+    [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:@{@"mergeEventsWithParents":  [NSNumber numberWithBool:mergeEventsWithParents]}]
          requestType:PYRequestTypeAsync
               method:PYRequestMethodDELETE
             postData:nil
@@ -239,9 +239,9 @@
 }
 
 - (void)streamSaveModifiedAttributeFor:(PYStream *)stream
-                              forStreamId:(NSString *)streamId
-                           successHandler:(void (^)())successHandler
-                             errorHandler:(void (^)(NSError *error))errorHandler
+                           forStreamId:(NSString *)streamId
+                        successHandler:(void (^)())successHandler
+                          errorHandler:(void (^)(NSError *error))errorHandler
 {
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS,streamId]
          requestType:PYRequestTypeAsync
@@ -356,9 +356,9 @@
 //GET /events
 
 - (void)eventsOnlineWithFilterParameters:(NSDictionary*)filterDic
-                        successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
-                          errorHandler:(void (^) (NSError *error))errorHandler
-                    shouldSyncAndCache:(BOOL)syncAndCache
+                          successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
+                            errorHandler:(void (^) (NSError *error))errorHandler
+                      shouldSyncAndCache:(BOOL)syncAndCache
 {
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
@@ -371,7 +371,7 @@
      */
     if (syncAndCache == YES) {
 # warning - change logic
-      //  [self syncNotSynchedEventsIfAny];
+        //  [self syncNotSynchedEventsIfAny];
     }
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
          requestType:PYRequestTypeAsync
@@ -404,7 +404,7 @@
                      
                      [eventsArray addObject:myEvent];
                  }
-
+                 
                  //cacheEvents method will overwrite contents of currently cached file
                  [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                  [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
@@ -418,7 +418,7 @@
                                                                      object:self
                                                                    userInfo:@{kPYNotificationKeyAdd: addArray,
                                                                               kPYNotificationKeyModify: modifyArray}];
-
+                 
                  if (successBlock) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
                      
@@ -439,7 +439,7 @@
 - (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
                               create:(void(^) (PYEvent*event))create
                               update:(void(^) (PYEvent*event))update
-                              same:(void(^) (PYEvent*event))same
+                                same:(void(^) (PYEvent*event))same
 {
     PYEvent* cachedEvent = [self.cache eventWithEventId:[eventDic objectForKey:@"id"]];
     cachedEvent.connection = self;
@@ -461,7 +461,6 @@
     // notify of event update
     [self.cache cacheEvent:cachedEvent];
     
-    
     update(cachedEvent);
 }
 
@@ -479,11 +478,11 @@
     {
         return errorHandler([NSError
                              errorWithDomain:@"Cannot create PYEvent on API with an different connection"
-                                                code:500 userInfo:nil]);
+                             code:500 userInfo:nil]);
     }
     
     
-   
+    
     // load filedata in attachment from cache if needed
     if (event.attachments) {
         for (PYAttachment* att in event.attachments) {
@@ -493,7 +492,7 @@
         }
     }
     
-
+    
     
     [self apiRequest:kROUTE_EVENTS
          requestType:PYRequestTypeAsync
@@ -502,7 +501,7 @@
          attachments:event.attachments
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                  NSDictionary* JSON = responseDict[kPYAPIResponseEvent];
-                
+                 
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -518,7 +517,7 @@
                  event.synchedAt = [[NSDate date] timeIntervalSince1970];
                  event.eventId = createdEventId;
                  [event clearModifiedProperties]; // clear modified properties
-                 [self.cache cacheEvent:event andCleanTempData:YES]; //-- remove eventual 
+                 [self.cache cacheEvent:event andCleanTempData:YES]; //-- remove eventual
                  
                  // notification
                  
@@ -531,7 +530,7 @@
                  if (successHandler) {
                      successHandler(createdEventId, stoppedId, event);
                  }
-
+                 
                  
              } failure:^(NSError *error) {
                  if (event.isSyncTriedNow == YES) {
@@ -587,18 +586,18 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
                  if (event.trashed == YES) {
-                    [self.cache removeEvent:event];
+                     [self.cache removeEvent:event];
                  } else {
-                    event.trashed = YES;
-                    [self.cache cacheEvent:event];
+                     event.trashed = YES;
+                     [self.cache cacheEvent:event];
                  }
                  
                  NSLog(@"It's event with server id because we'll never try to call this method if event has tempId");
-
+                 
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                      object:self
                                                                    userInfo:@{kPYNotificationKeyDelete: @[event]}];
-
+                 
                  if (successHandler) {
                      successHandler();
                  }
@@ -637,8 +636,8 @@
 //PUT /events/{event-id}
 
 - (void)eventSaveModifications:(PYEvent *)eventObject
-     successHandler:(void (^)(NSString *stoppedId))successHandler
-       errorHandler:(void (^)(NSError *error))errorHandler
+                successHandler:(void (^)(NSString *stoppedId))successHandler
+                  errorHandler:(void (^)(NSError *error))errorHandler
 {
     
     
@@ -654,7 +653,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                  NSDictionary *JSON = responseDict[kPYAPIResponseEvent];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
-               
+                 
                  eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
                  [eventObject clearModifiedProperties];
                  [self.cache cacheEvent:eventObject ];
@@ -729,9 +728,9 @@
 
 //POST /events/stop
 - (void)eventStopPeriodWithEventId:(NSString *)eventId
-                       onDate:(NSDate *)specificTime
-               successHandler:(void (^)(NSString *stoppedEventId))successHandler
-                 errorHandler:(void (^)(NSError *error))errorHandler
+                            onDate:(NSDate *)specificTime
+                    successHandler:(void (^)(NSString *stoppedEventId))successHandler
+                      errorHandler:(void (^)(NSError *error))errorHandler
 {
     
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];

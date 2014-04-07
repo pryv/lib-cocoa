@@ -75,21 +75,23 @@ Otherwise, you can manage abortion and error using the methods `- (void) pyWebLo
 
 ### Inits
 
-##### FIXME
+Streams and Events are manipulated independently. An event instance has the `(NSString*) streamId`property but cannot server `(PYStream*) stream` property unless the streams structure has been fetched.
+
+With the following command, if the the streams list is not present, it will load it from the cache and try to update it online. If already fetched, it will return instantenly. 
+
+This list will be then updated on each `connection.streamOnline` call 
 
 ```objective-c
 /** refresh stream list **/
-[connection refreshStreams:^done]
+[connection streamsEnsureFetched:^done]
 ```
 
-### Calls
+Having stream fetched enable the following :
 
-##### FIXME
-
-```objective-c
-/** get latest stream structure fetched **/
-NSArray *currentStreams = connection.currentStreams;
-```
+- `(PYStream*) event.stream`
+- `(PYStream*) stream.parent`
+- `(NSArray*) connection.streamFetchedRoots`
+- `(PYStream*) [connection streamWithStreamId:(NSSTring*)streamId`
 
 
 ### Notifications
@@ -198,15 +200,15 @@ PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connect
 The user ID and the access token are used for creating PYConnection object.
 
 ```objective-c
-PYConnection *access = [PYClient createAccessWithUsername:@"username" andAccessToken:@"accessToken"];
+PYConnection *access = [PYClient createConnectionWithUsername:@"username" andAccessToken:@"accessToken"];
 ```
 
 With `PYConnection` objects, you can browse Streams, streams and events with the permissions you have in access token.
 
 ```objective-c
-[Connection getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamList) {
+[connection streamsFromCache:^(NSArray *cachedStreamList) {
 
-} gotOnlineStreams:^(NSArray *onlineStreamList) {
+} andOnline:^(NSArray *onlineStreamList) {
 
 } errorHandler:^(NSError *error) {
 
@@ -214,13 +216,10 @@ With `PYConnection` objects, you can browse Streams, streams and events with the
 ```
 
 
-This library can work offline if caching is enabled. To enable/disable caching possibility you set the preprocessor macro `CACHE` in project file to 1/0 depending on whether or not you want caching support.
 
 `cachedStreamList` and `onlineStreamList` contain `PYStream` objects. A Stream il linked to `PYStream` children and `PYEvent` objects.
 
 You can manipulate streams and events. For example, you can create, delete, modify, …. Same rules applie for other object types. Currently only personal type of access allows creating Streams and it will be added for v2 of SDK when access-rights will be covered in depth.
-
-
 
 
 
@@ -232,12 +231,12 @@ Example of getting all events:
 `filter:nil` means **no** filer, so all events.
 
 ```objective-c
-[connection getEventsWithRequestType:PYRequestTypeAsync filter:nil
-gotCachedEvents:^(NSArray *cachedEventList) {
+[connection eventsWithFilter:nil
+fromCache:^(NSArray *cachedEventList) {
     
-} gotOnlineEvents:^(NSArray *onlineEventList) {
+} andOnline:^(NSArray *onlineEventList) {
     
-} successHandler:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
+} onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
     
 } errorHandler:^(NSError *error) {
     
@@ -256,9 +255,8 @@ event.eventFormat = @"txt";
 event.tags = @[@"tag1", @"tag2", @"tag3"];
 event.clientData = @{@"clDataKey": @"clientDataObject"};
 
-[connection createEvent:event
-         requestType:PYRequestTypeAsync
-      successHandler:^(NSString *newEventId, NSString *stoppedId) {
+[connection eventCreate:event
+      successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *event) {
     
 } errorHandler:^(NSError *error) {
     
@@ -272,8 +270,8 @@ PYEvent *event = [[PYEvent alloc] init];
 event.streamId = @"someStreamId";
 event.value = @"someEventValue";
 
-[connection updateEvent:event
-                           successHandler:^(NSString *stoppedId) {
+[connection eventSaveModifications:event
+                    successHandler:^(NSString *stoppedId) {
     
 } errorHandler:^(NSError *error) {
     
@@ -309,18 +307,7 @@ PYEventFilter *eventFilter = [[PYEventFilter alloc] initWithConnection:connectio
 
 In a similar way, you manipulate streams.
 
-Getting all streams from current Stream:
 
-```objective-c
-[connection getAllStreamsWithRequestType:PYRequestTypeAsync
-                         filterParams:nil
-                     gotCachedStreams:^(NSArray *cachedStreamsList) {
-
-} gotOnlineStreams:^(NSArray *onlineStreamList) {
-
-} errorHandler:^(NSError *error) {
-
-}];
 ```
 
 Creating stream in current Stream:
@@ -329,7 +316,7 @@ Creating stream in current Stream:
 PYStream *stream = [[PYStream alloc] init];
 stream.name = @"someStreamName";
             
-[connection createStream:stream withRequestType:PYRequestTypeAsync successHandler:^(NSString *createdStreamId) {
+[connection streamCreate:stream successHandler:^(NSString *createdStreamId) {
     
 } errorHandler:^(NSError *error) {
     
@@ -341,9 +328,9 @@ If you want to change name of previously created stream above, you do this :
 ```objective-c
 PYStream *stream = [[PYStream alloc] init];
 stream.name = @"someStreamNameChanged";
-[connec setModifiedStreamAttributesObject:stream
+[connec streamSaveModifiedAttributeFor:stream
                                forStreamId:createdStreamId
-                               requestType:PYRequestTypeAsync successHandler:^{
+                              	successHandler:^{
     
 } errorHandler:^(NSError *error) {
     
@@ -353,17 +340,13 @@ stream.name = @"someStreamNameChanged";
 You can trash/delete stream in this way:
 
 ```objective-c
-[connection trashOrDeleteStreamWithId:createdStreamId filterParams:nil withRequestType:PYRequestTypeAsync successHandler:^{
+[connection streamTrashOrDelete:stream filterParams:nil successHandler:^{
     
 } errorHandler:^(NSError *error) {
     
 }];
 ```
 
-### Some words about caching
-If caching is enabled for library, Streams, streams or events requested from server will be cached automatically. If you want to create an event and you get successful response, that event will be cached automatically for you. Same rules apply for other types. If you are offline, the library still works. All Streams, streams or events will be cached on disk with tempId and will be put in unsync list. When internet turns on, the unsync list will be synched with server and all events, streams or Streams will be cached automatically. Developers don't need to care about caching, all process about it is done in background. Developers should use public API methods as usual. From my pov I'll rather take out `gotCachedStreams` `gotCachedEvents` and `gotCachedStreams` callbacks because I think it's unnecessary. Everything can be in one callback… Perki, what do you think about it?
-
-Also, there are some testing classes that are testing whether or not Objective-C public API works with web service. To perform those tests start iOS example in simulator first. After this step, stop the simulator and choose libPryvApiKit.a scheme. Go to Product->Test in xCode.
 
 
 # Use cases
@@ -373,7 +356,7 @@ Also, there are some testing classes that are testing whether or not Objective-C
 #### If the event is a draft `event.isDraft` (ie `event.hasTempId && !event.toBeSync`)
 
 - Rollback: Event just have to be thrown away in case of cancel.
-- Save: `[connection createEvent:event ......]`
+- Save: `[connection eventCreate:event ......]`
 
 #### If the event is not a draft, the properties of the event have been cached.
 

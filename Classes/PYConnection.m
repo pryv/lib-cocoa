@@ -116,7 +116,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }];
 }
 
--(NSArray*) streamsRoots {
+-(NSArray*) streamsFetchedRoots {
     //TODO
     return nil;
 }
@@ -161,8 +161,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (void)setupDeserializeNonSyncList
 {
     
-    
-    
+
     NSArray *nonSyncStreamsArray = [self.cache streamsFromCache];
     
     for (PYStream *stream in nonSyncStreamsArray) {

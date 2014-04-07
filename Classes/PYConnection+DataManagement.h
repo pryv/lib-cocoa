@@ -59,13 +59,14 @@
  If the stream is already in the trash, it will be irreversibly deleted with its possible descendants
  If events exist that refer to the deleted item(s), you must indicate how to handle them with the parameter mergeEventsWithParent
  
- @param filterParams:
+ @param mergeEventsWithParent:
  mergeEventsWithParent (true or false): Required if actually deleting the item and if it (or any of its descendants) has linked events, ignored otherwise. If true, the linked events will be assigned to the parent of the deleted item; if false, the linked events will be deleted
  
  DELETE /streams/{stream-id}
  */
 
 - (void)streamTrashOrDelete:(PYStream *)stream
+        mergeEventsWithParent:(BOOL)mergeEventsWithParents
              successHandler:(void (^)())successHandler
                errorHandler:(void (^)(NSError *error))errorHandler;
 

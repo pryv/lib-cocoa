@@ -236,8 +236,8 @@
 {
     NSLog(@"deleting stream: %@", testStream);
     NOT_DONE(done3);
-    [self.connection streamTrashOrDelete:testStream filterParams:nil successHandler:^{
-        [self.connection streamTrashOrDelete:testStream filterParams:nil successHandler:^{
+    [self.connection streamTrashOrDelete:testStream mergeEventsWithParent:YES successHandler:^{
+        [self.connection streamTrashOrDelete:testStream mergeEventsWithParent:YES successHandler:^{
             NSLog(@"Test stream deleted. %@", testStream);
             DONE(done3);
         } errorHandler:^(NSError *error) {

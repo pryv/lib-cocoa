@@ -111,7 +111,7 @@
 /**
  Get all root streams from fetched Streams
  */
--(NSArray*) streamsRoots;
+-(NSArray*) streamsFetchedRoots;
 
 
 /**
