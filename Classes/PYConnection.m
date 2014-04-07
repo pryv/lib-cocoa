@@ -47,6 +47,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize lastTimeServerContact = _lastTimeServerContact;
 @synthesize cache = _cache;
 @synthesize fetchedStreamsMap = _fetchedStreamsMap;
+@synthesize fetchedStreamsRoots = _fetchedStreamsRoots;
 
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
@@ -86,6 +87,10 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     _cache = nil;
     [_apiExtraPath release];
     _apiExtraPath = nil;
+    [_fetchedStreamsMap release];
+    _fetchedStreamsMap = nil;
+    [_fetchedStreamsRoots release];
+    _fetchedStreamsRoots = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
@@ -116,10 +121,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }];
 }
 
--(NSArray*) streamsFetchedRoots {
-    //TODO
-    return nil;
-}
+
 
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
 {

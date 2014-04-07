@@ -73,7 +73,8 @@
         
         PYStream* stream = [event stream];
         STAssertNotNil(stream, @"stream shouldn't be nil");
-        
+        STAssertNotNil(self.connection.fetchedStreamsRoots, @"fetchedStreamsRoots shouldn't be nil");
+        STAssertTrue(self.connection.fetchedStreamsRoots.count > 0, @"fetchedStreamsRoots shouldn't be empty");
         finished1 = YES;
      }];
     

@@ -37,10 +37,13 @@
 
 /** update fetched Streams with a list of Streams **/
 - (void) updateFetchedStreams:(NSArray*)streams {
-    if (! _fetchedStreamsMap) {
-        _fetchedStreamsMap = [[NSMutableDictionary alloc] init];
-    }
-    [PYStream fillNSDictionary:_fetchedStreamsMap withStreamsStructure:streams];
+    NSMutableDictionary* newMap = [[NSMutableDictionary alloc] init];
+    [PYStream fillNSDictionary:newMap withStreamsStructure:streams];
+    
+    self.fetchedStreamsMap = newMap;
+    self.fetchedStreamsRoots = streams;
+    
+    [newMap autorelease];
 }
 
 
