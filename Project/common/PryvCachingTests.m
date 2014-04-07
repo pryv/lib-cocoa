@@ -61,10 +61,9 @@
     
     
     __block BOOL done;
-    [self.connection getEventsWithRequestType:PYRequestTypeAsync
-                                       filter:pyFilter
-                              gotCachedEvents:NULL
-                              gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime)
+    [self.connection eventsWithFilter:pyFilter
+                            fromCache:NULL
+                            andOnline:^(NSArray *onlineEventList, NSNumber *serverTime)
      {
          STAssertTrue(onlineEventList.count > 0, @"Should get at least one event");
          PYEvent* event = [onlineEventList firstObject];

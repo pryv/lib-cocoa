@@ -238,14 +238,13 @@
              }];
 }
 
-- (void)setModifiedStreamAttributesObject:(PYStream *)stream
+- (void)streamSaveModifiedAttributeFor:(PYStream *)stream
                               forStreamId:(NSString *)streamId
-                              requestType:(PYRequestType)reqType
                            successHandler:(void (^)())successHandler
                              errorHandler:(void (^)(NSError *error))errorHandler
 {
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS,streamId]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodPUT
             postData:[stream dictionary]
          attachments:nil
@@ -254,7 +253,7 @@
                  //Cache modified stream - We cache stream
                  NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
                  //If streamId isn't temporary cache stream (it will be overwritten in cache)
-                 [self.cache findAndCacheStream:stream withServerId:streamId requestType:reqType];
+                 [self.cache findAndCacheStream:stream withServerId:streamId requestType:PYRequestTypeAsync];
                  
                  if (successHandler) {
                      successHandler();
@@ -303,10 +302,60 @@
 
 
 
+- (void)eventsWithFilter:(PYEventFilter *)filter
+               fromCache:(void (^) (NSArray *cachedEventList))cachedEvents
+               andOnline:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
+    onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
+            errorHandler:(void (^)(NSError *error))errorHandler
+{
+    //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
+    
+    NSArray *eventsFromCache = [self allEventsFromCache];
+    
+    __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
+                                                                           withFilter:filter];
+#warning - check that retain ... without it was crashing in the subblock ..
+    [filteredCachedEventList retain];
+    
+    
+    if (cachedEvents) {
+        if ([eventsFromCache count] > 0) {
+            //if there are cached events return it, when get response return in onlineList
+            cachedEvents(filteredCachedEventList);
+        }
+    }
+    //This method should retrieve always online events
+    //In this method we should synchronize events from cache with ones online and to return current online list
+    [self eventsOnlineWithFilterParameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
+                            successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
+                                
+                                
+                                if (onlineEvents) {
+                                    onlineEvents(onlineEventList, serverTime);
+                                }
+                                if (syncDetails) {
+                                    // give differences between cachedEvents and received events
+                                    
+                                    NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
+                                    [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
+                                    NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
+                                    
+                                    [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
+                                    
+                                    syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
+                                                [details objectForKey:kPYNotificationKeyModify]);
+                                    filteredCachedEventList = nil;
+                                }
+                            }
+                              errorHandler:errorHandler
+                        shouldSyncAndCache:YES];
+}
+
+
+
 //GET /events
 
-- (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
-                            parameters:(NSDictionary*)filterDic
+- (void)eventsOnlineWithFilterParameters:(NSDictionary*)filterDic
                         successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache
@@ -325,7 +374,7 @@
       //  [self syncNotSynchedEventsIfAny];
     }
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
@@ -417,62 +466,8 @@
 }
 
 #pragma clang diagnostic pop
-
-
-- (void)getEventsWithRequestType:(PYRequestType)reqType
-                          filter:(PYEventFilter *)filter
-                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
-            onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
-                    errorHandler:(void (^)(NSError *error))errorHandler
-{
-    //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
-    
-    NSArray *eventsFromCache = [self allEventsFromCache];
-    
-    __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
-                                                                   withFilter:filter];
-#warning - check that retain ... without it was crashing in the subblock ..
-    [filteredCachedEventList retain];
-    
-    
-    if (cachedEvents) {
-        if ([eventsFromCache count] > 0) {
-            //if there are cached events return it, when get response return in onlineList
-            cachedEvents(filteredCachedEventList);
-        }
-    }
-    //This method should retrieve always online events
-    //In this method we should synchronize events from cache with ones online and to return current online list
-    [self getOnlineEventsWithRequestType:reqType
-                              parameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
-                          successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
-                              
-                              
-                              if (onlineEvents) {
-                                  onlineEvents(onlineEventList, serverTime);
-                              }
-                              if (syncDetails) {
-                                  // give differences between cachedEvents and received events
-                                 
-                                  NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
-                                  [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
-                                  NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
-                                  
-                                  [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
-                        
-                                  syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
-                                              [details objectForKey:kPYNotificationKeyModify]);
-                                  filteredCachedEventList = nil;
-                              }
-                          }
-                            errorHandler:errorHandler
-                      shouldSyncAndCache:YES];
-}
-
 //POST /events
-- (void)createEvent:(PYEvent *)event
-        requestType:(PYRequestType)reqType
+- (void)eventCreate:(PYEvent *)event
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
@@ -501,7 +496,7 @@
 
     
     [self apiRequest:kROUTE_EVENTS
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
@@ -577,8 +572,7 @@
      ];
 }
 
-- (void)trashOrDeleteEvent:(PYEvent *)event
-           withRequestType:(PYRequestType)reqType
+- (void)eventTrashOrDelete:(PYEvent *)event
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *error))errorHandler
 {
@@ -586,7 +580,7 @@
     
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS, event.eventId]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
@@ -642,7 +636,7 @@
 
 //PUT /events/{event-id}
 
-- (void)updateEvent:(PYEvent *)eventObject
+- (void)eventSaveModifications:(PYEvent *)eventObject
      successHandler:(void (^)(NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
@@ -708,13 +702,12 @@
 }
 
 //POST /events/start
-- (void)startPeriodEvent:(PYEvent *)event
-             requestType:(PYRequestType)reqType
+- (void)eventStartPeriod:(PYEvent *)event
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler
 {
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"start"]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
@@ -735,9 +728,8 @@
 }
 
 //POST /events/stop
-- (void)stopPeriodEventWithId:(NSString *)eventId
+- (void)eventStopPeriodWithEventId:(NSString *)eventId
                        onDate:(NSDate *)specificTime
-                  requestType:(PYRequestType)reqType
                successHandler:(void (^)(NSString *stoppedEventId))successHandler
                  errorHandler:(void (^)(NSError *error))errorHandler
 {
@@ -752,7 +744,7 @@
     }
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"stop"]
-         requestType:reqType
+         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[postData autorelease]
          attachments:nil
@@ -776,7 +768,6 @@
 
 - (void)dataForAttachment:(PYAttachment *)attachment
                   onEvent:(PYEvent *)event
-              requestType:(PYRequestType)reqType
            successHandler:(void (^) (NSData * filedata))success
              errorHandler:(void (^) (NSError *error))errorHandler
 {

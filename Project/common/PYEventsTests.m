@@ -91,12 +91,11 @@
     //-- Create event on server
     __block NSString *createdEventId;
 
-    [self.connection createEvent:event
-                     requestType:PYRequestTypeAsync
+    [self.connection eventCreate:event
                   successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event)
      {
-         STAssertNotNil(event.connection, @"Event.connection is nil. Server or createEvent:requestType: method bug");
-         STAssertNotNil(newEventId, @"EventId is nil. Server or createEvent:requestType: method bug");
+         STAssertNotNil(event.connection, @"Event.connection is nil. Server or eventCreate:requestType: method bug");
+         STAssertNotNil(newEventId, @"EventId is nil. Server or eventCreate:requestType: method bug");
          STAssertEquals(event.eventId, newEventId, @"EventId was not assigned to event");
          
          
@@ -119,7 +118,7 @@
          
          NOT_DONE(event_modify);
          event.eventContent = [NSString stringWithFormat:@"Test Modificaton %@", [NSDate date]];
-         [self.connection updateEvent:event
+         [self.connection eventSaveModifications:event
                successHandler:^(NSString *stoppedId) {
                    
                    DONE(event_modify);
@@ -132,10 +131,9 @@
          
          __block NSString* createdEventIdCopy = [newEventId copy];
          __block BOOL foundEventOnServer;
-         [self.connection getEventsWithRequestType:PYRequestTypeAsync
-                                            filter:pyFilter
-                                   gotCachedEvents:NULL
-                                   gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime)
+         [self.connection eventsWithFilter:pyFilter
+                                 fromCache:NULL
+                                 andOnline:^(NSArray *onlineEventList, NSNumber *serverTime)
           {
               STAssertTrue(onlineEventList.count > 0, @"Should get at least one event");
               
@@ -152,11 +150,9 @@
               STAssertTrue(foundEventOnServer, @"Event hasn't been found on server");
               
               //-- trash and delete event found
-              [self.connection trashOrDeleteEvent:event
-                                  withRequestType:PYRequestTypeAsync
+              [self.connection eventTrashOrDelete:event
                successHandler:^{
-                   [self.connection trashOrDeleteEvent:event
-                                       withRequestType:PYRequestTypeAsync
+                   [self.connection eventTrashOrDelete:event
                     successHandler:^{
                         DONE(done);
                     }

@@ -176,12 +176,11 @@
 
 - (void)update
 {
-    [self.connection getEventsWithRequestType:PYRequestTypeAsync
-                                       filter:self
-                              gotCachedEvents:^(NSArray *cachedEventList) {
+    [self.connection eventsWithFilter:self
+                            fromCache:^(NSArray *cachedEventList) {
                                   [self synchWithList:cachedEventList];
                           
-                              } gotOnlineEvents:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                            } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
                                   
                                 # warning should be uncommentend .. keep self.modified if no property has been changed since last update
                                   //self.modifiedSince = [serverTime doubleValue];

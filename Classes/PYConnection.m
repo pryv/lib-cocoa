@@ -240,9 +240,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                     [modifiedStream setValue:value forKey:property];
                 }];
                 
-                [self setModifiedStreamAttributesObject:modifiedStream forStreamId:stream.streamId requestType:PYRequestTypeAsync successHandler:^{
+                [self streamSaveModifiedAttributeFor:modifiedStream forStreamId:stream.streamId successHandler:^{
                     
-                    //We have success here. Stream is cached in setModifiedStreamAttributesObject:forStreamId method
+                    //We have success here. Stream is cached in streamSaveModifiedAttributeFor:forStreamId method
                     stream.synchedAt = [[NSDate date] timeIntervalSince1970];
                     [self.streamsNotSync removeObject:stream];
                     
@@ -276,8 +276,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         event.isSyncTriedNow = YES;
         
         if ([event toBeDeleteOnSync]) {
-            [self trashOrDeleteEvent:event
-                     withRequestType:PYRequestTypeAsync
+            [self eventTrashOrDelete:event
                       successHandler:^{
                           event.isSyncTriedNow = NO;
                           successCounter++;
@@ -288,8 +287,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                       }];
         } else if (event.hasTmpId) { // create
             
-            [self createEvent:event
-                  requestType:PYRequestTypeAsync
+            [self eventCreate:event
                successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
                    event.isSyncTriedNow = NO;
                    successCounter++;
@@ -303,7 +301,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                }];
         } else { // update
             NSLog(@"In this case event has server id");
-            [self updateEvent:event
+            [self eventSaveModifications:event
                 successHandler:^(NSString *stoppedId) {
                     event.isSyncTriedNow = NO;
                     successCounter++;

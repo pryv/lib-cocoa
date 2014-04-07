@@ -101,8 +101,7 @@
     
     
     NOT_DONE(done);
-    [self.connection createEvent:event
-                     requestType:PYRequestTypeAsync
+    [self.connection eventCreate:event
     successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
         STAssertTrue(newEventId != nil, @"new event id should not be nil %@", newEventId);
         //STAssertTrue([stoppedId length] > 0, @"stopped event id should not be nil %@", stoppedId);
@@ -133,8 +132,7 @@
     event.type = @"picture/attached";
     
     NOT_DONE(done);
-    [self.connection createEvent:event
-                     requestType:PYRequestTypeAsync
+    [self.connection eventCreate:event
     successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
       STAssertTrue(newEventId == nil, @"new event id should not be nil %@", newEventId);
       
@@ -200,8 +198,7 @@
     
     
     NOT_DONE(done);
-    [self.connection createEvent:event
-                     requestType:PYRequestTypeAsync
+    [self.connection eventCreate:event
     successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
       STAssertTrue(newEventId != nil, @"new event id should not be nil %@", newEventId);
       

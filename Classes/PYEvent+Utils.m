@@ -67,7 +67,6 @@
     if (self.connection) { // certainly a temporary event (not yet attached to a connection)
         [self.connection dataForAttachment:attachment
                                    onEvent:self
-                               requestType:PYRequestTypeAsync
                             successHandler:success
                               errorHandler:failure];
     } else {

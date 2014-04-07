@@ -61,8 +61,7 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
     
     //-- Create event
     __block BOOL step_1_CreateEvent = NO;
-    [self.connection createEvent:event
-                     requestType:PYRequestTypeAsync
+    [self.connection eventCreate:event
                   successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event) {
                         step_1_CreateEvent = YES;
                   }

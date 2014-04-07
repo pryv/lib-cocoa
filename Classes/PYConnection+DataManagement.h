@@ -66,7 +66,6 @@
  */
 
 - (void)streamTrashOrDelete:(PYStream *)stream
-               filterParams:(NSDictionary *)filter
              successHandler:(void (^)())successHandler
                errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -77,9 +76,8 @@
  PUT /streams/{id}
  
  */
-- (void)setModifiedStreamAttributesObject:(PYStream *)stream
+- (void)streamSaveModifiedAttributeFor:(PYStream *)stream
                               forStreamId:(NSString *)streamId
-                              requestType:(PYRequestType)reqType
                            successHandler:(void (^)())successHandler
                              errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -97,17 +95,15 @@
 /**
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
-- (void)getOnlineEventsWithRequestType:(PYRequestType)reqType
-                            parameters:(NSDictionary*)filterDic
+- (void)eventsOnlineWithFilterParameters:(NSDictionary*)filterDic
                         successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))onlineEventsList
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache;
 
 
-- (void)getEventsWithRequestType:(PYRequestType)reqType
-                          filter:(PYEventFilter *)filter
-                 gotCachedEvents:(void (^) (NSArray *cachedEventList))cachedEvents
-                 gotOnlineEvents:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
+- (void)eventsWithFilter:(PYEventFilter *)filter
+                 fromCache:(void (^) (NSArray *cachedEventList))cachedEvents
+                 andOnline:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
             onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
                     errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -116,8 +112,7 @@
 /** 
   * Records a new event. Events recorded this way must be completed events, i.e. either period events with a known duration or mark events. To start a running period event, post a events/start request. In addition to the usual JSON, this request accepts standard multipart/form-data content to support the creation of event with attached files in a single request. When sending a multipart request, one content part must hold the JSON for the new event and all other content parts must be the attached files.
   */
-- (void)createEvent:(PYEvent *)event
-        requestType:(PYRequestType)reqType
+- (void)eventCreate:(PYEvent *)event
      successHandler:(void (^)(NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -128,8 +123,7 @@
  If the event is not already in the trash, it will be moved to the trash (i.e. flagged as trashed)
  If the event is already in the trash, it will be irreversibly deleted (including all its attached files, if any).
  */
-- (void)trashOrDeleteEvent:(PYEvent *)event
-           withRequestType:(PYRequestType)reqType
+- (void)eventTrashOrDelete:(PYEvent *)event
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -138,14 +132,13 @@
  All event fields are optional, and only modified properties must be included, for other properties put nil
  @successHandler stoppedId indicates the id of the previously running period event that was stopped as a consequence of modifying the event (if set)
  */
-- (void)updateEvent:(PYEvent *)eventObject
+- (void)eventSaveModifications:(PYEvent *)eventObject
      successHandler:(void (^)(NSString *stoppedId))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler;
 
 
 //POST /events/start
-- (void)startPeriodEvent:(PYEvent *)event
-             requestType:(PYRequestType)reqType
+- (void)eventStartPeriod:(PYEvent *)event
           successHandler:(void (^)(NSString *startedEventId))successHandler
             errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -154,9 +147,8 @@
  @param eventId The id of the event to stop
  @param specifiedTime The stop time. Default: now.
  */
-- (void)stopPeriodEventWithId:(NSString *)eventId
+- (void)eventStopPeriodWithEventId:(NSString *)eventId
                        onDate:(NSDate *)specificTime
-                  requestType:(PYRequestType)reqType
                successHandler:(void (^)(NSString *stoppedEventId))successHandler
                  errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -167,7 +159,6 @@
  */
 - (void)dataForAttachment:(PYAttachment *)attachment
                   onEvent:(PYEvent *)event
-              requestType:(PYRequestType)reqType
            successHandler:(void (^) (NSData * filedata))success
              errorHandler:(void (^) (NSError *error))errorHandler;
 
