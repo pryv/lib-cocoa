@@ -110,7 +110,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         return done(nil);
     }
     //Return current cached streams
-    NSArray *allStreamsFromCache = [self.cache streamsFromCache];
+    NSArray *allStreamsFromCache = [self streamsFromCache];
     if (allStreamsFromCache.count > 0) {
         [self updateFetchedStreams:allStreamsFromCache];
     }

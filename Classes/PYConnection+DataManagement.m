@@ -35,16 +35,25 @@
 #pragma mark - Pryv API Streams
 
 
+- (NSArray*)streamsFromCache {
+    NSArray *allStreamsFromCache = [self.cache streamsFromCache];
+    for (PYStream* stream in  allStreamsFromCache) {
+        [self streamAndChildrenSetConnection:stream];
+    }
+    return allStreamsFromCache;
+}
+
+
 - (void)streamsFromCache:(void (^) (NSArray *cachedStreamsList))cachedStreams
                andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
             errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
-    NSArray *allStreamsFromCache = [self.cache streamsFromCache];
-    //    [allStreamsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
+   
+
+    NSArray* allStreamsFromCache = [self streamsFromCache];
+    
     if (cachedStreams) {
-        
-        
         NSUInteger currentNumberOfStreamsInCache = allStreamsFromCache.count;
         if (currentNumberOfStreamsInCache > 0) {
             //if there are cached streams return it, when get response return in onlineList
@@ -190,6 +199,10 @@
                  }
              } failure:^(NSError *error) {
                  if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
+                     return errorHandler([NSError errorWithDomain:@"pryv" code:500 userInfo:@{@"message" : @"Offline creation of streams not yet supported"}]);
+                     
+#pragma warning stream caching has to be reviewed
+                     
                      if (stream.isSyncTriedNow == NO) {
                          //If we didn't try to sync stream from unsync list that means that we have to cache that stream, otherwise leave it as is
                          //stream.Id = self.Id; SHOULD NOT BE COMMENTED, should use parentId ?

@@ -16,6 +16,9 @@
 
 #pragma mark - Pryv API Streams
 
+
+- (NSArray*)streamsFromCache;
+
 /**
  @discussion
  Get list of all streams

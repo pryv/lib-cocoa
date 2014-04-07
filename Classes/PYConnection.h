@@ -110,10 +110,6 @@
  */
 -(void) streamsEnsureFetched:(void(^)(NSError *error))done;
 
-/**
- Get all root streams from fetched Streams
- */
--(NSArray*) streamsFetchedRoots;
 
 
 /**

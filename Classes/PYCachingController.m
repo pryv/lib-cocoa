@@ -41,13 +41,6 @@
 	return self;
 }
 
-- (BOOL)cachingEnabled
-{
-#if CACHE
-    return YES;
-#endif
-    return NO;
-}
 
 - (BOOL)isDataCachedForKey:(NSString *)key
 {
@@ -163,6 +156,7 @@
 
 - (NSArray *)allStreamsFromCache
 {
+    
     NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'stream_'"];
     if (!filesWithSelectedPrefix.count) {
         return nil;
