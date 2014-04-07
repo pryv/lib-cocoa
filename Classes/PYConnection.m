@@ -17,6 +17,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYEvent+Sync.h"
 #import "PYAttachment.h"
 #import "PYConnection+DataManagement.h"
+#import "PYConnection+FetchedStreams.h"
 #import "PYCachingController.h"
 #import "PYReachability.h"
 #import "PYCachingController+Event.h"
@@ -45,7 +46,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
 @synthesize cache = _cache;
-@synthesize fetchedStreams = _fetchedStreams;
+@synthesize fetchedStreamsMap = _fetchedStreamsMap;
 
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
@@ -100,12 +101,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
  Be sure that some structure of the stream as been fetched
  */
 -(void) streamsEnsureFetched:(void(^)(NSError *error))done {
-    if (_fetchedStreams) {
+    if (_fetchedStreamsMap) {
         return done(nil);
     }
-    [self getAllStreamsWithRequestType:PYRequestTypeAsync gotCachedStreams:^(NSArray *cachedStreamsList) {
-        
-    } gotOnlineStreams:^(NSArray *onlineStreamList) {
+    //Return current cached streams
+    NSArray *allStreamsFromCache = [self.cache streamsFromCache];
+    if (allStreamsFromCache.count > 0) {
+        [self updateFetchedStreams:allStreamsFromCache];
+    }
+    [self getOnlineStreamsWithRequestType:PYRequestTypeAsync filterParams:nil successHandler:^(NSArray *streamsList) {
         done(nil);
     } errorHandler:^(NSError *error) {
         done(error);

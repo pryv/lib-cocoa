@@ -33,7 +33,7 @@
     
     NOT_DONE(done);
     
-    __block PYEvent *event = [[PYEvent alloc] initWithConnection:self.connection];
+    __block PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
     event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
     event.type = @"note/txt";

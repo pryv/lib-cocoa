@@ -44,7 +44,6 @@
     NSArray *allStreamsFromCache = [self.cache streamsFromCache];
     //    [allStreamsFromCache makeObjectsPerformSelector:@selector(setAccess:) withObject:self.access];
     if (cachedStreams) {
-        [self updateFetchedStreams:allStreamsFromCache];
         
         
         NSUInteger currentNumberOfStreamsInCache = allStreamsFromCache.count;
@@ -59,8 +58,7 @@
             onlineStreams(streamsList);
         }
     }
-                             errorHandler:errorHandler
-                       shouldSyncAndCache:YES];
+                             errorHandler:errorHandler];
 }
 
 
@@ -69,7 +67,6 @@
                            filterParams:(NSDictionary *)filter
                          successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
                            errorHandler:(void (^) (NSError *error))errorHandler
-                     shouldSyncAndCache:(BOOL)syncAndCache
 {
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
@@ -77,6 +74,8 @@
      It should retrieve always online streams and need to cache (sync) online streams (before caching sync unsyched stream, because we don't want to lose unsync changes)
      */
     
+    
+    BOOL syncAndCache = (filter == nil);
     /*if there are streams that are not synched with server, they need to be synched first and after that cached
      This method must be SYNC not ASYNC and this method sync streams with server and cache them
      */
@@ -122,6 +121,39 @@
              }];
 }
 
+- (void)getOnlineStreamWithId:(NSString *)streamId
+                  requestType:(PYRequestType)reqType
+               successHandler:(void (^) (PYStream *stream))onlineStreamHandler
+                 errorHandler:(void (^) (NSError *error))errorHandler
+{
+    //Method below automatically cache (overwrite) all streams, so this is bad
+    //When API support separate method of getting only one stream by its id this will be implemented here
+    
+    //This method should get particular stream and return it, not to cache it
+    [self getOnlineStreamsWithRequestType:reqType filterParams:nil successHandler:^(NSArray *streamsList) {
+        __block BOOL found = NO;
+        for (PYStream *currentStream in streamsList) {
+            if ([currentStream.streamId isEqualToString:streamId]) {
+                found = YES;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
+                                                                    object:self
+                                                                  userInfo:nil];
+                
+                if (onlineStreamHandler) {
+                    onlineStreamHandler(currentStream);
+                }
+                break;
+            }
+        }
+        if (!found) {
+            if (onlineStreamHandler) {
+                onlineStreamHandler(nil);
+            }
+        }
+    } errorHandler:errorHandler];
+}
+
 - (void)setupConnectionOnStreamAndChildren:(PYStream *)stream
 {
     [stream setConnection:self];
@@ -130,45 +162,6 @@
             [self setupConnectionOnStreamAndChildren:[stream.children objectAtIndex:i]];
         }
     }
-}
-
-- (void)getOnlineStreamsWithRequestType:(PYRequestType)reqType
-                                 filter:(NSDictionary*)filterDic
-                         successHandler:(void (^) (NSArray *streamsList))onlineStreamListHandler
-                           errorHandler:(void (^)(NSError *error))errorHandler
-{
-    //This method should retrieve always online streams and need to cache (sync) online streams
-    
-    [self apiRequest:[PYClient getURLPath:kROUTE_STREAMS withParams:filterDic]
-         requestType:reqType
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                 NSArray* JSON = responseDict[kPYAPIResponseStreams];
-                 
-                 NSMutableArray *streamList = [[[NSMutableArray alloc] init] autorelease];
-                 for(NSDictionary *streamDictionary in JSON){
-                     PYStream *streamObject = [PYStream streamFromJSON:streamDictionary];
-                     streamObject.connection = self;
-                     [streamList addObject:streamObject];
-                 }
-                 
-                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
-                                                                     object:self
-                                                                   userInfo:nil];
-
-                 if(onlineStreamListHandler){
-                     [self.cache cacheStreams:JSON];
-                     onlineStreamListHandler(streamList);
-                 }
-             } failure:^(NSError *error){
-                 if(errorHandler){
-                     errorHandler(error);
-                 }
-             }
-     ];
-    
 }
 
 - (void)createStream:(PYStream *)stream
@@ -305,38 +298,7 @@
              }];
 }
 
-- (void)getOnlineStreamWithId:(NSString *)streamId
-                  requestType:(PYRequestType)reqType
-               successHandler:(void (^) (PYStream *stream))onlineStreamHandler
-                 errorHandler:(void (^) (NSError *error))errorHandler
-{
-    //Method below automatically cache (overwrite) all streams, so this is bad
-    //When API support separate method of getting only one stream by its id this will be implemented here
-    
-    //This method should get particular stream and return it, not to cache it
-    [self getOnlineStreamsWithRequestType:reqType filter:nil successHandler:^(NSArray *streamsList) {
-        __block BOOL found = NO;
-        for (PYStream *currentStream in streamsList) {
-            if ([currentStream.streamId isEqualToString:streamId]) {
-                found = YES;
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
-                                                                    object:self
-                                                                  userInfo:nil];
 
-                if (onlineStreamHandler) {
-                    onlineStreamHandler(currentStream);
-                }
-                break;
-            }
-        }
-        if (!found) {
-            if (onlineStreamHandler) {
-                onlineStreamHandler(nil);
-            }
-        }
-    } errorHandler:errorHandler];
-}
 
 #pragma mark - Pryv API Events
 

@@ -37,7 +37,7 @@
     
 @private
     NSTimeInterval _serverTimeInterval;
-    NSMutableDictionary* _fetchedStreams;
+    NSMutableDictionary* _fetchedStreamsMap;
 }
 
 @property (nonatomic, copy) NSString *userID;
@@ -51,7 +51,7 @@
 @property (nonatomic, retain) PYCachingController *cache;
 
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
-@property (nonatomic, retain, readonly) NSMutableDictionary* fetchedStreams;
+@property (nonatomic, retain, readonly) NSMutableDictionary* fetchedStreamsMap;
 
 //online/offline
 @property (nonatomic, readonly, getter = isOnline) BOOL online;

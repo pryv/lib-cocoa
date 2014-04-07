@@ -23,24 +23,24 @@
 
 /** return true if streams have been fetched **/
 - (BOOL)hasFetchedStreams {
-    return _fetchedStreams != nil;
+    return _fetchedStreamsMap != nil;
 }
 
 /** return the stream instance corresponding to this streamId or streamsCLientId **/
 - (PYStream*)streamWithStreamId:(NSString*)streamId {
-    if (! _fetchedStreams) {
+    if (! _fetchedStreamsMap) {
         NSLog(@"<WARNING> fetch streams before being able to use [event stream] or use event.streamId property");
         return nil;
     }
-    return [_fetchedStreams objectForKey:streamId];
+    return [_fetchedStreamsMap objectForKey:streamId];
 }
 
 /** update fetched Streams with a list of Streams **/
 - (void) updateFetchedStreams:(NSArray*)streams {
-    if (! _fetchedStreams) {
-        _fetchedStreams = [[NSMutableDictionary alloc] init];
+    if (! _fetchedStreamsMap) {
+        _fetchedStreamsMap = [[NSMutableDictionary alloc] init];
     }
-    [PYStream fillNSDictionary:_fetchedStreams withStreamsStructure:streams];
+    [PYStream fillNSDictionary:_fetchedStreamsMap withStreamsStructure:streams];
 }
 
 

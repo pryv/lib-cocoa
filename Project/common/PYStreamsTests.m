@@ -8,6 +8,7 @@
 
 #import "PYBaseConnectionTests.h"
 
+#import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYStream.h"
 #import "PYCachingController+Stream.h"
@@ -62,7 +63,7 @@
 - (void)testStreamFetching
 {
     __block BOOL finished1 = NO;
-    [self.connection ensureStreamAreFetched:^(NSError *error) {
+    [self.connection streamsEnsureFetched:^(NSError *error) {
         if (error) {
             STFail(@"should have no error");
         }
