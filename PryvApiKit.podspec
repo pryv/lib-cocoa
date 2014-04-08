@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.requires_arc = false
   
   #s.dependency 'JSONKit'
-  s.dependency 'AnyJSON'
+  #s.dependency 'AnyJSON'
   #s.dependency 'CWLSynthesizeSingleton', '~> 0.0.2'
   #s.compiler_flags = '-Wno-deprecated-objc-isa-usage'
   
