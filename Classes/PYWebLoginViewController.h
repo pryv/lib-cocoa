@@ -14,6 +14,11 @@
 #endif
 #import "PYConnection.h"
 
+typedef enum {
+    BarStyleTypeCancel = 1,
+    BarStyleTypeHome
+} BarStyleType;
+
 @class PYWebLoginViewController;
 
 @protocol PYWebLoginDelegate
@@ -38,6 +43,7 @@
     NSString *appID;
     NSTimer *pollTimer;
     NSString *pollURL;
+    BarStyleType barStyleType;
     id  delegate;
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     WebView *webView;
@@ -53,7 +59,17 @@
                                 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
                                              withWebView:(WebView **)webView
                                 #endif
-                                            ;
+    ;
+    
++ (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID
+                                         andPermissions:(NSArray *)permissions
+                                         andBarStyle:(BarStyleType)barStyleType
+                                         delegate:(id )delegate
+                                         #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+                                         withWebView:(WebView **)webView
+                                        #endif
+    ;
+    
 - (void)timerBlock:(NSTimer*)timer;
 
 @end

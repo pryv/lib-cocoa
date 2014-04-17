@@ -26,6 +26,7 @@
 @property (nonatomic, copy) NSString *appID;
 @property (nonatomic, retain) NSTimer *pollTimer;
 @property (nonatomic, copy) NSString *pollURL;
+@property (nonatomic) BarStyleType barStyleType;
 @property (nonatomic, assign) id  delegate;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @property (nonatomic, assign) WebView *webView;
@@ -42,6 +43,8 @@
 @synthesize pollURL;
 @synthesize appID;
 @synthesize permissions;
+@synthesize barStyleType;
+
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @synthesize webView;
 #endif
@@ -55,6 +58,23 @@ NSString *token;
 BOOL closing;
 
 + (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions delegate:(id ) delegate
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+                                             withWebView:(WebView **)webView
+#endif
+{
+    return [PYWebLoginViewController requestConnectionWithAppId:appID andPermissions:permissions andBarStyle:BarStyleTypeCancel delegate:delegate
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+                                             withWebView:webView
+#endif
+     
+     
+     ];
+    
+}
+
+
++ (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions
+                                             andBarStyle:(BarStyleType)barStyleType delegate:(id ) delegate
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     withWebView:(WebView **)webView
     #endif
@@ -63,6 +83,7 @@ BOOL closing;
     login.permissions = permissions;
     login.appID = appID;
     login.delegate = delegate;
+    login.barStyleType = barStyleType;
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     login.webView = *(webView);
     #endif
@@ -91,10 +112,16 @@ BOOL closing;
     // -- navigation bar -- //
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self];
     navigationController.navigationBar.translucent = NO;
-    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
     
-    refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
-    self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
+    if (self.barStyleType == BarStyleTypeHome) {
+        self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(reload:)] autorelease];
+    } else {
+    
+        self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
+    
+        refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
+        self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
+    }
     
     // -- loading Indicator --//
     loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
