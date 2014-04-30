@@ -854,9 +854,9 @@
     [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
             NSLog(@"*77 %@ %@", @([result length]), url);
-            
-            success(result);
             [self.cache savePreview:result forEvent:event];
+            success(result);
+            
         }
     } failure:^(NSError *error) {
         errorHandler(error);
