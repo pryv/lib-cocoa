@@ -16,4 +16,14 @@
  */
 + (void)fillNSDictionary:(NSMutableDictionary*)dict withStreamsStructure:(NSArray*)rootStreams;
 
+
++ (void)fillNSMutableArray:(NSMutableArray*)array
+   withIdAndChildrensIdsOf:(PYStream*)stream;
+
+/**
+ * get the childrens ids of this stream
+ */
+- (NSArray*)descendantsIds;
+
+
 @end

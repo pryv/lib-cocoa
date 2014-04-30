@@ -62,7 +62,8 @@
           onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                     tags:(NSArray *)tags
 {
-    return [self initWithConnection:connection fromTime:fromTime toTime:toTime limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:nil];
+    return [self initWithConnection:connection fromTime:fromTime toTime:toTime
+                              limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:nil];
 }
 
 - (id)initWithConnection:(PYConnection*)connection
@@ -109,12 +110,12 @@
                         tags:(NSArray *)tags
                         types:(NSArray *)types
 {
-    _fromTime = fromTime; // time question ?? shouldn't we align time with the server?
-    _toTime = toTime;
-    _onlyStreamsIDs = onlyStreamsIDs;
-    _tags = tags;
-    _limit = limit;
-    _types = types;
+    self.fromTime = fromTime; // time question ?? shouldn't we align time with the server?
+    self.toTime = toTime;
+    self.onlyStreamsIDs = onlyStreamsIDs;
+    self.tags = tags;
+    self.limit = limit;
+    self.types = types;
 }
 
 - (void)notifyEventsToAdd:(NSArray*)srcAdd toRemove:(NSArray*)srcRemove modified:(NSArray*)srcModified
@@ -202,6 +203,9 @@
 
 - (void)update
 {
+    // no need to handle the events, it will be done by the notification listner
+    //[self.connection eventsWithFilter:self fromCache:nil andOnline:nil onlineDiffWithCached:nil errorHandler:nil];
+    
     [self.connection eventsWithFilter:self
                             fromCache:^(NSArray *cachedEventList) {
                                   [self synchWithList:cachedEventList];
@@ -225,6 +229,12 @@
 {
     
     NSDictionary *message = (NSDictionary*) notification.userInfo;
+    
+    PYEventFilter* sender = [message objectForKey:kPYNotificationWithFilter];
+    if (sender == self) {
+        NSLog(@"<NOTICE> skipping notification as I'm the sender");
+        return;
+    }
     
     NSArray* toAdd = [PYEventFilterUtility
                       filterEventsList:[message objectForKey:kPYNotificationKeyAdd] withFilter:self];

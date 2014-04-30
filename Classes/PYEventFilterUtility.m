@@ -9,6 +9,8 @@
 #import "PYEventFilterUtility.h"
 #import "PYEventFilter.h"
 #import "PYEvent.h"
+#import "PYConnection+FetchedStreams.h"
+#import "PYStream+Utils.h"
 
 @implementation PYEventFilterUtility
 
@@ -106,6 +108,23 @@
     return [result autorelease];
 }
 
++ (NSArray *)streamIdsCoveredByFilter:(PYEventFilter *)filter
+{
+    if (! filter.onlyStreamsIDs) return nil;
+    NSMutableSet *result = [[[NSMutableSet alloc] init] autorelease];
+  
+    for (NSString* streamId in filter.onlyStreamsIDs) {
+        PYStream* stream = [filter.connection streamWithStreamId:streamId];
+        if (!stream) {
+            [result addObject:streamId];
+        } else {
+            [result addObjectsFromArray:[stream descendantsIds]];
+        }
+    }
+    
+    return [result allObjects];
+}
+
 + (NSPredicate *)predicateFromFilter:(PYEventFilter *)filter
 {
     NSMutableArray *predicates = [[NSMutableArray alloc] init];
@@ -121,7 +140,8 @@
     }
     NSPredicate *onlyStreamsPredicate = nil;
     if (filter.onlyStreamsIDs != nil) {
-        onlyStreamsPredicate = [NSPredicate predicateWithFormat:@"streamId IN %@",filter.onlyStreamsIDs];
+        // find all children of this stream
+        onlyStreamsPredicate = [NSPredicate predicateWithFormat:@"streamId IN %@",[self streamIdsCoveredByFilter:filter]];
         [predicates addObject:onlyStreamsPredicate];
     }
     NSPredicate *onlyTagsPredicate = nil;

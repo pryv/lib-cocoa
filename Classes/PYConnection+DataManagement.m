@@ -339,7 +339,7 @@
     }
     //This method should retrieve always online events
     //In this method we should synchronize events from cache with ones online and to return current online list
-    [self eventsOnlineWithFilterParameters:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]
+    [self eventsOnlineWithFilter:filter
                             successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
                                 
                                 
@@ -368,7 +368,7 @@
 
 //GET /events
 
-- (void)eventsOnlineWithFilterParameters:(NSDictionary*)filterDic
+- (void)eventsOnlineWithFilter:(PYEventFilter*)filter
                           successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
                             errorHandler:(void (^) (NSError *error))errorHandler
                       shouldSyncAndCache:(BOOL)syncAndCache
@@ -386,7 +386,8 @@
 # warning - change logic
         //  [self syncNotSynchedEventsIfAny];
     }
-    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS withParams:filterDic]
+    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS
+                               withParams:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]]
          requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil
@@ -430,7 +431,8 @@
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                      object:self
                                                                    userInfo:@{kPYNotificationKeyAdd: addArray,
-                                                                              kPYNotificationKeyModify: modifyArray}];
+                                                                              kPYNotificationKeyModify: modifyArray,
+                                                                              kPYNotificationWithFilter: filter}];
                  
                  if (successBlock) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];

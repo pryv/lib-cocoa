@@ -10,4 +10,4 @@
 
 NSString *const kPYAPITestAccount = @"perkikiki";
 NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
-
+NSString *const kPYAPITestStreamId = @"diary";

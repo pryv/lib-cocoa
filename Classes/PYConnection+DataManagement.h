@@ -99,7 +99,7 @@
 /**
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
-- (void)eventsOnlineWithFilterParameters:(NSDictionary*)filterDic
+- (void)eventsOnlineWithFilter:(PYEventFilter*)filter
                         successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))onlineEventsList
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache;

@@ -40,7 +40,7 @@ NSString *const kPYAPIEventFilterLimit = @"limit";
 NSString *const kPYAPIEventFilterFromTime = @"fromTime";
 NSString *const kPYAPIEventFilterToTime = @"toTime";
 NSString *const kPYAPIEventModifiedSinceTime = @"modifiedSince";
-NSString *const kPYAPIEventFilterOnlyStreams = @"onlyStreams[]";
+NSString *const kPYAPIEventFilterOnlyStreams = @"streams[]";
 NSString *const kPYAPIEventFilterTags = @"tags[]";
 NSString *const kPYAPIEventFilterTypes = @"types[]";
 
@@ -54,3 +54,4 @@ NSString *const kPYNotificationKeyAdd = @"ADD";
 NSString *const kPYNotificationKeyModify = @"MODIFY";
 NSString *const kPYNotificationKeyDelete = @"DELETE";
 NSString *const kPYNotificationKeyUnchanged = @"SAME";
+NSString *const kPYNotificationWithFilter = @"WITH_FILTER";

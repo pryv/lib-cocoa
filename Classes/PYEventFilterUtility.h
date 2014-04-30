@@ -31,6 +31,9 @@
                  eventsToRemove:(NSMutableArray *)eventsToRemove
                  eventsModified:(NSMutableArray *)eventsModified;
 
-
+/**
+ Get all the streamIds covered by a Filter
+ */
++ (NSArray *)streamIdsCoveredByFilter:(PYEventFilter *)filter;
 
 @end

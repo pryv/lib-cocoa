@@ -8,9 +8,32 @@
 
 #import "PYStream+Utils.h"
 
+
+
 @implementation PYStream (Utils)
 
 
+
+/**
+ * StreamIds of all children, including this stream
+ */
+- (NSArray*)descendantsIds{
+    NSMutableArray* result = [[NSMutableArray alloc] init];
+    [PYStream fillNSMutableArray:result withIdAndChildrensIdsOf:self];
+    return [result autorelease];
+}
+
++ (void)fillNSMutableArray:(NSMutableArray*)array withIdAndChildrensIdsOf:(PYStream*)stream {
+    [array addObject:stream.streamId];
+    if (stream.children) {
+        for (PYStream *child in stream.children) {
+         [self fillNSMutableArray:array withIdAndChildrensIdsOf:child];
+        }
+    }
+}
+
+
+// --- static utils
 
 + (void)fillNSDictionary:(NSMutableDictionary*)dict withStreamsStructure:(NSArray*)rootStreams
 {

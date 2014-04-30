@@ -52,4 +52,5 @@ FOUNDATION_EXPORT NSString *const kPYNotificationKeyAdd;
 FOUNDATION_EXPORT NSString *const kPYNotificationKeyModify;
 FOUNDATION_EXPORT NSString *const kPYNotificationKeyDelete;
 FOUNDATION_EXPORT NSString *const kPYNotificationKeyUnchanged;
+FOUNDATION_EXPORT NSString *const kPYNotificationWithFilter;
 

@@ -67,7 +67,8 @@
                         tags:(NSArray *)tags
                        types:(NSArray *)types;
 
-- (void)changeFilterFromTime:(NSTimeInterval)fromTime
+- (id)initWithConnection:(PYConnection *)connection
+                    fromTime:(NSTimeInterval)fromTime
                       toTime:(NSTimeInterval)toTime
                        limit:(NSUInteger)limit
               onlyStreamsIDs:(NSArray *)onlyStreamsIDs
