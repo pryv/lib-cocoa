@@ -79,10 +79,13 @@
         [dic setObject:[NSString stringWithFormat:@"%f",filter.modifiedSince] forKey:kPYAPIEventModifiedSinceTime];
     }
     
-    //Not implemeted in web service
+    
     if (filter.tags != nil) {
         [dic setObject:filter.tags forKey:kPYAPIEventFilterTags];
-        //        [NSException raise:@"Not implemented" format:@"PYEventFilter.asDictionary tag matching is not yet implemented"];
+    }
+    
+    if (filter.types != nil) {
+        [dic setObject:filter.types forKey:kPYAPIEventFilterTypes];
     }
     
     return dic;
@@ -90,7 +93,7 @@
 
 + (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYEventFilter *)filter
 {
-    //    Would be nice to use  result = [eventErray filteredArrayUsingPredicate:[self predicate]];
+    
     NSMutableArray *result = [[NSMutableArray alloc]
                               initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
     [PYEventFilter sortNSMutableArrayOfPYEvents:result sortAscending:YES];
@@ -118,13 +121,20 @@
     }
     NSPredicate *onlyStreamsPredicate = nil;
     if (filter.onlyStreamsIDs != nil) {
-        onlyStreamsPredicate = [NSPredicate predicateWithFormat:@"StreamId IN %@",filter.onlyStreamsIDs];
+        onlyStreamsPredicate = [NSPredicate predicateWithFormat:@"streamId IN %@",filter.onlyStreamsIDs];
         [predicates addObject:onlyStreamsPredicate];
     }
     NSPredicate *onlyTagsPredicate = nil;
     if (filter.tags != nil) {
         onlyTagsPredicate = [NSPredicate predicateWithFormat:@"ANY tags IN %@",filter.tags];
         [predicates addObject:onlyTagsPredicate];
+    }
+    //TODO check this
+   NSPredicate *onlyTypesPredicate = nil;
+    if (filter.types != nil) {
+        NSLog(@"<WARNING> type predicate may not support widcards searches");
+        onlyTypesPredicate = [NSPredicate predicateWithFormat:@"type IN %@",filter.types];
+        [predicates addObject:onlyTypesPredicate];
     }
     // Perki 8.jan 2014 what's for?
     NSCompoundPredicate *testPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];

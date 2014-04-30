@@ -40,6 +40,7 @@ FOUNDATION_EXPORT NSString *const kPYAPIEventFilterOnlyStreams;
 FOUNDATION_EXPORT NSString *const kPYAPIEventFilterFromTime;
 FOUNDATION_EXPORT NSString *const kPYAPIEventFilterToTime;
 FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTags;
+FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTypes;
 FOUNDATION_EXPORT NSString *const kPYAPIEventModifiedSinceTime;
 
 FOUNDATION_EXPORT NSString *const kPYWebViewLoginNotVisibleNotification;

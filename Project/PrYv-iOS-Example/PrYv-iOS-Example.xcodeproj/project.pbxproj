@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E00541A1910052100C6B64C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E0054191910052100C6B64C /* Default-568h@2x.png */; };
 		C4F5E165A0854339A598B912 /* libPods-PrYv-iOS-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6108598D0D4E12A47FF121 /* libPods-PrYv-iOS-ExampleTests.a */; };
 		EEE2913A71AC4BFD8DE0FC78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229784B4DC274BB7947EF0E8 /* libPods.a */; };
 		FB1CEF3A18C4B1AB002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */; };
@@ -54,6 +55,7 @@
 /* Begin PBXFileReference section */
 		229784B4DC274BB7947EF0E8 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4602F0D58F054E1BBA13E3E7 /* Pods-PrYv-iOS-ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-iOS-ExampleTests.xcconfig"; path = "Pods/Pods-PrYv-iOS-ExampleTests.xcconfig"; sourceTree = "<group>"; };
+		4E0054191910052100C6B64C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A90F67BA884C4DF1A82D608F /* libPods-PrYv-iOS-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-iOS-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D326D046B84C40949AE762EA /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		FB51393318B21678000F9BED = {
 			isa = PBXGroup;
 			children = (
+				4E0054191910052100C6B64C /* Default-568h@2x.png */,
 				FB51397B18B21810000F9BED /* PrYv-Common */,
 				FB51394518B21678000F9BED /* PrYv-iOS-Example */,
 				FB51395E18B21679000F9BED /* PrYv-iOS-ExampleTests */,
@@ -330,6 +333,7 @@
 				FB51394A18B21678000F9BED /* InfoPlist.strings in Resources */,
 				FB51397318B21706000F9BED /* MainStoryboard_iPhone.storyboard in Resources */,
 				FB51395218B21678000F9BED /* Images.xcassets in Resources */,
+				4E00541A1910052100C6B64C /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

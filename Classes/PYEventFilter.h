@@ -24,11 +24,9 @@
     NSUInteger _limit;
     NSArray *_onlyStreamsIDs; // of strings
     NSArray *_tags;
-    
+    NSArray *_types;
     NSTimeInterval _modifiedSince;
-
     NSMutableDictionary *_currentEventsDic;
-
 }
 
 @property (readonly, nonatomic, retain) PYConnection *connection;
@@ -37,6 +35,7 @@
 @property (nonatomic) NSUInteger limit;
 @property (nonatomic, retain) NSArray *onlyStreamsIDs;
 @property (nonatomic, retain) NSArray *tags;
+@property (nonatomic, retain) NSArray *types;
 
 
 @property (nonatomic, retain, readonly) NSMutableDictionary *currentEventsDic;
@@ -50,6 +49,7 @@
  * @param toTime use PYEventFilter_UNDEFINED_TOTIME when undefined
  * @param onlyStreamsIDs array of strings with StreamsIDs, nil for no match
  * @param tags array of strings with tags, nil for no match
+ * @param type array of strings with typefilters, such as 'position/wgs84' or 'note/*', nil for no match
  * @param limit number of events may be 2x > to the limit if cached events are totally differents than online events, 0 or negative for ALL
  */
 - (id)initWithConnection:(PYConnection *)connection
@@ -57,7 +57,21 @@
                toTime:(NSTimeInterval)toTime
                 limit:(NSUInteger)limit
        onlyStreamsIDs:(NSArray *)onlyStreamsIDs
-                 tags:(NSArray *)tags;
+                    tags:(NSArray *)tags
+                   types:(NSArray *)types;
+
+- (void)changeFilterFromTime:(NSTimeInterval)fromTime
+                      toTime:(NSTimeInterval)toTime
+                       limit:(NSUInteger)limit
+              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
+                        tags:(NSArray *)tags
+                       types:(NSArray *)types;
+
+- (void)changeFilterFromTime:(NSTimeInterval)fromTime
+                      toTime:(NSTimeInterval)toTime
+                       limit:(NSUInteger)limit
+              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
+                        tags:(NSArray *)tags;
 
 - (void)changeFilterFromTime:(NSTimeInterval)fromTime
                       toTime:(NSTimeInterval)toTime

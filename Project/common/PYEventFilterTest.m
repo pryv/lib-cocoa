@@ -10,6 +10,7 @@
 
 #import "PYEventFilter.h"
 #import "PYTestsUtils.h"
+#import "PYEvent.h"
 
 @interface PYEventFilterTest : PYBaseConnectionTests
 @end
@@ -84,6 +85,62 @@
     
     
 }
+
+- (void) testFilterOnType
+{
+    STAssertNotNil(self.connection, @"Connection isn't created");
+    
+    NSString* typeFilter = @"note/txt";
+    
+    PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
+                                                               fromTime:PYEventFilter_UNDEFINED_FROMTIME
+                                                                 toTime:PYEventFilter_UNDEFINED_TOTIME
+                                                                  limit:20
+                                                         onlyStreamsIDs:nil
+                                                                   tags:nil
+                                                                  types:@[typeFilter]];
+    STAssertNotNil(pyFilter, @"PYEventFilter isn't created");
+    
+    
+    __block BOOL fromCache = NO;
+    __block BOOL fromOnline = NO;
+    [self.connection eventsWithFilter:pyFilter
+                            fromCache:^(NSArray *cachedEventList) {
+                                if (cachedEventList) {
+                                    for (int i = 0; i < cachedEventList.count; i++) {
+                                        STAssertTrue([[(PYEvent*)cachedEventList[i] type] isEqualToString:typeFilter],
+                                                     @"type is not note/txt");
+                                    }
+                                }
+                                fromCache = YES;
+                                
+                            } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                                if (onlineEventList) {
+                                    for (int i = 0; i < onlineEventList.count; i++) {
+                                        STAssertTrue([[(PYEvent*)onlineEventList[i] type] isEqualToString:typeFilter],
+                                                     @"type is not note/txt");
+                                    }
+                                }
+                                
+                                fromOnline = YES;
+                                
+                            } onlineDiffWithCached:nil
+                         errorHandler:^(NSError *error) {
+                             
+                         }];
+    [pyFilter update];
+    
+    
+    [PYTestsUtils execute:^{
+        STFail(@"Failed after waiting 10 seconds");
+    } ifNotTrue:&fromCache afterSeconds:10];
+    [PYTestsUtils execute:^{
+        STFail(@"Failed after waiting 10 seconds");
+    } ifNotTrue:&fromOnline afterSeconds:10];
+        
+    
+}
+
 
 - (void) testSort
 {

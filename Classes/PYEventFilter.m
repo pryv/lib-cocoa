@@ -35,6 +35,7 @@
 @synthesize limit = _limit;
 @synthesize onlyStreamsIDs = _onlyStreamsIDs;
 @synthesize tags = _tags;
+@synthesize types = _types;
 
 @synthesize modifiedSince = _modifiedSince;
 
@@ -50,6 +51,7 @@
     _connection  = nil;
     [_onlyStreamsIDs release];
     [_tags release];
+    [_types release];
     [super dealloc];
 }
 
@@ -60,13 +62,25 @@
           onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                     tags:(NSArray *)tags
 {
+    return [self initWithConnection:connection fromTime:fromTime toTime:toTime limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:nil];
+}
+
+- (id)initWithConnection:(PYConnection*)connection
+                fromTime:(NSTimeInterval)fromTime
+                  toTime:(NSTimeInterval)toTime
+                   limit:(NSUInteger)limit
+          onlyStreamsIDs:(NSArray *)onlyStreamsIDs
+                    tags:(NSArray *)tags
+                   types:(NSArray *)types
+{
     if (self = [super init]) {
         _connection = connection;
         [self changeFilterFromTime:fromTime
                             toTime:toTime
                              limit:limit
                     onlyStreamsIDs:onlyStreamsIDs
-                              tags:tags];
+                              tags:tags
+                             types:types];
         _modifiedSince = PYEventFilter_UNDEFINED_FROMTIME;
         _currentEventsDic = [[NSMutableDictionary alloc] init];
         
@@ -84,11 +98,23 @@
               onlyStreamsIDs:(NSArray *)onlyStreamsIDs
                         tags:(NSArray *)tags
 {
+    [self changeFilterFromTime:fromTime toTime:toTime limit:limit
+                onlyStreamsIDs:onlyStreamsIDs tags:tags types:nil];
+}
+
+- (void)changeFilterFromTime:(NSTimeInterval)fromTime
+                      toTime:(NSTimeInterval)toTime
+                       limit:(NSUInteger)limit
+              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
+                        tags:(NSArray *)tags
+                        types:(NSArray *)types
+{
     _fromTime = fromTime; // time question ?? shouldn't we align time with the server?
     _toTime = toTime;
     _onlyStreamsIDs = onlyStreamsIDs;
     _tags = tags;
     _limit = limit;
+    _types = types;
 }
 
 - (void)notifyEventsToAdd:(NSArray*)srcAdd toRemove:(NSArray*)srcRemove modified:(NSArray*)srcModified
