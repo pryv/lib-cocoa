@@ -36,7 +36,7 @@
 
 
 - (NSArray*)streamsFromCache {
-    NSArray *allStreamsFromCache = [self.cache streamsFromCache];
+    NSArray *allStreamsFromCache = [self.cache allStreamsFromCache];
     for (PYStream* stream in  allStreamsFromCache) {
         [self streamAndChildrenSetConnection:stream];
     }
@@ -105,12 +105,13 @@
                      [streamList addObject:stream];
                  }
                  
-                 if (syncAndCache == YES) {
-                     [self.cache cacheStreams:JSON];
-                 }
                  
                  //---- save the streams in the fetchedStream object
-                 [self updateFetchedStreams:streamList];
+                 if (filter == nil) { // It is a new version of RootStreams
+                     self.fetchedStreamsRoots = streamList;
+                 }
+                 [self updateFetchedStreamsMap];
+                 [self cacheFetchedStreams];
                  
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
                                                                      object:self
@@ -187,9 +188,13 @@
                  NSDictionary* JSON = responseDict[kPYAPIResponseStream];
                  NSString *createdStreamId = [JSON objectForKey:@"id"];
                  
-                 [self.cache findAndCacheStream:stream
-                                   withServerId:createdStreamId
-                                    requestType:PYRequestTypeAsync];
+                 stream.streamId = createdStreamId;
+                 [stream resetFromDictionary:responseDict];
+                 
+                 // attach to parent
+                 [self addToFetchedStreams:stream];
+                 [self cacheFetchedStreams];
+                 
                  
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationStreams
                                                                      object:self
@@ -213,7 +218,6 @@
                          stream.streamId = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
                          //return that created id so it can work offline. Stream will be cached when added to unsync list
                          
-                         [self.cache cacheStream:stream];
                          [self addStream:stream toUnsyncList:error];
                          
                          successHandler (stream.streamId);
@@ -263,10 +267,8 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
-                 //Cache modified stream - We cache stream
-                 NSLog(@"It's stream with server id because we'll never try to call this method if stream has tempId");
-                 //If streamId isn't temporary cache stream (it will be overwritten in cache)
-                 [self.cache findAndCacheStream:stream withServerId:streamId requestType:PYRequestTypeAsync];
+            
+                 [self cacheFetchedStreams];
                  
                  if (successHandler) {
                      successHandler();
@@ -291,7 +293,6 @@
                          //We have to know what properties are modified in order to make succesfull request
                          currentStreamFromCache.modifiedStreamPropertiesAndValues = [stream dictionary];
                          //We must have cached modified properties of stream in cache
-                         [self.cache cacheStream:currentStreamFromCache];
                          
                          if (successHandler) {
                              successHandler();

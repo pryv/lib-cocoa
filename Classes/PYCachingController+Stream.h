@@ -14,30 +14,9 @@
 @interface PYCachingController (Stream)
 
 /**
- Cache stream json objects on disk
+ Cache stream (PYStreams) objects on disk
  */
-- (void)cacheStreams:(NSArray *)streams;
-/**
- Remove PYStream object from disk
- */
-- (void)removeStream:(PYStream *)stream;
-/**
- Get all PYStream objects from disk
- */
-- (NSArray *)streamsFromCache;
-/**
- Get PYStream object from disk with key(streamId)
- */
-- (PYStream *)streamFromCacheWithStreamId:(NSString *)streamId;
-/**
- Cache PYStream object on disk
- */
-- (void)cacheStream:(PYStream *)stream;
-/**
- Get stream with particular id from server and cache it on disk
- */
-- (void)findAndCacheStream:(PYStream *)stream
-              withServerId:(NSString *)serverId
-               requestType:(PYRequestType)reqType;
+- (void)cachePYStreams:(NSArray*) streams;
+
 
 @end

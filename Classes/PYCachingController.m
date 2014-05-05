@@ -156,31 +156,16 @@
 
 - (NSArray *)allStreamsFromCache
 {
-    
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'stream_'"];
-    if (!filesWithSelectedPrefix.count) {
-        return nil;
+    NSDictionary *streamListDic = [PYJSONUtility getJSONObjectFromData:[self dataForKey:@"fetchedStreams"]];
+    NSMutableArray *streamList = [[NSMutableArray alloc] init];
+    for (NSDictionary *streamDictionary in streamListDic) {
+        PYStream *stream = [PYStream streamFromJSON:streamDictionary];
+        [streamList addObject:stream];
     }
     
-    NSMutableArray *arrayOFCachedStreams = [[NSMutableArray alloc] init];
-    for (NSString *streamCachedName in filesWithSelectedPrefix) {
-        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:[self dataForKey:streamCachedName]];
-        [arrayOFCachedStreams addObject:[PYStream streamFromJSON:streamDic]];
-    }
-    
-    return [arrayOFCachedStreams autorelease];
+    return [streamList autorelease];
 }
 
-- (PYStream *)streamWithKey:(NSString *)key
-{
-    if ([self isDataCachedForKey:key]) {
-        NSData *streamData = [self dataForKey:key];
-        NSDictionary *streamDic = [PYJSONUtility getJSONObjectFromData:streamData];
-        return [PYStream streamFromJSON:streamDic];
-    }
-    
-    return nil;
-}
 
 - (void) dealloc
 {

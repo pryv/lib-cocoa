@@ -23,6 +23,16 @@
     return [result autorelease];
 }
 
+
+- (void)addChildren:(PYStream*)stream {
+    NSMutableArray* newChildren = [[[NSMutableArray alloc] init] autorelease];
+    if (self.children) {
+        [newChildren addObjectsFromArray:self.children];
+    }
+    [newChildren addObject:stream];
+    self.children = newChildren;
+}
+
 + (void)fillNSMutableArray:(NSMutableArray*)array withIdAndChildrensIdsOf:(PYStream*)stream {
     [array addObject:stream.streamId];
     if (stream.children) {
@@ -50,6 +60,8 @@
         }
     }
 }
+
+
 
 
 @end

@@ -150,17 +150,10 @@
                                                                                     object:self.connection
                                                                                      queue:nil
     usingBlock:^(NSNotification *note) {
-//        if (! eventCreationReceived) {
-//              NSDictionary *message = (NSDictionary*) note.userInfo;
-//              NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
-//              STAssertNotNil(toAdd, @"We should get toAdd Array");
-//              STAssertEquals((NSUInteger)1, toAdd.count , @"Array should contain just one event");
-//              STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
-//              DONE(streamNotificationReceived);
-//        } else {
+
         NSLog(@"stream notification received");
               DONE(streamNotificationReceived);
-//        }
+
     }];
     [connectionStreamObserver retain];
     
@@ -173,16 +166,8 @@
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
         createdStreamIdFromServer = [[NSString stringWithString:createdStreamId] retain];
         NSLog(@"New stream ID : %@",createdStreamIdFromServer);
-        [self.connection.cache cacheStream:self.stream];
    
     
-        NSString *fakeStreamId = @"ashdgasgduasdfgdhjsgfjhsgdhjf";
-        PYStream *streamFromCacheWithFakeId = [self.connection.cache streamFromCacheWithStreamId:fakeStreamId];
-        STAssertNil(streamFromCacheWithFakeId, @"This must be nil. It's fake stream id");
-        
-        PYStream *streamFromCache = [self.connection.cache streamFromCacheWithStreamId:createdStreamIdFromServer];
-        STAssertNotNil(streamFromCache, @"No stream with corresponding ID found in cache.");
-
         DONE(done1);
     } errorHandler:^(NSError *error) {
         

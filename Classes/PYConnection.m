@@ -112,7 +112,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     //Return current cached streams
     NSArray *allStreamsFromCache = [self streamsFromCache];
     if (allStreamsFromCache.count > 0) {
-        [self updateFetchedStreams:allStreamsFromCache];
+        self.fetchedStreamsRoots = allStreamsFromCache;
+        [self updateFetchedStreamsMap];
     }
     [self streamsOnlineWithFilterParams:nil successHandler:^(NSArray *streamsList) {
         done(nil);
@@ -164,7 +165,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     
 
-    NSArray *nonSyncStreamsArray = [self.cache streamsFromCache];
+    NSArray *nonSyncStreamsArray = [self.cache allStreamsFromCache];
     
     for (PYStream *stream in nonSyncStreamsArray) {
         if (stream.notSyncAdd || stream.notSyncModify) {
@@ -214,6 +215,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                         //In that method we were search for stream with <createdStreamId> and we should done mapping between server and temp id in cache
                         stream.synchedAt = [[NSDate date] timeIntervalSince1970];
                         stream.streamId = [NSString stringWithString:tempId];
+                        
+                        
+                        
                         
                         [self.streamsNotSync removeObject:stream];
                         //We have success here. Stream is cached in streamCreate:withRequestType: method, remove old stream with tmpId from cache

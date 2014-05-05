@@ -25,5 +25,9 @@
  */
 - (NSArray*)descendantsIds;
 
+/**
+ * add a children
+ */
+- (void)addChildren:(PYStream*)stream;
 
 @end

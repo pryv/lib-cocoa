@@ -18,6 +18,12 @@
 - (PYStream*)streamWithStreamId:(NSString*)streamId;
 
 /** reset fetched Streams **/
-- (void) updateFetchedStreams:(NSArray*)streams;
+- (void) updateFetchedStreamsMap;
+
+/** cache fetched Streams **/
+- (void) cacheFetchedStreams;
+
+/** add a stream to the list of fetched Streams **/
+- (void) addToFetchedStreams:(PYStream*)stream;
 
 @end

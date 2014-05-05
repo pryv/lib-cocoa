@@ -15,69 +15,107 @@
 + (PYStream *)streamFromJSON:(id)JSON
 {
     NSDictionary *jsonDictionary = JSON;
-    PYStream *stream = [[PYStream alloc] init];
-    stream.streamId = [jsonDictionary objectForKey:@"id"];
+    PYStream *stream = nil;
     
-    stream.name = [jsonDictionary objectForKey:@"name"];
+    stream.streamId = [jsonDictionary objectForKey:@"id"];
+    [stream resetFromDictionary:jsonDictionary];
+
+    // we have a clientId if event is loaded from cache
+    id clientId = [JSON objectForKey:@"clientId"];
+    if ([clientId isKindOfClass:[NSNull class]]) {
+        stream = [[[self alloc] init] autorelease];
+    } else {
+        stream = [PYStream createOrRetreiveWithClientId:clientId];
+    }
+    
+    id streamId = [JSON objectForKey:@"id"];
+    if ([streamId isKindOfClass:[NSNull class]]) {
+        stream.streamId = nil;
+    }else{
+        stream.streamId = streamId;
+    }
+    
+    [stream resetFromDictionary:JSON];
+    return stream;
+}
+
+- (void)resetFromDictionary:(NSDictionary *)jsonDictionary {
+
+    self.name = [jsonDictionary objectForKey:@"name"];
     
     NSString *parentId = [jsonDictionary objectForKey:@"parentId"];
     if ([parentId isKindOfClass:[NSNull class]]) {
-        stream.parentId = nil;
+        self.parentId = nil;
     }else{
-        stream.parentId = parentId;
+        self.parentId = parentId;
     }
-    stream.clientData = [jsonDictionary objectForKey:@"clientData"];
+    self.clientData = [jsonDictionary objectForKey:@"clientData"];
         
-    stream.timeCount = [[jsonDictionary objectForKey:@"timeCount"] doubleValue];
-    stream.singleActivity = [[jsonDictionary objectForKey:@"singleActivity"] boolValue];
-    stream.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
+    self.singleActivity = [[jsonDictionary objectForKey:@"singleActivity"] boolValue];
+    self.trashed = [[jsonDictionary objectForKey:@"trashed"] boolValue];
     
     NSArray *childrenArray = [jsonDictionary objectForKey:@"children"];
-    [self setChildrenForStream:stream withArray:childrenArray];
+    [PYStream setChildrenForStream:self withArray:childrenArray];
     
+    
+    NSNumber *created = [jsonDictionary objectForKey:@"modified"];
+    if ([created  isKindOfClass:[NSNull class]]) {
+        self.created = PYStream_UNDEFINED_TIME;
+    }else{
+        self.created = [created  doubleValue];
+    }
+    self.createdBy = [jsonDictionary objectForKey:@"createdBy"];
+   
+    NSNumber *modified = [jsonDictionary objectForKey:@"modified"];
+    if ([modified isKindOfClass:[NSNull class]]) {
+        self.modified = PYStream_UNDEFINED_TIME;
+    }else{
+        self.modified = [modified doubleValue];
+    }
+    self.modifiedBy = [jsonDictionary objectForKey:@"modifiedBy"];
+   
+    
+    //---- app support
     NSNumber *hasTmpId = [jsonDictionary objectForKey:@"hasTmpId"];
     if ([hasTmpId isKindOfClass:[NSNull class]]) {
-        stream.hasTmpId = NO;
+        self.hasTmpId = NO;
     }else{
-        stream.hasTmpId = [hasTmpId boolValue];
+        self.hasTmpId = [hasTmpId boolValue];
     }
     
     NSNumber *notSyncAdd = [jsonDictionary objectForKey:@"notSyncAdd"];
     if ([notSyncAdd isKindOfClass:[NSNull class]]) {
-        stream.notSyncAdd = NO;
+        self.notSyncAdd = NO;
     }else{
-        stream.notSyncAdd = [notSyncAdd boolValue];
+        self.notSyncAdd = [notSyncAdd boolValue];
     }
     
     NSNumber *notSyncModify = [jsonDictionary objectForKey:@"notSyncModify"];
     if ([notSyncModify isKindOfClass:[NSNull class]]) {
-        stream.notSyncModify = NO;
+        self.notSyncModify = NO;
     }else{
-        stream.notSyncModify = [notSyncModify boolValue];
+        self.notSyncModify = [notSyncModify boolValue];
     }
     
     NSNumber *synchedAt = [jsonDictionary objectForKey:@"synchedAt"];
     if ([synchedAt isKindOfClass:[NSNull class]]) {
-        stream.synchedAt = 0;
+        self.synchedAt = 0;
     }else{
-        stream.synchedAt = [synchedAt doubleValue];
+        self.synchedAt = [synchedAt doubleValue];
     }
     
     NSDictionary *modifiedProperties = [jsonDictionary objectForKey:@"modifiedProperties"];
     if ([modifiedProperties isKindOfClass:[NSNull class]]) {
-        stream.modifiedStreamPropertiesAndValues = nil;
+        self.modifiedStreamPropertiesAndValues = nil;
     }else{
-        stream.modifiedStreamPropertiesAndValues = modifiedProperties;
+        self.modifiedStreamPropertiesAndValues = modifiedProperties;
     }
-
-    
-    return [stream autorelease];
 }
 
-+ (void)setChildrenForStream:(PYStream *)stream withArray:(NSArray *)children
++ (void)setChildrenForStream:(PYStream *)stream withArray:(NSArray *)childrenDict
 {
     NSMutableArray *childrenArrayOfStreams = [[NSMutableArray alloc] init];
-    for (NSDictionary *streamDic in children) {
+    for (NSDictionary *streamDic in childrenDict) {
         [childrenArrayOfStreams addObject:[self streamFromJSON:streamDic]];
     }
     

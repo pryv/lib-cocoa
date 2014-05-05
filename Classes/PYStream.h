@@ -6,22 +6,35 @@
 
 #import <Foundation/Foundation.h>
 
+
+
+#define PYStream_UNDEFINED_TIME -DBL_MAX
+
 @class PYConnection;
 
 
 @interface PYStream : NSObject
 {
-    NSString  *_clientId;
-    PYConnection *_connection;
-    NSString *_streamId;
+    //-- app
+    
+    
+    //-- api
+    NSString *_streamId; // (api == id)
     NSString *_name;
     NSString *_parentId;
-    NSDictionary *_clientData;
-    NSTimeInterval _timeCount;
-    NSArray *_children;
     BOOL _singleActivity;
+    NSDictionary *_clientData;
+    NSArray *_children; // PYEvents
     BOOL _trashed;
+    NSTimeInterval _created;
+    NSString* _createdBy;
+    NSTimeInterval _modified;
+    NSString* _modifiedBy;
     
+    
+    //-- app
+    NSString  *_clientId;
+    PYConnection *_connection;
     BOOL _isSyncTriedNow;
     BOOL _hasTmpId;
     BOOL _notSyncAdd;
@@ -29,21 +42,23 @@
     NSTimeInterval _synchedAt;
     NSDictionary *_modifiedStreamPropertiesAndValues;
 }
-/** client side id only.. remain the same before and after synching **/
-@property (nonatomic, retain) NSString  *clientId;
-@property (nonatomic, retain) PYConnection *connection;
+
 @property (nonatomic, copy) NSString *streamId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *parentId;
-@property (nonatomic, copy) NSDictionary *clientData;
-@property (nonatomic) NSTimeInterval timeCount;
-
-//@children -> array of PYStream objects
-@property (nonatomic, retain) NSArray *children;
-
 @property (nonatomic, assign, getter = isSingleActivity) BOOL singleActivity;
+@property (nonatomic, copy) NSDictionary *clientData;
+@property (nonatomic, retain) NSArray *children; //@children -> array of PYStream objects
 @property (nonatomic, assign, getter = isTrashed) BOOL trashed;
+@property (nonatomic) NSTimeInterval created;
+@property (nonatomic, copy) NSString *createdBy;
+@property (nonatomic) NSTimeInterval modified;
+@property (nonatomic, copy) NSString *modifiedBy;
 
+
+/** client side id only.. remain the same before and after synching **/
+@property (nonatomic, retain) NSString  *clientId;
+@property (nonatomic, retain) PYConnection *connection;
 /**
  @property isSyncTriedNow - Flag for non sync stream. If app tries to sync stream a few times this is used to determine what flags should be added to stream
  */
@@ -68,6 +83,19 @@
  */
 @property (nonatomic, retain) NSDictionary *modifiedStreamPropertiesAndValues;
 
+- (id)init;
+
+- (id)initWithConnection:(PYConnection *)connection;
+
+/*! 
+ * designated initializer
+ */
+- (id)initWithConnection:(PYConnection *) connection andClientId:(NSString *) clientId;
+
+
++ (PYStream*) createOrRetreiveWithClientId:(NSString*) clientId;
+
+
 /**
  Convert PYStream object to json-like NSDictionary representation for synching with server
  */
@@ -79,15 +107,6 @@
 
 /** return parent stream if fetched on pyConnection**/
 - (PYStream*)parent;
-
-- (id)init;
-
-- (id)initWithConnection:(PYConnection *)connection;
-
-/*! 
- * designated initializer
- */
-- (id)initWithConnection:(PYConnection *) connection andClientId:(NSString *) clientId;
 
 
 @end

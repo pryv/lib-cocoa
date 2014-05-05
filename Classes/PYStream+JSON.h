@@ -15,4 +15,9 @@
  */
 + (PYStream *)streamFromJSON:(id)json;
 
+/**
+ * reset content of this stream with this dictionary (not clientId nor streamId)
+ */
+- (void)resetFromDictionary:(NSDictionary *)jsonDictionary;
+
 @end
