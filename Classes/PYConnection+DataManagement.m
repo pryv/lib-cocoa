@@ -179,17 +179,32 @@
       successHandler:(void (^)(NSString *createdStreamId))successHandler
         errorHandler:(void (^)(NSError *error))errorHandler;
 {
+    if (stream.streamId != nil) {
+        @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
+                                       reason:@"Stream has already a StreamId" userInfo:nil];
+    }
+    
+    if (stream.connection == nil) {
+        stream.connection = self;
+    } else if (stream.connection != self) {
+      @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
+                                     reason:@"Cannot create stream on a different connection" userInfo:nil];
+    }
+        
+        
+    stream.connection = self;
+    
     [self apiRequest:kROUTE_STREAMS
          requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[stream dictionary]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                 NSDictionary* JSON = responseDict[kPYAPIResponseStream];
-                 NSString *createdStreamId = [JSON objectForKey:@"id"];
-                 
+                 NSDictionary* streamDict = responseDict[kPYAPIResponseStream];
+                 NSString *createdStreamId = [streamDict objectForKey:@"id"];
+                
                  stream.streamId = createdStreamId;
-                 [stream resetFromDictionary:responseDict];
+                 [stream resetFromDictionary:streamDict];
                  
                  // attach to parent
                  [self addToFetchedStreams:stream];
