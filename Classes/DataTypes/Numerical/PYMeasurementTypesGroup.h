@@ -1,9 +1,6 @@
 //
-//  PYEventTypesGroup.h
-//  NotesApp
-//
-//  Created by Mladen Djordjevic on 5/26/13.
-//  Copyright (c) 2013 PrYv. All rights reserved.
+//  PYMeasurementTypesGroup.h
+//  Is a group of choosen measures of the same "Class" as Mass, Weight, Length,....
 //
 
 #import <Foundation/Foundation.h>
@@ -11,7 +8,7 @@
 #import "PYEventType.h"
 #import "PYEventTypes.h"
 
-@interface PYEventTypesGroup : NSObject
+@interface PYMeasurementTypesGroup : NSObject
 {
     PYEventClass *_klass;
     NSMutableArray *_types;

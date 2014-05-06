@@ -12,7 +12,7 @@
     
 @private
     NSString *_classKey;
-    NSString *_eventDescription;
+    NSString *_classDescription;
     NSDictionary *_extrasName;
 }
 

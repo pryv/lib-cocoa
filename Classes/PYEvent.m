@@ -158,12 +158,7 @@
         [dic setObject:[NSNumber numberWithDouble:_duration] forKey:@"duration"];
     }
     
-    //    if ((_eventClass && _eventClass.length > 0) && (_eventFormat && _eventFormat.length > 0)) {
-    //        NSArray *objects = [NSArray arrayWithObjects:_eventClass, _eventFormat, nil];
-    //        NSArray *keys = [NSArray arrayWithObjects:@"class", @"format", nil];
-    //        NSDictionary *typeDic = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
-    //        [dic setObject:typeDic forKey:@"type"];
-    //    }
+  
     if (_type) {
         [dic setObject:_type forKey:@"type"];
     }

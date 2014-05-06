@@ -1,18 +1,12 @@
-//
-//  MeasurementGroup.m
-//  NotesApp
-//
-//  Created by Mladen Djordjevic on 5/26/13.
-//  Copyright (c) 2013 PrYv. All rights reserved.
-//
 
-#import "PYEventTypesGroup.h"
 
-@interface PYEventTypesGroup ()
+#import "PYMeasurementTypesGroup.h"
+
+@interface PYMeasurementTypesGroup ()
 
 @end
 
-@implementation PYEventTypesGroup
+@implementation PYMeasurementTypesGroup
 
 @synthesize formatKeys = _formatKeys;
 @synthesize klass = _klass;
@@ -41,7 +35,7 @@
 }
 
 - (NSString*) name {
-    NSLog(@"** WARNING PYEventTypesGroup.name should be removed ASAP");
+    NSLog(@"** WARNING PYMeasurementTypesGroup.name should be removed ASAP");
     return self.classKey;
 }
 

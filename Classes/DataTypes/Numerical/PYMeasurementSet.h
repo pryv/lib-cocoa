@@ -1,13 +1,10 @@
 //
 //  PYMeasurementSet.h
-//  NotesApp
-//
-//  Created by Mladen Djordjevic on 5/25/13.
-//  Copyright (c) 2013 PrYv. All rights reserved.
+//  Is a set of PYMesurementGroups
 //
 
 #import <Foundation/Foundation.h>
-#import "PYEventTypesGroup.h"
+#import "PYMeasurementTypesGroup.h"
 
 @interface PYMeasurementSet : NSObject
 {

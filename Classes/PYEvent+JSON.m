@@ -71,6 +71,7 @@
     
     id eventType = [JSON objectForKey:@"type"];
     
+    
     if([[eventType class] isSubclassOfClass:[NSDictionary class]])
     {
         NSDictionary *eventTypeDic = (NSDictionary*)eventType;

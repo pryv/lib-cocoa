@@ -2,6 +2,8 @@
 //  EventTypes.h
 //  PryvApiKit
 //
+//  Handler for eventype files 
+//
 //  Created by Perki on 28.11.13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //

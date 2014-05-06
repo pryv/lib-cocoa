@@ -45,7 +45,7 @@
     
     for(NSString *classKey in [types allKeys])
     {
-        PYEventTypesGroup *group = [[PYEventTypesGroup alloc]
+        PYMeasurementTypesGroup *group = [[PYMeasurementTypesGroup alloc]
                                     initWithClassKey:classKey
                                     andListOfFormats:[types objectForKey:classKey]
                                     andPYEventsTypes:pyTypes];

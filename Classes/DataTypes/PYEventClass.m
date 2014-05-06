@@ -10,21 +10,21 @@
 #import "PYUtilsLocalization.h"
 
 @interface PYEventClass ()
-@property (nonatomic, copy) NSString *eventDescription;
+@property (nonatomic, copy) NSString *classDescription;
 @end
 
 @implementation PYEventClass
 
 @synthesize classKey = _classKey;
 @synthesize extrasName = _extrasName;
-@synthesize eventDescription = _eventDescription;
+@synthesize classDescription = _classDescription;
 
 - (id)initWithClassKey:(NSString*)classKey andDefinitionDictionary:(NSDictionary*)dict {
      self = [super init];
      if(self)
      {
          self.classKey = classKey;
-         self.eventDescription = [dict objectForKey:@"description"];
+         self.classDescription = [dict objectForKey:@"description"];
          
      }
      return self;
@@ -33,7 +33,7 @@
 - (void)dealloc
 {
     [_classKey release];
-    [_eventDescription release];
+    [_classDescription release];
     [super dealloc];
 }
 
@@ -44,7 +44,7 @@
 
 - (NSString *)description
 {
-    return self.eventDescription;
+    return self.classDescription;
 }
 
 -(NSString *)localizedName {
