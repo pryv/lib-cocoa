@@ -846,7 +846,12 @@
     
     NSData *cachedData = [self.cache previewForEvent:event];
     if (cachedData) {
-        success(cachedData);
+        if (success) { success(cachedData);}
+        return;
+    }
+    
+    if (! event.eventId) {
+        if (success) { success(nil);}
         return;
     }
     
