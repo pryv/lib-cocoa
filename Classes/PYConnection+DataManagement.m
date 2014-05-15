@@ -402,6 +402,18 @@
 # warning - change logic
         //  [self syncNotSynchedEventsIfAny];
     }
+    
+    // shush if filter.onlyStreamIds = []
+    if (filter && filter.onlyStreamsIDs && ([filter.onlyStreamsIDs count] == 0)) {
+        NSLog(@"<WARNING> skipping online request filter.onlyStreamsIDs is empty");
+        if (successBlock) {
+            successBlock(@[], nil, @{kPYNotificationKeyAdd: @[],
+                                     kPYNotificationKeyModify: @[],
+                                     kPYNotificationKeyUnchanged: @[]});
+        }
+        return;
+    }
+    
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS
                                withParams:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]]
          requestType:PYRequestTypeAsync
