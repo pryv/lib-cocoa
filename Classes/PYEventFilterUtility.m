@@ -149,12 +149,13 @@
         onlyTagsPredicate = [NSPredicate predicateWithFormat:@"ANY tags IN %@",filter.tags];
         [predicates addObject:onlyTagsPredicate];
     }
-    //TODO check this
-   NSPredicate *onlyTypesPredicate = nil;
     if (filter.types != nil) {
-        NSLog(@"<WARNING> type predicate may not support widcards searches");
-        onlyTypesPredicate = [NSPredicate predicateWithFormat:@"type IN %@",filter.types];
-        [predicates addObject:onlyTypesPredicate];
+        NSMutableArray* orPredicateList = [[NSMutableArray alloc] init];
+        
+        for (NSString* type in filter.types) {
+            [orPredicateList addObject:[NSPredicate predicateWithFormat:@"type LIKE %@", type]];
+        }
+        [predicates addObject:[NSCompoundPredicate orPredicateWithSubpredicates:orPredicateList]];
     }
     // Perki 8.jan 2014 what's for?
     NSCompoundPredicate *testPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
