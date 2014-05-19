@@ -44,13 +44,13 @@
     _request = nil;
     [_response release];
     _response = nil;
-
+    
     [_onSuccess release];
     [_onFailure release];
     [_connection release];
     //[_responseData release];
     
-        
+    
     [super dealloc];
 }
 
@@ -68,9 +68,9 @@
             _responseData = [[NSMutableData data] retain];
             _running = YES;
         } else {
-            // Inform the user that the connection failed.
+            NSLog(@"<ERROR> PYAsyncService.initWithRequest failed to create an NSURLConnection");
         }
- 
+        
     }
     
     return self;
@@ -92,40 +92,46 @@
             failure (req, resp, error, responseData);
         }
     }];
-
+    
 }
 
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
-                            success:(PYAsyncServiceSuccessBlockJSON)success
-                            failure:(PYAsyncServiceFailureBlock)failure
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure
 {
-    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
-    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
-        if (success) {
-            
-            id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
-            if (JSON == nil) { // Is not NSDictionary or NSArray
-                if ([resp statusCode] == 204) {
-                    // NOTE: special case - Deleting trashed events returns zero length content
-                    // maybe need to handle it somewhere else
-                    JSON = [[[NSDictionary alloc] init] autorelease];
-                } else {
-                    NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
-                    NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
-                    failure (req, resp, error, responseData);
-                    return;
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+        [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
+            if (success) {
+                
+                id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+                if (JSON == nil) { // Is not NSDictionary or NSArray
+                    if ([resp statusCode] == 204) {
+                        // NOTE: special case - Deleting trashed events returns zero length content
+                        // maybe need to handle it somewhere else
+                        JSON = [[[NSDictionary alloc] init] autorelease];
+                    } else {
+                        NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
+                        NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
+                        failure (req, resp, error, responseData);
+                        return;
+                    }
                 }
+                success (req, resp, JSON);
             }
-            success (req, resp, JSON);
-        }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
-        if (failure) {
-            failure (req, resp, error, responseData);
-        }
-    }];
-    
+        } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
+            if (failure) {
+                failure (req, resp, error, responseData);
+            }
+        }];
+        
+        
+    });
     
 }
 
@@ -143,12 +149,14 @@
 	
 	if (_running)
 	{
-		self.request = nil;		
+		self.request = nil;
 		_running = NO;
 		
 	}
 }
 
+
+#pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
@@ -165,7 +173,7 @@
     self.response = (NSHTTPURLResponse *)response;
     
     
-
+    
     
 }
 
@@ -175,8 +183,8 @@
     // receivedData is an instance variable declared elsewhere.
     [_responseData appendData:data];
     
-//    float progress = data.length / _response.expectedContentLength;
-
+    //    float progress = data.length / _response.expectedContentLength;
+    
 }
 
 
@@ -193,14 +201,14 @@
     _running = NO;
     
     // inform the user
-//    NSLog(@"Connection failed! Error - %@ %@",
-//          [error localizedDescription],
-//          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+    //    NSLog(@"Connection failed! Error - %@ %@",
+    //          [error localizedDescription],
+    //          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
     if (self.onFailure){
         self.onFailure(self.request, self.response, error, nil);
     }
-        
+    
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -221,7 +229,7 @@
         // release the connection, and the data object
         [connection release];
         [_responseData release];
-
+        
         return;
 	}
     
