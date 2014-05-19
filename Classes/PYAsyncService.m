@@ -83,15 +83,19 @@
 {
     PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
-    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData) {
-        if (success) {
-            success (req, resp, responseData);
-        }
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id responseData) {
-        if (failure) {
-            failure (req, resp, error, responseData);
-        }
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
+        
+        [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData) {
+            if (success) {
+                success (req, resp, responseData);
+            }
+        } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, id responseData) {
+            if (failure) {
+                failure (req, resp, error, responseData);
+            }
+        }];
+        
+    });
     
 }
 
@@ -103,7 +107,7 @@
     
     
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
         
         PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
         [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
