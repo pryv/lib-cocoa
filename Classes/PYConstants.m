@@ -43,6 +43,7 @@ NSString *const kPYAPIEventModifiedSinceTime = @"modifiedSince";
 NSString *const kPYAPIEventFilterOnlyStreams = @"streams[]";
 NSString *const kPYAPIEventFilterTags = @"tags[]";
 NSString *const kPYAPIEventFilterTypes = @"types[]";
+NSString *const kPYAPIEventFilterState = @"state";
 
 
 //Notifications

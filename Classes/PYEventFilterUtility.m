@@ -50,6 +50,20 @@
             // NSLog(@"event is cached and not modified");
         }
     }
+    
+    // eventsNotPresent in onlineEventList and Present in knownEvent
+    PYEvent *knownEvent;
+    NSEnumerator *knownEventsEnumerator = [knownEvents objectEnumerator];
+    while ((knownEvent = [knownEventsEnumerator nextObject]) != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", knownEvent.eventId];
+        NSArray *results = [onlineEventList filteredArrayUsingPredicate:predicate];
+ 
+        if (results.count == 0) {
+            [eventsToRemove addObject:knownEvent];
+        }
+    }
+    
+    
     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToAdd sortAscending:YES];
     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToRemove sortAscending:YES];
     [PYEventFilter sortNSMutableArrayOfPYEvents:eventsModified sortAscending:YES];
@@ -89,6 +103,12 @@
     if (filter.types != nil) {
         [dic setObject:filter.types forKey:kPYAPIEventFilterTypes];
     }
+    
+    if (PYEventFilter_kStateArray[filter.state] != nil) {
+      [dic setObject:PYEventFilter_kStateArray[filter.state] forKey:kPYAPIEventFilterState];
+    }
+    
+    
     
     return dic;
 }
@@ -157,6 +177,12 @@
         }
         [predicates addObject:[NSCompoundPredicate orPredicateWithSubpredicates:orPredicateList]];
     }
+    
+#warning - TODO XXXXXXXXX
+    if (filter.state == PYEventFilter_kStateDefault) {
+        
+    }
+    
     // Perki 8.jan 2014 what's for?
     NSCompoundPredicate *testPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
     NSLog(@"subpredicates %@",testPredicate.subpredicates);

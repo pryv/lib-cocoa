@@ -28,6 +28,8 @@
 
 @implementation PYEventFilter
 
+NSString * const PYEventFilter_kStateArray[] = { nil, @"trashed", @"all" };
+
 
 @synthesize connection = _connection;
 @synthesize fromTime = _fromTime;
@@ -36,6 +38,7 @@
 @synthesize onlyStreamsIDs = _onlyStreamsIDs;
 @synthesize tags = _tags;
 @synthesize types = _types;
+@synthesize state = _state;
 
 @synthesize modifiedSince = _modifiedSince;
 
@@ -205,6 +208,11 @@
 {
     // no need to handle the events, it will be done by the notification listner
     //[self.connection eventsWithFilter:self fromCache:nil andOnline:nil onlineDiffWithCached:nil errorHandler:nil];
+    
+    // first of all clean up actual list of event
+    
+    
+    
     
     [self.connection eventsWithFilter:self
                             fromCache:^(NSArray *cachedEventList) {

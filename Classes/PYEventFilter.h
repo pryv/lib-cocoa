@@ -16,6 +16,13 @@
 #define PYEventFilter_UNDEFINED_FROMTIME -DBL_MAX
 #define PYEventFilter_UNDEFINED_TOTIME DBL_MAX
 
+typedef enum {
+    PYEventFilter_kStateDefault,
+    PYEventFilter_kStateTrashed,
+    PYEventFilter_kStateAll
+} PYEventFilter_kState;
+extern NSString * const PYEventFilter_kStateArray[];
+
 @interface PYEventFilter : NSObject
 {
     PYConnection *_connection;
@@ -36,6 +43,7 @@
 @property (nonatomic, retain) NSArray *onlyStreamsIDs;
 @property (nonatomic, retain) NSArray *tags;
 @property (nonatomic, retain) NSArray *types;
+@property (nonatomic) PYEventFilter_kState state;
 
 
 @property (nonatomic, retain, readonly) NSMutableDictionary *currentEventsDic;
