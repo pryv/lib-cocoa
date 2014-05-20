@@ -179,10 +179,11 @@
       successHandler:(void (^)(NSString *createdStreamId))successHandler
         errorHandler:(void (^)(NSError *error))errorHandler;
 {
+    /**
     if (stream.streamId != nil) {
         @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
                                        reason:@"Stream has already a StreamId" userInfo:nil];
-    }
+    }**/
     
     if (stream.connection == nil) {
         stream.connection = self;

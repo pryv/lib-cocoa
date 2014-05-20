@@ -13,7 +13,7 @@
 #import "PYEvent.h"
 #import "PYClient.h"
 #import "PYMeasurementSet.h"
-
+#import "PYMeasurementTypesGroup.h"
 
 @interface PYEventTypesTests : SenTestCase
 @end
@@ -179,9 +179,9 @@
     
     NSArray* groups = testSet.measurementGroups;
     NSString* testGroupKey = @"volume";
-    PYEventTypesGroup* testGroup = nil;
+    PYMeasurementTypesGroup* testGroup = nil;
     for (int i = 0; i < groups.count; i++) {
-        PYEventTypesGroup* group = (PYEventTypesGroup*)[groups objectAtIndex:i];
+        PYMeasurementTypesGroup* group = (PYMeasurementTypesGroup*)[groups objectAtIndex:i];
         if ([group.classKey isEqualToString:testGroupKey]){ testGroup = group ; break ; }
     }
     

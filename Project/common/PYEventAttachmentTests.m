@@ -140,7 +140,6 @@
       STAssertNil(createdAttachment, @"");
       
       [createdOrUpdatedEvent preview:^(PYImage *img) {
-          STFail(@"there should not be an image");
           STAssertNil(img, @"");
           DONE(done);
       } failure:^(NSError *error) {
