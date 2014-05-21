@@ -89,13 +89,15 @@
     self = (PYEvent*)[[NSManagedObject alloc] initWithEntity:eventEntity insertIntoManagedObjectContext:nil];
     if (self)
     {
+        #warning fixme
+        [self retain]; // should we retain?
+        
         if (clientId) {
             self.clientId = clientId;
         } else {
             self.clientId  = [PYEvent createClientId];
         }
-        #warning fixme
-        //[_clientId retain]; // should we retain?
+        
         
         [self superviseIn];
         
