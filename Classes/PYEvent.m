@@ -19,6 +19,7 @@
 #import "PYSupervisable.h"
 #import "PYConnection.h"
 #import "PYCachingController+Event.h"
+#import "PYCachingController.h"
 
 @interface PYEvent () <PYSupervisable>
 
@@ -38,7 +39,7 @@
 @end
 
 @implementation PYEvent
-@synthesize clientId = _clientId;
+@dynamic clientId;
 @synthesize eventId = _eventId;
 @synthesize time = _time;
 @synthesize duration = _duration;
@@ -83,16 +84,18 @@
 }
 
 - (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId {
-    self = [super init];
+    //self = [super init];
+    NSEntityDescription *eventEntity = [[[PYCachingController sharedManagedObjectModel] entitiesByName] objectForKey:@"PYEvent"];
+    self = (PYEvent*)[[NSManagedObject alloc] initWithEntity:eventEntity insertIntoManagedObjectContext:nil];
     if (self)
     {
         if (clientId) {
-            _clientId = clientId;
+            self.clientId = clientId;
         } else {
-            _clientId = [PYEvent createClientId];
+            self.clientId  = [PYEvent createClientId];
         }
         #warning fixme
-        [_clientId retain]; // should we retain?
+        //[_clientId retain]; // should we retain?
         
         [self superviseIn];
         

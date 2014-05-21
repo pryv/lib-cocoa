@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
+
 @class PYEvent;
 @class PYStream;
 
@@ -61,8 +63,18 @@
  Get all PYStream objects from disk
  */
 - (NSArray *)allStreamsFromCache;
-/**
- Get single PYStream object from disk for key
- */
-- (PYStream *)streamWithKey:(NSString *)key;
+
+
+#pragma mark - core data
+
+
+
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
++ (NSManagedObjectModel*) sharedManagedObjectModel;
+
+- (void)saveContext;
+- (NSURL *)applicationDocumentsDirectory;
+
 @end

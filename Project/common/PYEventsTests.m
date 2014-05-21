@@ -28,7 +28,7 @@
 {
     STAssertNotNil(self.connection, @"Connection isn't created");
     
-    
+    return ; 
     
     
     NOT_DONE(done);

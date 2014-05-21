@@ -13,6 +13,10 @@ Pod::Spec.new do |s|
   # but currently they keep us from running tests
   #s.public_header_files = 'Classes/PryvApiKit.h', 'Classes/PYError.h', 'Classes/PYConstants.h', 'Classes/PYErrorUtility.h', 'Classes/PYEvent.h', 'Classes/PYEvent+Utils.h', 'Classes/PYEventFilter.h', 'Classes/PYConnection.h', 'Classes/PYStream.h', 'Classes/PYAttachment.h', 'Classes/PYConnection+DataManagement.h', 'Classes/PYClient.h', 'Classes/PYWebLoginViewController.h', 'Classes/PYEventType.h', 'Classes/PYEventTypes.h', 'Classes/PYMeasurementSet.h'
   
+  s.frameworks          = 'Foundation', 'CoreData'
+  
+  s.resources      = 'Model/*.{xcdatamodeld,xcdatamodel}'
+  
   s.source_files = 'Classes/**/*.{h,m}'
   s.exclude_files = 'Classes/Reachability/PYReachability.{h,m}', 'Classes/CWLSynthesizeSingleton.h'
 

@@ -14,10 +14,11 @@
 #define PYEvent_UNDEFINED_TIME -DBL_MAX
 #define PYEvent_UNDEFINED_DURATION -DBL_MAX
 
+#import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 #import "PYStream.h"
 
-@interface PYEvent : NSObject
+@interface PYEvent : NSManagedObject
 {
     NSString  *_clientId;
     
@@ -53,7 +54,7 @@
 
 @property (nonatomic, retain) PYConnection  *connection;
 /** client side id only.. remain the same before and after synching **/
-@property (nonatomic, readonly) NSString  *clientId;
+@property (nonatomic, retain) NSString  *clientId;
 
 # pragma mark - API Matching properties
 @property (nonatomic, copy) NSString  *eventId;
