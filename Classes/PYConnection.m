@@ -222,7 +222,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                         [self.streamsNotSync removeObject:stream];
                         //We have success here. Stream is cached in streamCreate:withRequestType: method, remove old stream with tmpId from cache
                         //He will always have tmpId here but just in case for testing (defensive programing)
-                        [self.cache removeStream:stream];
                         
                     } errorHandler:^(NSError *error) {
                         stream.isSyncTriedNow = NO;

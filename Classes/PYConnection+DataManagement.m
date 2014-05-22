@@ -296,25 +296,17 @@
                      
                      if (stream.isSyncTriedNow == NO) {
                          
-                         //Get current stream with id from cache
-                         PYStream *currentStreamFromCache = [self.cache streamFromCacheWithStreamId:streamId];
-                         
-                         currentStreamFromCache.notSyncModify = YES;
-                         
-                         NSDictionary *modifiedPropertiesDic = [stream dictionary];
-                         [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
-                             [currentStreamFromCache setValue:value forKey:property];
-                         }];
                          
                          //We have to know what properties are modified in order to make succesfull request
-                         currentStreamFromCache.modifiedStreamPropertiesAndValues = [stream dictionary];
+                         stream.modifiedStreamPropertiesAndValues = [stream dictionary];
                          //We must have cached modified properties of stream in cache
+                         
+                         [self cacheFetchedStreams];
                          
                          if (successHandler) {
                              successHandler();
                          }
-                         
-                     }else{
+                     } else {
                          NSLog(@"Stream with server id wants to be synchronized on server from unsync list but there is no internet");
                      }
                  }else{

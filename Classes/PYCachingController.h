@@ -61,8 +61,5 @@
  Get all PYStream objects from disk
  */
 - (NSArray *)allStreamsFromCache;
-/**
- Get single PYStream object from disk for key
- */
-- (PYStream *)streamWithKey:(NSString *)key;
+
 @end
