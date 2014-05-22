@@ -75,11 +75,11 @@
     [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
     [userInfo setObject:request forKey:PryvRequestKey];
     
-    NSArray *arrayOfErrros = [JSONerror objectForKey:@"subErrors"];
-    if (arrayOfErrros) {
+    NSArray *arrayOfErrors = [JSONerror objectForKey:@"subErrors"];
+    if (arrayOfErrors) {
         NSMutableDictionary *userInfoSuberrors = [[NSMutableDictionary alloc] init];
-        NSMutableArray *arrayOfSubErrors = [[NSMutableArray alloc] initWithCapacity:arrayOfErrros.count];
-        for (NSDictionary *error in arrayOfErrros) {
+        NSMutableArray *arrayOfSubErrors = [[NSMutableArray alloc] initWithCapacity:arrayOfErrors.count];
+        for (NSDictionary *error in arrayOfErrors) {
             if ([[JSONerror objectForKey:@"error"] isKindOfClass:[NSDictionary class]]) {
                 [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
                 [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];

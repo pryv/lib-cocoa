@@ -64,7 +64,6 @@
  */
 - (NSArray *)allStreamsFromCache;
 
-
 #pragma mark - core data
 
 

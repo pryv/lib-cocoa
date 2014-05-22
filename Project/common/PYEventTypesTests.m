@@ -133,14 +133,14 @@
     }
     
     PYEvent *activity = [[PYEvent alloc] init];
-    activity.type = @"activity/pryv";
+    activity.type = @"activity/plain";
     if (! [activity.pyType.formatKey isEqualToString:activity.pyType.localizedName]) {
         STFail(@"Failed testing if activity/pryv event localizedName is : %@",
                activity.pyType.localizedName);
     }
     
     if (! [@"activity" isEqualToString:activity.pyType.klass.localizedName]) {
-        STFail(@"Failed testing if length/km event class localizedName in english is activity : %@",
+        STFail(@"Failed testing if activity/pryv event class localizedName in english is activity : %@",
                activity.pyType.klass.localizedName);
     }
 }
