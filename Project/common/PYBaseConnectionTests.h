@@ -15,8 +15,7 @@
 #define WAIT_FOR_DONE(done)     \
                     while (!done) {\
                         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode\
-                        beforeDate:[NSDate distantFuture]];\
-                        sleep(10);\
+                        beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];\
                     }
 
 
