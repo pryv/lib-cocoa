@@ -89,8 +89,8 @@
     self = (PYEvent*)[[NSManagedObject alloc] initWithEntity:eventEntity insertIntoManagedObjectContext:nil];
     if (self)
     {
-        #warning fixme
-        [self retain]; // should we retain?
+        
+        [self retain]; // object was expected to be retained by the ManagedContext which is null in this case
         
         if (clientId) {
             self.clientId = clientId;
