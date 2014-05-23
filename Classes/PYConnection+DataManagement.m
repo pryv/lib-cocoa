@@ -49,8 +49,8 @@
             errorHandler:(void (^)(NSError *error))errorHandler
 {
     //Return current cached streams
-   
-
+    
+    
     NSArray* allStreamsFromCache = [self streamsFromCache];
     
     if (cachedStreams) {
@@ -180,19 +180,19 @@
         errorHandler:(void (^)(NSError *error))errorHandler;
 {
     /**
-    if (stream.streamId != nil) {
-        @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
-                                       reason:@"Stream has already a StreamId" userInfo:nil];
-    }**/
+     if (stream.streamId != nil) {
+     @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
+     reason:@"Stream has already a StreamId" userInfo:nil];
+     }**/
     
     if (stream.connection == nil) {
         stream.connection = self;
     } else if (stream.connection != self) {
-      @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
-                                     reason:@"Cannot create stream on a different connection" userInfo:nil];
+        @throw [NSException exceptionWithName:@"SDKCannotcreateStream"
+                                       reason:@"Cannot create stream on a different connection" userInfo:nil];
     }
-        
-        
+    
+    
     stream.connection = self;
     
     [self apiRequest:kROUTE_STREAMS
@@ -203,7 +203,7 @@
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                  NSDictionary* streamDict = responseDict[kPYAPIResponseStream];
                  NSString *createdStreamId = [streamDict objectForKey:@"id"];
-                
+                 
                  stream.streamId = createdStreamId;
                  [stream resetFromDictionary:streamDict];
                  
@@ -283,7 +283,7 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
                  
-            
+                 
                  [self cacheFetchedStreams];
                  
                  if (successHandler) {
@@ -330,47 +330,52 @@
     onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
             errorHandler:(void (^)(NSError *error))errorHandler
 {
+    
+    
     //Return current cached events and eventsToAdd, modyfiy, remove (for visual details)
     
-    NSArray *eventsFromCache = [self allEventsFromCache];
-    
-    __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
-                                                                           withFilter:filter];
+#warning - we should remove the dispatch as soon as event is faster
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *eventsFromCache = [self allEventsFromCache];
+        
+        __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
+                                                                               withFilter:filter];
 #warning - check that retain ... without it was crashing in the subblock ..
-    [filteredCachedEventList retain];
-    
-    
-    if (cachedEvents) {
-        if ([eventsFromCache count] > 0) {
-            //if there are cached events return it, when get response return in onlineList
-            cachedEvents(filteredCachedEventList);
+        [filteredCachedEventList retain];
+        
+        
+        if (cachedEvents) {
+            if ([eventsFromCache count] > 0) {
+                //if there are cached events return it, when get response return in onlineList
+                cachedEvents(filteredCachedEventList);
+            }
         }
-    }
-    //This method should retrieve always online events
-    //In this method we should synchronize events from cache with ones online and to return current online list
-    [self eventsOnlineWithFilter:filter
-                            successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
-                                
-                                
-                                if (onlineEvents) {
-                                    onlineEvents(onlineEventList, serverTime);
-                                }
-                                if (syncDetails) {
-                                    // give differences between cachedEvents and received events
-                                    
-                                    NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
-                                    [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
-                                    NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
-                                    
-                                    [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
-                                    
-                                    syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
-                                                [details objectForKey:kPYNotificationKeyModify]);
-                                    filteredCachedEventList = nil;
-                                }
-                            }
-                              errorHandler:errorHandler
-                        shouldSyncAndCache:YES];
+        //This method should retrieve always online events
+        //In this method we should synchronize events from cache with ones online and to return current online list
+        [self eventsOnlineWithFilter:filter
+                      successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
+                          
+                          
+                          if (onlineEvents) {
+                              onlineEvents(onlineEventList, serverTime);
+                          }
+                          if (syncDetails) {
+                              // give differences between cachedEvents and received events
+                              
+                              NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
+                              [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
+                              NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
+                              
+                              [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
+                              
+                              syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
+                                          [details objectForKey:kPYNotificationKeyModify]);
+                              filteredCachedEventList = nil;
+                          }
+                      }
+                        errorHandler:errorHandler
+                  shouldSyncAndCache:YES];
+    });
 }
 
 
@@ -378,9 +383,9 @@
 //GET /events
 
 - (void)eventsOnlineWithFilter:(PYEventFilter*)filter
-                          successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
-                            errorHandler:(void (^) (NSError *error))errorHandler
-                      shouldSyncAndCache:(BOOL)syncAndCache
+                successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
+                  errorHandler:(void (^) (NSError *error))errorHandler
+            shouldSyncAndCache:(BOOL)syncAndCache
 {
     /*
      This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
