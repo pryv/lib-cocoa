@@ -19,7 +19,7 @@
 #import "PYSupervisable.h"
 #import "PYConnection.h"
 #import "PYCachingController+Event.h"
-#import "PYCachingController.h"
+#import "PYLocalStorage.h"
 
 @interface PYEvent () <PYSupervisable>
 
@@ -40,14 +40,14 @@
 
 @implementation PYEvent
 @dynamic clientId;
-@synthesize eventId = _eventId;
+@dynamic eventId;
 @synthesize time = _time;
 @synthesize duration = _duration;
-@synthesize type = _type;
+@dynamic type;
 @synthesize eventContent = _eventContent;
-@synthesize streamId = _streamId;
+@dynamic streamId;
 @synthesize tags = _tags;
-@synthesize eventDescription = _eventDescription;
+@dynamic eventDescription;
 @synthesize attachments = _attachments;
 @synthesize clientData = _clientData;
 @synthesize trashed = _trashed;
@@ -85,7 +85,7 @@
 
 - (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId {
     //self = [super init];
-    NSEntityDescription *eventEntity = [[[PYCachingController sharedManagedObjectModel] entitiesByName] objectForKey:@"PYEvent"];
+    NSEntityDescription *eventEntity = [[[PYLocalStorage sharedInstance] entitiesByName] objectForKey:@"PYEvent"];
     self = (PYEvent*)[[NSManagedObject alloc] initWithEntity:eventEntity insertIntoManagedObjectContext:nil];
     if (self)
     {

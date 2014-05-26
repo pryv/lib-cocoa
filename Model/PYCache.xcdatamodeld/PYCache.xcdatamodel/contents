@@ -2,8 +2,12 @@
 <model userDefinedModelVersionIdentifier="v0.0.1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="PYEvent" representedClassName="PYEvent" syncable="YES">
         <attribute name="clientId" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="eventDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eventId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="streamId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PYEvent" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="PYEvent" positionX="-63" positionY="-18" width="128" height="118"/>
     </elements>
 </model>
