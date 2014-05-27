@@ -28,6 +28,9 @@ static NSMutableDictionary *s_liveObjectDictionary;
 - (void)superviseOut {
     id<PYSupervisable> supervisableSelf = (id<PYSupervisable>)self;
     NSMutableDictionary *liveObjDict = [[self class] liveObjectDictionary];
+    if ([supervisableSelf supervisableKey] == nil) {
+        return;
+    }
     [liveObjDict removeObjectForKey:[supervisableSelf supervisableKey]];
 }
 

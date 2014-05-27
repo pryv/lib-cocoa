@@ -84,9 +84,7 @@
 }
 
 - (id) initWithConnection:(PYConnection*) connection andClientId:(NSString*) clientId {
-    //self = [super init];
-    NSEntityDescription *eventEntity = [[[PYLocalStorage sharedInstance] entitiesByName] objectForKey:@"PYEvent"];
-    self = (PYEvent*)[[NSManagedObject alloc] initWithEntity:eventEntity insertIntoManagedObjectContext:nil];
+    self =  [PYLocalStorage createTempEvent];
     if (self)
     {
         
@@ -109,6 +107,7 @@
     }
     return self;
 }
+
 
 #pragma mark - Supervisable
 

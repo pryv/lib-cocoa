@@ -12,6 +12,7 @@
 #import "PYConnection+DataManagement.h"
 #import "PYJSONUtility.h"
 #import "PYAttachment.h"
+#import "PYLocalStorage.h"
 
 @interface PYCachingController ()
 - (NSString *)keyForPreviewOnEvent:(PYEvent *)event;
@@ -49,6 +50,7 @@
       
     NSData *eventData = [PYJSONUtility getDataFromJSONObject:[event cachingDictionary]];
     [self cacheData:eventData withKey:[self keyForEvent:event]];
+    [PYLocalStorage save:event];
 }
 
 

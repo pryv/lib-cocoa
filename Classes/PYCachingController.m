@@ -38,7 +38,6 @@
 			[[NSFileManager defaultManager] createDirectoryAtPath:_localDataPath withIntermediateDirectories:NO attributes:nil error:&error];
 		
 	}
-    [self managedObjectContext];
     
 	return self;
 }

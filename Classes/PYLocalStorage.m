@@ -12,14 +12,74 @@
 @implementation PYLocalStorage
 
 
+// http://www.cocoanetics.com/2012/07/multi-context-coredata
+// http://stackoverflow.com/questions/17613510/parent-moc-get-changes-with-empty-data-from-child-moc
+// 
+
 @synthesize managedObjectContext = _managedObjectContext;
-@synthesize tempManagedObjectContext = _tempManagedObjectContext;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 
 
-+ (PYEvent*) getTempEvent {
-  NSManagedObject *o = [NSEntityDescription insertNewObjectForEntityForName:@"PYEvent" inManagedObjectContext:childContext];
++ (PYEvent*) createTempEvent {
+    NSManagedObjectContext* tempManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    [tempManagedObjectContext setPersistentStoreCoordinator:[[PYLocalStorage sharedInstance] managedObjectContext].persistentStoreCoordinator];
+    return  [NSEntityDescription insertNewObjectForEntityForName:@"PYEvent"
+                                          inManagedObjectContext:tempManagedObjectContext];
+}
+
++ (void) save:(NSManagedObject*)object {
+    [PYLocalStorage save:object withSuccessCallBack:nil];
+}
++ (void) save:(NSManagedObject*)object withSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success {
+    NSManagedObjectContext* objectMOC = [object managedObjectContext];
+    NSManagedObjectContext* mainMOC = [[PYLocalStorage sharedInstance] managedObjectContext];
+    
+    // different strategy for temp object
+    if (objectMOC != mainMOC) {
+       
+        [objectMOC performBlock:^{
+            // do something that takes some time asynchronously using the temp context
+            
+            // push to parent
+            NSError *error;
+            if (![objectMOC save:&error])
+            {
+                NSLog(@"<ERROR> PYLocalStorage while saving temp object %@", error);
+                if (success) { success(NO, error); }
+                return;
+            }
+            
+            // save parent to disk asynchronously
+            [mainMOC performBlock:^{
+                NSError *error;
+                if (![mainMOC save:&error])
+                {
+                    NSLog(@"<ERROR> PYLocalStorage while saving main MOC after temp save %@", error);
+                    if (success) { success(NO, error); }
+                    return;
+                }
+                
+                if (success) { success(YES, nil); }
+                
+            }];
+        }];
+        
+    } else { // object is on the main context
+        
+        [mainMOC performBlock:^{
+            NSError *error;
+            if (![mainMOC save:&error])
+            {
+                NSLog(@"<ERROR> PYLocalStorage while saving main MOC %@", error);
+                if (success) { success(NO, error); }
+                return;
+            }
+            
+            if (success) { success(YES, nil); }
+            
+        }];
+    }
 }
 
 
@@ -35,6 +95,7 @@ static PYLocalStorage* _sharedPYLocalStorage;
     return _sharedPYLocalStorage;
 }
 
+
 - (void)saveContext
 {
     NSError *error = nil;
@@ -49,18 +110,6 @@ static PYLocalStorage* _sharedPYLocalStorage;
     }
 }
 
-// Returns the temporary
-- (NSManagedObjectContext *)tempManagedObjectContext
-{
-    if (_tempManagedObjectContext != nil) {
-        return _tempManagedObjectContext;
-    }
-    
-    _tempManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    _tempManagedObjectContext.parentContext = [self managedObjectContext];
-    return _tempManagedObjectContext;
-}
-
 
 
 // Returns the managed object context for the application.
@@ -73,7 +122,7 @@ static PYLocalStorage* _sharedPYLocalStorage;
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
     return _managedObjectContext;
@@ -135,8 +184,31 @@ static PYLocalStorage* _sharedPYLocalStorage;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+    // subscribe to change notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_mocDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
     
     return _persistentStoreCoordinator;
+}
+
+- (void)_mocDidSaveNotification:(NSNotification *)notification
+{
+    NSManagedObjectContext *savedContext = [notification object];
+    
+    // ignore change notifications for the main MOC
+    if (_managedObjectContext == savedContext)
+    {
+        return;
+    }
+    
+    if (_managedObjectContext.persistentStoreCoordinator != savedContext.persistentStoreCoordinator)
+    {
+        // that's another database
+        return;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+    });
 }
 
 
