@@ -71,6 +71,10 @@
 
 @property (nonatomic) NSTimeInterval modified;
 
+
+#pragma mark - coreData
+- (void) saveWithSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success;
+
 # pragma mark - synch status
 
 

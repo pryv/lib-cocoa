@@ -8,7 +8,7 @@
 
 #import <CoreData/CoreData.h>
 
-@class PYEvent;
+
 
 @interface PYLocalStorage : NSObject
 
@@ -21,14 +21,17 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
-+ (PYEvent*) createTempEvent;
 
-+ (void) save:(NSManagedObject*)object;
-+ (void) save:(NSManagedObject*)object withSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success;
 
 + (PYLocalStorage*) sharedInstance;
 
-- (void)saveContext;
+- (NSManagedObject*) createTempEntityForName:(NSString*)entityName;
+
+- (void) save:(NSManagedObject*)object;
+- (void) save:(NSManagedObject*)object withSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success;
+
+
+- (void) saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
 @end

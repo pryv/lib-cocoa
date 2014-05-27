@@ -50,7 +50,7 @@
       
     NSData *eventData = [PYJSONUtility getDataFromJSONObject:[event cachingDictionary]];
     [self cacheData:eventData withKey:[self keyForEvent:event]];
-    [PYLocalStorage save:event];
+    [[PYLocalStorage sharedInstance] save:event];
 }
 
 

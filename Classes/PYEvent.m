@@ -19,7 +19,7 @@
 #import "PYSupervisable.h"
 #import "PYConnection.h"
 #import "PYCachingController+Event.h"
-#import "PYLocalStorage.h"
+#import "PYLocalStorage+Event.h"
 
 @interface PYEvent () <PYSupervisable>
 
@@ -300,15 +300,12 @@
     return description;
 }
 
+
 - (void)dealloc
 {
     [self superviseOut];
     [_connection release];
-    [_clientId release];
-    [_eventId release];
-    [_type release];
     [_eventContent release];
-    [_streamId release];
     [_tags release];
     [_eventDescription release];
     [_attachments release];
@@ -316,6 +313,12 @@
     [_modifiedEventPropertiesToBeSync release];
     [super dealloc];
 }
+
+#pragma mark - coreData
+- (void) saveWithSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success  {
+    [[PYLocalStorage sharedInstance] save:self withSuccessCallBack:success];
+}
+
 
 #pragma mark - stream
 

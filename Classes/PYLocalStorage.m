@@ -21,19 +21,20 @@
 @synthesize managedObjectModel = _managedObjectModel;
 
 
-+ (PYEvent*) createTempEvent {
+- (NSManagedObject*) createTempEntityForName:(NSString*)entityName {
     NSManagedObjectContext* tempManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [tempManagedObjectContext setPersistentStoreCoordinator:[[PYLocalStorage sharedInstance] managedObjectContext].persistentStoreCoordinator];
-    return  [NSEntityDescription insertNewObjectForEntityForName:@"PYEvent"
+    return  [NSEntityDescription insertNewObjectForEntityForName:entityName
                                           inManagedObjectContext:tempManagedObjectContext];
 }
 
-+ (void) save:(NSManagedObject*)object {
-    [PYLocalStorage save:object withSuccessCallBack:nil];
+- (void) save:(NSManagedObject*)object {
+    [self save:object withSuccessCallBack:nil];
 }
-+ (void) save:(NSManagedObject*)object withSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success {
+
+- (void) save:(NSManagedObject*)object withSuccessCallBack:(void (^) (BOOL succeded, NSError* error))success {
     NSManagedObjectContext* objectMOC = [object managedObjectContext];
-    NSManagedObjectContext* mainMOC = [[PYLocalStorage sharedInstance] managedObjectContext];
+    NSManagedObjectContext* mainMOC = [self managedObjectContext];
     
     // different strategy for temp object
     if (objectMOC != mainMOC) {
@@ -150,6 +151,8 @@ static PYLocalStorage* _sharedPYLocalStorage;
     }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"PYKit.sqlite"];
+    
+    NSLog(@"####StoreURL####: %@", storeURL);
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
