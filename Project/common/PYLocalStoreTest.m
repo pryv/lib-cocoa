@@ -34,14 +34,17 @@
 - (void)testEventSupervisor
 {
     
-    PYEvent* e1 = [PYEvent createOrRetreiveWithClientId:nil];
-    e1.eventId = @"e1";
+    PYEvent* e1 = [PYLocalStorage createTempEvent];
+    e1.eventId = @"e5";
+    
     NOT_DONE(event_saved);
     [e1 saveWithSuccessCallBack:^(BOOL succeded, NSError *error) {
         DONE(event_saved);
     }];
     WAIT_FOR_DONE(event_saved);
-    STAssertEquals(e1, [PYLocalStorage eventById:e1.eventId onConnection:nil], @"e1 not found in supervisor");
+    PYEvent* e2 = [PYLocalStorage eventById:e1.eventId onConnection:nil];
+    
+    STAssertEquals(e1, e2, @"e1 shoudl be equal to e2");
     
     [e1 release];
 }

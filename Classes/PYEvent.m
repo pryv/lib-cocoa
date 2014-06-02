@@ -39,7 +39,7 @@
 @end
 
 @implementation PYEvent
-@dynamic clientId;
+@synthesize clientId = _clientId;
 @dynamic eventId;
 @synthesize time = _time;
 @synthesize duration = _duration;
@@ -88,8 +88,6 @@
     if (self)
     {
         
-        [self retain]; // object was expected to be retained by the ManagedContext which is null in this case
-        
         if (clientId) {
             self.clientId = clientId;
         } else {
@@ -104,6 +102,20 @@
         self.synchedAt = PYEvent_UNDEFINED_TIME;
         self.modified = PYEvent_UNDEFINED_TIME;
         self.connection = connection;
+    }
+    return self;
+}
+
+- (id)initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
+{
+    self = [super initWithEntity:entity insertIntoManagedObjectContext:context];
+    if (self != nil) {
+        self.clientId  = [PYEvent createClientId];
+        self.time = PYEvent_UNDEFINED_TIME;
+        self.duration = PYEvent_UNDEFINED_DURATION;
+        self.synchedAt = PYEvent_UNDEFINED_TIME;
+        self.modified = PYEvent_UNDEFINED_TIME;
+
     }
     return self;
 }

@@ -22,13 +22,9 @@
 {
     NSString  *_clientId;
     
-    NSString  *_eventId;
-    NSString  *_streamId;
     NSTimeInterval _duration;
-    NSString *_type;
     id _eventContent;
     NSArray *_tags;
-    NSString  *_eventDescription;
     NSMutableArray *_attachments;
     NSDictionary *_clientData;
     BOOL _trashed;
@@ -57,13 +53,13 @@
 @property (nonatomic, retain) NSString  *clientId;
 
 # pragma mark - API Matching properties
-@property (nonatomic, copy) NSString  *eventId;
-@property (nonatomic, copy) NSString  *streamId;
+@property (nonatomic, retain) NSString  *eventId;
+@property (nonatomic, retain) NSString  *streamId;
 @property (nonatomic) NSTimeInterval duration;
-@property (nonatomic, copy) NSString *type;
+@property (nonatomic, retain) NSString *type;
 @property (nonatomic, retain) id eventContent;
 @property (nonatomic, retain) NSArray *tags;
-@property (nonatomic, copy) NSString  *eventDescription;
+@property (nonatomic, retain) NSString  *eventDescription;
 /** array of PYEventAttachment objects **/
 @property (nonatomic, retain) NSMutableArray *attachments;
 @property (nonatomic, retain) NSDictionary *clientData;

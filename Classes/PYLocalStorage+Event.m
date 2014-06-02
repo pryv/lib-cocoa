@@ -35,7 +35,7 @@
     {
         // Deal with error...
     }
-    if ([array count] > 1) {
+    if ([array count] > 0) {
        return (PYEvent*)[array objectAtIndex:0];
     }
     return nil;
