@@ -336,29 +336,37 @@
     
 #warning - we should remove the dispatch as soon as event is faster
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+       
         NSArray *eventsFromCache = [self allEventsFromCache];
+       
+        
         
         __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
                                                                                withFilter:filter];
+        
+        
+        
 #warning - check that retain ... without it was crashing in the subblock ..
         [filteredCachedEventList retain];
         
-        
+       
         if (cachedEvents) {
             if ([eventsFromCache count] > 0) {
                 //if there are cached events return it, when get response return in onlineList
                 cachedEvents(filteredCachedEventList);
             }
         }
+        
         //This method should retrieve always online events
         //In this method we should synchronize events from cache with ones online and to return current online list
         [self eventsOnlineWithFilter:filter
                       successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
                           
-                          
                           if (onlineEvents) {
                               onlineEvents(onlineEventList, serverTime);
                           }
+
                           if (syncDetails) {
                               // give differences between cachedEvents and received events
                               
@@ -445,6 +453,8 @@
                      [eventsArray addObject:myEvent];
                  }
                  
+                 [self.cache saveAllEvents];
+                 
                  //cacheEvents method will overwrite contents of currently cached file
                  [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                  [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
@@ -487,7 +497,7 @@
     if (cachedEvent == nil) // cache event
     {
         PYEvent *event = [PYEvent eventFromDictionary:eventDic onConnection:self];
-        [self.cache cacheEvent:event];
+        [self.cache cacheEvent:event addSaveCache:NO];
         // notify of event creation
         create(event);
         return;
@@ -500,7 +510,7 @@
     }
     [cachedEvent resetFromDictionary:eventDic];
     // notify of event update
-    [self.cache cacheEvent:cachedEvent];
+    [self.cache cacheEvent:cachedEvent addSaveCache:NO];
     
     update(cachedEvent);
 }

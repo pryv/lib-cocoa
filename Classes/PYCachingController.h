@@ -12,7 +12,11 @@
 @interface PYCachingController : NSObject
 {
     NSString *_localDataPath;
+    NSMutableDictionary *_allEventsDictionary;
 }
+
+
+@property (nonatomic, retain) NSMutableDictionary* allEventsDictionary;
 
 - (id)initWithCachingId:(NSString *)connectionCachingId;
 
@@ -45,6 +49,11 @@
  doesn't set connection property on Event
  */
 - (NSArray *)allEventsFromCache;
+
+/**
+ * Trigger a save All event on disk
+ */
+- (void)saveAllEvents;
 
 /**
  Reset content of an exisiting event with the data present in the cache

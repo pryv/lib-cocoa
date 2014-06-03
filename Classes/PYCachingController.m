@@ -16,11 +16,15 @@
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
+
+- (void)_backgroundSaveAllEvents;
+
 @end
 
 @implementation PYCachingController
 
 @synthesize localDataPath = _localDataPath;
+@synthesize allEventsDictionary = _allEventsDictionary;
 
 - (id)initWithCachingId:(NSString *)connectionCachingId
 {
@@ -30,13 +34,20 @@
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:
                               [NSString
-                                stringWithFormat:@"cache_%@", connectionCachingId]];
-                              
+                               stringWithFormat:@"cache_%@", connectionCachingId]];
+        
         NSLog(@"self.localDataPath %@", self.localDataPath);
 		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:_localDataPath])
 			[[NSFileManager defaultManager] createDirectoryAtPath:_localDataPath withIntermediateDirectories:NO attributes:nil error:&error];
-		
+        
+        NSDictionary* savedDict = [PYJSONUtility getJSONObjectFromData:[self dataForKey:@"cachedEvents"]];
+        if (savedDict) {
+            self.allEventsDictionary = [[NSMutableDictionary alloc] initWithDictionary:savedDict];
+        } else {
+            self.allEventsDictionary = [[NSMutableDictionary alloc] init];
+        }
+        
 	}
     
 	return self;
@@ -69,7 +80,7 @@
     NSArray *filesWithSelectedPrefix = [files filteredArrayUsingPredicate:
                                         [NSPredicate predicateWithFormat:format]];
     return filesWithSelectedPrefix;
-
+    
 }
 
 - (void)moveEntityWithKey:(NSString *)src toKey:(NSString *)dst
@@ -79,8 +90,8 @@
         NSLog(@"WANT TO MOVE BAD Entity: %@",src);
     }
     NSError *error = nil;
-     [[NSFileManager defaultManager] moveItemAtPath:[self.localDataPath stringByAppendingPathComponent:src]
-                                             toPath:[self.localDataPath stringByAppendingPathComponent:dst] error:&error];
+    [[NSFileManager defaultManager] moveItemAtPath:[self.localDataPath stringByAppendingPathComponent:src]
+                                            toPath:[self.localDataPath stringByAppendingPathComponent:dst] error:&error];
     if (error) {
         NSAssert(@"Error in moving entity: %@ to %@", src, dst);
     }
@@ -110,20 +121,39 @@
 
 - (NSArray *)allEventsFromCache
 {
-    NSArray *filesWithSelectedPrefix = [self getAllFilesWithPredicateFormat:@"self BEGINSWITH[cd] 'event_'"];
-    if (!filesWithSelectedPrefix.count) {
-        return nil;
-    }
-    
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
-    for (NSString *eventCachedName in filesWithSelectedPrefix) {
-        NSData *eventData = [self dataForKey:eventCachedName];
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
+    for (NSString *eventCachedName in self.allEventsDictionary) {
+        NSDictionary *eventDic = [self.allEventsDictionary objectForKey:eventCachedName];
         [arrayOFCachedEvents
          addObject:[PYEvent _eventFromDictionary:eventDic]];
     }
     
     return [arrayOFCachedEvents autorelease];
+}
+
+BOOL _needSave = NO;
+
+- (void)saveAllEvents
+{
+     NSLog(@"*545 requires saving events");
+    _needSave = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self _backgroundSaveAllEvents];
+    });
+}
+
+- (void)_backgroundSaveAllEvents
+{
+    @synchronized(self) {
+        if (_needSave) {
+            _needSave = NO;
+            NSLog(@"*545 Saving events A");
+            [self cacheData:[PYJSONUtility getDataFromJSONObject:self.allEventsDictionary] withKey:@"cachedEvents"];
+            NSLog(@"*546 Saving events B");
+        } else {
+            NSLog(@"*547 Skipping save.. not needed");
+        }
+    }
 }
 
 
