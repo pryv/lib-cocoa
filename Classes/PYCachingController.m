@@ -16,6 +16,7 @@
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
+@property (nonatomic, strong) dispatch_queue_t queue;
 
 - (void)_backgroundSaveAllEvents;
 
@@ -25,11 +26,13 @@
 
 @synthesize localDataPath = _localDataPath;
 @synthesize allEventsDictionary = _allEventsDictionary;
+@synthesize queue = _queue;
 
 - (id)initWithCachingId:(NSString *)connectionCachingId
 {
     self = [super init];
 	if (self) {
+        self.queue = dispatch_queue_create("com.domain.app.savequeue", 0);
 		NSError *error = nil;
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:
@@ -136,7 +139,7 @@ BOOL _needSave = NO;
 {
      NSLog(@"*545 requires saving events");
     _needSave = YES;
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(self.queue, ^{
         [self _backgroundSaveAllEvents];
     });
 }
@@ -170,10 +173,9 @@ BOOL _needSave = NO;
 
 - (PYEvent *)eventWithKey:(NSString *)key;
 {
-    if ([self isDataCachedForKey:key]) {
-        NSData *eventData = [self dataForKey:key];
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        return [PYEvent _eventFromDictionary:eventDic];
+    NSDictionary* eventDict = [self.allEventsDictionary objectForKey:key];
+    if (eventDict) {
+        return [PYEvent _eventFromDictionary:eventDict];
     }
     
     return nil;

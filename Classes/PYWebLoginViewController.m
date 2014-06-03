@@ -107,7 +107,7 @@ BOOL closing;
                                              selector:@selector(viewHidden:)
                                                  name:kPYWebViewLoginNotVisibleNotification object:nil];
     
-    [[self.webView mainFrame] loadHTMLString:@"<html><center><h1>Pryv Signin</h1></center><hr><center>Loading...</center></html>" baseURL:nil];
+    [[self.webView mainFrame] loadHTMLString:@"<html><head></head><body style=\"font-family: HelveticaNeue;position: absolute;top: 50%;left: 50%;text-align: center;margin-left: -64px;\"><div style=\"letter-spacing: 2px;\">Loading...<span style=\"font-size: 14px;color: #bebebe;letter-spacing: 1px;display: block;\">Please be patient</span></div></body></html>" baseURL:nil];
     [self requestLoginView];
     #else
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
@@ -138,7 +138,7 @@ BOOL closing;
     webView = [[UIWebView alloc] initWithFrame:applicationFrame];
     [webView setDelegate:self];
     [webView setBackgroundColor:[UIColor grayColor]];
-    [webView loadHTMLString:@"<html><center><h1>Pryv Signin</h1></center><hr><center>loading ...</center></html>" baseURL:nil];
+    [webView loadHTMLString:@"<html><head></head><body style=\"font-family: HelveticaNeue;position: absolute;top: 50%;left: 50%;text-align: center;margin-left: -64px;\"><div style=\"letter-spacing: 2px;\">Loading...<span style=\"font-size: 14px;color: #bebebe;letter-spacing: 1px;display: block;\">Please be patient</span></div></body></html>" baseURL:nil];
     
     self.view = webView;
     
@@ -330,7 +330,7 @@ static BOOL s_requestedLoginView = NO;
 - (void)handleFailure:(NSError *)error
 {
     NSLog(@"[HTTPClient Error]: %@", error);
-    NSString *content = [NSString stringWithFormat:@"<html><center><h1>PrYv Signup</h1></center><hr><center>error: %@ ...</center></html>",[error localizedDescription]];
+    NSString *content = [NSString stringWithFormat:@"<html><head></head><body style=\"font-family: HelveticaNeue;position: absolute;top: 50%%;left: 50%%;text-align: center;margin-left: -64px;\"><div style=\"letter-spacing: 2px;\">Signup Error... %@<span style=\"font-size: 14px;color: #bebebe;letter-spacing: 1px;display: block;\">Please be patient</span></div></body></html>",[error localizedDescription]];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [[webView mainFrame] loadHTMLString:content baseURL:nil];
     #else

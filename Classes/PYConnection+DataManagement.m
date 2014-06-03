@@ -362,10 +362,11 @@
         //In this method we should synchronize events from cache with ones online and to return current online list
         [self eventsOnlineWithFilter:filter
                       successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
-                          
+                          NSDate *afx3 = [NSDate date];
                           if (onlineEvents) {
                               onlineEvents(onlineEventList, serverTime);
                           }
+                          NSLog(@"*afx3 A %f", [afx3 timeIntervalSinceNow]);
 
                           if (syncDetails) {
                               // give differences between cachedEvents and received events
@@ -380,6 +381,7 @@
                                           [details objectForKey:kPYNotificationKeyModify]);
                               filteredCachedEventList = nil;
                           }
+                           NSLog(@"*afx3 B %f", [afx3 timeIntervalSinceNow]);
                       }
                         errorHandler:errorHandler
                   shouldSyncAndCache:YES];
@@ -427,6 +429,9 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 
+                 NSDate* afx2 = [NSDate date];
+                 
                  NSArray *JSON = responseDict[kPYAPIResponseEvents];
                  
                  NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
@@ -453,8 +458,9 @@
                      [eventsArray addObject:myEvent];
                  }
                  
-                 [self.cache saveAllEvents];
+                 NSLog(@"*afx2 A %f", [afx2 timeIntervalSinceNow]);
                  
+                 [self.cache saveAllEvents];
                  //cacheEvents method will overwrite contents of currently cached file
                  [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
                  [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
@@ -469,13 +475,12 @@
                                                                    userInfo:@{kPYNotificationKeyAdd: addArray,
                                                                               kPYNotificationKeyModify: modifyArray,
                                                                               kPYNotificationWithFilter: filter}];
-                 
                  if (successBlock) {
                      NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
-                     
                      successBlock(eventsArray, serverTime, details);
                      
                  }
+                  NSLog(@"*afx2 B %f", [afx2 timeIntervalSinceNow]);
                  
              } failure:^(NSError *error) {
                  if (errorHandler) {
@@ -493,7 +498,6 @@
                                 same:(void(^) (PYEvent*event))same
 {
     PYEvent* cachedEvent = [self.cache eventWithEventId:[eventDic objectForKey:@"id"]];
-    cachedEvent.connection = self;
     if (cachedEvent == nil) // cache event
     {
         PYEvent *event = [PYEvent eventFromDictionary:eventDic onConnection:self];
@@ -502,6 +506,8 @@
         create(event);
         return;
     }
+    cachedEvent.connection = self;
+    
     // eventId is already known.. same event or modified ?
     NSNumber *modified = [eventDic objectForKey:@"modified"];
     if ([modified doubleValue] <= cachedEvent.modified) { // cached win

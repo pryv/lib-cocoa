@@ -187,12 +187,13 @@ NSString * const PYEventFilter_kStateArray[] = { nil, @"trashed", @"all" };
     NSMutableArray *eventsToAdd = [[[NSMutableArray alloc] init] autorelease];
     NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
     NSMutableArray *eventsModified = [[[NSMutableArray alloc] init] autorelease];
-    
+    NSDate* afx = [NSDate date];
     [PYEventFilterUtility createEventsSyncDetails:eventList
                                       knownEvents:self.currentEventsSet
                                       eventsToAdd:eventsToAdd
                                    eventsToRemove:eventsToRemove
                                    eventsModified:eventsModified];
+    NSLog(@"*afx %f", [afx timeIntervalSinceNow]);
     
     [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
 }
