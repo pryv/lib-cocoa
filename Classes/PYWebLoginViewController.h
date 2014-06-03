@@ -26,7 +26,10 @@ typedef enum {
 //- (void) pyWebLoginNotVisible:(NSNotification *)notification;
 #else
 - (UIViewController *)pyWebLoginGetController;
+- (BOOL)pyWebLoginShowUIViewController:(UIViewController*)loginViewController;
 #endif
+
+// implement one of
 - (void)pyWebLoginSuccess:(PYConnection *)pyConnection;
 - (void)pyWebLoginAborted:(NSString *)reason;
 - (void)pyWebLoginError:(NSError *)error;
@@ -37,8 +40,10 @@ typedef enum {
 @interface PYWebLoginViewController : NSViewController {
 #else
 @interface PYWebLoginViewController : UIViewController {
+   
 #endif
     @private
+    BOOL closeReliesOnDelegate;
     NSArray *permissions;
     NSString *appID;
     NSTimer *pollTimer;
