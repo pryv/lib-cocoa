@@ -22,6 +22,7 @@
     UIBarButtonItem *refreshBarButtonItem;
 }
 #endif
+@property (nonatomic) BOOL closeReliesOnDelegate;
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, copy) NSString *appID;
 @property (nonatomic, retain) NSTimer *pollTimer;
@@ -38,6 +39,7 @@
 
 @implementation PYWebLoginViewController
 
+@synthesize closeReliesOnDelegate;
 @synthesize delegate;
 @synthesize pollTimer;
 @synthesize pollURL;
@@ -80,6 +82,7 @@ BOOL closing;
     #endif
 {
     PYWebLoginViewController *login = [[PYWebLoginViewController alloc] init];
+    login.closeReliesOnDelegate = NO;
     login.permissions = permissions;
     login.appID = appID;
     login.delegate = delegate;
@@ -140,7 +143,13 @@ BOOL closing;
     self.view = webView;
     
     // -- show on delegate's UIController -- //
-    [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
+    if ([self.delegate pyWebLoginGetController]) {
+        [[self.delegate pyWebLoginGetController] presentViewController:navigationController animated:YES completion:nil];
+    } else {
+        [self.delegate pyWebLoginShowUIViewController:navigationController];
+        self.closeReliesOnDelegate = YES;
+    }
+    
     
     [navigationController release];
     #endif
@@ -154,7 +163,9 @@ BOOL closing;
     [self.pollTimer invalidate];
     #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     #else
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    if (! self.closeReliesOnDelegate) {
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    }
     #endif
 }
 
