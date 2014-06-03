@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+#import "PYCachingController.h"
 #import "PYCachingController+Event.h"
 #import "PYEvent.h"
 #import "PYConnection.h"
@@ -29,7 +30,7 @@
 - (void)cacheEvent:(PYEvent *)event andCleanTempData:(BOOL)cleanTemp
 {
     if (cleanTemp) {
-       [self removeEntityWithKey:[self keyForNotYetCreatedEvent:event]];
+        [self.allEventsDictionary removeObjectForKey:[self keyForNotYetCreatedEvent:event]];
         // move eventual attachments
         for (PYAttachment* att in event.attachments) {
             [self moveEntityWithKey:[self keyForAttachment:att onNotYetCreatedEvent:event]
@@ -40,15 +41,24 @@
     [self cacheEvent:event];
 }
 
-- (void)cacheEvent:(PYEvent *)event
-{
+
+
+- (void)cacheEvent:(PYEvent *)event {
+    [self cacheEvent:event addSaveCache:YES];
+}
+
+- (void)cacheEvent:(PYEvent *)event addSaveCache:(BOOL)save {
 
     for (PYAttachment *att in event.attachments) {
         if (att.fileData && att.fileData.length > 0) [self saveDataForAttachment:att onEvent:event];
     }
       
-    NSData *eventData = [PYJSONUtility getDataFromJSONObject:[event cachingDictionary]];
-    [self cacheData:eventData withKey:[self keyForEvent:event]];
+    NSDictionary *eventData = [event cachingDictionary];
+    [self.allEventsDictionary setObject:eventData forKey:[self keyForEvent:event]];
+    
+    if (save) {
+        [self saveAllEvents];
+    }
 }
 
 
@@ -56,7 +66,7 @@
 
 - (void)removeEvent:(PYEvent *)event
 {
-    [self removeEntityWithKey:[self keyForEvent:event]];
+    [self.allEventsDictionary removeObjectForKey:[self keyForEvent:event]];
     if (event.attachments) {
     for (PYAttachment* att in event.attachments) {
         [self removeEntityWithKey:[self keyForAttachment:att onEvent:event]];
@@ -100,7 +110,7 @@
 
 - (BOOL)eventIsKnownByCache:(PYEvent *)event
 {
-    return [self isDataCachedForKey:[self keyForEvent:event]];
+    return ([self.allEventsDictionary objectForKey:[self keyForEvent:event]] != nil);
 }
 
 
