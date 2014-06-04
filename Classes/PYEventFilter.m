@@ -104,7 +104,7 @@
         [userInfo setObject:resultRemove forKey:kPYNotificationKeyDelete];
     }
     if (srcModified != nil) {
-       
+        
         NSEnumerator *toModifiyEnumerator = [srcModified objectEnumerator];
         while ((event = [toModifiyEnumerator nextObject]) != nil) {
             if ([self.currentEventsDic objectForKey:event.clientId] != nil) { // known object
@@ -129,7 +129,7 @@
 
 
 /**
- * The list represent 
+ * The list represent
  * @param eventList complete list of events that should match the filter
  */
 - (void)synchWithList:(NSArray*) eventList {
@@ -162,23 +162,44 @@
     
     // first of all clean up actual list of event
     
+    NSPredicate* predicate = [PYEventFilterUtility predicateFromFilter:self];
+    NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+    NSEnumerator *currentEventsEnumerator = [self.currentEventsSet objectEnumerator];
+    PYEvent* event;
+    while ((event = [currentEventsEnumerator nextObject]) != nil) {
+        if (! [predicate evaluateWithObject:event]) {
+            [eventsToRemove addObject:event];
+        }
+    }
+    [self notifyEventsToAdd:nil toRemove:eventsToRemove modified:nil];
     
     
+    // -- if filter is matching the cache.. just update the cache
     
-    [self.connection eventsWithFilter:self
-                            fromCache:^(NSArray *cachedEventList) {
-                                  [self synchWithList:cachedEventList];
-                          
-                            } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                  
-                                # warning should be uncommentend .. keep self.modified if no property has been changed since last update
-                                  //self.modifiedSince = [serverTime doubleValue];
-                                  [self synchWithList:onlineEventList];
-                                  
-                              } onlineDiffWithCached:nil
-                                 errorHandler:^(NSError *error) {
-                                  
-                              }];
+    
+    if (! [self.connection updateCache:nil ifCacheIncludes:self]) {
+        
+        
+        
+        // -- check online
+        
+        
+        [self.connection eventsWithFilter:self
+                                fromCache:^(NSArray *cachedEventList) {
+                                    [self synchWithList:cachedEventList];
+                                    
+                                } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                                    
+# warning should be uncommentend .. keep self.modified if no property has been changed since last update
+                                    //self.modifiedSince = [serverTime doubleValue];
+                                    [self synchWithList:onlineEventList];
+                                    
+                                } onlineDiffWithCached:nil
+                             errorHandler:^(NSError *error) {
+                                 
+                             }];
+    }
+    
 }
 
 
@@ -197,12 +218,11 @@
     
     NSArray* toAdd = [PYEventFilterUtility
                       filterEventsList:[message objectForKey:kPYNotificationKeyAdd] withFilter:self];
-    NSArray* toRemove = [PYEventFilterUtility
-                         filterEventsList:[message objectForKey:kPYNotificationKeyDelete] withFilter:self];
+    
     NSArray* modify = [PYEventFilterUtility
                        filterEventsList:[message objectForKey:kPYNotificationKeyModify] withFilter:self];
     
-    [self notifyEventsToAdd:toAdd toRemove:toRemove modified:modify];
+    [self notifyEventsToAdd:toAdd toRemove:[message objectForKey:kPYNotificationKeyDelete] modified:modify];
 }
 
 #pragma mark - Utilities sort

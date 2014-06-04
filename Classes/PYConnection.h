@@ -12,6 +12,7 @@
 @class PYReachability;
 @class PYEvent;
 @class PYStream;
+@class PYFilter;
 @class PYCachingController;
 
 @interface PYConnection : NSObject
@@ -50,6 +51,7 @@
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 @property (nonatomic, retain) PYReachability *connectionReachability;
 @property (nonatomic, retain) PYCachingController *cache;
+
 
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 @property (nonatomic, copy) NSMutableDictionary* fetchedStreamsMap;
@@ -110,7 +112,16 @@
  */
 -(void) streamsEnsureFetched:(void(^)(NSError *error))done;
 
+/**
+ Update cached data in the scope of the cache filter
+ */
+-(void) updateCache:(void(^)(NSError *error))done;
 
+/**
+ * Update cached data in the scope of the cache filter is greater than the passed filter
+ * @return NO is the cache.filter does not cover this filter
+ */
+-(BOOL) updateCache:(void(^)(NSError *error))done ifCacheIncludes:(PYFilter*)filter;
 
 /**
  @discussion

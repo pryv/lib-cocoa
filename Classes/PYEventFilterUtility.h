@@ -17,6 +17,7 @@
 
 + (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending;
 
++ (NSPredicate *)predicateFromFilter:(PYFilter *)filter;
 
 /**
  This method gets NSDictionary json-like representation of PYEventFilter
@@ -39,5 +40,10 @@
  Get all the streamIds covered by a Filter
  */
 + (NSArray *)streamIdsCoveredByFilter:(PYFilter *)filter;
+
+/**
+ * does not consider modified since
+ */
++ (BOOL)filter:(PYFilter*)srcFilter isIncludedInFilter:(PYFilter*)destFilter;
 
 @end

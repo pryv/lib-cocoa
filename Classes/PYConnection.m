@@ -23,11 +23,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
 #import "PYUtils.h"
+#import "PYFilter.h"
+#import "PYEventFilterUtility.h"
 
 @interface PYConnection ()
 
 @property (nonatomic, readwrite) NSTimeInterval serverTimeInterval;
-
+@property (nonatomic, retain) PYFilter *cacheFilter;
 
 @end
 
@@ -46,6 +48,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
 @synthesize cache = _cache;
+@synthesize cacheFilter = _cacheFilter;
 @synthesize fetchedStreamsMap = _fetchedStreamsMap;
 @synthesize fetchedStreamsRoots = _fetchedStreamsRoots;
 
@@ -53,6 +56,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
     self = [super init];
     if (self) {
+        self.cacheFilter = [[PYFilter alloc] initWithConnection:self
+                                                       fromTime:PYEventFilter_UNDEFINED_FROMTIME
+                                                         toTime:PYEventFilter_UNDEFINED_TOTIME
+                                                          limit:1000000000000
+                                                 onlyStreamsIDs:nil
+                                                           tags:nil
+                                                          types:nil];
+        self.cacheFilter.state = PYEventFilter_kStateAll;
+        
         self.userID = username;
         self.accessToken = token;
         self.apiDomain = [PYClient defaultDomain];
@@ -121,6 +133,30 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
         done(error);
     }];
 }
+
+/**
+ Update cached data in the scope of the cache filter
+ */
+-(void) updateCache:(void(^)(NSError *error))done {
+   [self eventsOnlineWithFilter:self.cacheFilter successHandler:^(NSArray *eventList, NSNumber *serverTime, NSDictionary *details) {
+       NSLog(@"Synchronized cache with %lu events", [eventList count]);
+       self.cacheFilter.modifiedSince = [serverTime doubleValue];
+   } errorHandler:^(NSError *error) {
+       
+   } shouldSyncAndCache:YES];
+}
+
+/**
+ * Update cached data in the scope of the cache filter is greater than the passed filter
+ * @return NO is the cache.filter does not cover this filter
+ */
+-(BOOL) updateCache:(void(^)(NSError *error))done ifCacheIncludes:(PYFilter*)filter {
+    if (! self.cacheFilter) return NO;
+    if (! [PYEventFilterUtility filter:filter isIncludedInFilter:self.cacheFilter]) return NO;
+    [self updateCache:done];
+    return YES;
+}
+
 
 
 

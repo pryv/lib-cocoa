@@ -113,18 +113,57 @@
     return dic;
 }
 
+
+/**
+ * does not consider modified since
+ */
++ (BOOL)filter:(PYFilter*)srcFilter isIncludedInFilter:(PYFilter*)destFilter {
+
+    if (destFilter.fromTime > srcFilter.fromTime) return NO;
+    
+    if (destFilter.fromTime < srcFilter.toTime) return NO;
+    
+    if (destFilter.limit < srcFilter.limit) return NO;
+    
+#warning - check this
+    if (destFilter.onlyStreamsIDs != nil) {
+        if (srcFilter.onlyStreamsIDs == nil) return NO; // not good nil.. may cover all :(
+        NSSet *srcSet = [NSSet setWithArray:[self streamIdsCoveredByFilter:srcFilter]];
+        if (! [srcSet isSubsetOfSet:[NSSet setWithArray:[self streamIdsCoveredByFilter:destFilter]]]) return NO;
+    }
+    
+    if (destFilter.tags != nil) {
+        if (srcFilter.tags == nil) return NO; // not good nil.. may cover all :(
+        NSSet *srcSet = [NSSet setWithArray:srcFilter.tags];
+        if (! [srcSet isSubsetOfSet:[NSSet setWithArray:destFilter.tags]]) return NO;
+    }
+    
+   
+    
+    if (destFilter.onlyStreamsIDs != nil) {
+#warning - todo quick
+        NSLog(@"<WARNING> PYEventFilterUtility incomplet (BOOL)filter:(PYFilter*)srcFilter isIncludedInFilter:(PYFilter*)destFilter  checjk");
+    }
+    
+    if (destFilter.state != PYEventFilter_kStateAll) {
+        if (destFilter.state != srcFilter.state) return NO;
+    }
+    return YES;
+}
+
 + (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYFilter *)filter
 {
     
     NSMutableArray *result = [[NSMutableArray alloc]
                               initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
     [PYEventFilterUtility sortNSMutableArrayOfPYEvents:result sortAscending:YES];
+    /**
     if (result.count > filter.limit)
     {
         NSArray *limitedArray = [result subarrayWithRange:NSMakeRange(0, filter.limit)];
         [result release];
         return  limitedArray;
-    }
+    }**/
     return [result autorelease];
 }
 

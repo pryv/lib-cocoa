@@ -474,9 +474,11 @@
                                                                      object:self
                                                                    userInfo:@{kPYNotificationKeyAdd: addArray,
                                                                               kPYNotificationKeyModify: modifyArray,
+                                                                              kPYNotificationKeyUnchanged: sameArray,
                                                                               kPYNotificationWithFilter: filter}];
                  if (successBlock) {
-                     NSNumber* serverTime = [[response allHeaderFields] objectForKey:@"Server-Time"];
+                     NSDictionary* meta = [responseDict objectForKey:@"meta"];
+                     NSNumber* serverTime = [meta objectForKey:@"serverTime"];
                      successBlock(eventsArray, serverTime, details);
                      
                  }
