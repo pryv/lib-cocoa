@@ -7,7 +7,7 @@
 //
 
 #import "PYEventFilterUtility.h"
-#import "PYEventFilter.h"
+#import "PYFilter.h"
 #import "PYEvent.h"
 #import "PYConnection+FetchedStreams.h"
 #import "PYStream+Utils.h"
@@ -64,13 +64,13 @@
     }
     
     
-    [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToAdd sortAscending:YES];
-    [PYEventFilter sortNSMutableArrayOfPYEvents:eventsToRemove sortAscending:YES];
-    [PYEventFilter sortNSMutableArrayOfPYEvents:eventsModified sortAscending:YES];
+    [PYEventFilterUtility sortNSMutableArrayOfPYEvents:eventsToAdd sortAscending:YES];
+    [PYEventFilterUtility sortNSMutableArrayOfPYEvents:eventsToRemove sortAscending:YES];
+    [PYEventFilterUtility sortNSMutableArrayOfPYEvents:eventsModified sortAscending:YES];
 }
 
 
-+ (NSDictionary *)apiParametersForEventsRequestFromFilter:(PYEventFilter *)filter
++ (NSDictionary *)apiParametersForEventsRequestFromFilter:(PYFilter *)filter
 {
     NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
     if (filter == nil) return dic;
@@ -113,12 +113,12 @@
     return dic;
 }
 
-+ (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYEventFilter *)filter
++ (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYFilter *)filter
 {
     
     NSMutableArray *result = [[NSMutableArray alloc]
                               initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
-    [PYEventFilter sortNSMutableArrayOfPYEvents:result sortAscending:YES];
+    [PYEventFilterUtility sortNSMutableArrayOfPYEvents:result sortAscending:YES];
     if (result.count > filter.limit)
     {
         NSArray *limitedArray = [result subarrayWithRange:NSMakeRange(0, filter.limit)];
@@ -128,7 +128,7 @@
     return [result autorelease];
 }
 
-+ (NSArray *)streamIdsCoveredByFilter:(PYEventFilter *)filter
++ (NSArray *)streamIdsCoveredByFilter:(PYFilter *)filter
 {
     if (! filter.onlyStreamsIDs) return nil;
     NSMutableSet *result = [[[NSMutableSet alloc] init] autorelease];
@@ -145,7 +145,7 @@
     return [result allObjects];
 }
 
-+ (NSPredicate *)predicateFromFilter:(PYEventFilter *)filter
++ (NSPredicate *)predicateFromFilter:(PYFilter *)filter
 {
     NSMutableArray *predicates = [[NSMutableArray alloc] init];
     NSPredicate *fromTimePredicate = nil;
@@ -191,6 +191,47 @@
     NSPredicate *resultPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     [predicates release];
     return resultPredicate;
+}
+
+
++ (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
+    /** Sort untested **/
+    if (sortAscending) {
+        [events sortUsingFunction:_compareEventByTimeAsc context:nil];
+    } else {
+        [events sortUsingFunction:_compareEventByTimeDesc context:nil];
+    }
+}
+
+
+/**
+ * Untested
+ */
+NSComparisonResult _compareEventByTimeAsc( PYEvent* e1, PYEvent* e2, void* ignore)
+{
+    NSTimeInterval t1 = [e1 getEventServerTime];
+    NSTimeInterval t2 = [e2 getEventServerTime];
+    if (t1 < t2)
+        return NSOrderedAscending;
+    else if (t1 > t2)
+        return NSOrderedDescending;
+    else
+        return NSOrderedSame;
+}
+
+/**
+ * Untested
+ */
+NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* ignore)
+{
+    NSTimeInterval t1 = [e1 getEventServerTime];
+    NSTimeInterval t2 = [e2 getEventServerTime];
+    if (t1 > t2)
+        return NSOrderedAscending;
+    else if (t1 < t2)
+        return NSOrderedDescending;
+    else
+        return NSOrderedSame;
 }
 
 

@@ -9,6 +9,7 @@
 #import "PYBaseConnectionTests.h"
 
 #import "PYEventFilter.h"
+#import "PYEventFilterUtility.h"
 #import "PYTestsUtils.h"
 #import "PYEvent.h"
 
@@ -231,13 +232,13 @@
     
     NSMutableArray* events = [[NSMutableArray alloc] initWithObjects:event2,event1,event3,nil];
     
-    [PYEventFilter sortNSMutableArrayOfPYEvents:events sortAscending:NO];
+    [PYEventFilterUtility sortNSMutableArrayOfPYEvents:events sortAscending:NO];
     STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
     STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
     STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
     
     
-    [PYEventFilter sortNSMutableArrayOfPYEvents:events sortAscending:YES];
+    [PYEventFilterUtility sortNSMutableArrayOfPYEvents:events sortAscending:YES];
     STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
     STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
     STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");

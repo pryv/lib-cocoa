@@ -375,7 +375,7 @@
                               [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
                               NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
                               
-                              [PYEventFilter sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
+                              [PYEventFilterUtility sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
                               
                               syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
                                           [details objectForKey:kPYNotificationKeyModify]);
@@ -462,10 +462,10 @@
                  
                  [self.cache saveAllEvents];
                  //cacheEvents method will overwrite contents of currently cached file
-                 [PYEventFilter sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
-                 [PYEventFilter sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
-                 [PYEventFilter sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
-                 [PYEventFilter sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
+                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
+                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
+                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
+                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
                  
                  NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
                                            kPYNotificationKeyModify: modifyArray,

@@ -16,7 +16,8 @@
 
 @interface PYCachingController ()
 @property (nonatomic, retain) NSString *localDataPath;
-@property (nonatomic, strong) dispatch_queue_t queue;
+@property (nonatomic) dispatch_queue_t queue;
+
 
 - (void)_backgroundSaveAllEvents;
 

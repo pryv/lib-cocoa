@@ -106,12 +106,11 @@
 {
     
     
-    
-    
-    
-    PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
-    [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
-        dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
+    dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
+        
+        PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+        [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
+            
             
             if (success) {
                 
@@ -130,17 +129,16 @@
                 }
                 success (req, resp, JSON);
             }
-        });
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
-        dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
+            
+        } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
             if (failure) {
                 failure (req, resp, error, responseData);
             }
-        });
-    }];
-    
-    
-    
+            
+        }];
+        
+        
+    });
     
 }
 
@@ -150,9 +148,9 @@
     self.onSuccess = success;
     self.onFailure = failure;
     [self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.connection start];
-    });
+    //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self.connection start];
+    //});
 }
 
 - (void)stop

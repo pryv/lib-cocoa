@@ -10,18 +10,22 @@
 #import "PYClient.h"
 
 @class PYConnection;
-@class PYEventFilter;
+@class PYFilter;
 
 @interface PYEventFilterUtility : NSObject
+
+
++ (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending;
+
 
 /**
  This method gets NSDictionary json-like representation of PYEventFilter
  */
-+ (NSDictionary *)apiParametersForEventsRequestFromFilter:(PYEventFilter *)filter;
++ (NSDictionary *)apiParametersForEventsRequestFromFilter:(PYFilter *)filter;
 /**
  Get array of PYEvent objects from cache that are filtered 
  */
-+ (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYEventFilter *)filter;
++ (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYFilter *)filter;
 /**
  This method creates event sync details for visual presentation on client app
  */
@@ -34,6 +38,6 @@
 /**
  Get all the streamIds covered by a Filter
  */
-+ (NSArray *)streamIdsCoveredByFilter:(PYEventFilter *)filter;
++ (NSArray *)streamIdsCoveredByFilter:(PYFilter *)filter;
 
 @end
