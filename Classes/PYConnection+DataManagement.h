@@ -8,7 +8,7 @@
 
 #import "PYClient.h"
 #import "PYConnection.h"
-#import "PYEventFilter.h"
+#import "PYFilter.h"
 
 @class PYAttachment;
 
@@ -99,13 +99,13 @@
 /**
  @param shouldSyncAndCache is temporary because web service lack of possibility to get events by id from server
  */
-- (void)eventsOnlineWithFilter:(PYEventFilter*)filter
+- (void)eventsOnlineWithFilter:(PYFilter*)filter
                         successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))onlineEventsList
                           errorHandler:(void (^) (NSError *error))errorHandler
                     shouldSyncAndCache:(BOOL)syncAndCache;
 
 
-- (void)eventsWithFilter:(PYEventFilter *)filter
+- (void)eventsWithFilter:(PYFilter *)filter
                  fromCache:(void (^) (NSArray *cachedEventList))cachedEvents
                  andOnline:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
             onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails

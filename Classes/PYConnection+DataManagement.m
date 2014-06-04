@@ -324,7 +324,7 @@
 
 
 
-- (void)eventsWithFilter:(PYEventFilter *)filter
+- (void)eventsWithFilter:(PYFilter *)filter
                fromCache:(void (^) (NSArray *cachedEventList))cachedEvents
                andOnline:(void (^) (NSArray *onlineEventList, NSNumber *serverTime))onlineEvents
     onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
@@ -392,7 +392,7 @@
 
 //GET /events
 
-- (void)eventsOnlineWithFilter:(PYEventFilter*)filter
+- (void)eventsOnlineWithFilter:(PYFilter*)filter
                 successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
                   errorHandler:(void (^) (NSError *error))errorHandler
             shouldSyncAndCache:(BOOL)syncAndCache
