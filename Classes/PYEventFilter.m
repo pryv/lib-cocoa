@@ -28,19 +28,6 @@
 
 @implementation PYEventFilter
 
-NSString * const PYEventFilter_kStateArray[] = { nil, @"trashed", @"all" };
-
-
-@synthesize connection = _connection;
-@synthesize fromTime = _fromTime;
-@synthesize toTime = _toTime;
-@synthesize limit = _limit;
-@synthesize onlyStreamsIDs = _onlyStreamsIDs;
-@synthesize tags = _tags;
-@synthesize types = _types;
-@synthesize state = _state;
-
-@synthesize modifiedSince = _modifiedSince;
 
 @synthesize currentEventsDic = _currentEventsDic;
 
@@ -51,10 +38,6 @@ NSString * const PYEventFilter_kStateArray[] = { nil, @"trashed", @"all" };
     //TODO check that it's necessary
     [_currentEventsDic release];
     _currentEventsDic = nil;
-    _connection  = nil;
-    [_onlyStreamsIDs release];
-    [_tags release];
-    [_types release];
     [super dealloc];
 }
 
@@ -77,48 +60,15 @@ NSString * const PYEventFilter_kStateArray[] = { nil, @"trashed", @"all" };
                     tags:(NSArray *)tags
                    types:(NSArray *)types
 {
-    if (self = [super init]) {
-        _connection = connection;
-        [self changeFilterFromTime:fromTime
-                            toTime:toTime
-                             limit:limit
-                    onlyStreamsIDs:onlyStreamsIDs
-                              tags:tags
-                             types:types];
-        _modifiedSince = PYEventFilter_UNDEFINED_FROMTIME;
-        _currentEventsDic = [[NSMutableDictionary alloc] init];
+    if (self = [super initWithConnection:connection fromTime:fromTime toTime:toTime
+                                   limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:types]) {
         
+        _currentEventsDic = [[NSMutableDictionary alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionEventUpdate:)
-                                                     name:kPYNotificationEvents object:self.connection];
+                                                     name:kPYNotificationEvents object:connection];
         
     }
     return self;
-}
-
-
-- (void)changeFilterFromTime:(NSTimeInterval)fromTime
-                      toTime:(NSTimeInterval)toTime
-                       limit:(NSUInteger)limit
-              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
-                        tags:(NSArray *)tags
-{
-    [self changeFilterFromTime:fromTime toTime:toTime limit:limit
-                onlyStreamsIDs:onlyStreamsIDs tags:tags types:nil];
-}
-
-- (void)changeFilterFromTime:(NSTimeInterval)fromTime
-                      toTime:(NSTimeInterval)toTime
-                       limit:(NSUInteger)limit
-              onlyStreamsIDs:(NSArray *)onlyStreamsIDs
-                        tags:(NSArray *)tags
-                        types:(NSArray *)types
-{
-    self.fromTime = fromTime; // time question ?? shouldn't we align time with the server?
-    self.toTime = toTime;
-    self.onlyStreamsIDs = onlyStreamsIDs;
-    self.tags = tags;
-    self.limit = limit;
-    self.types = types;
 }
 
 - (void)notifyEventsToAdd:(NSArray*)srcAdd toRemove:(NSArray*)srcRemove modified:(NSArray*)srcModified
@@ -256,44 +206,5 @@ NSString * const PYEventFilter_kStateArray[] = { nil, @"trashed", @"all" };
 }
 
 #pragma mark - Utilities sort
-
-/**
- * Untested
- */
-NSComparisonResult _compareEventByTimeAsc( PYEvent* e1, PYEvent* e2, void* ignore)
-{
-    NSTimeInterval t1 = [e1 getEventServerTime];
-    NSTimeInterval t2 = [e2 getEventServerTime];
-    if (t1 < t2)
-        return NSOrderedAscending;
-    else if (t1 > t2)
-        return NSOrderedDescending;
-    else
-        return NSOrderedSame;
-}
-
-/**
- * Untested
- */
-NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* ignore)
-{
-    NSTimeInterval t1 = [e1 getEventServerTime];
-    NSTimeInterval t2 = [e2 getEventServerTime];
-    if (t1 > t2)
-        return NSOrderedAscending;
-    else if (t1 < t2)
-        return NSOrderedDescending;
-    else
-        return NSOrderedSame;
-}
-
-+ (void)sortNSMutableArrayOfPYEvents:(NSMutableArray *)events sortAscending:(BOOL)sortAscending {
-    /** Sort untested **/
-    if (sortAscending) {
-        [events sortUsingFunction:_compareEventByTimeAsc context:nil];
-    } else {
-        [events sortUsingFunction:_compareEventByTimeDesc context:nil];
-    }
-}
 
 @end
