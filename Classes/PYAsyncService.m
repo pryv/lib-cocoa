@@ -23,7 +23,10 @@
 
 @property (nonatomic, copy) PYAsyncServiceSuccessBlock onSuccess;
 @property (nonatomic, copy) PYAsyncServiceFailureBlock onFailure;
+@property (nonatomic, copy) PYAsyncServiceProgressBlock onProgress;
 
+- (id)initWithRequest:(NSURLRequest *)request;
+- (void)stop;
 
 @end
 
@@ -48,8 +51,8 @@
     [_onSuccess release];
     [_onFailure release];
     [_connection release];
+    _responseData = nil;
     //[_responseData release];
-    
     
     [super dealloc];
 }
@@ -72,14 +75,48 @@
         }
         
     }
-    
     return self;
 }
+
+
+- (void)setCompletionBlockWithSuccess:(PYAsyncServiceSuccessBlock)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+                             progress:(PYAsyncServiceProgressBlock)progress
+{
+    self.onSuccess = success;
+    self.onFailure = failure;
+    self.onProgress = progress;
+    [self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self.connection start];
+    //});
+}
+
+- (void)stop
+{
+	[_connection cancel];
+	if (_running)
+	{
+		self.request = nil;
+		_running = NO;
+		
+	}
+}
+
+#pragma mark - static hooks
 
 
 + (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
                              success:(PYAsyncServiceSuccessBlock)success
                              failure:(PYAsyncServiceFailureBlock)failure
+{
+    [self RAWRequestServiceWithRequest:request success:success failure:failure progress:nil];
+}
+
++ (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
+                             success:(PYAsyncServiceSuccessBlock)success
+                             failure:(PYAsyncServiceFailureBlock)failure
+                            progress:(PYAsyncServiceProgressBlock)progress
 {
     PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
     
@@ -93,7 +130,7 @@
             if (failure) {
                 failure (req, resp, error, responseData);
             }
-        }];
+        } progress:progress];
         
     });
     
@@ -104,16 +141,20 @@
                               success:(PYAsyncServiceSuccessBlockJSON)success
                               failure:(PYAsyncServiceFailureBlock)failure
 {
-    
-    
+    [self JSONRequestServiceWithRequest:request success:success failure:failure progress:nil];
+}
+
++ (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+                             progress:(PYAsyncServiceProgressBlock)progress
+{
     dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
         
         PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
         [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
             
-            
             if (success) {
-                
                 id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
                 if (JSON == nil) { // Is not NSDictionary or NSArray
                     if ([resp statusCode] == 204) {
@@ -134,35 +175,9 @@
             if (failure) {
                 failure (req, resp, error, responseData);
             }
-            
-        }];
-        
-        
+        } progress:progress];
     });
     
-}
-
-- (void)setCompletionBlockWithSuccess:(PYAsyncServiceSuccessBlock)success
-                              failure:(PYAsyncServiceFailureBlock)failure
-{
-    self.onSuccess = success;
-    self.onFailure = failure;
-    [self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [self.connection start];
-    //});
-}
-
-- (void)stop
-{
-	[_connection cancel];
-	
-	if (_running)
-	{
-		self.request = nil;
-		_running = NO;
-		
-	}
 }
 
 
@@ -179,12 +194,7 @@
     
     // receivedData is an instance variable declared elsewhere.
     [_responseData setLength:0];
-    
     self.response = (NSHTTPURLResponse *)response;
-    
-    
-    
-    
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -193,13 +203,15 @@
     // receivedData is an instance variable declared elsewhere.
     [_responseData appendData:data];
     
-    //    float progress = data.length / _response.expectedContentLength;
+    NSLog(@"Progress %lu / %lld", (unsigned long)data.length, _response.expectedContentLength);
     
+    if (self.onProgress) {
+        self.onProgress(data.length, (unsigned long) _response.expectedContentLength);
+    }
 }
 
 
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     // release the connection, and the data object
     [connection release];
@@ -232,7 +244,8 @@
     
     if (isUnacceptableStatusCode)
 	{
-        NSError *e = [NSError errorWithDomain:@"HTTP URL Connection is unacceptable status code" code:self.response.statusCode userInfo:nil];
+        NSError *e = [NSError errorWithDomain:@"HTTP URL Connection is unacceptable status code"
+                                         code:self.response.statusCode userInfo:nil];
         if (self.onFailure){
             self.onFailure(self.request, self.response, e, self.responseData);
         }

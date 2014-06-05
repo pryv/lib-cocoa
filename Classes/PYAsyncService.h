@@ -11,6 +11,7 @@
 typedef void(^PYAsyncServiceSuccessBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *responseData);
 typedef void(^PYAsyncServiceSuccessBlockJSON)(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON);
 typedef void(^PYAsyncServiceFailureBlock)(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData);
+typedef void(^PYAsyncServiceProgressBlock)(unsigned long received, unsigned long expected);
 
 typedef enum {
 	PYRequestResultTypeJSON = 1,
@@ -40,7 +41,7 @@ typedef enum {
 }
 
 /*!
- @method JSONRequestServiceWithRequest:
+ @method JSONRequestServiceWithRequest:success:failure
  @abstract The result expected is JSON formated
  */
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
@@ -48,16 +49,31 @@ typedef enum {
                             failure:(PYAsyncServiceFailureBlock)failure;
 
 /*!
- @method RAWRequestServiceWithRequest:
+ @method JSONRequestServiceWithRequest:success:failure:progress
+ @abstract The result expected is JSON formated
+ */
++ (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+                             progress:(PYAsyncServiceProgressBlock)progress;
+
+/*!
+ @method RAWRequestServiceWithRequest:success:failure
  @abstract The result is returned as NSMutableData
  */
 + (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
                               success:(PYAsyncServiceSuccessBlock)success
                               failure:(PYAsyncServiceFailureBlock)failure;
+/*!
+ @method RAWRequestServiceWithRequest:success:failure:progress
+ @abstract The result is returned as NSMutableData
+ */
++ (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
+                             success:(PYAsyncServiceSuccessBlock)success
+                             failure:(PYAsyncServiceFailureBlock)failure
+                            progress:(PYAsyncServiceProgressBlock)progress;
 
 
-- (id)initWithRequest:(NSURLRequest *)request;
 
-- (void)stop;
 
 @end
