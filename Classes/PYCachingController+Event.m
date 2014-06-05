@@ -25,7 +25,24 @@
 
 @implementation PYCachingController (Event)
 
+- (void)cacheEvent:(PYEvent *)event {
+    [self cacheEvent:event addSaveCache:YES];
+}
 
+
+- (void)cacheEvent:(PYEvent *)event addSaveCache:(BOOL)save {
+
+    for (PYAttachment *att in event.attachments) {
+        if (att.fileData && att.fileData.length > 0) [self saveDataForAttachment:att onEvent:event];
+    }
+      
+    NSDictionary *eventData = [event cachingDictionary];
+    [self.allEventsDictionary setObject:eventData forKey:[self keyForEvent:event]];
+    
+    if (save) {
+        [self saveAllEvents];
+    }
+}
 
 - (void)cacheEvent:(PYEvent *)event andCleanTempData:(BOOL)cleanTemp
 {
@@ -42,28 +59,6 @@
 }
 
 
-
-- (void)cacheEvent:(PYEvent *)event {
-    [self cacheEvent:event addSaveCache:YES];
-}
-
-- (void)cacheEvent:(PYEvent *)event addSaveCache:(BOOL)save {
-
-    for (PYAttachment *att in event.attachments) {
-        if (att.fileData && att.fileData.length > 0) [self saveDataForAttachment:att onEvent:event];
-    }
-      
-    NSDictionary *eventData = [event cachingDictionary];
-    [self.allEventsDictionary setObject:eventData forKey:[self keyForEvent:event]];
-    
-    if (save) {
-        [self saveAllEvents];
-    }
-}
-
-
-
-
 - (void)removeEvent:(PYEvent *)event
 {
     [self.allEventsDictionary removeObjectForKey:[self keyForEvent:event]];
@@ -76,6 +71,7 @@
 }
 
 
+
 - (NSString *)keyForEvent:(PYEvent *)event {
     if (event.hasTmpId) {
         return [self keyForNotYetCreatedEvent:event];
@@ -83,7 +79,6 @@
     
     return [self keyForEventId:event.eventId];
 }
-
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
@@ -101,12 +96,6 @@
 
 
 #pragma mark - previews
-
-
-- (NSArray *)eventsFromCache
-{
-    return [self allEventsFromCache];
-}
 
 - (BOOL)eventIsKnownByCache:(PYEvent *)event
 {

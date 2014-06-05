@@ -33,14 +33,6 @@
  */
 - (void)removeEvent:(PYEvent *)event;
 
-/**
- Get all PYEvent objects from disk
-
- Attention! connection is not set on Events, caller of this method
- shoul set the connection property on all events
- */
-- (NSArray *)eventsFromCache;
-
 
 /**
  check if the event is known by cache
@@ -57,7 +49,6 @@
 - (void)saveDataForAttachment:(PYAttachment *)attachment onEvent:(PYEvent*) event;
 
 
-
 /**
  get cachedPreview (if any)
  */
@@ -67,7 +58,6 @@
  save preview for this event
  */
 - (void)savePreview:(NSData *)fileData forEvent:(PYEvent *)event;
-
 
 
 @end

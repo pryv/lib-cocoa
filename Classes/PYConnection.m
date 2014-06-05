@@ -172,19 +172,19 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 #pragma mark streams
 
-- (NSArray*)allEventsFromCache
+- (NSArray*)allEvents
 {
-    NSArray *allEventsFromCache = [self.cache eventsFromCache];
+    NSArray *allEvents = [self.cache allEvents];
     // set connection property on events
-    [allEventsFromCache makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
-    return allEventsFromCache;
+    [allEvents makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
+    return allEvents;
 }
 
 - (NSArray*)eventsNotSync
 {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     PYEvent* event;
-    for (event in [self allEventsFromCache]) {
+    for (event in [self allEvents]) {
         if ([event toBeSyncSkipCacheTest]) {
             [result addObject:event];
         }
@@ -200,7 +200,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 {
     
 
-    NSArray *nonSyncStreamsArray = [self.cache allStreamsFromCache];
+    NSArray *nonSyncStreamsArray = [self.cache allStreams];
     
     for (PYStream *stream in nonSyncStreamsArray) {
         if (stream.notSyncAdd || stream.notSyncModify) {

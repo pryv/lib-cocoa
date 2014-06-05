@@ -79,7 +79,7 @@
 /**
  * Get all event known by cache
  */
-- (NSArray *)allEventsFromCache;
+- (NSArray *)allEvents;
 
 /**
  Add stream to unsync list. If app tryed to create, modify or trash stream and it fails due to no internet access it will be added to unsync list

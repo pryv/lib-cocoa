@@ -139,24 +139,24 @@
 # pragma mark - serialization
 
 /**
- Get PYEvent object from json dictionary representation (JSON representation can include additioanl helper properties for event). It means that this method 'read' event from disk and from server
+ * Get PYEvent object from json dictionary representation (JSON representation can include additioanl helper properties for event). It means that this method 'read' event from disk and from server
  */
 + (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
 /**
- Convert PYEvent object to json-like NSDictionary representation for synching with server
+ * Convert PYEvent object to json-like NSDictionary representation for synching with server
  */
 - (NSDictionary *)dictionary;
+
+
 /**
- Convert PYEvent object to json-like NSDictionary representation for caching on disk
+ * Convert PYEvent object to json-like NSDictionary representation for caching on disk
  */
 - (NSDictionary *)cachingDictionary;
 
-
-# pragma mark - changes tools
 /**
- Reset all the fields from the cache. Can be used to rollback an edit change
+ * Reset all the fields from a cachingDictionary. Can be used to rollback an edit change
  */
-- (void)resetFromCache;
+- (void)resetFromCachingDictionary:(NSDictionary*)dictionary;
 
 
 - (NSMutableSet *)listModifiedPropertiesAgainstCachedVersion;

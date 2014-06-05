@@ -18,7 +18,7 @@
 @property (nonatomic, retain) NSString *localDataPath;
 @property (nonatomic) dispatch_queue_t queue;
 
-
+- (NSArray *)_getAllFilesWithPredicateFormat:(NSString *)format;
 - (void)_backgroundSaveAllEvents;
 
 @end
@@ -28,6 +28,8 @@
 @synthesize localDataPath = _localDataPath;
 @synthesize allEventsDictionary = _allEventsDictionary;
 @synthesize queue = _queue;
+
+#pragma mark - id to disk manipulations
 
 - (id)initWithCachingId:(NSString *)connectionCachingId
 {
@@ -57,6 +59,7 @@
 }
 
 
+
 - (BOOL)isDataCachedForKey:(NSString *)key
 {
 	return key && [[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]];
@@ -77,13 +80,17 @@
 }
 
 
-- (NSArray *)getAllFilesWithPredicateFormat:(NSString *)format
+- (void)removeEntityWithKey:(NSString *)key
 {
-    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localDataPath error:nil];
-    NSArray *filesWithSelectedPrefix = [files filteredArrayUsingPredicate:
-                                        [NSPredicate predicateWithFormat:format]];
-    return filesWithSelectedPrefix;
-    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]])
+    {
+        NSLog(@"WANT TO REMOVE BAD Entity: %@",key);
+    }
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
+    if (error) {
+        NSAssert(@"Error in removing entity", @"");
+    }
 }
 
 - (void)moveEntityWithKey:(NSString *)src toKey:(NSString *)dst
@@ -100,46 +107,50 @@
     }
 }
 
-- (void)removeEntityWithKey:(NSString *)key
+- (NSArray *)_getAllFilesWithPredicateFormat:(NSString *)format
 {
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.localDataPath stringByAppendingPathComponent:key]])
-    {
-        NSLog(@"WANT TO REMOVE BAD Entity: %@",key);
-    }
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
-    if (error) {
-        NSAssert(@"Error in removing entity", @"");
-    }
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localDataPath error:nil];
+    NSArray *filesWithSelectedPrefix = [files filteredArrayUsingPredicate:
+                                        [NSPredicate predicateWithFormat:format]];
+    return filesWithSelectedPrefix;
+    
 }
 
-- (void)removeStreamWithKey:(NSString *)key
+#pragma mark - streams
+
+
+- (NSArray *)allStreams
 {
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtPath:[self.localDataPath stringByAppendingPathComponent:key] error:&error];
-    if (error) {
-        NSAssert(@"Error in removing stream", @"");
+    NSDictionary *streamListDic = [PYJSONUtility getJSONObjectFromData:[self dataForKey:@"fetchedStreams"]];
+    NSMutableArray *streamList = [[NSMutableArray alloc] init];
+    for (NSDictionary *streamDictionary in streamListDic) {
+        PYStream *stream = [PYStream streamFromJSON:streamDictionary];
+        [streamList addObject:stream];
     }
+    
+    return [streamList autorelease];
 }
 
-- (NSArray *)allEventsFromCache
+
+# pragma mark - events
+
+- (NSArray *)allEvents
 {
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
     for (NSString *eventCachedName in self.allEventsDictionary) {
         NSDictionary *eventDic = [self.allEventsDictionary objectForKey:eventCachedName];
-        [arrayOFCachedEvents
-         addObject:[PYEvent _eventFromDictionary:eventDic]];
+        [arrayOFCachedEvents addObject:[PYEvent _eventFromDictionary:eventDic]];
     }
     
     return [arrayOFCachedEvents autorelease];
 }
 
-BOOL _needSave = NO;
+BOOL _eventsNeedSave = NO;
 
 - (void)saveAllEvents
 {
      NSLog(@"*545 requires saving events");
-    _needSave = YES;
+    _eventsNeedSave = YES;
     dispatch_async(self.queue, ^{
         [self _backgroundSaveAllEvents];
     });
@@ -148,8 +159,8 @@ BOOL _needSave = NO;
 - (void)_backgroundSaveAllEvents
 {
     @synchronized(self) {
-        if (_needSave) {
-            _needSave = NO;
+        if (_eventsNeedSave) {
+            _eventsNeedSave = NO;
             NSLog(@"*545 Saving events A");
             [self cacheData:[PYJSONUtility getDataFromJSONObject:self.allEventsDictionary] withKey:@"cachedEvents"];
             NSLog(@"*546 Saving events B");
@@ -160,17 +171,6 @@ BOOL _needSave = NO;
 }
 
 
-- (void) resetEventFromDictionary:(PYEvent*)event
-{
-    NSString* key = [self keyForEventId:event.eventId];
-    if (key && [self isDataCachedForKey:key])
-    {
-        NSData *eventData = [self dataForKey:key];
-        NSDictionary *eventDic = [PYJSONUtility getJSONObjectFromData:eventData];
-        [event resetFromDictionary:eventDic];
-    }
-    
-}
 
 - (PYEvent *)eventWithKey:(NSString *)key;
 {
@@ -187,24 +187,14 @@ BOOL _needSave = NO;
     return [self eventWithKey:[self keyForEventId:eventId]];
 }
 
-- (NSArray *)allStreamsFromCache
-{
-    NSDictionary *streamListDic = [PYJSONUtility getJSONObjectFromData:[self dataForKey:@"fetchedStreams"]];
-    NSMutableArray *streamList = [[NSMutableArray alloc] init];
-    for (NSDictionary *streamDictionary in streamListDic) {
-        PYStream *stream = [PYStream streamFromJSON:streamDictionary];
-        [streamList addObject:stream];
-    }
-    
-    return [streamList autorelease];
-}
-
+#pragma mark - memory
 
 - (void) dealloc
 {
     [_localDataPath release];
     _localDataPath = nil;
-    
+    [_allEventsDictionary release];
+    _allEventsDictionary = nil;
     [super dealloc];
 }
 

@@ -36,7 +36,7 @@
 
 
 - (NSArray*)streamsFromCache {
-    NSArray *allStreamsFromCache = [self.cache allStreamsFromCache];
+    NSArray *allStreamsFromCache = [self.cache allStreams];
     for (PYStream* stream in  allStreamsFromCache) {
         [self streamAndChildrenSetConnection:stream];
     }
@@ -334,7 +334,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
        
-        NSArray *eventsFromCache = [self allEventsFromCache];
+        NSArray *eventsFromCache = [self allEvents];
        
         
         

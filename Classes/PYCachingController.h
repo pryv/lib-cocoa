@@ -20,6 +20,7 @@
 
 - (id)initWithCachingId:(NSString *)connectionCachingId;
 
+#pragma mark - id to disk manipulations
 
 /**
  Check if data is cached for key
@@ -38,27 +39,32 @@
  */
 - (void)removeEntityWithKey:(NSString *)key;
 
-
+/**
+ Change the key of an event
+ */
 - (void)moveEntityWithKey:(NSString *)src toKey:(NSString *)dst;
+
+
+#pragma mark - streams
+
 /**
- Remove stream from disk for key
+ Get all PYStream objects from disk
  */
-- (void)removeStreamWithKey:(NSString *)key;
+- (NSArray *)allStreams;
+
+# pragma mark - events
+
 /**
- Get all PYEvent objects from disk
- doesn't set connection property on Event
+ Get all PYEvent objects from memory
  */
-- (NSArray *)allEventsFromCache;
+- (NSArray *)allEvents;
+
 
 /**
  * Trigger a save All event on disk
  */
 - (void)saveAllEvents;
 
-/**
- Reset content of an exisiting event with the data present in the cache
- */
-- (void) resetEventFromDictionary:(PYEvent*)event;
 
 /**
  Get single PYEvent object from disk for key
@@ -66,9 +72,6 @@
  */
 - (PYEvent *)eventWithKey:(NSString *)key;
 - (PYEvent *)eventWithEventId:(NSString *)eventId;
-/**
- Get all PYStream objects from disk
- */
-- (NSArray *)allStreamsFromCache;
+
 
 @end
