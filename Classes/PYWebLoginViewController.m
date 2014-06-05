@@ -313,7 +313,6 @@ static BOOL s_requestedLoginView = NO;
     //__block __typeof__(self) bself = self;
     [PYClient apiRequest:fullPathString
                  headers:nil
-             requestType:PYRequestTypeAsync
                   method:PYRequestMethodPOST
                 postData:postData
              attachments:nil
@@ -377,7 +376,6 @@ static BOOL s_requestedLoginView = NO;
 - (void)timerBlock:(NSTimer *)timer {
     [PYClient apiRequest:pollURL
                  headers:nil
-             requestType:PYRequestTypeAsync
                   method:PYRequestMethodGET
                 postData:nil
              attachments:nil

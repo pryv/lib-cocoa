@@ -8,7 +8,6 @@
 
 NSString const *kUnsyncEventsEventKey       = @"pryv.unsyncevents.Event";
 NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
-//NSString const *kUnsyncEventsRequestTypeKey = @"pryv.unsyncevents.RequestType";
 
 #import "PYConstants.h"
 #import "PYConnection.h"
@@ -256,7 +255,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                         
                         
                         [self.streamsNotSync removeObject:stream];
-                        //We have success here. Stream is cached in streamCreate:withRequestType: method, remove old stream with tmpId from cache
+                        //We have success here. Stream is cached in streamCreate: method, remove old stream with tmpId from cache
                         //He will always have tmpId here but just in case for testing (defensive programing)
                         
                     } errorHandler:^(NSError *error) {
@@ -432,7 +431,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 
 - (void) apiRequest:(NSString *)path
-        requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments
@@ -451,7 +449,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     [PYClient apiRequest:fullPath
                  headers:headers
-             requestType:reqType
                   method:method
                 postData:postData
              attachments:attachments
@@ -500,7 +497,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
                              errorHandler:(void(^)(NSError *error))errorHandler{
     
     [self apiRequest:@"/profile/app" //TODO: handle app profiles for improved user experience
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil
          attachments:nil

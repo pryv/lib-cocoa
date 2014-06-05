@@ -10,11 +10,6 @@
 
 
 typedef enum {
-    PYRequestTypeAsync = 1,
-    PYRequestTypeSync
-} PYRequestType;
-
-typedef enum {
 	PYRequestMethodGET = 1,
 	PYRequestMethodPUT,
 	PYRequestMethodPOST,
@@ -55,7 +50,6 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 + (NSMutableURLRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary*)headers
-        requestType:(PYRequestType)reqType
              method:(PYRequestMethod)method
            postData:(NSDictionary *)postData
         attachments:(NSArray *)attachments

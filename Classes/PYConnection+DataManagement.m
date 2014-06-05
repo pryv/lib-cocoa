@@ -91,7 +91,6 @@
     }
     
     [self apiRequest:[PYClient getURLPath:kROUTE_STREAMS withParams:filter]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
@@ -196,7 +195,6 @@
     stream.connection = self;
     
     [self apiRequest:kROUTE_STREAMS
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[stream dictionary]
          attachments:nil
@@ -256,7 +254,6 @@
               errorHandler:(void (^)(NSError *))errorHandler
 {
     [self apiRequest:[PYClient getURLPath:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS, stream.streamId] withParams:@{@"mergeEventsWithParents":  [NSNumber numberWithBool:mergeEventsWithParents]}]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
@@ -277,7 +274,6 @@
                           errorHandler:(void (^)(NSError *error))errorHandler
 {
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_STREAMS,streamId]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodPUT
             postData:[stream dictionary]
          attachments:nil
@@ -424,7 +420,6 @@
     
     [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS
                                withParams:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodGET
             postData:nil
          attachments:nil
@@ -554,7 +549,6 @@
     
     
     [self apiRequest:kROUTE_EVENTS
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
@@ -638,7 +632,6 @@
     
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS, event.eventId]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodDELETE
             postData:nil
          attachments:nil
@@ -705,7 +698,6 @@
 #warning - attachments should be updated asside..
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@", kROUTE_EVENTS, eventObject.eventId]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodPUT
             postData:[eventObject dictionaryForUpdate]
          attachments:nil
@@ -765,7 +757,6 @@
             errorHandler:(void (^)(NSError *error))errorHandler
 {
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"start"]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[event dictionary]
          attachments:event.attachments
@@ -802,7 +793,6 @@
     }
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS,@"stop"]
-         requestType:PYRequestTypeAsync
               method:PYRequestMethodPOST
             postData:[postData autorelease]
          attachments:nil

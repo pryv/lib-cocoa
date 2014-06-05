@@ -39,7 +39,7 @@
         
         if (!cachedOnlineEvent) {
             // if online event isn't in cache
-            // TODO Add to app cache if not done by getEventsWithRequestType
+            // TODO Add to app cache if not done by getEvents
             [eventsToAdd addObject:onlineEvent];
             
         } else if (cachedOnlineEvent.modified != onlineEvent.modified){

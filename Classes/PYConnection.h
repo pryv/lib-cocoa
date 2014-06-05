@@ -100,7 +100,6 @@
  Low level method for web service communication
  */
 - (void)apiRequest:(NSString *)path
-       requestType:(PYRequestType)reqType
             method:(PYRequestMethod)method
           postData:(NSDictionary *)postData
        attachments:(NSArray *)attachments

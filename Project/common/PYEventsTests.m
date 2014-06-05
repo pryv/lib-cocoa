@@ -94,8 +94,8 @@
     [self.connection eventCreate:event
                   successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event)
      {
-         STAssertNotNil(event.connection, @"Event.connection is nil. Server or eventCreate:requestType: method bug");
-         STAssertNotNil(newEventId, @"EventId is nil. Server or eventCreate:requestType: method bug");
+         STAssertNotNil(event.connection, @"Event.connection is nil. Server or eventCreate: method bug");
+         STAssertNotNil(newEventId, @"EventId is nil. Server or eventCreate: method bug");
          STAssertEquals(event.eventId, newEventId, @"EventId was not assigned to event");
          
          

@@ -17,6 +17,14 @@ typedef enum {
 	PYRequestResultTypeRAW
 } PYRequestResultType;
 
+
+
+/*!
+ @class PYAsyncService
+ 
+ @abstract PYAsyncService is used for handling asynchroneous HTTP requests
+ 
+ */
 @interface PYAsyncService : NSObject {
 
 @private
@@ -31,10 +39,18 @@ typedef enum {
     PYAsyncServiceFailureBlock _onFailure;
 }
 
+/*!
+ @method JSONRequestServiceWithRequest:
+ @abstract The result expected is JSON formated
+ */
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
                             success:(PYAsyncServiceSuccessBlockJSON)success
                             failure:(PYAsyncServiceFailureBlock)failure;
 
+/*!
+ @method RAWRequestServiceWithRequest:
+ @abstract The result is returned as NSMutableData
+ */
 + (void)RAWRequestServiceWithRequest:(NSURLRequest *)request
                               success:(PYAsyncServiceSuccessBlock)success
                               failure:(PYAsyncServiceFailureBlock)failure;
