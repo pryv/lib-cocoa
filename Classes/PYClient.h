@@ -50,20 +50,23 @@ typedef void(^PYClientFailureBlock)(NSError *error);
  */
 + (PYConnection *)createConnectionWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
-+ (NSString *)fileMIMEType:(NSString*)file;
-
-+ (BOOL)isUnacceptableStatusCode:(NSUInteger)statusCode;
-
-+ (NSString *)getURLPath:(NSString *)path withParams:(NSDictionary *)params;
-
+/**
+ * low level JSON request to the API.. handles Pryv's error code
+ */
 + (void)sendJSONDictRequest:(NSURLRequest *)request
             success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
+/**
+ * low level RAW request to the API.. handles Pryv's error code
+ */
 + (void)sendRAWRequest:(NSURLRequest *)request
                 success:(PYClientSuccessBlock)successHandler
                 failure:(PYClientFailureBlock)failureHandler;
 
+/**
+ * High level request to the API .. wrapper for sendJSONDictRequest
+ */
 + (NSMutableURLRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary*)headers
              method:(PYRequestMethod)method
