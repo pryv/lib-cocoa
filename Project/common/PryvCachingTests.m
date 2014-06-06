@@ -12,6 +12,7 @@
 #import "PYConnection.h"
 #import "PYConnection+DataManagement.h"
 #import "PYTestsUtils.h"
+#import "PYEvent.h"
 
 
 @interface PryvCachingTests : PYBaseConnectionTests
@@ -67,11 +68,11 @@
      {
          STAssertTrue(onlineEventList.count > 0, @"Should get at least one event");
          PYEvent* event = [onlineEventList firstObject];
-         
+         NSDictionary* initialState = [event cachingDictionary];
          NSTimeInterval previousDate = [[event eventDate] timeIntervalSince1970];
          [event setEventDate:nil];
          STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
-         [event resetFromCache];
+         [event resetFromCachingDictionary:initialState];
          STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
          done = YES;
      } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {

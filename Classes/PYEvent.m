@@ -215,6 +215,11 @@
 }
 
 
+- (void)resetFromCachingDictionary:(NSDictionary*)dictionary {
+    [self resetFromDictionary:dictionary];
+}
+
+
 - (NSDictionary *)dictionary {
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];

@@ -25,13 +25,29 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 
 @interface PYClient : NSObject
 
+/**
+ * get user's prefered code
+ */
 + (NSString *)languageCodePrefered;
+/**
+ * set user's preferred code (used for pyWebLogin)
+ */
 + (void)setLanguageCodePrefered:(NSString*) languageCode;
-
+/**
+ * domain used for request to api
+ */
 + (NSString *)defaultDomain;
+/**
+ * set default domain for connection creation
+ */
 + (void)setDefaultDomain:(NSString*) domain;
+/**
+ * use Pryv's staging domain for connection
+ */
 + (void)setDefaultDomainStaging;
-
+/**
+ * create a connection with a specific username and accessToken
+ */
 + (PYConnection *)createConnectionWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 + (NSString *)fileMIMEType:(NSString*)file;
