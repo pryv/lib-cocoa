@@ -365,6 +365,22 @@ You can trash/delete stream in this way:
 
 **Note:** there is a fallback with this method. Until data is reset changes are done on app-wide instance of the event. We may at some point need a logic with  `PYEvent *backupEvent = [event backup] ; [event restoreFromBackup:backupEvent]`
 
+## Offline First .. 
+
+You may create a PYConnection for offline first use.  
+
+Use the access token as a serial parameter to create multiple offline first connection
+
+```objective-c
+PYConnection *access = [PYClient createConnectionWithUsername:kPYConnectionOfflineUsername andAccessToken:@"1"];
+```
+
+assign to a user with
+
+```objective-c
+[access setOnlineModeWithUsername:@"username" andAccessToken:@"token"];
+```
+
 
 
 # License

@@ -21,7 +21,11 @@ FOUNDATION_EXPORT NSString *const PryvErrorJSONResponseIsNotJSON;
 
 FOUNDATION_EXPORT NSString *const PryvErrorHTTPStatusCodeKey;
 
+
+FOUNDATION_EXPORT NSString *const PryvErrorAPIUnreachable;
+
 FOUNDATION_EXPORT NSString *const PryvRequestKey;
+
 
 
 typedef enum PYErrorCode {

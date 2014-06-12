@@ -14,6 +14,7 @@ NSString *const PryvErrorHTTPStatusCodeKey = @"com.pryv.sdk:HTTPStatusCode";
 NSString *const PryvErrorSubErrorsKey = @"com.pryv.sdk:SubErrors";
 NSString *const PryvRequestKey = @"com.pryv.sdk:Request";
 NSString *const PryvErrorJSONResponseIsNotJSON = @"com.pryv.sdk:JSONResponseIsNotJSON";
+NSString *const PryvErrorAPIUnreachable = @"com.pryv.sdk:APIUnreachable";
 
 
 

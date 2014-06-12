@@ -9,6 +9,7 @@
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+TimeManagement.h"
 #import "PYConnection+FetchedStreams.h"
+#import "PYConnection+Synchronization.h"
 #import "PYStream+JSON.h"
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"

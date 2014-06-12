@@ -17,6 +17,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYAttachment.h"
 #import "PYConnection+DataManagement.h"
 #import "PYConnection+FetchedStreams.h"
+#import "PYConnection+Synchronization.h"
 #import "PYCachingController.h"
 #import "PYReachability.h"
 #import "PYCachingController+Event.h"
@@ -24,6 +25,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYUtils.h"
 #import "PYFilter.h"
 #import "PYEventFilterUtility.h"
+#import "PYError.h"
+
+NSString *const kPYConnectionOfflineUsername = @"_off";
 
 @interface PYConnection ()
 
@@ -43,8 +47,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 @synthesize serverTimeInterval = _serverTimeInterval;
 @synthesize connectionReachability = _connectionReachability;
 @synthesize streamsNotSync = _streamsNotSync;
-@synthesize attachmentsCountNotSync = _attachmentsCountNotSync;
-@synthesize attachmentSizeNotSync = _attachmentSizeNotSync;
 @synthesize lastTimeServerContact = _lastTimeServerContact;
 @synthesize cache = _cache;
 @synthesize cacheFilter = _cacheFilter;
@@ -80,6 +82,25 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     return self;
 }
 
+
+- (void) setOnlineModeWithUsername:(NSString *)username andAccessToken:(NSString *)token {
+    if (self.userID != kPYConnectionOfflineUsername) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"connection is not an offline connection"] userInfo:nil];
+    }
+    
+    
+    self.userID = username;
+    self.accessToken = token;
+    
+    // TODO move cache..
+#pragma waring - TODO move cache and others
+    
+    @throw [NSException exceptionWithName:@"Unimplemented"
+                                   reason:[NSString stringWithFormat:@"PYConnection.setOnlineModeWithUsername is not fully implemented"] userInfo:nil];
+    
+}
+
 - (void)dealloc
 {
     [_userID release];
@@ -106,57 +127,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     [super dealloc];
 }
 
-- (BOOL)isOnline
-{
-    return _online;
-}
 
-#pragma mark streams
-
-/**
- Be sure that some structure of the stream as been fetched
- */
--(void) streamsEnsureFetched:(void(^)(NSError *error))done {
-    if (_fetchedStreamsMap) {
-        return done(nil);
-    }
-    //Return current cached streams
-    NSArray *allStreamsFromCache = [self streamsFromCache];
-    if (allStreamsFromCache.count > 0) {
-        self.fetchedStreamsRoots = allStreamsFromCache;
-        [self updateFetchedStreamsMap];
-    }
-    [self streamsOnlineWithFilterParams:nil successHandler:^(NSArray *streamsList) {
-        done(nil);
-    } errorHandler:^(NSError *error) {
-        done(error);
-    }];
-}
-
-/**
- Update cached data in the scope of the cache filter
- */
--(void) updateCache:(void(^)(NSError *error))done {
-   [self eventsOnlineWithFilter:self.cacheFilter successHandler:^(NSArray *eventList, NSNumber *serverTime, NSDictionary *details) {
-       NSLog(@"Synchronized cache with %lu events", [eventList count]);
-       self.cacheFilter.modifiedSince = [serverTime doubleValue];
-   } errorHandler:^(NSError *error) {
-       
-   } shouldSyncAndCache:YES];
-}
-
-/**
- * Update cached data in the scope of the cache filter is greater than the passed filter
- * @return NO is the cache.filter does not cover this filter
- */
--(BOOL) updateCache:(void(^)(NSError *error))done ifCacheIncludes:(PYFilter*)filter {
-    if (! self.cacheFilter) return NO;
-    if (! [PYEventFilterUtility filter:filter isIncludedInFilter:self.cacheFilter]) return NO;
-    [self updateCache:done];
-    return YES;
-}
-
-
+#pragma mark - streams
 
 
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error
@@ -170,6 +142,9 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
+
+
+
 #pragma mark streams
 
 - (NSArray*)allEvents
@@ -178,18 +153,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     // set connection property on events
     [allEvents makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
     return allEvents;
-}
-
-- (NSArray*)eventsNotSync
-{
-    NSMutableArray* result = [[NSMutableArray alloc] init];
-    PYEvent* event;
-    for (event in [self allEvents]) {
-        if ([event toBeSyncSkipCacheTest]) {
-            [result addObject:event];
-        }
-    }
-    return [result autorelease];
 }
 
 
@@ -221,145 +184,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
     return _streamsNotSync;
 }
-
-- (void)syncNotSynchedStreamsIfAny
-{
-    NSMutableArray *nonSyncStreams = [[[NSMutableArray alloc] init] autorelease];
-    [nonSyncStreams addObjectsFromArray:[self.streamsNotSync allObjects]];
-    for (PYStream *stream in nonSyncStreams) {
-        
-        //the condition is not correct : set self.Id to shut error up, should be parentId
-        //        if ([stream.parentId compare:self.Id] == NSOrderedSame) {
-        
-        
-        //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
-        stream.isSyncTriedNow = YES;
-        
-        if (stream.hasTmpId) {
-            if (stream.notSyncModify) {
-                NSLog(@"stream has tmpId and it's mofified -> do nothing. If stream doesn't have server id it needs to be added to server and that is all what is matter. Modified object will update PYStream object in cache and in unsyncList");
-                
-            }
-            NSLog(@"stream has tmpId and it's added");
-            if (stream.notSyncAdd) {
-                NSString *tempId = [NSString stringWithString:stream.streamId];
-                stream.streamId = @"";
-                [self streamCreate:stream
-                    successHandler:^(NSString *createdStreamId) {
-                        //If succedded remove from unsyncSet and add call syncStreamWithServer
-                        //In that method we were search for stream with <createdStreamId> and we should done mapping between server and temp id in cache
-                        stream.synchedAt = [[NSDate date] timeIntervalSince1970];
-                        stream.streamId = [NSString stringWithString:tempId];
-                        
-                        
-                        
-                        
-                        [self.streamsNotSync removeObject:stream];
-                        //We have success here. Stream is cached in streamCreate: method, remove old stream with tmpId from cache
-                        //He will always have tmpId here but just in case for testing (defensive programing)
-                        
-                    } errorHandler:^(NSError *error) {
-                        stream.isSyncTriedNow = NO;
-                        NSLog(@"SYNC error: creating stream failed.");
-                        NSLog(@"%@",error);
-                    }];
-            }
-            
-        }else{
-            NSLog(@"In this case stream has server id");
-            
-            if (stream.notSyncModify) {
-                NSLog(@"for modifified unsync streams with serverId we have to provide only modified values, not full event object");
-                
-                NSDictionary *modifiedPropertiesDic = stream.modifiedStreamPropertiesAndValues;
-                PYStream *modifiedStream = [[PYStream alloc] init];
-                modifiedStream.isSyncTriedNow = YES;
-                
-                [modifiedPropertiesDic enumerateKeysAndObjectsUsingBlock:^(NSString *property, id value, BOOL *stop) {
-                    [modifiedStream setValue:value forKey:property];
-                }];
-                
-                [self streamSaveModifiedAttributeFor:modifiedStream forStreamId:stream.streamId successHandler:^{
-                    
-                    //We have success here. Stream is cached in streamSaveModifiedAttributeFor:forStreamId method
-                    stream.synchedAt = [[NSDate date] timeIntervalSince1970];
-                    [self.streamsNotSync removeObject:stream];
-                    
-                } errorHandler:^(NSError *error) {
-                    modifiedStream.isSyncTriedNow = NO;
-                    stream.isSyncTriedNow = NO;
-                }];
-            }
-        }
-    }
-    // }
-}
-
-
-  // to be batched
-- (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done
-{
-    
-
-    NSArray* eventNotSync = self.eventsNotSync;
-    
-   int eventCounter = (int)eventNotSync.count;
-   __block int successCounter = 0;
- 
-    
-    dispatch_group_t group = dispatch_group_create();
-    
-    for (PYEvent *event in eventNotSync) {
-        dispatch_group_enter(group);
-        //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
-        event.isSyncTriedNow = YES;
-        
-        if ([event toBeDeleteOnSync]) {
-            [self eventTrashOrDelete:event
-                      successHandler:^{
-                          event.isSyncTriedNow = NO;
-                          successCounter++;
-                          dispatch_group_leave(group);
-                      } errorHandler:^(NSError *error) {
-                          event.isSyncTriedNow = NO;
-                          dispatch_group_leave(group);
-                      }];
-        } else if (event.hasTmpId) { // create
-            
-            [self eventCreate:event
-               successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
-                   event.isSyncTriedNow = NO;
-                   successCounter++;
-                   dispatch_group_leave(group);
-               } errorHandler:^(NSError *error) {
-                   //reset flag if fail, very IMPORTANT
-                   event.isSyncTriedNow = NO;
-                   NSLog(@"SYNC error: creating event failed");
-                   NSLog(@"%@",error);
-                   dispatch_group_leave(group);
-               }];
-        } else { // update
-            NSLog(@"In this case event has server id");
-            [self eventSaveModifications:event
-                successHandler:^(NSString *stoppedId) {
-                    event.isSyncTriedNow = NO;
-                    successCounter++;
-                    dispatch_group_leave(group);
-                } errorHandler:^(NSError *error) {
-                    event.isSyncTriedNow = NO;
-                    dispatch_group_leave(group);
-                }];
-        }
-    }
-    
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        if (done) {
-            done(successCounter, eventCounter);
-        }
-    });
-    dispatch_release(group);
-}
-
 
 #pragma mark - Reachability
 
@@ -398,32 +222,6 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     }
 }
 
-- (NSUInteger)attachmentsCountNotSync
-{
-    NSUInteger attCount = 0;
-    for (NSDictionary *eventDic in self.eventsNotSync) {
-        PYEvent *event = [eventDic objectForKey:kUnsyncEventsEventKey];
-        if (event.attachments.count > 0) {
-            attCount += event.attachments.count;
-        }
-    }
-    
-    return attCount;
-}
-
-- (NSInteger)attachmentSizeNotSync
-{
-    NSUInteger attSize = 0;
-    for (NSDictionary *eventDic in self.eventsNotSync) {
-        PYEvent *event = [eventDic objectForKey:kUnsyncEventsEventKey];
-        for (PYAttachment *attachment in event.attachments) {
-            attSize += attachment.fileData.length; //numberOfBytes
-        }
-    }
-    
-    return attSize;
-}
-
 - (NSString *)apiBaseUrl;
 {
     return [NSString stringWithFormat:@"%@://%@%@:%@/%@", self.apiScheme, self.userID, self.apiDomain, @(self.apiPort), self.apiExtraPath];
@@ -437,15 +235,22 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler {
     
-    if (path == nil) path = @"";
-    if (!self.accessToken) {
+    if (self.userID == kPYConnectionOfflineUsername) { // offline mode
         if (failureHandler) {
-            failureHandler([NSError errorWithDomain:@"PYConnection.accessToken is nil" code:1000 userInfo:nil]);
+            failureHandler([[[NSError alloc] initWithDomain:PryvErrorAPIUnreachable code:0 userInfo:nil] autorelease]);
         }
         return;
     }
+    
+    
+    NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithObjectsAndKeys:nil];
+    if (!self.accessToken) {
+        NSLog(@"<WARNING> NO Authorization token");
+    } else {
+        [headers setObject:self.accessToken forKey:@"Authorization"];
+    }
+    if (path == nil) path = @"";
     NSString* fullPath = [NSString stringWithFormat:@"%@%@",[self apiBaseUrl],path];
-    NSDictionary *headers = [NSDictionary dictionaryWithObject:self.accessToken forKey:@"Authorization"];
     
     [PYClient apiRequest:fullPath
                  headers:headers
@@ -488,35 +293,15 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
     
 }
 
-#pragma mark - PrYv API authorize and get server time (GET /)
-
-/**
- * probably useless as now all requests synchronize
- */
-- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
-                             errorHandler:(void(^)(NSError *error))errorHandler{
-    
-    [self apiRequest:@"/profile/app" //TODO: handle app profiles for improved user experience
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
-                 NSLog(@"Successfully authorized and synchronized with server time: %f ", _serverTimeInterval);
-                 if (successHandler)
-                     successHandler(_serverTimeInterval);
-                 
-             } failure:^(NSError *error) {
-                 if (errorHandler)
-                     errorHandler(error);
-                 
-                 
-             }];
-}
-
 - (NSString*) idURL
 {
     return [NSString stringWithFormat:@"%@?auth=%@", [self apiBaseUrl], self.accessToken];
 }
+
+
+
+# pragma mark - cache
+
 
 - (NSString*) idCaching
 {
@@ -524,6 +309,57 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
             stringWithFormat:@"%@_%@%@_%@_%@",
             [PYUtils md5FromString:self.idURL],
             self.userID, self.apiDomain, self.apiExtraPath, self.accessToken];
+}
+
+
+-(void) streamsEnsureFetched:(void(^)(NSError *error))done {
+    if (_fetchedStreamsMap) {
+        return done(nil);
+    }
+    //Return current cached streams
+    NSArray *allStreamsFromCache = [self streamsFromCache];
+    if (allStreamsFromCache.count > 0) {
+        self.fetchedStreamsRoots = allStreamsFromCache;
+        [self updateFetchedStreamsMap];
+    }
+    [self streamsOnlineWithFilterParams:nil successHandler:^(NSArray *streamsList) {
+        done(nil);
+    } errorHandler:^(NSError *error) {
+        done(error);
+    }];
+}
+
+
+/**
+ Update cached data in the scope of the cache filter
+ */
+-(void) updateCache:(void(^)(NSError *error))done {
+    [self eventsOnlineWithFilter:self.cacheFilter successHandler:^(NSArray *eventList, NSNumber *serverTime, NSDictionary *details) {
+        NSLog(@"Synchronized cache with %lu events", [eventList count]);
+        self.cacheFilter.modifiedSince = [serverTime doubleValue];
+    } errorHandler:^(NSError *error) {
+        
+    } shouldSyncAndCache:YES];
+}
+
+/**
+ * Update cached data in the scope of the cache filter is greater than the passed filter
+ * @return NO is the cache.filter does not cover this filter
+ */
+-(BOOL) updateCache:(void(^)(NSError *error))done ifCacheIncludes:(PYFilter*)filter {
+    if (! self.cacheFilter) return NO;
+    if (! [PYEventFilterUtility filter:filter isIncludedInFilter:self.cacheFilter]) return NO;
+    [self updateCache:done];
+    return YES;
+}
+
+
+#pragma mark - connectivity
+
+
+- (BOOL)isOnline
+{
+    return _online;
 }
 
 

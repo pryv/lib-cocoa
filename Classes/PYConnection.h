@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "PYClient.h"
 
+
+FOUNDATION_EXPORT NSString *const kPYConnectionOfflineUsername;
+
 @class PYReachability;
 @class PYEvent;
 @class PYStream;
@@ -58,10 +61,7 @@
 @property (nonatomic, copy) NSArray* fetchedStreamsRoots;
 
 //online/offline
-@property (nonatomic, readonly, getter = isOnline) BOOL online;
 @property (nonatomic, retain) NSMutableSet *streamsNotSync;
-@property (nonatomic, readonly) NSUInteger attachmentsCountNotSync;
-@property (nonatomic, readonly) NSInteger attachmentSizeNotSync;
 
 //ids
 /**
@@ -70,31 +70,33 @@
 @property (nonatomic, readonly) NSString *idURL;
 @property (nonatomic, readonly) NSString *idCaching;
 
-
-
+/**
+ * Initalize a newly created object with a username and accessToken. 
+ * Connection can be initalized offline first with kPYConnectionOfflineUsername as username. The token will be used a serial number for this connection.
+ * @param username pryv's user id for this connection.
+ * @param token access token for this connection.
+ */
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
-- (NSString *)apiBaseUrl;
+/**
+ * Synchronized with a designed account a connection was initalized as in offline first mode. 
+ */
+- (void) setOnlineModeWithUsername:(NSString *)username andAccessToken:(NSString *)token;
 
 /**
- * Get all event known by cache
+ * Return the url used for this connection. Attention! inconsistent if in Offline first mode.
  */
-- (NSArray *)allEvents;
+- (NSString *)apiBaseUrl;
+
+
+
+#pragma mark - streams
+
 
 /**
  Add stream to unsync list. If app tryed to create, modify or trash stream and it fails due to no internet access it will be added to unsync list
  */
 - (void)addStream:(PYStream *)stream toUnsyncList:(NSError *)error;
-
-/**
- Sync all streams from list
- */
-- (void)syncNotSynchedStreamsIfAny;
-
-/**
- Sync all events from list
- */
-- (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done;
 
 /**
  Low level method for web service communication
@@ -107,11 +109,6 @@
            failure:(PYClientFailureBlock)failureHandler;
 
 /**
- Be sure that some structure of the stream as been fetched
- */
--(void) streamsEnsureFetched:(void(^)(NSError *error))done;
-
-/**
  Update cached data in the scope of the cache filter
  */
 -(void) updateCache:(void(^)(NSError *error))done;
@@ -122,19 +119,22 @@
  */
 -(BOOL) updateCache:(void(^)(NSError *error))done ifCacheIncludes:(PYFilter*)filter;
 
+
+
+#pragma mark - cache
+
 /**
- @discussion
- this method simply connect to the Pryv API and synchronize with the localTime
- Delta time in seconds between server and machine is returned
- This method will be called when you start the manager
- 
- GET /
- 
+ Be sure that some structure of the stream as been fetched
  */
-- (void)synchronizeTimeWithSuccessHandler:(void(^)(NSTimeInterval serverTimeInterval))successHandler
-                             errorHandler:(void(^)(NSError *error))errorHandler;
+-(void) streamsEnsureFetched:(void(^)(NSError *error))done;
 
 
+#pragma mark - connectivity
+
+/**
+ *
+ */
+@property (nonatomic, readonly, getter = isOnline) BOOL online;
 
 
 
