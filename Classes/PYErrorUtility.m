@@ -69,8 +69,16 @@
         [userInfo setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
         [userInfo setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
     } else {
-        [userInfo setObject:[JSONerror valueForKeyPath:@"id"] forKey:PryvErrorJSONResponseId];
-        [userInfo setObject:[JSONerror valueForKeyPath:@"message"] forKey:NSLocalizedDescriptionKey];
+        NSString *responseId = [JSONerror valueForKeyPath:@"id"];
+        if (! responseId) responseId = [JSONerror valueForKeyPath:@"reasonID"];
+        if (! responseId) responseId = @"UNKOWN_ERROR";
+        
+        NSString *message = [JSONerror valueForKeyPath:@"message"];
+        if (! message) message = @"UNKNOWN_MESSAGE";
+        
+        [userInfo setObject:responseId forKey:PryvErrorJSONResponseId];
+        [userInfo setObject:message forKey:NSLocalizedDescriptionKey];
+        
     }
     [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
     [userInfo setObject:request forKey:PryvRequestKey];
