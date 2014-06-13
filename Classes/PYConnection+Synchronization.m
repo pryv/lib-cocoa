@@ -146,9 +146,10 @@ BOOL allreadySynchingEvents = NO;
     }
     
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        allreadySynchingEvents = NO;
         if (done) {
             done(successCounter, eventCounter);
-            allreadySynchingEvents = NO;
+            
         }
     });
     dispatch_release(group);
