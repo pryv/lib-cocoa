@@ -33,7 +33,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 
 @property (nonatomic, readwrite) NSTimeInterval serverTimeInterval;
 @property (nonatomic, retain) PYFilter *cacheFilter;
-
+@property (nonatomic, retain) NSTimer *cacheRefreshTimer;
 @end
 
 @implementation PYConnection
@@ -78,6 +78,14 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
         [self pyAccessStatus:self.connectionReachability];
         [self setupDeserializeNonSyncList];
+        
+        self.cacheRefreshTimer= [NSTimer scheduledTimerWithTimeInterval:120.0
+                                         target:self
+                                       selector:@selector(updateCache:)
+                                       userInfo:nil
+                                        repeats:YES];
+        
+        
     }
     return self;
 }
