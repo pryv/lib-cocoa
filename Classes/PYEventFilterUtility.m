@@ -121,7 +121,7 @@
 
     if (destFilter.fromTime > srcFilter.fromTime) return NO;
     
-    if (destFilter.fromTime < srcFilter.toTime) return NO;
+    if (destFilter.toTime < srcFilter.toTime) return NO;
     
     if (destFilter.limit < srcFilter.limit) return NO;
     

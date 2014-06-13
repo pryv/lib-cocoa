@@ -62,8 +62,9 @@
 {
     if (self = [super initWithConnection:connection fromTime:fromTime toTime:toTime
                                    limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:types]) {
+       
+            _currentEventsDic = [[NSMutableDictionary alloc] init];
         
-        _currentEventsDic = [[NSMutableDictionary alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionEventUpdate:)
                                                      name:kPYNotificationEvents object:connection];
         
@@ -148,6 +149,47 @@
     [self notifyEventsToAdd:eventsToAdd toRemove:eventsToRemove modified:eventsModified];
 }
 
+- (void)notifyWithOnlineListSinceLastUpdate:(NSArray*) eventList {
+    
+    
+    NSMutableArray *resultAdd = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *resultModify = [[[NSMutableArray alloc] init] autorelease];
+    
+    ///  /!\ AT WORK - Proof of concept
+    ///
+    ///  Missing: just add what's not present .. and remove that need to removed
+    
+    NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
+    PYEvent* event;
+    if (eventList != nil) {
+        NSEnumerator *toAddEnumerator = [eventList objectEnumerator];
+        while ((event = [toAddEnumerator nextObject]) != nil) {
+            if ([self.currentEventsDic objectForKey:event.clientId] == nil) {
+                [self.currentEventsDic setValue:event forKey:event.clientId];
+                [resultAdd addObject:event];
+            } else {
+                [resultModify addObject:event];
+            }
+        }
+        [userInfo setObject:resultAdd forKey:kPYNotificationKeyAdd];
+        [userInfo setObject:resultModify forKey:kPYNotificationKeyAdd];
+    }
+    
+    if ((resultAdd.count + resultModify.count) == 0 ) {
+        NSLog(@"*43 void Filter notification.. no changes detected ");
+        [userInfo release];
+        return;
+    }
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:kPYNotificationEvents
+     object:self
+     userInfo:userInfo];
+    [userInfo release];
+
+}
+
+
 - (NSArray*)currentEventsSet
 {
     // TODO check order
@@ -157,6 +199,13 @@
 
 - (void)update
 {
+    
+    NSArray* toAdd = [PYEventFilterUtility
+                      filterEventsList:[self.connection allEvents] withFilter:self];
+    [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
+    
+    
+    
     // no need to handle the events, it will be done by the notification listner
     //[self.connection eventsWithFilter:self fromCache:nil andOnline:nil onlineDiffWithCached:nil errorHandler:nil];
     
@@ -182,17 +231,15 @@
         
         
         // -- check online
-        
+      
         
         [self.connection eventsWithFilter:self
                                 fromCache:^(NSArray *cachedEventList) {
                                     [self synchWithList:cachedEventList];
                                     
                                 } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                    
-# warning should be uncommentend .. keep self.modified if no property has been changed since last update
-                                    //self.modifiedSince = [serverTime doubleValue];
-                                    [self synchWithList:onlineEventList];
+
+                                    [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
                                     
                                 } onlineDiffWithCached:nil
                              errorHandler:^(NSError *error) {
@@ -215,6 +262,9 @@
         NSLog(@"<NOTICE> skipping notification as I'm the sender");
         return;
     }
+    
+    
+    
     
     NSArray* toAdd = [PYEventFilterUtility
                       filterEventsList:[message objectForKey:kPYNotificationKeyAdd] withFilter:self];
