@@ -658,7 +658,19 @@
                  
              } failure:^(NSError *error) {
                  
-                 if (error.code == kCFURLErrorNotConnectedToInternet || error.code == kCFURLErrorNetworkConnectionLost) {
+                 BOOL ignore = NO;
+                 if ([@"unknown-resource" isEqualToString:
+                      [error.userInfo objectForKey:@"com.pryv.sdk:JSONResponseId"] ]) {
+                     NSLog(@"<WARNING> tried to remove unkown object");
+                     ignore = YES;
+                 }
+                 
+                 if (error.code == kCFURLErrorNotConnectedToInternet ||
+                     error.code == kCFURLErrorNetworkConnectionLost) {
+                      ignore = YES;
+                 }
+                 
+                 if (ignore) {
                      if (event.isSyncTriedNow == NO) {
                          
                          if (event.trashed == NO) {
