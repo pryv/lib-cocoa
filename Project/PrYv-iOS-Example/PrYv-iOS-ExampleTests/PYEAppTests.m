@@ -12,6 +12,7 @@
 #import <PryvApiKit/PryvApiKit.h>
 #import "PYTestsUtils.h"
 #import "PYCachingController.h"
+#import "PYCachingController+Event.h"
 
 @interface PYEAppTests ()
 
@@ -81,7 +82,6 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
     self.connection.apiPort = originalApiPort; // set conn onnLine
    
     
-    __block NSTimeInterval startingSynchAt = [[NSDate date] timeIntervalSince1970];
     
     //--####### Launch synch
     __block BOOL step_2_SynchEvents = NO;

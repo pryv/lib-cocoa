@@ -143,9 +143,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 }
 
 
-
-
-#pragma mark streams
+#pragma mark events
 
 - (NSArray*)allEvents
 {
@@ -156,9 +154,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 }
 
 
-/**
- * Load event form cache.. Part of this init
- */
+#warning - refactor
 - (void)setupDeserializeNonSyncList
 {
     
@@ -175,7 +171,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 }
 
 
-
+#warning - refactor
 - (NSMutableSet *)streamsNotSync
 {
     if (!_streamsNotSync) {

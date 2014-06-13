@@ -128,6 +128,10 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOfflineUsername;
  */
 -(void) streamsEnsureFetched:(void(^)(NSError *error))done;
 
+#pragma marl - cache events
+
+/** all events form cache ... to be refactored **/
+- (NSArray*)allEvents;
 
 #pragma mark - connectivity
 

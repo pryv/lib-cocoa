@@ -61,6 +61,10 @@
     return self;
 }
 
+- (BOOL)pyWebLoginShowUIViewController:(UIViewController*)loginViewController {
+    return NO;
+};
+
 - (void)pyWebLoginSuccess:(PYConnection*)pyAccess {
     NSLog(@"Signin With Success %@ %@",pyAccess.userID,pyAccess.accessToken);
     [pyAccess synchronizeTimeWithSuccessHandler:nil errorHandler:nil];

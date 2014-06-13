@@ -9,6 +9,7 @@
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
 #import "PYClient.h"
+#import "PYClient+Utils.h"
 #import "PYError.h"
 
 @interface PYAsyncService ()

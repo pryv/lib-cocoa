@@ -18,6 +18,7 @@
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
+#import "PYClient+Utils.h"
 
 
 
