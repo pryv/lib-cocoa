@@ -88,9 +88,11 @@
 
 
 // to be batched
+BOOL allreadySynchingEvents = NO;
 - (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done
 {
-    
+    if (allreadySynchingEvents) return;
+    allreadySynchingEvents = YES;
     
     NSArray* eventNotSync = self.eventsNotSync;
     
@@ -146,6 +148,7 @@
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         if (done) {
             done(successCounter, eventCounter);
+            allreadySynchingEvents = NO;
         }
     });
     dispatch_release(group);

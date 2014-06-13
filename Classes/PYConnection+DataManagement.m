@@ -406,7 +406,7 @@
      */
     if (syncAndCache == YES) {
 # warning - change logic
-        //  [self syncNotSynchedEventsIfAny];
+        [self syncNotSynchedEventsIfAny:nil];
     }
     
     // shush if filter.onlyStreamIds = []
