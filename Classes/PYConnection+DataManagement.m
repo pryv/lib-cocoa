@@ -630,8 +630,7 @@
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *error))errorHandler
 {
-    
-    
+    [event compareAndSetModifiedPropertiesFromCache];
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS, event.eventId]
               method:PYRequestMethodDELETE
