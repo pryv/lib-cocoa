@@ -69,21 +69,23 @@
     if (path == nil) path = @"";
     NSMutableString *pathString = [NSMutableString stringWithString:path];
     
-    [pathString appendString:@"?"];
-    for (NSString *key in [params allKeys])
-    {
-        id value = [params objectForKey:key];
-        if ([value isKindOfClass:[NSArray class]]) {
-            NSArray *valueArray = value;
-            [valueArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                [pathString appendFormat:@"%@[]=%@&",key,obj];
-            }];
-        }else{
-            [pathString appendFormat:@"%@=%@&",key,[params objectForKey:key]];
-            
+    if (params) {
+        [pathString appendString:@"?"];
+        for (NSString *key in [params allKeys])
+        {
+            id value = [params objectForKey:key];
+            if ([value isKindOfClass:[NSArray class]]) {
+                NSArray *valueArray = value;
+                [valueArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    [pathString appendFormat:@"%@[]=%@&",key,obj];
+                }];
+            }else{
+                [pathString appendFormat:@"%@=%@&",key,[params objectForKey:key]];
+                
+            }
         }
+        [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
     }
-    [pathString deleteCharactersInRange:NSMakeRange([pathString length]-1, 1)];
     return pathString;
     
 }
