@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E00541A1910052100C6B64C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E0054191910052100C6B64C /* Default-568h@2x.png */; };
 		4E242C98194F2A09006C6FD2 /* PYAccessesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */; };
+		4E4D79C31951EBF500346849 /* PYFollowedSlicesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */; };
 		C4F5E165A0854339A598B912 /* libPods-PrYv-iOS-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6108598D0D4E12A47FF121 /* libPods-PrYv-iOS-ExampleTests.a */; };
 		EEE2913A71AC4BFD8DE0FC78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229784B4DC274BB7947EF0E8 /* libPods.a */; };
 		FB1CEF3A18C4B1AB002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */; };
@@ -58,6 +59,7 @@
 		4602F0D58F054E1BBA13E3E7 /* Pods-PrYv-iOS-ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-iOS-ExampleTests.xcconfig"; path = "Pods/Pods-PrYv-iOS-ExampleTests.xcconfig"; sourceTree = "<group>"; };
 		4E0054191910052100C6B64C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYAccessesTests.m; path = ../common/PYAccessesTests.m; sourceTree = "<group>"; };
+		4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYFollowedSlicesTests.m; path = ../common/PYFollowedSlicesTests.m; sourceTree = "<group>"; };
 		A90F67BA884C4DF1A82D608F /* libPods-PrYv-iOS-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-iOS-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D326D046B84C40949AE762EA /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				FB51398518B2185F000F9BED /* PYEventFilterTest.m */,
 				FB51398718B2185F000F9BED /* PYEventsTests.m */,
 				4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */,
+				4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */,
 				FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */,
 				FB51398D18B2185F000F9BED /* PYStreamsTests.m */,
 				FB1CEF4718C4F22F002584F7 /* Resources */,
@@ -445,6 +448,7 @@
 				FBB2D37C18DC8844006B063C /* PYSupervisorTest.m in Sources */,
 				FB51399D18B2185F000F9BED /* PYTestsUtils.m in Sources */,
 				FB1CEF3A18C4B1AB002584F7 /* PYEventAttachmentTests.m in Sources */,
+				4E4D79C31951EBF500346849 /* PYFollowedSlicesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

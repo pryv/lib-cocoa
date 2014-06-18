@@ -19,6 +19,7 @@ FOUNDATION_EXPORT NSString *const kPYAPIDomainStaging;
 FOUNDATION_EXPORT NSString *const kROUTE_EVENTS;
 FOUNDATION_EXPORT NSString *const kROUTE_STREAMS;
 FOUNDATION_EXPORT NSString *const kROUTE_ACCESSES;
+FOUNDATION_EXPORT NSString *const kROUTE_FOLLOWEDSLICES;
 
 
 NSString *const kPYAPIResponseEvents;
@@ -28,6 +29,7 @@ NSString *const kPYAPIResponseStream;
 NSString *const kPYAPIResponseMeta;
 NSString *const kPYAPIResponseMetaServerTime;
 NSString *const kPYAPIResponseAccesses;
+NSString *const kPYAPIResponseFollowedSlices;
 
 FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestStreamId;
 FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestAllStreams;
