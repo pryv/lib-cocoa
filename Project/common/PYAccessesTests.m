@@ -8,9 +8,16 @@
 
 #import "PYBaseConnectionTests.h"
 #import "PYConnection+Accesses.h"
+#import "PYTestConstants.h"
 
 @interface PYAccessesTests : PYBaseConnectionTests
+
+
+@property (nonatomic, retain) PYConnection *connectionTrusted;
+
 @end
+
+
 
 @implementation PYAccessesTests
 
@@ -18,7 +25,10 @@
 - (void)setUp
 {
     [super setUp];
-    
+    self.connectionTrusted = [PYClient createConnectionWithUsername:kPYAPITestAccount
+                                              andAccessToken:kPYAPITestAccessTrustedToken];
+    STAssertNotNil(self.connectionTrusted, @"Connection not created.");
+
     
     
 }
@@ -29,7 +39,7 @@
 
     NOT_DONE(done);
     
-    [self.connection accessesOnlineWithSuccessHandler:^(NSArray *accessesList) {
+    [self.connectionTrusted accessesOnlineWithSuccessHandler:^(NSArray *accessesList) {
         
         
         DONE(done);

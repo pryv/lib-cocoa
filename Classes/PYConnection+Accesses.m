@@ -16,7 +16,7 @@
                            errorHandler:(void (^) (NSError *error))errorHandler {
     
     
-    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS  withParams:nil]
+    [self apiRequest:[PYClient getURLPath:kROUTE_ACCESSES  withParams:nil]
               method:PYRequestMethodGET
             postData:nil
          attachments:nil

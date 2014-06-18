@@ -12,4 +12,5 @@
 
 FOUNDATION_EXPORT NSString *const kPYAPITestAccount;
 FOUNDATION_EXPORT NSString *const kPYAPITestAccessToken;
+FOUNDATION_EXPORT NSString *const kPYAPITestAccessTrustedToken;
 FOUNDATION_EXPORT NSString *const kPYAPITestStreamId;

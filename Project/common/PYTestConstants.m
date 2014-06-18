@@ -10,4 +10,5 @@
 
 NSString *const kPYAPITestAccount = @"perkikiki";
 NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
+NSString *const kPYAPITestAccessTrustedToken = @"chwjc45ln000ohqwk1dabet0c"; //@"chwi036ph000zpxwkrx3hbvar";
 NSString *const kPYAPITestStreamId = @"diary";
