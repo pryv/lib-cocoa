@@ -26,6 +26,13 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYFilter.h"
 #import "PYEventFilterUtility.h"
 #import "PYError.h"
+#import "PYClient.h"
+
+NSString *const kPYConnectionOptionFetchStructure = @"fetchStructure";
+NSString *const kPYConnectionOptionFetchAccessInfos = @"fetchAccessInfos";
+
+NSString *const kPYConnectionOptionValueYes = @"yes";
+NSString *const kPYConnectionOptionValueNo = @"no";
 
 NSString *const kPYConnectionOfflineUsername = @"_off";
 
@@ -52,6 +59,8 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 @synthesize cacheFilter = _cacheFilter;
 @synthesize fetchedStreamsMap = _fetchedStreamsMap;
 @synthesize fetchedStreamsRoots = _fetchedStreamsRoots;
+@synthesize options = _options;
+@synthesize cacheForGetAPIRequests = _cacheForGetAPIRequests;
 
 
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token {
@@ -85,9 +94,57 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
                                        userInfo:nil
                                         repeats:YES];
         
-        
+        self.cacheForGetAPIRequests = [[NSMutableDictionary alloc] init];
     }
     return self;
+}
+
+
+/**
+ * return true if option is activated for key
+ */
+- (BOOL) optionIsActivatedForKey:(NSString*)optionKey {
+    if (! _options) return NO;
+    NSString* value = [_options objectForKey:optionKey];
+    if (! value) return NO;
+    return [kPYConnectionOptionValueYes isEqualToString:value];
+}
+
+- (void) setUpWithOptions:(NSDictionary*)optionDict andCallBack:(void(^)(NSError *error))done {
+    _options = [NSMutableDictionary dictionaryWithDictionary:optionDict];
+    
+    dispatch_group_t group = dispatch_group_create();
+    
+    
+    __block NSError* errorFetchStructure;
+    if ([self optionIsActivatedForKey:kPYConnectionOptionFetchStructure]) {
+        dispatch_group_enter(group);
+        [self streamsEnsureFetched:^(NSError *error) {
+            errorFetchStructure = error;
+            dispatch_group_leave(group);
+        }];
+        
+    }
+    
+    __block NSError* errorAccessInfos;
+    if ([self optionIsActivatedForKey:kPYConnectionOptionFetchAccessInfos]) {
+        dispatch_group_enter(group);
+        // TODO fetch accessinfos
+            dispatch_group_leave(group);
+        
+    }
+    
+    
+    // only the first error is sent
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (done) {
+            if (errorFetchStructure) return done(errorFetchStructure);
+            if (errorAccessInfos) return done(errorAccessInfos);
+            done(nil);
+        }
+    });
+    dispatch_release(group);
+    
 }
 
 
@@ -271,7 +328,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
                      }
                      
                      if (serverTime == nil) {
-                         NSLog(@"Error cannot find Server-Time in headers path: %@", fullPath);
+                         NSLog(@"Error cannot find Server-Time in meta path: %@", fullPath);
                          
                          
                          /*

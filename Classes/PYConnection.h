@@ -12,6 +12,13 @@
 
 FOUNDATION_EXPORT NSString *const kPYConnectionOfflineUsername;
 
+
+FOUNDATION_EXPORT NSString *const kPYConnectionOptionFetchStructure;
+FOUNDATION_EXPORT NSString *const kPYConnectionOptionFetchAccessInfos;
+
+FOUNDATION_EXPORT NSString *const kPYConnectionOptionValueYes;
+FOUNDATION_EXPORT NSString *const kPYConnectionOptionValueNo;
+
 @class PYReachability;
 @class PYEvent;
 @class PYStream;
@@ -43,6 +50,7 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOfflineUsername;
     NSTimeInterval _serverTimeInterval;
     NSMutableDictionary* _fetchedStreamsMap;
     NSArray* _fetchedStreamsRoots;
+    NSMutableDictionary* _options;
 }
 
 @property (nonatomic, copy) NSString *userID;
@@ -54,7 +62,9 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOfflineUsername;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 @property (nonatomic, retain) PYReachability *connectionReachability;
 @property (nonatomic, retain) PYCachingController *cache;
+@property (nonatomic, copy) NSMutableDictionary *options;
 
+@property (nonatomic, retain) NSMutableDictionary *cacheForGetAPIRequests;
 
 @property (nonatomic, readonly) NSTimeInterval serverTimeInterval;
 @property (nonatomic, copy) NSMutableDictionary* fetchedStreamsMap;
@@ -77,6 +87,20 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOfflineUsername;
  * @param token access token for this connection.
  */
 - (id) initWithUsername:(NSString *)username andAccessToken:(NSString *)token;
+
+
+/**
+ * Options are
+ * kPYConnectionOptionFetchStructure auto / none
+ * kPYConnectionOptionFetchAccess auto / none
+ */
+- (void) setUpWithOptions:(NSDictionary*)optionDict andCallBack:(void(^)(NSError *error))done;
+
+/**
+ * return true if option is activated for key
+ */
+- (BOOL) optionIsActivatedForKey:(NSString*)optionKey;
+
 
 /**
  * Synchronized with a designed account a connection was initalized as in offline first mode. 
