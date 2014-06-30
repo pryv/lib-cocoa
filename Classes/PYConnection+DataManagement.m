@@ -527,7 +527,7 @@
        errorHandler:(void (^)(NSError *error))errorHandler
 {
     
-    if (event.connection == nil) {
+    if (! event.connection) {
         event.connection = self;
     }
     if (event.connection != self)
@@ -536,6 +536,13 @@
                              errorWithDomain:@"Cannot create PYEvent on API with an different connection"
                              code:500 userInfo:nil]);
     }
+    if (event.eventId)
+    {
+        return errorHandler([NSError
+                             errorWithDomain:@"Cannot create an already existing PYEvent"
+                             code:500 userInfo:nil]);
+    }
+    
     
     
     
@@ -600,7 +607,7 @@
                  
                  //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
                  
-                 if ([event eventDate] == nil) {
+                 if (! [event eventDate]) {
                      [event setEventDate:[NSDate date]]; // now
                  }
                  
