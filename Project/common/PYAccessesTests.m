@@ -39,13 +39,11 @@
 
     NOT_DONE(done);
     
-    [self.connectionTrusted accessesOnlineWithSuccessHandler:^(NSArray *accessesList) {
-        
-        
+    [self.connectionTrusted accessesWithSuccessHandler:^(NSDate *cachedAt, NSArray *accessesList) {
         DONE(done);
-    } errorHandler:^(NSError *error) {
-          STFail(@"Error occured when geting access. %@", error);
-         DONE(done);
+    } refreshCacheIfOlderThan:0 failureHandler:^(NSError *error) {
+        STFail(@"Error occured when geting access. %@", error);
+        DONE(done);
     }];
      
          

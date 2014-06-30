@@ -10,7 +10,12 @@
 
 @interface PYConnection (FollowedSlices)
 
--(void)followedSlicesOnlineWithSuccessHandler:(void (^) (NSArray *slicesList))onlineSlicesList
-                           errorHandler:(void (^) (NSError *error))errorHandler;
+/**
+ * retrieve the followedSlices online or from cache.
+ * @param maxAge If <= 0 try to fetch online
+ */
+-(void)followedSlicesWithSuccessHandler:(void (^) (NSDate* cachedAt, NSArray *slicesList))slicesList
+                refreshCacheIfOlderThan:(NSTimeInterval)maxAge
+                                failure:(void (^) (NSError *error))failure;
 
 @end

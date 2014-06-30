@@ -10,7 +10,8 @@
 
 @interface PYConnection (Accesses)
 
--(void)accessesOnlineWithSuccessHandler:(void (^) (NSArray *accessesList))onlineAccessesList
-                           errorHandler:(void (^) (NSError *error))errorHandler;
+-(void)accessesWithSuccessHandler:(void (^) (NSDate* cachedAt, NSArray *accessesList))accessesList
+          refreshCacheIfOlderThan:(NSTimeInterval)maxAge
+                   failureHandler:(void (^) (NSError *error))failureHandler;
 
 @end

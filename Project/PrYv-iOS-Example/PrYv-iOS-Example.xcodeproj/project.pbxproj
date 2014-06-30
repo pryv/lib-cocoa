@@ -10,6 +10,7 @@
 		4E00541A1910052100C6B64C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E0054191910052100C6B64C /* Default-568h@2x.png */; };
 		4E242C98194F2A09006C6FD2 /* PYAccessesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */; };
 		4E4D79C31951EBF500346849 /* PYFollowedSlicesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */; };
+		4E52FA5519598FE90096F794 /* PYProfileAndInfosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5FF67319598BC400835D0C /* PYProfileAndInfosTests.m */; };
 		C4F5E165A0854339A598B912 /* libPods-PrYv-iOS-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6108598D0D4E12A47FF121 /* libPods-PrYv-iOS-ExampleTests.a */; };
 		EEE2913A71AC4BFD8DE0FC78 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 229784B4DC274BB7947EF0E8 /* libPods.a */; };
 		FB1CEF3A18C4B1AB002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */; };
@@ -60,6 +61,7 @@
 		4E0054191910052100C6B64C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYAccessesTests.m; path = ../common/PYAccessesTests.m; sourceTree = "<group>"; };
 		4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYFollowedSlicesTests.m; path = ../common/PYFollowedSlicesTests.m; sourceTree = "<group>"; };
+		4E5FF67319598BC400835D0C /* PYProfileAndInfosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYProfileAndInfosTests.m; path = ../common/PYProfileAndInfosTests.m; sourceTree = "<group>"; };
 		A90F67BA884C4DF1A82D608F /* libPods-PrYv-iOS-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-iOS-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D326D046B84C40949AE762EA /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				FB51398518B2185F000F9BED /* PYEventFilterTest.m */,
 				FB51398718B2185F000F9BED /* PYEventsTests.m */,
 				4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */,
+				4E5FF67319598BC400835D0C /* PYProfileAndInfosTests.m */,
 				4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */,
 				FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */,
 				FB51398D18B2185F000F9BED /* PYStreamsTests.m */,
@@ -436,6 +439,7 @@
 			files = (
 				4E242C98194F2A09006C6FD2 /* PYAccessesTests.m in Sources */,
 				FB51396518B21679000F9BED /* PrYv_iOS_ExampleTests.m in Sources */,
+				4E52FA5519598FE90096F794 /* PYProfileAndInfosTests.m in Sources */,
 				FB51399818B2185F000F9BED /* PYEventsTests.m in Sources */,
 				FB51399C18B2185F000F9BED /* PYTestConstants.m in Sources */,
 				FB51399518B2185F000F9BED /* PryvCachingTests.m in Sources */,
@@ -592,9 +596,9 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-iOS-Example.app/PrYv-iOS-Example";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-iOS-Example/PrYv-iOS-Example-Prefix.pch";
@@ -617,9 +621,9 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-iOS-Example.app/PrYv-iOS-Example";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-iOS-Example/PrYv-iOS-Example-Prefix.pch";

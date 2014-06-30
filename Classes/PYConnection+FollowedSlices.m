@@ -7,36 +7,27 @@
 //
 
 #import "PYConnection+FollowedSlices.h"
+#import "PYConnection+CacheForGetAPIRequest.h"
 #import "PYConstants.h"
 #import "PYClient+Utils.h"
 
 @implementation PYConnection (FollowedSlices)
 
--(void)followedSlicesOnlineWithSuccessHandler:(void (^) (NSArray *slicesList))onlineSlicesList
-                           errorHandler:(void (^) (NSError *error))errorHandler {
-    
-    
-    [self apiRequest:[PYClient getURLPath:kROUTE_FOLLOWEDSLICES  withParams:nil]
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                 
-                 NSArray *JSON = responseDict[kPYAPIResponseFollowedSlices];
-                 
-                 
-                 if (onlineSlicesList) {
-                     return onlineSlicesList(JSON);
-                     
-                 }
-                 
-                 
-             } failure:^(NSError *error) {
-                 if (errorHandler) {
-                     errorHandler (error);
-                 }
-             }];
-}
+-(void)followedSlicesWithSuccessHandler:(void (^) (NSDate* cachedAt, NSArray *slicesList))slicesList
+                refreshCacheIfOlderThan:(NSTimeInterval)maxAge
+                                failure:(void (^) (NSError *error))failureHandler;
 
+{
+    
+    [self apiRequestGetOnlineOrFromCache:kROUTE_FOLLOWEDSLICES refreshCacheIfOlderThan:maxAge
+                                 success:^(NSDate *cachedAt, NSDictionary *responseDict) {
+        NSArray *rArray = responseDict[kPYAPIResponseFollowedSlices];
+        if (slicesList) {
+            return slicesList(cachedAt, rArray);
+            
+        }
+
+    } failure:failureHandler];
+  }
 
 @end

@@ -39,15 +39,13 @@
     
     NOT_DONE(done);
     
-    [self.connectionTrusted followedSlicesOnlineWithSuccessHandler:^(NSArray *FollowedSlicesList) {
-        
-        
+    [self.connectionTrusted followedSlicesWithSuccessHandler:^(NSDate *cachedAt, NSArray *slicesList) {
         DONE(done);
-    } errorHandler:^(NSError *error) {
+    } refreshCacheIfOlderThan:0 failure:^(NSError *error) {
         STFail(@"Error occured when getting followedSlices. %@", error);
         DONE(done);
     }];
-    
+ 
     
     WAIT_FOR_DONE(done);
     

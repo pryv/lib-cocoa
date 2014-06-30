@@ -19,12 +19,16 @@ NSString *const kPYAPIDomainStaging = @".pryv.in";
 NSString *const kROUTE_EVENTS = @"events";
 NSString *const kROUTE_STREAMS = @"streams";
 NSString *const kROUTE_ACCESSES = @"accesses";
+NSString *const kROUTE_ACCESSINFOS = @"access-info";
+NSString *const kROUTE_PROFILEPUBLIC = @"profile/public";
+NSString *const kROUTE_PROFILEAPP = @"profile/app";
 NSString *const kROUTE_FOLLOWEDSLICES = @"followed-slices";
 
 NSString *const kPYAPIResponseEvents = @"events";
 NSString *const kPYAPIResponseEvent = @"event";
 NSString *const kPYAPIResponseStreams = @"streams";
 NSString *const kPYAPIResponseStream = @"stream";
+NSString *const kPYAPIResponseProfile = @"profile";
 NSString *const kPYAPIResponseAccesses = @"accesses";
 NSString *const kPYAPIResponseFollowedSlices = @"followedSlices";
 

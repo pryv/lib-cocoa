@@ -10,7 +10,6 @@
 #import "PYTestConstants.h"
 #import "PYTestsUtils.h"
 
-
 @implementation PYBaseConnectionTests
 
 @synthesize connection = _connection;

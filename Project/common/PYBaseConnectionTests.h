@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 PrYv. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+
 #import <PryvApiKit/PryvApiKit.h>
+#import <SenTestingKit/SenTestingKit.h>
 
 
 #define NOT_DONE(done) __block BOOL done = NO;

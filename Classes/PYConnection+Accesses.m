@@ -7,34 +7,25 @@
 //
 
 #import "PYConnection+Accesses.h"
+#import "PYConnection+CacheForGetAPIRequest.h"
 #import "PYConstants.h"
 #import "PYClient+Utils.h"
 
 @implementation PYConnection (Accesses)
 
--(void)accessesOnlineWithSuccessHandler:(void (^) (NSArray *accessesList))onlineAccessesList
-                           errorHandler:(void (^) (NSError *error))errorHandler {
+-(void)accessesWithSuccessHandler:(void (^) (NSDate* cachedAt, NSArray *accessesList))accessesList
+          refreshCacheIfOlderThan:(NSTimeInterval)maxAge
+                   failureHandler:(void (^) (NSError *error))failureHandler {
     
+    [self apiRequestGetOnlineOrFromCache:kROUTE_ACCESSES refreshCacheIfOlderThan:maxAge
+                                 success:^(NSDate *cachedAt, NSDictionary *responseDict) {
+                                     NSArray *rArray = responseDict[kPYAPIResponseAccesses];
+                                     if (accessesList) {
+                                         return accessesList(cachedAt, rArray);
+                                         
+                                     }
+                                     
+                                 } failure:failureHandler];
     
-    [self apiRequest:[PYClient getURLPath:kROUTE_ACCESSES  withParams:nil]
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                 
-                 NSArray *JSON = responseDict[kPYAPIResponseAccesses];
-                 
-                 
-                 if (onlineAccessesList) {
-                     return onlineAccessesList(JSON);
-                     
-                 }
-                
-                 
-             } failure:^(NSError *error) {
-                 if (errorHandler) {
-                     errorHandler (error);
-                 }
-             }];
 }
 @end
