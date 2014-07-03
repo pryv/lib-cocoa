@@ -29,6 +29,17 @@
  
  */
 
+
++ (BOOL)isAPIUnreachableError:(NSError*)error {
+    if (! error) return NO;
+    return [error.domain isEqualToString:PryvErrorAPIUnreachable];
+}
+
+
++ (NSError *)getAPIUnreachableWithUserInfos:(NSDictionary*)userInfos {
+    return [[[NSError alloc] initWithDomain:PryvErrorAPIUnreachable code:0 userInfo:userInfos] autorelease];
+}
+
 + (NSError *)getErrorFromJSONResponse:(NSDictionary*) JSONerror
                                 error:(NSError *)error
                          withResponse:(NSHTTPURLResponse *)response

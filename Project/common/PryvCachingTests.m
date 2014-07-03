@@ -2,7 +2,6 @@
 //  PryvCachingTests.m
 //  PryvApiKit
 //
-//  Created by Nenad Jelic on 6/24/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
@@ -61,7 +60,7 @@
                                                                    tags:nil];
     
     
-    __block BOOL done;
+    NOT_DONE(eventsWithFilter);
     [self.connection eventsWithFilter:pyFilter
                             fromCache:NULL
                             andOnline:^(NSArray *onlineEventList, NSNumber *serverTime)
@@ -74,20 +73,16 @@
          STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
          [event resetFromCachingDictionary:initialState];
          STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
-         done = YES;
+         DONE(eventsWithFilter);
      } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
 
      } errorHandler:^(NSError *error) {
          STFail(@"Failed fetching event.");
-         done = YES;
+         DONE(eventsWithFilter);
      }];
     
-    [PYTestsUtils waitForBOOL:&done forSeconds:10];
-    if (!done) {
-        STFail(@"Timeout fetching event.");
-        return;
-    }
-
+    WAIT_FOR_DONE_WITH_TIMEOUT(eventsWithFilter, 20);
+    if (!eventsWithFilter) STFail(@"Timeout eventsWithFilter");
 
 }
 

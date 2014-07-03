@@ -68,6 +68,8 @@
 @property (nonatomic, retain) NSDictionary *clientData;
 @property (nonatomic) BOOL trashed;
 
+@property (nonatomic, retain) NSError *synchError; // This is set when an error occured on creation / delete / update
+
 @property (nonatomic) NSTimeInterval modified;
 
 # pragma mark - synch status

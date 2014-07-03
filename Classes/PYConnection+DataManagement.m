@@ -19,7 +19,7 @@
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
 #import "PYClient+Utils.h"
-
+#import "PYErrorUtility.h"
 
 
 @interface PYConnection ()
@@ -335,9 +335,9 @@
 #warning - we should remove the dispatch as soon as event is faster
     dispatch_async(dispatch_get_main_queue(), ^{
         
-       
+        
         NSArray *eventsFromCache = [self allEvents];
-       
+        
         
         
         __block NSArray *filteredCachedEventList = [PYEventFilterUtility filterEventsList:eventsFromCache
@@ -348,7 +348,7 @@
 #warning - check that retain ... without it was crashing in the subblock ..
         [filteredCachedEventList retain];
         
-       
+        
         if (cachedEvents) {
             if ([eventsFromCache count] > 0) {
                 //if there are cached events return it, when get response return in onlineList
@@ -365,7 +365,7 @@
                               onlineEvents(onlineEventList, serverTime);
                           }
                           NSLog(@"*afx3 A %f", [afx3 timeIntervalSinceNow]);
-
+                          
                           if (syncDetails) {
                               // give differences between cachedEvents and received events
                               
@@ -379,7 +379,7 @@
                                           [details objectForKey:kPYNotificationKeyModify]);
                               filteredCachedEventList = nil;
                           }
-                           NSLog(@"*afx3 B %f", [afx3 timeIntervalSinceNow]);
+                          NSLog(@"*afx3 B %f", [afx3 timeIntervalSinceNow]);
                       }
                         errorHandler:errorHandler
                   shouldSyncAndCache:YES];
@@ -479,7 +479,7 @@
                      successBlock(eventsArray, serverTime, details);
                      
                  }
-                  NSLog(@"*afx2 B %f", [afx2 timeIntervalSinceNow]);
+                 NSLog(@"*afx2 B %f", [afx2 timeIntervalSinceNow]);
                  
              } failure:^(NSError *error) {
                  if (errorHandler) {
@@ -544,8 +544,6 @@
     }
     
     
-    
-    
     // load filedata in attachment from cache if needed
     if (event.attachments) {
         for (PYAttachment* att in event.attachments) {
@@ -595,25 +593,36 @@
                  
                  
              } failure:^(NSError *error) {
-                 if (event.isSyncTriedNow == YES) {
-                     NSLog(@"Event wants to be synchronized on server from unsync list but there is no internet %@", error);
+                 
+                 if (! [PYErrorUtility isAPIUnreachableError:error]) { // this is an API error forward it
+                     event.synchError = error; // set the event with
+                     [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                         object:self
+                                                                       userInfo:@{kPYNotificationKeySynchError: @[event]}];
                      
-                     if (successHandler) {
-                         successHandler (nil, @"", event);
-                     }
+                     // if the event is at synch (already cached) and is faulty we should remove it from cache
+                      if (event.isSyncTriedNow) [self.cache removeEvent:event];
                      
+                     if (errorHandler) errorHandler(error);
+                     return;
+                 }
+                 
+                 // --- API Unreachable
+                 
+                 if (event.isSyncTriedNow) { // already synchronizing event creation -> skip
+                     if (successHandler) successHandler (nil, @"", event);
                      return ;
                  }
                  
-                 //If we didn't try to sync event from unsync list that means that we have to cache that event, otherwise leave it as is
                  
-                 if (! [event eventDate]) {
+                 // --- ADD to cache
+                 
+                 
+                 if (! [event eventDate]) { // set a date if none
                      [event setEventDate:[NSDate date]]; // now
                  }
                  
-                 //When we try to create event and we came here it have tmpId
                  
-                 //return that created id so it can work offline. Event will be cached when added to unsync list
                  if (event.attachments.count > 0) {
                      for (PYAttachment *attachment in event.attachments) {
                          //  attachment.mimeType = @"mimeType";
@@ -664,74 +673,78 @@
                  
              } failure:^(NSError *error) {
                  
-                 BOOL ignore = NO;
-                 if ([@"unknown-resource" isEqualToString:
-                      [error.userInfo objectForKey:@"com.pryv.sdk:JSONResponseId"] ]) {
+                 // tried to remove an unkown ressource
+                 if ([@"unknown-resource" isEqualToString:[error.userInfo objectForKey:@"com.pryv.sdk:JSONResponseId"] ]) {
                      NSLog(@"<WARNING> tried to remove unkown object");
-                     ignore = YES;
+                     event.trashed = YES;
+                     [self.cache removeEvent:event];
+                     [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                         object:self
+                                                                       userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                     
+                     if (successHandler) successHandler();
+                     return;
                  }
                  
-                 if (error.code == kCFURLErrorNotConnectedToInternet ||
-                     error.code == kCFURLErrorNetworkConnectionLost) {
-                      ignore = YES;
+                 
+                 if (! [PYErrorUtility isAPIUnreachableError:error]) { // this is an API error forward it
+                     event.synchError = error; // set the event with
+                     [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                         object:self
+                                                                       userInfo:@{kPYNotificationKeySynchError: @[event]}];
+                     if (errorHandler) errorHandler(error);
+                     return;
                  }
                  
-                 if (ignore) {
-                     if (event.isSyncTriedNow == NO) {
-                         
-                         if (event.trashed == NO) {
-                             event.trashed = YES;
-                             [self.cache cacheEvent:event];
-                         }else{
-                             //if event has trashed = yes flag it needs to be deleted from cache
-                             [self.cache removeEvent:event];
-                         }
-                         
-                         [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
-                                                                             object:self
-                                                                           userInfo:@{kPYNotificationKeyDelete: @[event]}];
-                         if (successHandler) {
-                             successHandler();
-                         }
-                         return;
-                         
-                     } else {
-                         NSLog(@"Event with server id wants to be synchronized on server from unsync list but there is no internet");
-                     }
+                 if (event.isSyncTriedNow) { // skip if synchro is in course
+                     if (errorHandler) errorHandler(error);
+                     return;
                  }
-                 if (errorHandler) {
-                     errorHandler (error);
+                 
+                 // -- edge case, we don't know (YET) how to synchronize events deleted offline, so we send an APIUnreachble Error
+                 if (event.trashed) {
+                     if (errorHandler) errorHandler(error);
+                     NSLog(@"<WARNING> SDK doesn't know yet how to delete events offline");
+                     return;
                  }
+                 
+                 
+                 event.trashed = YES;
+                 [self.cache cacheEvent:event];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                     object:self
+                                                                   userInfo:@{kPYNotificationKeyDelete: @[event]}];
+                 if (successHandler)  successHandler();
              }];
 }
 
 //PUT /events/{event-id}
 
-- (void)eventSaveModifications:(PYEvent *)eventObject
+- (void)eventSaveModifications:(PYEvent *)event
                 successHandler:(void (^)(NSString *stoppedId))successHandler
                   errorHandler:(void (^)(NSError *error))errorHandler
 {
     
     
-    [eventObject compareAndSetModifiedPropertiesFromCache];
+    [event compareAndSetModifiedPropertiesFromCache];
     
 #warning - attachments should be updated asside..
     
-    [self apiRequest:[NSString stringWithFormat:@"%@/%@", kROUTE_EVENTS, eventObject.eventId]
+    [self apiRequest:[NSString stringWithFormat:@"%@/%@", kROUTE_EVENTS, event.eventId]
               method:PYRequestMethodPUT
-            postData:[eventObject dictionaryForUpdate]
+            postData:[event dictionaryForUpdate]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                  NSDictionary *JSON = responseDict[kPYAPIResponseEvent];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
-                 eventObject.synchedAt = [[NSDate date] timeIntervalSince1970];
-                 [eventObject clearModifiedProperties];
-                 [self.cache cacheEvent:eventObject ];
+                 event.synchedAt = [[NSDate date] timeIntervalSince1970];
+                 [event clearModifiedProperties];
+                 [self.cache cacheEvent:event ];
                  
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                      object:self
-                                                                   userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
+                                                                   userInfo:@{kPYNotificationKeyModify: @[event]}];
                  
                  if (successHandler) {
                      NSString *stoppedIdToReturn;
@@ -746,13 +759,27 @@
              } failure:^(NSError *error) {
                  
                  
-                 if (eventObject.isSyncTriedNow == NO) {
+                 if (! [PYErrorUtility isAPIUnreachableError:error]) { // this is an API error forward it
+                     event.synchError = error; // set the event with
+                     [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                                         object:self
+                                                                       userInfo:@{kPYNotificationKeySynchError: @[event]}];
+                     
+                     // if the event is at synch (already cached) and is faulty we should remove it from cache
+                     if (event.isSyncTriedNow) [self.cache removeEvent:event];
+                     
+                     if (errorHandler) errorHandler(error);
+                     return;
+                 }
+
+                 
+                 if (event.isSyncTriedNow == NO) {
                      //Get current event with id from cache
-                     [self.cache cacheEvent:eventObject];
+                     [self.cache cacheEvent:event];
                      
                      [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                          object:self
-                                                                       userInfo:@{kPYNotificationKeyModify: @[eventObject]}];
+                                                                       userInfo:@{kPYNotificationKeyModify: @[event]}];
                      
                      if (successHandler) {
                          NSString *stoppedIdToReturn = @"";
@@ -863,7 +890,7 @@
     [request setHTTPMethod:@"GET"];
     request.timeoutInterval = 60.0f;
     
-    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
+    [PYClient apiRawRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
             NSLog(@"*66 %@ %@", @([result length]), url);
             success(result);
@@ -910,7 +937,7 @@
     [request setHTTPMethod:@"GET"];
     request.timeoutInterval = 60.0f;
     
-    [PYClient sendRAWRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
+    [PYClient apiRawRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (success) {
             NSLog(@"*77 %@ %@", @([result length]), url);
             [self.cache savePreview:result forEvent:event];

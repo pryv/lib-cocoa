@@ -55,6 +55,7 @@
 @synthesize modifiedEventPropertiesToBeSync = _modifiedEventPropertiesToBeSync;
 @synthesize connection = _connection;
 @synthesize isSyncTriedNow = _isSyncTriedNow;
+@synthesize synchError = _synchError;
 
 + (NSString *)createClientId
 {

@@ -32,6 +32,8 @@ NSString *const kPYAPIResponseProfile = @"profile";
 NSString *const kPYAPIResponseAccesses = @"accesses";
 NSString *const kPYAPIResponseFollowedSlices = @"followedSlices";
 
+NSString *const kPYAPIResponseHeaderApiVersion = @"api-version";
+
 NSString *const kPYAPIResponseMeta = @"meta";
 NSString *const kPYAPIResponseMetaServerTime = @"serverTime";
 
@@ -59,6 +61,7 @@ NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisib
 
 NSString *const kPYNotificationStreams = @"pySTREAMS";
 NSString *const kPYNotificationEvents = @"pyEVENTS";
+NSString *const kPYNotificationKeySynchError = @"synchError";
 NSString *const kPYNotificationKeyAdd = @"ADD";
 NSString *const kPYNotificationKeyModify = @"MODIFY";
 NSString *const kPYNotificationKeyDelete = @"DELETE";

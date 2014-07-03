@@ -20,6 +20,13 @@
 #import "PYAsyncService.h"
 #import "PYJSONUtility.h"
 
+@interface PYClient ()
+
++ (BOOL)ifNoAPIVersionInResponse:(NSHTTPURLResponse*)resp failWith:(PYClientFailureBlock)failureHandler;
+
+@end
+
+
 @implementation PYClient
 
 static NSString *s_myDefaultDomain;
@@ -177,25 +184,39 @@ static NSString *s_myLanguageCodePrefered;
             request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
         }
     }
-    [self sendJSONDictRequest:request success:successHandler failure:failureHandler];
+    [self apiJSONDictRequest:request success:successHandler failure:failureHandler];
     return request;
+}
+
+
++ (BOOL)ifNoAPIVersionInResponse:(NSHTTPURLResponse*)resp failWith:(PYClientFailureBlock)failureHandler {
+    if (! resp || ! [[resp allHeaderFields] objectForKey:kPYAPIResponseHeaderApiVersion]) {
+        failureHandler([PYErrorUtility getAPIUnreachableWithUserInfos:nil]);
+        return NO;
+    }
+    return YES;
 }
 
 /**
  *
  */
-+ (void)sendJSONDictRequest:(NSURLRequest *)request
++ (void)apiJSONDictRequest:(NSURLRequest *)request
             success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler
 {
 
     //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
     [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
+        if (! [self ifNoAPIVersionInResponse:resp failWith:failureHandler]) return;
+        
+        
         if (successHandler) {
             NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not NSDictionary");
             successHandler(req, resp,(NSDictionary*) JSON);
         }
     } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
+         if (! [self ifNoAPIVersionInResponse:resp failWith:failureHandler]) return;
+        
         
         if (failureHandler) {
             NSDictionary *JSON = [PYJSONUtility getJSONObjectFromData:responseData];
@@ -205,7 +226,7 @@ static NSString *s_myLanguageCodePrefered;
             } else {
                 errorToReturn = [PYErrorUtility getErrorFromJSONResponse:JSON error:error withResponse:resp andRequest:request];
             }
-             NSLog(@"** PYClient.sendJSONDictRequest Async \n** Error: %@, \n** requestUrl: %@,\n** body: %@ ",
+             NSLog(@"** PYClient.apiJSONDictRequest Async \n** Error: %@, \n** requestUrl: %@,\n** body: %@ ",
                    errorToReturn, [[request URL] absoluteString],
                    [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
             failureHandler(errorToReturn);
@@ -213,7 +234,7 @@ static NSString *s_myLanguageCodePrefered;
     }];
 }
 
-+ (void)sendRAWRequest:(NSURLRequest *)request
++ (void)apiRawRequest:(NSURLRequest *)request
                success:(PYClientSuccessBlock)successHandler
                failure:(PYClientFailureBlock)failureHandler
 {

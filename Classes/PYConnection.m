@@ -26,6 +26,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYFilter.h"
 #import "PYEventFilterUtility.h"
 #import "PYError.h"
+#import "PYErrorUtility.h"
 #import "PYClient.h"
 
 NSString *const kPYConnectionOptionFetchStructure = @"fetchStructure";
@@ -298,7 +299,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     
     if (self.userID == kPYConnectionOfflineUsername) { // offline mode
         if (failureHandler) {
-            failureHandler([[[NSError alloc] initWithDomain:PryvErrorAPIUnreachable code:0 userInfo:nil] autorelease]);
+            failureHandler([PYErrorUtility getAPIUnreachableWithUserInfos:nil]);
         }
         return;
     }
@@ -319,30 +320,17 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
                 postData:postData
              attachments:attachments
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                     
-                     
                      NSDictionary* metas = responseDict[kPYAPIResponseMeta];
                      NSNumber* serverTime = nil;
-                     if (metas != nil ) {
+                     if (metas) {
                          serverTime = [NSNumber numberWithDouble:[metas[kPYAPIResponseMetaServerTime] doubleValue]] ;
                      }
                      
-                     if (serverTime == nil) {
+                     if (! serverTime) {
                          NSLog(@"Error cannot find Server-Time in meta path: %@", fullPath);
-                         
-                         
-                         /*
-                          NSDictionary *errorInfoDic = @{ @"message" : @"Error cannot find Server-Time in headers"};
-                          
-                          NSError *errorToReturn =
-                          [[[NSError alloc] initWithDomain:PryvSDKDomain code:1000 userInfo:errorInfoDic] autorelease];
-                          failureHandler(errorToReturn);
-                          */
                      } else {
                          _lastTimeServerContact = [[NSDate date] timeIntervalSince1970];
                          _serverTimeInterval = _lastTimeServerContact - [serverTime doubleValue];
-                         
-                         
                      }
                      
                      if (successHandler) {

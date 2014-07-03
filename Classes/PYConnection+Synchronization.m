@@ -125,6 +125,8 @@ BOOL allreadySynchingEvents = NO;
                    successCounter++;
                    dispatch_group_leave(group);
                } errorHandler:^(NSError *error) {
+                   //if we arrive there, it means that the created event is invalid.
+                   //it has been removed from cache!!
                    //reset flag if fail, very IMPORTANT
                    event.isSyncTriedNow = NO;
                    NSLog(@"SYNC error: creating event failed");

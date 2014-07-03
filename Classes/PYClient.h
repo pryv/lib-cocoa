@@ -53,19 +53,19 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 /**
  * low level JSON request to the API.. handles Pryv's error code
  */
-+ (void)sendJSONDictRequest:(NSURLRequest *)request
++ (void)apiJSONDictRequest:(NSURLRequest *)request
             success:(PYClientSuccessBlockDict)successHandler
             failure:(PYClientFailureBlock)failureHandler;
 
 /**
  * low level RAW request to the API.. handles Pryv's error code
  */
-+ (void)sendRAWRequest:(NSURLRequest *)request
++ (void)apiRawRequest:(NSURLRequest *)request
                 success:(PYClientSuccessBlock)successHandler
                 failure:(PYClientFailureBlock)failureHandler;
 
 /**
- * High level request to the API .. wrapper for sendJSONDictRequest
+ * High level request to the API .. wrapper for apiJSONDictRequest
  */
 + (NSMutableURLRequest*) apiRequest:(NSString *)fullURL
             headers:(NSDictionary*)headers

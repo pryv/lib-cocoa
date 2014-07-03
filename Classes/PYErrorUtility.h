@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface PYErrorUtility : NSObject
+
++ (BOOL)isAPIUnreachableError:(NSError*)error;
+
++ (NSError *)getAPIUnreachableWithUserInfos:(NSDictionary*)userInfos;
+
 /**
  Get NSError object for server response
  */

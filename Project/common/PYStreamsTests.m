@@ -2,7 +2,6 @@
 //  PYStreamsTests.m
 //  PryvApiKit
 //
-//  Created by Nenad Jelic on 6/26/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
@@ -48,7 +47,7 @@
                                      
                                      finished1 = YES;
                                  } errorHandler:^(NSError *error) {
-                                     STFail(@"error fetching streams");
+                                     STFail(@"error fetching streams %@", error);
                                      finished1 = YES;
                                  }];
     [PYTestsUtils execute:^{
@@ -91,7 +90,6 @@
              andParent:(PYStream *)parentStream
 {
     NSString *streamInfo = [NSString stringWithFormat:@"streamID: %@", stream.streamId];
-    //NSLog(@"tested %@", streamInfo);
     STAssertEqualObjects(stream.connection, connection,
                          @"connection should match %@", streamInfo);
     STAssertNotNil(stream.clientId, @"Client Id shouldn't be nil %@", streamInfo);
@@ -125,7 +123,6 @@
     
     NOT_DONE(done1);
     [self.connection streamCreate:newStream successHandler:^(NSString *createdStreamId) {
-        //
         DONE(done1);
     } errorHandler:^(NSError *error) {
         STFail(@"could not create stream");
@@ -150,14 +147,12 @@
                                                                                     object:self.connection
                                                                                      queue:nil
     usingBlock:^(NSNotification *note) {
-
-        NSLog(@"stream notification received");
               DONE(streamNotificationReceived);
 
     }];
     [connectionStreamObserver retain];
     
-    NOT_DONE(done1);
+    NOT_DONE(streamCreate);
     
     __block NSString *createdStreamIdFromServer = nil;
     [self.connection streamCreate:self.stream
@@ -165,22 +160,19 @@
                        
         STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
         createdStreamIdFromServer = [[NSString stringWithString:createdStreamId] retain];
-        NSLog(@"New stream ID : %@",createdStreamIdFromServer);
-   
-    
-        DONE(done1);
+        DONE(streamCreate);
     } errorHandler:^(NSError *error) {
         
         STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
-        DONE(done1);
+        DONE(streamCreate);
     }];
     
-    WAIT_FOR_DONE(done1);
+    WAIT_FOR_DONE(streamCreate);
     WAIT_FOR_DONE(streamNotificationReceived);
 
     
     
-    NOT_DONE(done2);
+    NOT_DONE(streamsFromCache);
     
     [self.connection streamsFromCache:^(NSArray *cachedStreamsList) {
         
@@ -195,47 +187,45 @@
                        andParent:nil];
         }
         
-        DONE(done2);
+        DONE(streamsFromCache);
         
     } errorHandler:^(NSError *error) {
-        NSLog(@"error: %@", error);
-        DONE(done2);
+        STFail(@"Unexpected Error: %@", error);
+        DONE(streamsFromCache);
     }];
      
-    WAIT_FOR_DONE(done2);
+    WAIT_FOR_DONE(streamsFromCache);
     
     
-    NOT_DONE(done3);
+    NOT_DONE(streamOnlineWithId);
     [self.connection streamOnlineWithId:createdStreamIdFromServer
                             successHandler:^(PYStream *stream) {
                                      STAssertNotNil(stream, @"should return single stream requested by id from the server");
-                                     DONE(done3);
+                                     DONE(streamOnlineWithId);
                                      
                          } errorHandler:^(NSError *error) {
-                                     NSLog(@"error: %@", error);
-                                     DONE(done3);
+                                     STFail(@"Unexpected Error: %@", error);
+                                     DONE(streamOnlineWithId);
                          }];
-    WAIT_FOR_DONE(done3);
+    WAIT_FOR_DONE(streamOnlineWithId);
 }
 
 - (void)deleteStream:(PYStream *)testStream
 {
-    NSLog(@"deleting stream: %@", testStream);
-    NOT_DONE(done3);
+    NOT_DONE(streamTrashOrDelete);
     [self.connection streamTrashOrDelete:testStream mergeEventsWithParent:YES successHandler:^{
         [self.connection streamTrashOrDelete:testStream mergeEventsWithParent:YES successHandler:^{
-            NSLog(@"Test stream deleted. %@", testStream);
-            DONE(done3);
+            DONE(streamTrashOrDelete);
         } errorHandler:^(NSError *error) {
-            //NSLog(@"Failed while deleting stream : %@",error);
-            DONE(done3);
+            STFail(@"Failed while deleting stream : %@",error);
+            DONE(streamTrashOrDelete);
         }];
     } errorHandler:^(NSError *error) {
-        //NSLog(@"Failed while trashing stream : %@",error);
-        DONE(done3);
+        STFail(@"Failed while trashing stream : %@",error);
+        DONE(streamTrashOrDelete);
     }];
     
-    WAIT_FOR_DONE(done3);
+    WAIT_FOR_DONE(streamTrashOrDelete);
 }
 
 

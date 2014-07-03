@@ -12,9 +12,6 @@
 
 #import <PYConnection.h>
 
-@interface PYConnection (Testing)
-- (NSArray *)eventsNotSync;
-@end
 @implementation PYConnection (Testing)
 @end
 

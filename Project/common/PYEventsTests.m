@@ -69,16 +69,14 @@
                                           STAssertEquals((NSUInteger)1, toAdd.count , @"Array should contain just one event");
                                           STAssertEquals([toAdd firstObject], event, @"Event should be the same than the one created");
                                           DONE(eventCreationReceived);
-                                      } else {
-                                          /** -- not predictable until API v0.7
+                                      } else if (! eventModificationReceived) { // only once...
                                           NSDictionary *message = (NSDictionary*) note.userInfo;
-                                          NSArray* toAdd = [message objectForKey:kPYNotificationKeyAdd];
-                                          STAssertNotNil(toAdd, @"We should not get toAdd Array");
-                                          
-                                          NSArray* modify = [message objectForKey:kPYNotificationKeyModify];
-                                          
-                                          STAssertEquals(1u,modify.count , @"Array should contain just one event");
-                                          STAssertEquals([modify firstObject], event, @"Event should be the same than the one created");
+                                          NSArray* toModify = [message objectForKey:kPYNotificationKeyModify];
+                                          STAssertNotNil(toModify, @"We should get a toModify Array");
+                                         
+                                          /** Modify from the API in unpredictable...
+                                          STAssertEquals(1u,toModify.count , @"Array should contain just one event");
+                                          STAssertEquals([toModify firstObject], event, @"Event should be the same than the one created");
                                            **/
                                           DONE(eventModificationReceived);
                                           
@@ -157,6 +155,7 @@
                         DONE(done);
                     }
                     errorHandler:^(NSError *error) {
+                        STFail(@"Error occured when deleting.");
                         DONE(done);
                     }];
                }

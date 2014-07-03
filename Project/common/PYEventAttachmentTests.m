@@ -76,6 +76,7 @@
         STFail(@"when there is no connection there is no preview");
         DONE(done);
     } failure:^(NSError *error) {
+        // failure expected
         DONE(done);
     }];
     WAIT_FOR_DONE(done);
@@ -116,7 +117,7 @@
         DONE(done);
     }
     errorHandler:^(NSError *error) {
-        NSLog(@"error: %@", error);
+        STFail(@"Failed creating event. %@", error);
         DONE(done);
     }];
     
@@ -128,28 +129,28 @@
 {
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = @"TVKoK036of";
-    event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
+    //event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
     event.type = @"picture/attached";
     
     NOT_DONE(done);
     [self.connection eventCreate:event
     successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdOrUpdatedEvent) {
-      STAssertTrue(newEventId == nil, @"new event id should not be nil %@", newEventId);
+      STAssertTrue(newEventId != nil, @"new event id should not be nil %@", newEventId);
       
       PYAttachment *createdAttachment = [createdOrUpdatedEvent.attachments firstObject];
       STAssertNil(createdAttachment, @"");
       
       [createdOrUpdatedEvent preview:^(PYImage *img) {
-          STAssertNil(img, @"");
+          STFail(@"Should not get preview");
           DONE(done);
       } failure:^(NSError *error) {
-          STAssertEquals(error.code, (NSInteger)404, @"");
+          STAssertEquals(error.code, (NSInteger)422, @""); // corrupted data expected
           DONE(done);
       }];
       //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
     }
     errorHandler:^(NSError *error) {
-            NSLog(@"error: %@", error);
+            STFail(@"Failed creating event. %@", error);
             DONE(done);
     }];
     
@@ -205,17 +206,15 @@
       STAssertNotNil(createdAttachment, @"");
       
       [createdOrUpdatedEvent preview:^(PYImage *img) {
-          //STFail(@"there should not be an image");
           STAssertNotNil(img, @"");
           DONE(done);
       } failure:^(NSError *error) {
           STFail(@"there should be an preview at this point");
           DONE(done);
       }];
-      //STAssertNotNil(createdAttachment.mimeType, @"mime type should be set");
     }
     errorHandler:^(NSError *error) {
-            NSLog(@"error: %@", error);
+            STFail(@"Failed creating event. %@", error);
             DONE(done);
     }];
     WAIT_FOR_DONE(done);
@@ -235,9 +234,5 @@
 
 }
 
-- (void)eventCreated:(NSNotification *)notification
-{
-
-}
 
 @end

@@ -18,6 +18,13 @@
                         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode\
                         beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];\
                     }
+//-- when using WAIT_FOR_DONE_WITH_TIMEOUT check your flag after WAIT is passed!
+#define WAIT_FOR_DONE_WITH_TIMEOUT(done, timeout)     \
+                    NSDate* startedAt = [NSDate date]; \
+                    while (!done && (0 < (timeout +  [startedAt timeIntervalSinceNow]))) {\
+                       [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode\
+                    beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];\
+                    }
 
 
 @interface PYBaseConnectionTests : SenTestCase
