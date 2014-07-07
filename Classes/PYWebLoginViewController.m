@@ -6,11 +6,14 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
+#import "PYAsyncService.h"
 #import "PYClient.h"
+#import "PYClient+Utils.h"
 #import "PYError.h"
 #import "PYErrorUtility.h"
 #import "PYConstants.h"
 #import "PYWebLoginViewController.h"
+#import "PYJSONUtility.h"
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 @interface PYWebLoginViewController ()
@@ -33,6 +36,11 @@
 @property (nonatomic, assign) WebView *webView;
 #endif
 
++ (NSMutableURLRequest*) registrationRequest:(NSString *)fullURL
+                                      method:(PYRequestMethod)method
+                                    postData:(NSDictionary *)postData
+                                     success:(PYClientSuccessBlockDict)successHandler
+                                     failure:(PYClientFailureBlock)failureHandler;
 
 @end
 
@@ -66,20 +74,20 @@ BOOL closing;
 {
     return [PYWebLoginViewController requestConnectionWithAppId:appID andPermissions:permissions andBarStyle:BarStyleTypeCancel delegate:delegate
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-                                             withWebView:webView
+                                                    withWebView:webView
 #endif
-     
-     
-     ];
+            
+            
+            ];
     
 }
 
 
 + (PYWebLoginViewController *)requestConnectionWithAppId:(NSString *)appID andPermissions:(NSArray *)permissions
                                              andBarStyle:(BarStyleType)barStyleType delegate:(id ) delegate
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    withWebView:(WebView **)webView
-    #endif
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+                                             withWebView:(WebView **)webView
+#endif
 {
     PYWebLoginViewController *login = [[PYWebLoginViewController alloc] init];
     login.closeReliesOnDelegate = NO;
@@ -87,12 +95,12 @@ BOOL closing;
     login.appID = appID;
     login.delegate = delegate;
     login.barStyleType = barStyleType;
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     login.webView = *(webView);
-    #endif
+#endif
     
     [login openOn];
-        
+    
     return [login autorelease];
 }
 
@@ -101,7 +109,7 @@ BOOL closing;
     //[self init];
     closing = NO;
     
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [self cleanURLCache];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(viewHidden:)
@@ -109,7 +117,7 @@ BOOL closing;
     
     [[self.webView mainFrame] loadHTMLString:@"<html><head></head><body style=\"font-family: HelveticaNeue;position: absolute;top: 50%;left: 50%;text-align: center;margin-left: -64px;\"><div style=\"letter-spacing: 2px;\">Loading...<span style=\"font-size: 14px;color: #bebebe;letter-spacing: 1px;display: block;\">Please be patient</span></div></body></html>" baseURL:nil];
     [self requestLoginView];
-    #else
+#else
     NSLog(@"PYWebLoginViewControlleriOs:Open on");
     
     // -- navigation bar -- //
@@ -119,9 +127,9 @@ BOOL closing;
     if (self.barStyleType == BarStyleTypeHome) {
         self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(reload:)] autorelease];
     } else {
-    
+        
         self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
-    
+        
         refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
         self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
     }
@@ -152,7 +160,7 @@ BOOL closing;
     
     
     [navigationController release];
-    #endif
+#endif
     return self;
 }
 
@@ -161,12 +169,12 @@ BOOL closing;
     if (closing) return;
     closing = YES;
     [self.pollTimer invalidate];
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    #else
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#else
     if (! self.closeReliesOnDelegate) {
         [self dismissViewControllerAnimated:YES completion:^{ }];
     }
-    #endif
+#endif
 }
 
 - (void)dealloc
@@ -175,9 +183,9 @@ BOOL closing;
     [pollTimer invalidate];
     [pollTimer release];
     [pollURL release];
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    #else
+#else
     [[NSNotificationCenter defaultCenter]
      removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [webView release];
@@ -186,7 +194,7 @@ BOOL closing;
     [refreshBarButtonItem release];
     [loadingActivityIndicatorView release];
     [loadingActivityIndicator release];
-    #endif
+#endif
     [super dealloc];
 }
 
@@ -235,7 +243,7 @@ BOOL closing;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -295,13 +303,13 @@ static BOOL s_requestedLoginView = NO;
     // TODO extract the url to a more meaningful place
     NSString *preferredLanguageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
     
-//    NSDictionary *postData = @{
-//                               // TODO extract the app id some where to constants
-//                               @"requestingAppId": self.appID,
-//                               @"returnURL": @"false",
-//                               @"languageCode" : preferredLanguageCode,
-//                               @"requestedPermissions": self.permissions
-//                               };
+    //    NSDictionary *postData = @{
+    //                               // TODO extract the app id some where to constants
+    //                               @"requestingAppId": self.appID,
+    //                               @"returnURL": @"false",
+    //                               @"languageCode" : preferredLanguageCode,
+    //                               @"requestedPermissions": self.permissions
+    //                               };
     NSArray *objects = [NSArray arrayWithObjects:self.appID, @"false", preferredLanguageCode, self.permissions, nil];
     NSArray *keys = [NSArray arrayWithObjects:@"requestingAppId", @"returnURL", @"languageCode", @"requestedPermissions", nil];
     NSDictionary *postData = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
@@ -311,11 +319,10 @@ static BOOL s_requestedLoginView = NO;
     
     //block typeof trick doesn't work on Mac OS X, but using self does not create memory leak
     //__block __typeof__(self) bself = self;
-    [PYClient apiRequest:fullPathString
-                 headers:nil
+   
+    [PYWebLoginViewController registrationRequest:fullPathString
                   method:PYRequestMethodPOST
                 postData:postData
-             attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                      if (!self) return;
                      [self handlePollSuccess:responseDict];
@@ -330,11 +337,11 @@ static BOOL s_requestedLoginView = NO;
 {
     NSLog(@"[HTTPClient Error]: %@", error);
     NSString *content = [NSString stringWithFormat:@"<html><head></head><body style=\"font-family: HelveticaNeue;position: absolute;top: 50%%;left: 50%%;text-align: center;margin-left: -64px;\"><div style=\"letter-spacing: 2px;\">Signup Error... %@<span style=\"font-size: 14px;color: #bebebe;letter-spacing: 1px;display: block;\">Please be patient</span></div></body></html>",[error localizedDescription]];
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [[webView mainFrame] loadHTMLString:content baseURL:nil];
-    #else
+#else
     [webView loadHTMLString:content baseURL:nil];
-    #endif
+#endif
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
         [self abortedWithError:error];
@@ -374,23 +381,23 @@ static BOOL s_requestedLoginView = NO;
 }
 
 - (void)timerBlock:(NSTimer *)timer {
-    [PYClient apiRequest:pollURL
-                 headers:nil
+    [PYWebLoginViewController registrationRequest:pollURL
                   method:PYRequestMethodGET
                 postData:nil
-             attachments:nil
                  success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                if (!self) return;
-                                     [self handlePollSuccess:JSON];
-                                } failure:^(NSError *error) {
-                                    if (!self) return;
-                                    [self handleFailure:error];
-                                }];
+                     if (!self) return;
+                     [self handlePollSuccess:JSON];
+                 } failure:^(NSError *error) {
+                     if (!self) return;
+                     [self handleFailure:error];
+                 }];
 }
+
+
 
 - (void)handlePollSuccess:(NSDictionary*) jsonDictionary
 {
-
+    
     
     // check status
     NSString *statusString = [jsonDictionary objectForKey:@"status"];
@@ -408,7 +415,7 @@ static BOOL s_requestedLoginView = NO;
 #else
             [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
 #endif
-     
+            
         }
         
         NSString *pollUrlString = [jsonDictionary objectForKey:@"poll"];
@@ -442,7 +449,7 @@ static BOOL s_requestedLoginView = NO;
             [self abortedWithReason:message];
             
         } else if ([@"ERROR" isEqualToString:statusString]) {
-           
+            
             NSString *message = [jsonDictionary objectForKey:@"message"];
             assert(message);
             
@@ -456,7 +463,7 @@ static BOOL s_requestedLoginView = NO;
             
         } else {
             
-            NSLog(@"poll request unknown status: %@", statusString); 
+            NSLog(@"poll request unknown status: %@", statusString);
             NSString *message = NSLocalizedString(@"Unknown Error",);
             if ([jsonDictionary objectForKey:@"message"]) {
                 message = [jsonDictionary objectForKey:@"message"];
@@ -493,17 +500,65 @@ static BOOL s_requestedLoginView = NO;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
+/**
+ * Prepare the request for the API
+ */
++ (NSMutableURLRequest*) registrationRequest:(NSString *)fullURL
+                                      method:(PYRequestMethod)method
+                                    postData:(NSDictionary *)postData
+                                     success:(PYClientSuccessBlockDict)successHandler
+                                     failure:(PYClientFailureBlock)failureHandler {
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+    NSURL *url;
+    
+    if (!fullURL) {
+        [NSException raise:@"There is no fullURL string" format:@"fullURL can't be nil"];
+    }
+    
+    url = [NSURL URLWithString:fullURL];
+    
+    
+    [request setURL:url];
+    NSDictionary *postDataa = postData;
+    
+    if ( (method == PYRequestMethodGET  && postDataa != nil))
+    {
+        [NSException raise:NSInvalidArgumentException
+                    format:@"postData must be nil for GET method or DELETE method" ];
+    }
+    
+    if (method == PYRequestMethodPOST) {
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    }
+    
+    NSString *httpMethod = [PYClient getMethodName:method];
+    request.HTTPMethod = httpMethod;
+    request.timeoutInterval = 60.0f;
+    
+    if (postDataa) {
+        request.HTTPBody = [PYJSONUtility getDataFromJSONObject:postDataa];
+    }
+    [PYAsyncService JSONRequestServiceWithRequest:request success:successHandler
+                                          failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData)
+     {
+         
+         if (failureHandler) failureHandler(error);
+     }];
+     return request;
+     }
+     
+     
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 #else
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)viewDidUnload {
-
-    [super viewDidUnload];
-}
+     - (void)didReceiveMemoryWarning
+    {
+        [super didReceiveMemoryWarning];
+        // Dispose of any resources that can be recreated.
+    }
+     
+     - (void)viewDidUnload {
+         
+         [super viewDidUnload];
+     }
 #endif
-@end
+     @end
