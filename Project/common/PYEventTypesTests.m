@@ -220,6 +220,12 @@
                           );
         }
         
+        
+        // -- sorting
+        
+        [group sortUsingLocalizedName];
+#warning test that group is sorted
+        
         if ([group.classKey isEqualToString:testGroupKey]){ testGroup = group ; break ; }
     }
     
