@@ -64,5 +64,20 @@
     
 }
 
+- (void)testSetupConnection
+{
+    NSDictionary* options =
+            @{kPYConnectionOptionFetchStructure : kPYConnectionOptionValueYes,
+              kPYConnectionOptionFetchAccessInfos : kPYConnectionOptionValueYes};
+    
+    NOT_DONE(setUpWithOptions);
+    [self.connection setUpWithOptions:options andCallBack:^(NSError *error) {
+        if (error) STFail(@"Unexpected Error %@", error);
+        DONE(setUpWithOptions);
+    }];
+    WAIT_FOR_DONE(setUpWithOptions);
+}
+
+
 
 @end

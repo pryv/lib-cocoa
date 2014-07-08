@@ -130,7 +130,8 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     __block NSError* errorAccessInfos;
     if ([self optionIsActivatedForKey:kPYConnectionOptionFetchAccessInfos]) {
         dispatch_group_enter(group);
-        // TODO fetch accessinfos
+        errorAccessInfos = nil;
+#warning  TODO fetch accessinfos
             dispatch_group_leave(group);
         
     }

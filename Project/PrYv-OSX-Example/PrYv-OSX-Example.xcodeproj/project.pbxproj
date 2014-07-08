@@ -236,9 +236,6 @@
 		FBE2E91018B2279D0059691E /* PrYv-Common */ = {
 			isa = PBXGroup;
 			children = (
-				4E91D583196C439B006E70F7 /* PYAccessesTests.m */,
-				4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */,
-				4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */,
 				FBE2E91418B227C10059691E /* offLineTests.m */,
 				FB1CEF3E18C4BC9F002584F7 /* PYBaseConnectionTests.h */,
 				FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */,
@@ -252,6 +249,9 @@
 				FBE2E92218B227C10059691E /* PYStreamsTests.m */,
 				FBE2E92318B227C10059691E /* PYTestConstants.h */,
 				FBE2E92418B227C10059691E /* PYTestConstants.m */,
+				4E91D583196C439B006E70F7 /* PYAccessesTests.m */,
+				4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */,
+				4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */,
 				FB31950118D206E8004564C6 /* Resources */,
 				FBE2E92518B227C10059691E /* Utils */,
 			);
