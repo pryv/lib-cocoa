@@ -78,6 +78,28 @@
     WAIT_FOR_DONE(setUpWithOptions);
 }
 
+- (void)testCreatingOfflineFirstConnection
+{
+    PYConnection* connection = [PYClient createConnectionWithUsername:kPYConnectionOfflineUsername  andAccessToken:@"A"];
+    
+#warning todo add stream and events..
+    
+    
+    BOOL gotError = NO;
+    @try {
+        [connection setOnlineModeWithUsername:kPYAPITestAccount andAccessToken:kPYAPITestAccessToken2];
+    }
+    @catch (NSException * e) {
+        STAssertTrue([[e name] isEqualToString:@"Unimplemented"], @"Should have Unimplemented Error");
+        gotError = TRUE;
+        NSLog(@"Exception: %@", e);
+    }
+    STAssertTrue(gotError, @"SHOULD HAVE ERROR");
+    
+    
+}
+
+
 
 
 @end

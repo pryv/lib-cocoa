@@ -82,11 +82,15 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         self.apiScheme = kPYAPIScheme;
         self.apiExtraPath = @"";
         self.apiPort = 443;
+        
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [PYReachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
         self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
         [self pyAccessStatus:self.connectionReachability];
+        
+        
         [self setupDeserializeNonSyncList];
         
         self.cacheRefreshTimer= [NSTimer scheduledTimerWithTimeInterval:120.0

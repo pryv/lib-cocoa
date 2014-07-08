@@ -38,6 +38,17 @@
     [super tearDown];
 }
 
+- (void)testUpdatingCache
+{
+
+        STAssertNotNil(self.connection, @"Connection isn't created");
+
+        [self.connection updateCache:^(NSError *error) {
+            STAssertNil(error, @"No error expected");
+        }];
+
+}
+
 - (void)testCachingOnDisk
 {
     
