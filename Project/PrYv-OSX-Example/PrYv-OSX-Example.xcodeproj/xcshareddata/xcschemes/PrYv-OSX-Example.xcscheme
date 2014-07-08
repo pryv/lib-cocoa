@@ -37,14 +37,6 @@
                BlueprintName = "PrYv-OSX-ExampleTests"
                ReferencedContainer = "container:PrYv-OSX-Example.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "PYBaseConnectionTests">
-               </Test>
-               <Test
-                  Identifier = "PYEventFilterTest/testEventFilter">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

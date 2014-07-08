@@ -137,11 +137,11 @@
     
     
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 10 seconds");
-    } ifNotTrue:&fromCache afterSeconds:10];
+        STFail(@"Failed after waiting 50 seconds");
+    } ifNotTrue:&fromCache afterSeconds:50];
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 10 seconds");
-    } ifNotTrue:&fromOnline afterSeconds:10];
+        STFail(@"Failed after waiting 50 seconds");
+    } ifNotTrue:&fromOnline afterSeconds:50];
     
     
 }
@@ -159,8 +159,8 @@
         streamFetched  =YES;
     }];
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 10 seconds");
-    } ifNotTrue:&streamFetched afterSeconds:10];
+        STFail(@"Failed after waiting 50 seconds");
+    } ifNotTrue:&streamFetched afterSeconds:50];
     
     
     
@@ -210,11 +210,11 @@
     
     
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 10 seconds");
-    } ifNotTrue:&fromCache afterSeconds:10];
+        STFail(@"Failed after waiting 50 seconds");
+    } ifNotTrue:&fromCache afterSeconds:50];
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 10 seconds");
-    } ifNotTrue:&fromOnline afterSeconds:10];
+        STFail(@"Failed after waiting 50 seconds");
+    } ifNotTrue:&fromOnline afterSeconds:50];
     
     
 }
