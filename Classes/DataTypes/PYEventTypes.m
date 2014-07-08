@@ -14,7 +14,8 @@
 #import "PYMeasurementSet.h"
 #import "PYAsyncService.h"
 
-
+// for staging:
+// static NSString *const  kMeasurementSetsUrl = @"https://sw.pryv/dist/data-types/";
 static NSString *const  kMeasurementSetsUrl = @"https://d1kp76srklnnah.cloudfront.net/dist/data-types/";
 static NSString *const  kMeasurementSetsHierarchical = @"hierarchical.json";
 static NSString *const  kMeasurementSetsExtras = @"extras.json";
