@@ -12,16 +12,21 @@
 #import "PYEventTypesPackagedData.h"
 #import "PYEvent.h"
 #import "PYMeasurementSet.h"
+#import "PYAsyncService.h"
 
 
-#define kMeasurementSetsUrl @"http://pryv.github.io/event-types/extras.json"
+static NSString *const  kMeasurementSetsUrl = @"https://d1kp76srklnnah.cloudfront.net/dist/data-types/";
+static NSString *const  kMeasurementSetsHierarchical = @"hierarchical.json";
+static NSString *const  kMeasurementSetsExtras = @"extras.json";
 
 @interface PYEventTypes ()
+
 
 - (void)setup;
 - (void)updateFlatAndKlasses;
 - (void)changeNSDictionary:(NSDictionary**) dict withContentOfJSONString:(id) jsonString;
-- (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError*)error;
+
+- (void)loadFile:(NSString*) filename withSuccess:(void (^)(NSDictionary* jsonDict))successHandler;
 
 @end
 
@@ -64,7 +69,13 @@
     
     _measurementSets = [[NSMutableArray alloc] init];
     [self updateMeasurementSets];
+    
+    
+    // try to get online measurement sets
+    [self updateFromOnlineSourceWithSuccess:nil];
 }
+
+
 
 /**
  * Update _flat reference table from hierachical data
@@ -158,24 +169,71 @@
 }
 
 
-- (void)reloadWithCompletionBlock:(PYEventTypesCompletionBlock)completionBlock
+- (void)updateFromOnlineSourceWithSuccess:(void (^)(NSDictionary* hierarchical, NSDictionary* extras))successHandler
 {
+    __block NSDictionary* hierarchical;
+    __block NSDictionary* extras;
     
-    // TODO if connection reload if not online use pakaged set..
+    dispatch_group_t group = dispatch_group_create();
     
-    /**
-     NSURL *measurementSetsURL = [NSURL URLWithString:kMeasurementSetsUrl];
-     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:measurementSetsURL];
-    [PYClient apiJSONDictRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-        
-    }
-      [self executeCompletionBlockOnMainQueue:completionBlock withObject:result andError:nil];
-     } failure:^(NSError *error) {
-         [self executeCompletionBlockOnMainQueue:completionBlock withObject:nil andError:error];
-     }];
-     **/
+    dispatch_group_enter(group);
+    [self loadFile:kMeasurementSetsHierarchical withSuccess:^(NSDictionary *jsonDict) {
+        hierarchical = jsonDict;
+#warning check that reatin is wisely used..
+        [hierarchical retain];
+        dispatch_group_leave(group);
+    }];
     
-    [self executeCompletionBlockOnMainQueue:completionBlock withObject:self andError:nil];
+    dispatch_group_enter(group);
+    [self loadFile:kMeasurementSetsExtras withSuccess:^(NSDictionary *jsonDict) {
+        extras = jsonDict;
+        [extras retain];
+        dispatch_group_leave(group);
+    }];
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (hierarchical && extras) {
+            NSLog(@"<INFO> Loaded dataypes files hierachical: %@, extras: %@",
+                  [hierarchical objectForKey:@"version"], [extras objectForKey:@"version"]);
+            
+            self.hierarchical = hierarchical;
+            self.extras = extras;
+            
+            [self updateFlatAndKlasses];
+            [self updateMeasurementSets];
+            
+        }
+        if (successHandler) successHandler(hierarchical, extras);
+    });
+    dispatch_release(group);
+}
+
+/**
+ * DO not throw errors just nil on any failure
+ */
+- (void)loadFile:(NSString*) filename withSuccess:(void (^)(NSDictionary* jsonDict))successHandler
+{
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kMeasurementSetsUrl,filename]];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    
+    [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
+        if([JSON isKindOfClass:[NSDictionary class]]) {
+            NSDictionary* jsonDict = (NSDictionary*) JSON;
+            if ([jsonDict objectForKey:@"version"]) {
+                if (successHandler) {
+                    successHandler(jsonDict);
+                    return;
+                }
+            }
+            NSLog(@"<WARNING> PYEventTypes: Failed to load %@, cannot find version", filename);
+        } else {
+            NSLog(@"<WARNING> PYEventTypes: Failed to load %@, is not a dictionary", filename);
+        }
+        if (successHandler) successHandler(nil);
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
+        NSLog(@"<WARNING> PYEventTypes: Failed to load %@ with error %@", filename, error);
+        if (successHandler) successHandler(nil);
+    }];
 }
 
 
@@ -204,15 +262,6 @@
 }
 
 
-- (void)executeCompletionBlockOnMainQueue:(PYEventTypesCompletionBlock)completionBlock withObject:(id)object andError:(NSError *)error
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(completionBlock)
-        {
-            completionBlock(object, error);
-        }
-    });
-}
 
 - (void)dealloc
 {

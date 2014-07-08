@@ -12,7 +12,6 @@
 @class PYEventType;
 @class PYEventClass;
 
-typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 @interface PYEventTypes : NSObject
 {
@@ -36,7 +35,6 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 + (PYEventTypes *)sharedInstance;
 
-- (void)reloadWithCompletionBlock:(PYEventTypesCompletionBlock)completionBlock;
 
 - (PYEventType *)pyTypeForEvent:(PYEvent*)event;
 
@@ -44,5 +42,6 @@ typedef void (^PYEventTypesCompletionBlock)(id object, NSError *error);
 
 - (PYEventClass *)pyClassForString:(NSString*)classKey;
 
+- (void)updateFromOnlineSourceWithSuccess:(void (^)(NSDictionary* hierarchical, NSDictionary* extras))successHandler;
 
 @end

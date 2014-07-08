@@ -15,6 +15,10 @@
 #import "PYMeasurementSet.h"
 #import "PYMeasurementTypesGroup.h"
 
+
+#import "PYBaseConnectionTests.h"
+
+
 @interface PYEventTypesTests : SenTestCase
 @end
 
@@ -35,6 +39,31 @@
         STFail(@"Cannot find classes in dictionary");
         
     }
+    
+    NSDictionary* extras = [[PYEventTypes sharedInstance] extras];
+    if (! [extras objectForKey:@"extras"]) {
+        STFail(@"Cannot find extras in dictionary");
+        
+    }
+}
+
+- (void)testGettingResourcesOnline
+{
+    
+    NOT_DONE(updateFromOnlineSource);
+    [[PYEventTypes sharedInstance] updateFromOnlineSourceWithSuccess:^(NSDictionary *hierarchical, NSDictionary *extras) {
+        DONE(updateFromOnlineSource);
+    }];
+    
+    WAIT_FOR_DONE(updateFromOnlineSource);
+    
+    NSDictionary* hierarchical = [[PYEventTypes sharedInstance] hierarchical];
+    if (! [hierarchical objectForKey:@"classes"]) {
+        STFail(@"Cannot find classes in dictionary");
+        
+    }
+    
+ 
     
     NSDictionary* extras = [[PYEventTypes sharedInstance] extras];
     if (! [extras objectForKey:@"extras"]) {
