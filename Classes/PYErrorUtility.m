@@ -45,34 +45,6 @@
                          withResponse:(NSHTTPURLResponse *)response
                            andRequest:(NSURLRequest *)request;
 {
-    if (!JSONerror) {
-        if (error) {
-            
-            NSMutableDictionary *userInfoDic = nil;
-            if (error.userInfo && error.userInfo.count > 0) {
-                userInfoDic = [error.userInfo mutableCopy];
-                [userInfoDic setObject:request forKey:PryvRequestKey];
-
-            }else{
-                userInfoDic = [[NSMutableDictionary alloc] init];
-                [userInfoDic setObject:request forKey:PryvRequestKey];
-
-            }
-            
-            NSError *errorToReturn = [[NSError alloc] initWithDomain:error.domain code:error.code userInfo:userInfoDic];
-            [userInfoDic autorelease];
-            return [errorToReturn autorelease];
-        }
-        
-        NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
-        [userInfo setObject:[NSNumber numberWithInteger:response.statusCode] forKey:PryvErrorHTTPStatusCodeKey];
-        [userInfo setObject:[NSString stringWithFormat:@"Http error: API returns with status code %d",(unsigned int)response.statusCode] forKey:NSLocalizedDescriptionKey];
-        [userInfo setObject:request forKey:PryvRequestKey];
-
-
-        return [[[NSError alloc] initWithDomain:PryvSDKDomain code:response.statusCode userInfo:userInfo] autorelease];
-        
-    }
     
     NSMutableDictionary *userInfo = [[[NSMutableDictionary alloc] init] autorelease];
 
@@ -96,22 +68,8 @@
     
     NSArray *arrayOfErrors = [JSONerror objectForKey:@"subErrors"];
     if (arrayOfErrors) {
-        NSMutableDictionary *userInfoSuberrors = [[NSMutableDictionary alloc] init];
-        NSMutableArray *arrayOfSubErrors = [[NSMutableArray alloc] initWithCapacity:arrayOfErrors.count];
-        for (NSDictionary *error in arrayOfErrors) {
-            if ([[JSONerror objectForKey:@"error"] isKindOfClass:[NSDictionary class]]) {
-                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.id"] forKey:PryvErrorJSONResponseId];
-                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"error.message"] forKey:NSLocalizedDescriptionKey];
-            } else {
-                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"id"] forKey:PryvErrorJSONResponseId];
-                [userInfoSuberrors setObject:[JSONerror valueForKeyPath:@"message"] forKey:NSLocalizedDescriptionKey];
-            }
-            [arrayOfSubErrors addObject:userInfoSuberrors];
-        }
-        
-        [userInfo setObject:arrayOfSubErrors forKey:PryvErrorSubErrorsKey];
-        [userInfoSuberrors release];
-        [arrayOfSubErrors release];
+        [userInfo setObject:arrayOfErrors forKey:PryvErrorSubErrorsKey];
+        [arrayOfErrors release];
     }
     
     return [[[NSError alloc] initWithDomain:PryvSDKDomain code:error.code userInfo:userInfo] autorelease];
@@ -139,14 +97,6 @@
     return [[[NSError alloc] initWithDomain:PryvSDKDomain code:error.code userInfo:userInfo] autorelease];
 }
 
-+ (NSString*) contentForRequest:(NSURLRequest *)request {
-    return [NSString stringWithFormat:@"%@ url: %@ \n%@", request, request.URL.absoluteString,
-                                      [[[NSString alloc] initWithData:request.HTTPBody
-                                                             encoding:NSUTF8StringEncoding] autorelease]];
-    
-    //NSLog(@"Method: %@", self.HTTPMethod);
-    
-}
 
 
 @end
