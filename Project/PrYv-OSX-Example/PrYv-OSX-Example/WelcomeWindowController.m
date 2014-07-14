@@ -10,7 +10,7 @@
 #import "SigninWindowController.h"
 #import <PryvApiKit/PryvApiKit.h>
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Streams.h"
 #import "AppDelegate.h"
 #import "User.h"
 #import <PryvApiKit/PYCachingController+Stream.h>

@@ -8,7 +8,7 @@
 
 #import "PYTestConstants.h"
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Streams.h"
 #import "PYConnection+Synchronization.h"
 #import "PYTestsUtils.h"
 #import "PYBaseConnectionTests.h"

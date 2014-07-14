@@ -8,7 +8,10 @@
 
 #import "PYEvent+Sync.h"
 #import "PYConnection+Synchronization.h"
-#import "PYConnection+DataManagement.h"
+
+#import "PYConnection+Streams.h"
+#import "PYConnection+Events.h"
+
 
 @implementation PYConnection (Synchronization)
 

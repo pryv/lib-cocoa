@@ -12,7 +12,7 @@
 
 #import "PYEventType.h"
 #import "PYEventTypes.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Events.h"
 #import "PYConnection+TimeManagement.h"
 #import "PYConnection+FetchedStreams.h"
 #import "NSObject+Supervisor.h"

@@ -9,7 +9,7 @@
 #import "PYCachingController.h"
 #import "PryvApiKit.h"
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Events.h"
 #import "PYTestsUtils.h"
 #import "PYEvent.h"
 

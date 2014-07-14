@@ -8,7 +8,7 @@
 #import "PYBaseConnectionTests.h"
 
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Streams.h"
 #import "PYStream.h"
 #import "PYCachingController+Stream.h"
 #import "PYTestsUtils.h"

@@ -1,19 +1,15 @@
 //
-//  PYConnection+DataManagement.h
-//  PryvApiKit
+//  PYConnection+Streams.h
+//  Pods
 //
-//  Created by Victor Kristof on 14.08.13.
-//  Copyright (c) 2013 Pryv. All rights reserved.
+//  Created by Perki on 14.07.14.
+//
 //
 
-#import "PYClient.h"
 #import "PYConnection.h"
-#import "PYFilter.h"
 
+@interface PYConnection (Streams)
 
-@interface PYConnection (DataManagement)
-
-#pragma mark - Pryv API Streams
 
 
 - (NSArray*)streamsFromCache;
@@ -30,8 +26,8 @@
  */
 
 - (void)streamsFromCache:(void (^) (NSArray *cachedStreamsList))cachedStreams
-                    andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
-                        errorHandler:(void (^)(NSError *error))errorHandler;
+               andOnline:(void (^) (NSArray *onlineStreamList))onlineStreams
+            errorHandler:(void (^)(NSError *error))errorHandler;
 
 //This is not supposed to be called directly by client app
 /**
@@ -39,8 +35,8 @@
  */
 
 - (void)streamsOnlineWithFilterParams:(NSDictionary *)filter
-                         successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
-                           errorHandler:(void (^) (NSError *error))errorHandler;
+                       successHandler:(void (^) (NSArray *streamsList))onlineStreamsList
+                         errorHandler:(void (^) (NSError *error))errorHandler;
 
 /**
  @discussion
@@ -68,7 +64,7 @@
  */
 
 - (void)streamTrashOrDelete:(PYStream *)stream
-        mergeEventsWithParent:(BOOL)mergeEventsWithParents
+      mergeEventsWithParent:(BOOL)mergeEventsWithParents
              successHandler:(void (^)())successHandler
                errorHandler:(void (^)(NSError *error))errorHandler;
 
@@ -80,16 +76,16 @@
  
  */
 - (void)streamSaveModifiedAttributeFor:(PYStream *)stream
-                              forStreamId:(NSString *)streamId
-                           successHandler:(void (^)())successHandler
-                             errorHandler:(void (^)(NSError *error))errorHandler;
+                           forStreamId:(NSString *)streamId
+                        successHandler:(void (^)())successHandler
+                          errorHandler:(void (^)(NSError *error))errorHandler;
 
 /**
  Get online stream with id from server. This methos mustn't cache stream
  */
 - (void)streamOnlineWithId:(NSString *)streamId
-               successHandler:(void (^) (PYStream *stream))onlineStream
-                 errorHandler:(void (^) (NSError *error))errorHandler;
+            successHandler:(void (^) (PYStream *stream))onlineStream
+              errorHandler:(void (^) (NSError *error))errorHandler;
 
 
 @end

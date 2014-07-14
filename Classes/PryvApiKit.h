@@ -18,7 +18,8 @@
 #import <PryvApiKit/PYConnection.h>
 #import <PryvApiKit/PYStream.h>
 #import <PryvApiKit/PYAttachment.h>
-#import <PryvApiKit/PYConnection+DataManagement.h>
+#import <PryvApiKit/PYConnection+Events.h>
+#import <PryvApiKit/PYConnection+Streams.h>
 #import <PryvApiKit/PYConnection+Synchronization.h>
 
 // Pryv Api Client

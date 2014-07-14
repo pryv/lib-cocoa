@@ -10,7 +10,7 @@
 #import "PYJSONUtility.h"
 #import "PYStream.h"
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Streams.h"
 
 @implementation  PYCachingController (Stream)
 

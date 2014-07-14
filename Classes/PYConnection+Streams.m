@@ -1,38 +1,22 @@
 //
-//  PYConnection+DataManagement.m
-//  PryvApiKit
+//  PYConnection+Streams.m
+//  Pods
 //
-//  Created by Victor Kristof on 14.08.13.
-//  Copyright (c) 2013 Pryv. All rights reserved.
+//  Created by Perki on 14.07.14.
+//
 //
 
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Streams.h"
 #import "PYConnection+TimeManagement.h"
 #import "PYConnection+FetchedStreams.h"
 #import "PYConnection+Synchronization.h"
 #import "PYStream+JSON.h"
-#import "PYEventFilterUtility.h"
-#import "PYEvent.h"
-#import "PYEvent+Sync.h"
-#import "PYEvent+JSON.h"
-#import "PYAttachment.h"
-#import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
 #import "PYClient+Utils.h"
 #import "PYErrorUtility.h"
+#import "PYConstants.h"
 
-
-@interface PYConnection ()
-
-- (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
-                              create:(void(^) (PYEvent*event))create
-                              update:(void(^) (PYEvent*event))update
-                                same:(void(^) (PYEvent*event))same;
-
-@end
-
-
-@implementation PYConnection (DataManagement)
+@implementation PYConnection (Streams)
 
 #pragma mark - Pryv API Streams
 
@@ -315,8 +299,6 @@
                  
              }];
 }
-
-
 
 
 

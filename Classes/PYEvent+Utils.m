@@ -7,7 +7,7 @@
 //
 
 #import "PYEvent+Utils.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Events.h"
 #import "PYAttachment.h"
 #import "PYCachingController+Event.h"
 

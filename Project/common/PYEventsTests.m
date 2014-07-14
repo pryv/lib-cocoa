@@ -7,7 +7,7 @@
 //
 
 #import "PYBaseConnectionTests.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Streams.h"
 #import "PYConnection+TimeManagement.h"
 
 @interface PYEventsTests : PYBaseConnectionTests

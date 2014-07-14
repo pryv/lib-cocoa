@@ -17,7 +17,7 @@
 
 #import "PYEventFilter.h"
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Events.h"
 #import "PYEvent.h"
 #import "PYEventFilterUtility.h"
 

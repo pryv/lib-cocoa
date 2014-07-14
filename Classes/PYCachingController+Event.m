@@ -10,7 +10,8 @@
 #import "PYCachingController+Event.h"
 #import "PYEvent.h"
 #import "PYConnection.h"
-#import "PYConnection+DataManagement.h"
+#import "PYConnection+Events.h"
+#import "PYConnection+Streams.h"
 #import "PYJSONUtility.h"
 #import "PYAttachment.h"
 
