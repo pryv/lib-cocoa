@@ -8,7 +8,7 @@
 
 #import "PYMeasurementSet.h"
 
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 #import "PYClient.h"
 #import "PYEventTypes.h"
 #import "PYUtilsLocalization.h"

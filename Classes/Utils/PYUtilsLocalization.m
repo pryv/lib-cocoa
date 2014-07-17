@@ -8,7 +8,7 @@
 
 #import "PYUtilsLocalization.h"
 #import "PYClient.h"
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 
 @implementation PYUtilsLocalization
 

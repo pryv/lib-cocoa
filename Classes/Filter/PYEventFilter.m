@@ -20,6 +20,7 @@
 #import "PYConnection+Events.h"
 #import "PYEvent.h"
 #import "PYEventFilterUtility.h"
+#import "PYkNotifications.h"
 
 
 @interface PYEventFilter ()

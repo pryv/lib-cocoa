@@ -2,13 +2,11 @@
 //  Constants.h
 //  PryvApiKit
 //
-//  Created by Nenad Jelic on 3/19/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-NSString *const kLanguageCodeDefault;
 
 #pragma mark - API
 
@@ -54,15 +52,4 @@ FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTags;
 FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTypes;
 FOUNDATION_EXPORT NSString *const kPYAPIEventFilterState;
 
-FOUNDATION_EXPORT NSString *const kPYWebViewLoginNotVisibleNotification;
-
-
-FOUNDATION_EXPORT NSString *const kPYNotificationStreams;
-FOUNDATION_EXPORT NSString *const kPYNotificationEvents;
-FOUNDATION_EXPORT NSString *const kPYNotificationKeySynchError;
-FOUNDATION_EXPORT NSString *const kPYNotificationKeyAdd;
-FOUNDATION_EXPORT NSString *const kPYNotificationKeyModify;
-FOUNDATION_EXPORT NSString *const kPYNotificationKeyDelete;
-FOUNDATION_EXPORT NSString *const kPYNotificationKeyUnchanged;
-FOUNDATION_EXPORT NSString *const kPYNotificationWithFilter;
 

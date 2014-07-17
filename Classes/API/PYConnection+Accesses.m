@@ -8,7 +8,7 @@
 
 #import "PYConnection+Accesses.h"
 #import "PYConnection+CacheForGetAPIRequest.h"
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 #import "PYClient+Utils.h"
 
 @implementation PYConnection (Accesses)

@@ -2,9 +2,11 @@
 //  PYClient.m
 //  PryvApiKit
 //
-//  Created by Nenad Jelic on 3/21/13.
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
+
+
+NSString *const kLanguageCodeDefault = @"en";
 
 //compile time check for OS
 #if TARGET_OS_IPHONE
@@ -13,7 +15,7 @@
 
 #import "PYClient.h"
 #import "PYClient+Utils.h"
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 #import "PYErrorUtility.h"
 #import "PYConnection.h"
 #import "PYAttachment.h"

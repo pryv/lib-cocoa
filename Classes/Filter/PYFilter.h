@@ -8,7 +8,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 
 
 @class PYConnection;

@@ -7,7 +7,7 @@
 //
 
 #import <PryvApiKit/PYError.h>
-#import <PryvApiKit/PYConstants.h>
+#import <PryvApiKit/PYkNotifications.h>
 #import <PryvApiKit/PYErrorUtility.h>
 
 // Model

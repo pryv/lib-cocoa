@@ -20,6 +20,7 @@
 #import "PYCachingController+Stream.h"
 #import "PYClient+Utils.h"
 #import "PYErrorUtility.h"
+#import "PYkNotifications.h"
 
 
 @interface PYConnection ()

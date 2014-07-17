@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 
-NSString *const kLanguageCodeDefault = @"en";
+
 
 #pragma mark - API
 
@@ -57,13 +57,3 @@ NSString *const kPYAPIEventFilterState = @"state";
 
 
 //Notifications
-NSString *const kPYWebViewLoginNotVisibleNotification = @"PYWebViewLoginNotVisibleNotification";
-
-NSString *const kPYNotificationStreams = @"pySTREAMS";
-NSString *const kPYNotificationEvents = @"pyEVENTS";
-NSString *const kPYNotificationKeySynchError = @"synchError";
-NSString *const kPYNotificationKeyAdd = @"ADD";
-NSString *const kPYNotificationKeyModify = @"MODIFY";
-NSString *const kPYNotificationKeyDelete = @"DELETE";
-NSString *const kPYNotificationKeyUnchanged = @"SAME";
-NSString *const kPYNotificationWithFilter = @"WITH_FILTER";

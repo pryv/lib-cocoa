@@ -14,7 +14,8 @@
 #import "PYCachingController+Stream.h"
 #import "PYClient+Utils.h"
 #import "PYErrorUtility.h"
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
+#import "PYkNotifications.h"
 
 @implementation PYConnection (Streams)
 

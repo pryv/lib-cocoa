@@ -9,7 +9,7 @@
 NSString const *kUnsyncEventsEventKey       = @"pryv.unsyncevents.Event";
 NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
-#import "PYConstants.h"
+#import "PYAPIConstants.h"
 #import "PYConnection.h"
 #import "PYStream+JSON.h"
 #import "PYEvent.h"

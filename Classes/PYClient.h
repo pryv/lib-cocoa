@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
+NSString *const kLanguageCodeDefault;
+
 typedef enum {
 	PYRequestMethodGET = 1,
 	PYRequestMethodPUT,

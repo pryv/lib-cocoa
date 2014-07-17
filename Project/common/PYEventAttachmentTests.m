@@ -7,7 +7,7 @@
 //
 
 #import "PYBaseConnectionTests.h"
-#import <PryvAPIKit/PYConstants.h>
+#import <PryvAPIKit/PYAPIConstants.h>
 
 
 @interface PYEventAttachmentTests : PYBaseConnectionTests

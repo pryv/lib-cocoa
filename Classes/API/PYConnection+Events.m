@@ -14,6 +14,7 @@
 #import "PYEvent.h"
 #import "PYAttachment.h"
 #import "PYErrorUtility.h"
+#import "PYkNotifications.h"
 
 
 @interface PYConnection ()
