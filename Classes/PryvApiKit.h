@@ -6,32 +6,31 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <PryvApiKit/PYError.h>
-#import <PryvApiKit/PYkNotifications.h>
-#import <PryvApiKit/PYErrorUtility.h>
+// Pryv Client
+#import <PryvApiKit/PYClient.h>
+#import <PryvApiKit/PYWebLoginViewController.h>
+
+// Pryv API
+
+#import <PryvApiKit/PYFilter.h>
+#import <PryvApiKit/PYEventFilter.h>
+#import <PryvApiKit/PYConnection.h>
+#import <PryvApiKit/PYConnection+Events.h>
+#import <PryvApiKit/PYConnection+Streams.h>
 
 // Model
 #import <PryvApiKit/PYEvent.h>
 #import <PryvApiKit/PYEvent+Utils.h>
-#import <PryvApiKit/PYFilter.h>
-#import <PryvApiKit/PYEventFilter.h>
-#import <PryvApiKit/PYConnection.h>
 #import <PryvApiKit/PYStream.h>
 #import <PryvApiKit/PYAttachment.h>
-#import <PryvApiKit/PYConnection+Events.h>
-#import <PryvApiKit/PYConnection+Streams.h>
-#import <PryvApiKit/PYConnection+Synchronization.h>
 
-// Pryv Api Client
-#import <PryvApiKit/PYClient.h>
-#import <PryvApiKit/PYWebLoginViewController.h>
+#import <PryvApiKit/PYError.h>
+#import <PryvApiKit/PYkNotifications.h>
+#import <PryvApiKit/PYErrorUtility.h>
 
-#if TARGET_OS_MAC
-#else 
-// DataTypes
-    #import <PryvApiKit/PYEventType.h>
-    #import <PryvApiKit/PYEventTypes.h>
-    #import <PryvApiKit/PYMeasurementSet.h>
-#endif
+#import <PryvApiKit/PYEventType.h>
+#import <PryvApiKit/PYEventTypes.h>
+#import <PryvApiKit/PYMeasurementSet.h>
+
 
 

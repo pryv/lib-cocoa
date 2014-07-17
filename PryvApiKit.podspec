@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   		cache.requires_arc = false
   	end
   	
-  	api.subspec 'Cache' do |online|
+  	api.subspec 'Online' do |online|
   		online.source_files = 'Classes/API/Online/*.{h,m}'
   		online.requires_arc = false
   	end
