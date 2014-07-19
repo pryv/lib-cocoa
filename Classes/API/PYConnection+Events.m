@@ -6,9 +6,10 @@
 //
 //
 
-
-#import "PYCachingController+Event.h"
 #import "PYConnection+Events.h"
+#import "PYCachingController+Event.h"
+#import "PYOnlineController+Events.h"
+
 #import "PYClient.h"
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"
@@ -629,34 +630,11 @@
         return;
     }
     
+    [self.online previewForEvent:event successHandler:^(NSData *content) {
+        if (success) success(content);
+        [self.cache savePreview:content forEvent:event];
+    } errorHandler:errorHandler];
     
-    
-    NSString *path = [NSString stringWithFormat:@"%@/%@?w=512",kROUTE_EVENTS, event.eventId];
-    NSString *urlPath = [path stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-    
-    
-    
-    NSString* fullPath = [NSString stringWithFormat:@"%@://%@%@:%i/%@", self.apiScheme, self.userID, self.apiDomain, 3443, urlPath];
-    
-    NSURL *url = [NSURL URLWithString:fullPath];
-    
-    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-    [request setValue:self.accessToken forHTTPHeaderField:@"Authorization"];
-    [request setURL:url];
-    [request setHTTPMethod:@"GET"];
-    request.timeoutInterval = 60.0f;
-    
-    [PYClient apiRawRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
-        if (success) {
-            NSLog(@"*77 %@ %@", @([result length]), url);
-            [self.cache savePreview:result forEvent:event];
-            success(result);
-            
-        }
-    } failure:^(NSError *error) {
-        errorHandler(error);
-        
-    }];
 }
 
 

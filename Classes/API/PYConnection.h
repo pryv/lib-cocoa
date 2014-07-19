@@ -24,6 +24,7 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOptionValueNo;
 @class PYStream;
 @class PYFilter;
 @class PYCachingController;
+@class PYOnlineController;
 
 @interface PYConnection : NSObject
 {
@@ -37,13 +38,13 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOptionValueNo;
     NSTimeInterval _lastTimeServerContact;
     
     PYReachability *_connectionReachability;
-    BOOL _online;
+    BOOL _onlineStatus;
     NSMutableSet *_streamsNotSync;
     NSUInteger _attachmentsCountNotSync;
     NSInteger _attachmentSizeNotSync;
     
     PYCachingController *_cache;
-    
+    PYOnlineController *_online;
     
     
 @private
@@ -62,6 +63,7 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOptionValueNo;
 @property (nonatomic, readonly) NSTimeInterval lastTimeServerContact;
 @property (nonatomic, retain) PYReachability *connectionReachability;
 @property (nonatomic, retain) PYCachingController *cache;
+@property (nonatomic, retain) PYOnlineController *online;
 @property (nonatomic, copy) NSMutableDictionary *options;
 
 @property (nonatomic, retain) NSMutableDictionary *cacheForGetAPIRequests;
@@ -162,7 +164,7 @@ FOUNDATION_EXPORT NSString *const kPYConnectionOptionValueNo;
 /**
  *
  */
-@property (nonatomic, readonly, getter = isOnline) BOOL online;
+@property (nonatomic, readonly, getter = isOnline) BOOL onlineStatus;
 
 
 

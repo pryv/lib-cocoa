@@ -20,6 +20,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYConnection+FetchedStreams.h"
 #import "PYConnection+Synchronization.h"
 #import "PYCachingController.h"
+#import "PYOnlineController.h"
 #import "PYReachability.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
@@ -88,7 +89,11 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object: nil];
         self.connectionReachability = [PYReachability reachabilityForInternetConnection];
         [self.connectionReachability startNotifier];
+        
+#warning - is autorelease mandatory?
         self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
+        self.online = [[[PYOnlineController alloc] initWithConnection:self] autorelease];
+        
         [self pyAccessStatus:self.connectionReachability];
         
         
@@ -265,11 +270,11 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     if (netStatus == NotReachable) {
         //No internet
         NSLog(@"No internet");
-        _online = NO;
+        _onlineStatus = NO;
     }else{
         //HAVE Internet
         NSLog(@"HAVE internet");
-        _online = YES;
+        _onlineStatus = YES;
         //[self syncNotSynchedStreamsIfAny];
         [self syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
             NSLog(@"synched %i events", successCount);
@@ -282,10 +287,10 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     if (currReach == self.connectionReachability) {
         if (currReach.currentReachabilityStatus == NotReachable) {
             NSLog(@"No internet, cannot create access");
-            _online = NO;
+            _onlineStatus = NO;
         }else{
             NSLog(@"HAVE internet access created");
-            _online = YES;
+            _onlineStatus = YES;
         }
     }
 }
@@ -414,7 +419,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 
 - (BOOL)isOnline
 {
-    return _online;
+    return _onlineStatus;
 }
 
 

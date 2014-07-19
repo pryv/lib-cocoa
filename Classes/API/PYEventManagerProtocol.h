@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 @class PYAttachment;
+@class PYEvent;
 
 struct PartialEventResult
 {

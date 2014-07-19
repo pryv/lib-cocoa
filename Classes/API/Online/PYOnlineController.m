@@ -10,4 +10,14 @@
 
 @implementation PYOnlineController
 
+@synthesize connection = _connection;
+
+- (id) initWithConnection:(PYConnection*) connection {
+    self = [super init];
+    if (self) {
+        self.connection = connection;
+    }
+    return self;
+}
+
 @end

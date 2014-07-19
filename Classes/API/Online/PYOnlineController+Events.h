@@ -7,7 +7,8 @@
 //
 
 #import "PYOnlineController.h"
+#import "PYEventManagerProtocol.h"
 
-@interface PYOnlineController (Events)
+@interface PYOnlineController (Events) <PYEventManagerProtocol>
 
 @end
