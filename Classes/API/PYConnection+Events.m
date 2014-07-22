@@ -249,6 +249,15 @@
             successHandler:(void (^)())successHandler
               errorHandler:(void (^)(NSError *error))errorHandler
 {
+    
+    // if no event.id remove it from cache only
+    if (! event.eventId) {
+        [self.cache removeEvent:event];
+        if (successHandler) successHandler();
+        return; 
+    }
+    
+    
     [event compareAndSetModifiedPropertiesFromCache];
     
     [self apiRequest:[NSString stringWithFormat:@"%@/%@",kROUTE_EVENTS, event.eventId]
