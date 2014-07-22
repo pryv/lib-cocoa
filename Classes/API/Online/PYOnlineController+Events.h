@@ -11,4 +11,11 @@
 
 @interface PYOnlineController (Events) <PYEventManagerProtocol>
 
+
+
+- (void) eventsGetWithFilter:(PYFilter*)filter
+                successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
+                  errorHandler:(void (^) (NSError *error))errorHandler;
+
+
 @end

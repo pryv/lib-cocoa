@@ -22,4 +22,10 @@
     onlineDiffWithCached:(void (^) (NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified))syncDetails
             errorHandler:(void (^)(NSError *error))errorHandler;
 
+
+- (void) eventCreateOrReuseFromDictionary:(NSDictionary*) eventDic
+                                   create:(void(^) (PYEvent*event))create
+                                   update:(void(^) (PYEvent*event))update
+                                     same:(void(^) (PYEvent*event))same;
+
 @end

@@ -10,11 +10,14 @@
 
 @class PYConnection;
 
+
 @interface PYOnlineController : NSObject
 
 // assign to avoid reference counting
 @property (nonatomic, assign) PYConnection *connection;
 
 - (id) initWithConnection:(PYConnection*) connection;
+
+
 
 @end

@@ -7,25 +7,21 @@
 //
 
 #import "PYConnection+Events.h"
+#import "PYConnection+Synchronization.h"
 #import "PYCachingController+Event.h"
 #import "PYOnlineController+Events.h"
 
 #import "PYClient.h"
 #import "PYEventFilterUtility.h"
 #import "PYEvent.h"
+#import "PYEvent+JSON.h"
+#import "PYEvent+Sync.h"
 #import "PYAttachment.h"
 #import "PYErrorUtility.h"
 #import "PYkNotifications.h"
 
 
-@interface PYConnection ()
 
-- (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
-                              create:(void(^) (PYEvent*event))create
-                              update:(void(^) (PYEvent*event))update
-                                same:(void(^) (PYEvent*event))same;
-
-@end
 
 @implementation PYConnection (Events)
 
@@ -66,142 +62,40 @@
             }
         }
         
-        //This method should retrieve always online events
-        //In this method we should synchronize events from cache with ones online and to return current online list
-        [self eventsOnlineWithFilter:filter
-                      successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
-                          NSDate *afx3 = [NSDate date];
-                          if (onlineEvents) {
-                              onlineEvents(onlineEventList, serverTime);
-                          }
-                          NSLog(@"*afx3 A %f", [afx3 timeIntervalSinceNow]);
-                          
-                          if (syncDetails) {
-                              // give differences between cachedEvents and received events
-                              
-                              NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
-                              [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
-                              NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
-                              
-                              [PYEventFilterUtility sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
-                              
-                              syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
-                                          [details objectForKey:kPYNotificationKeyModify]);
-                              filteredCachedEventList = nil;
-                          }
-                          NSLog(@"*afx3 B %f", [afx3 timeIntervalSinceNow]);
-                      }
-                        errorHandler:errorHandler
-                  shouldSyncAndCache:YES];
-    });
+        
+        [self.online eventsGetWithFilter:filter successHandler:^(NSArray *onlineEventList, NSNumber *serverTime, NSDictionary *details) {
+            NSDate *afx3 = [NSDate date];
+            if (onlineEvents) {
+                onlineEvents(onlineEventList, serverTime);
+            }
+            NSLog(@"*afx3 A %f", [afx3 timeIntervalSinceNow]);
+            
+            if (syncDetails) {
+                // give differences between cachedEvents and received events
+                
+                NSMutableSet *intersection = [NSMutableSet setWithArray:filteredCachedEventList];
+                [intersection intersectSet:[NSSet setWithArray:onlineEventList]];
+                NSMutableArray *removeArray = [NSMutableArray arrayWithArray:[intersection allObjects]];
+                
+                [PYEventFilterUtility sortNSMutableArrayOfPYEvents:removeArray sortAscending:YES];
+                
+                syncDetails([details objectForKey:kPYNotificationKeyAdd], removeArray,
+                            [details objectForKey:kPYNotificationKeyModify]);
+                filteredCachedEventList = nil;
+            }
+            NSLog(@"*afx3 B %f", [afx3 timeIntervalSinceNow]);
+        } errorHandler:errorHandler];
+        
+});
 }
 
 
 
-//GET /events
-
-- (void)eventsOnlineWithFilter:(PYFilter*)filter
-                successHandler:(void (^) (NSArray *eventList, NSNumber *serverTime, NSDictionary *details))successBlock
-                  errorHandler:(void (^) (NSError *error))errorHandler
-            shouldSyncAndCache:(BOOL)syncAndCache
-{
-    /*
-     This method musn't be called directly (it's api support method). This method works ONLY in ONLINE mode
-     This method doesn't care about current cache, it's interested in online events only
-     It should retrieve always online events and need to cache (sync) online events (before caching sync unsyched, because we don't want to loose unsuc changes)
-     */
-    
-    /*if there are events that are not synched with server, they need to be synched first and after that cached
-     This method must be SYNC not ASYNC and this method sync events with server and cache them
-     */
-    if (syncAndCache == YES) {
-# warning - change logic
-        [self syncNotSynchedEventsIfAny:nil];
-    }
-    
-    // shush if filter.onlyStreamIds = []
-    if (filter && filter.onlyStreamsIDs && ([filter.onlyStreamsIDs count] == 0)) {
-        NSLog(@"<WARNING> skipping online request filter.onlyStreamsIDs is empty");
-        if (successBlock) {
-            successBlock(@[], nil, @{kPYNotificationKeyAdd: @[],
-                                     kPYNotificationKeyModify: @[],
-                                     kPYNotificationKeyUnchanged: @[]});
-        }
-        return;
-    }
-    
-    [self apiRequest:[PYClient getURLPath:kROUTE_EVENTS
-                               withParams:[PYEventFilterUtility apiParametersForEventsRequestFromFilter:filter]]
-              method:PYRequestMethodGET
-            postData:nil
-         attachments:nil
-             success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                 
-                 NSDate* afx2 = [NSDate date];
-                 
-                 NSArray *JSON = responseDict[kPYAPIResponseEvents];
-                 
-                 NSMutableArray *eventsArray = [[[NSMutableArray alloc] init] autorelease];
-                 __block NSMutableArray* addArray = [[[NSMutableArray alloc] init] autorelease];
-                 __block NSMutableArray* modifyArray = [[[NSMutableArray alloc] init] autorelease];
-                 __block NSMutableArray* sameArray = [[[NSMutableArray alloc] init] autorelease];
-                 
-                 for (int i = 0; i < [JSON count]; i++) {
-                     NSDictionary *eventDic = [JSON objectAtIndex:i];
-                     
-                     __block PYEvent* myEvent;
-                     [self eventFromReceivedDictionary:eventDic
-                                                create:^(PYEvent *event) {
-                                                    myEvent = event;
-                                                    [addArray addObject:event];
-                                                } update:^(PYEvent *event) {
-                                                    myEvent = event;
-                                                    [modifyArray addObject:event];
-                                                } same:^(PYEvent *event) {
-                                                    myEvent = event;
-                                                    [sameArray addObject:event];
-                                                }];
-                     
-                     [eventsArray addObject:myEvent];
-                 }
-                 
-                 NSLog(@"*afx2 A %f", [afx2 timeIntervalSinceNow]);
-                 
-                 [self.cache saveAllEvents];
-                 //cacheEvents method will overwrite contents of currently cached file
-                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:eventsArray sortAscending:YES];
-                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:addArray sortAscending:YES];
-                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:modifyArray sortAscending:YES];
-                 [PYEventFilterUtility sortNSMutableArrayOfPYEvents:sameArray sortAscending:YES];
-                 
-                 NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
-                                           kPYNotificationKeyModify: modifyArray,
-                                           kPYNotificationKeyUnchanged: sameArray};
-                 [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
-                                                                     object:self
-                                                                   userInfo:@{kPYNotificationKeyAdd: addArray,
-                                                                              kPYNotificationKeyModify: modifyArray,
-                                                                              kPYNotificationKeyUnchanged: sameArray,
-                                                                              kPYNotificationWithFilter: filter}];
-                 if (successBlock) {
-                     NSDictionary* meta = [responseDict objectForKey:@"meta"];
-                     NSNumber* serverTime = [meta objectForKey:@"serverTime"];
-                     successBlock(eventsArray, serverTime, details);
-                     
-                 }
-                 NSLog(@"*afx2 B %f", [afx2 timeIntervalSinceNow]);
-                 
-             } failure:^(NSError *error) {
-                 if (errorHandler) {
-                     errorHandler (error);
-                 }
-             }];
-}
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 
-- (void) eventFromReceivedDictionary:(NSDictionary*) eventDic
+- (void) eventCreateOrReuseFromDictionary:(NSDictionary*) eventDic
                               create:(void(^) (PYEvent*event))create
                               update:(void(^) (PYEvent*event))update
                                 same:(void(^) (PYEvent*event))same

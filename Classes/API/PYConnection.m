@@ -11,6 +11,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 
 #import "PYAPIConstants.h"
 #import "PYConnection.h"
+#import "PYConnection+Events.h"
 #import "PYStream+JSON.h"
 #import "PYEvent.h"
 #import "PYEvent+Sync.h"
@@ -24,6 +25,7 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYReachability.h"
 #import "PYCachingController+Event.h"
 #import "PYCachingController+Stream.h"
+#import "PYOnlineController+Events.h"
 #import "PYUtils.h"
 #import "PYFilter.h"
 #import "PYEventFilterUtility.h"
@@ -394,12 +396,14 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
  Update cached data in the scope of the cache filter
  */
 -(void) updateCache:(void(^)(NSError *error))done {
-    [self eventsOnlineWithFilter:self.cacheFilter successHandler:^(NSArray *eventList, NSNumber *serverTime, NSDictionary *details) {
+    [self.online eventsGetWithFilter:self.cacheFilter successHandler:^(NSArray *eventList, NSNumber *serverTime, NSDictionary *details) {
         NSLog(@"Synchronized cache with %lu events", [eventList count]);
         self.cacheFilter.modifiedSince = [serverTime doubleValue];
     } errorHandler:^(NSError *error) {
         
-    } shouldSyncAndCache:YES];
+    }];
+    
+    [self syncNotSynchedEventsIfAny:nil];
 }
 
 /**

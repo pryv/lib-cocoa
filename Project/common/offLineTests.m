@@ -9,7 +9,7 @@
 #import "PYBaseConnectionTests.h"
 #import "PYTestsUtils.h"
 #import "PYCachingController+Event.h"
-
+#import "PYConnection+Synchronization.h"
 #import <PYConnection.h>
 
 @implementation PYConnection (Testing)

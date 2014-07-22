@@ -54,7 +54,6 @@
                 andToken:[NSString stringWithString:pyConnection.accessToken]];
   
     NSLog(@"Signin With Success %@ %@",pyConnection.userID,pyConnection.accessToken);
-    [pyConnection synchronizeTimeWithSuccessHandler:nil errorHandler:nil];
     
 }
 
