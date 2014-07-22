@@ -10,7 +10,7 @@
 #import "PYConnection.h"
 #import "PYConnection+Streams.h"
 #import "PYStream.h"
-#import "PYCachingController+Stream.h"
+#import "PYCachingController+Streams.h"
 #import "PYTestsUtils.h"
 
 @interface PYStreamsTests : PYBaseConnectionTests

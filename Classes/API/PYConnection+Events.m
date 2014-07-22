@@ -8,7 +8,7 @@
 
 #import "PYConnection+Events.h"
 #import "PYConnection+Synchronization.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 #import "PYOnlineController+Events.h"
 
 #import "PYClient.h"
@@ -42,7 +42,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         
-        NSArray *eventsFromCache = [self allEvents];
+        NSArray *eventsFromCache = [self.cache allEvents];
         
         
         
@@ -109,7 +109,6 @@
         create(event);
         return;
     }
-    cachedEvent.connection = self;
     
     // eventId is already known.. same event or modified ?
     NSNumber *modified = [eventDic objectForKey:@"modified"];

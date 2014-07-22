@@ -11,7 +11,7 @@
 #import "PYConnection+FetchedStreams.h"
 #import "PYConnection+Synchronization.h"
 #import "PYStream+JSON.h"
-#import "PYCachingController+Stream.h"
+#import "PYCachingController+Streams.h"
 #import "PYClient+Utils.h"
 #import "PYErrorUtility.h"
 #import "PYAPIConstants.h"

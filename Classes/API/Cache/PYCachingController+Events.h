@@ -11,7 +11,7 @@
 
 @class PYEvent, PYConnection, PYAttachment;
 
-@interface PYCachingController (Event)
+@interface PYCachingController (Events)
 
 /**
  Cache PYEvent object on disk

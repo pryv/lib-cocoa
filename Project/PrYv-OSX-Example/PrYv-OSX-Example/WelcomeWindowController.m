@@ -13,7 +13,7 @@
 #import "PYConnection+Streams.h"
 #import "AppDelegate.h"
 #import "User.h"
-#import <PryvApiKit/PYCachingController+Stream.h>
+#import <PryvApiKit/PYCachingController+Streams.h>
 
 
 @interface WelcomeWindowController ()

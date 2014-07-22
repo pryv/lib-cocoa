@@ -8,6 +8,7 @@
 
 @class PYEvent;
 @class PYStream;
+@class PYConnection;
 
 @interface PYCachingController : NSObject
 {
@@ -18,7 +19,9 @@
 
 @property (nonatomic, retain) NSMutableDictionary* allEventsDictionary;
 
-- (id)initWithCachingId:(NSString *)connectionCachingId;
+
+- (id)initWithConnection:(PYConnection*) connection;
+
 
 #pragma mark - id to disk manipulations
 
@@ -70,7 +73,6 @@
  Get single PYEvent object from disk for key
  doesn't set connection property on Event
  */
-- (PYEvent *)eventWithKey:(NSString *)key;
 - (PYEvent *)eventWithEventId:(NSString *)eventId;
 
 

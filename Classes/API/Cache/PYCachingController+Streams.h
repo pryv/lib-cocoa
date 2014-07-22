@@ -11,7 +11,7 @@
 
 @class PYStream;
 
-@interface PYCachingController (Stream)
+@interface PYCachingController (Streams)
 
 /**
  Cache stream (PYStreams) objects on disk

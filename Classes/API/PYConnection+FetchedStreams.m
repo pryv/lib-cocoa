@@ -8,7 +8,7 @@
 
 #import "PYConnection+FetchedStreams.h"
 #import "PYStream+Utils.h"
-#import "PYCachingController+Stream.h"
+#import "PYCachingController+Streams.h"
 
 @implementation PYConnection (FetchedStreams)
 

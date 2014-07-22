@@ -79,7 +79,7 @@
 
 - (id) initWithConnection:(PYConnection*) connection;
 
-+ (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId;
++ (PYEvent*) createOrReuseWithClientId:(NSString*) clientId;
 
 /**
  hasTmpId - Check if event from cache has tmpId. If event has it it means that isn't sync from server (created offline)
@@ -140,10 +140,7 @@
 
 # pragma mark - serialization
 
-/**
- * Get PYEvent object from json dictionary representation (JSON representation can include additioanl helper properties for event). It means that this method 'read' event from disk and from server
- */
-+ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
+
 /**
  * Convert PYEvent object to json-like NSDictionary representation for synching with server
  */

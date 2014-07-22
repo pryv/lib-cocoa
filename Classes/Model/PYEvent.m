@@ -18,7 +18,7 @@
 #import "NSObject+Supervisor.h"
 #import "PYSupervisable.h"
 #import "PYConnection.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 
 @interface PYEvent () <PYSupervisable>
 
@@ -65,7 +65,7 @@
     return [(NSString *)uuidStringRef autorelease];
 }
 
-+ (PYEvent*) createOrRetreiveWithClientId:(NSString*) clientId {
++ (PYEvent*) createOrReuseWithClientId:(NSString*) clientId {
     if (clientId) {
         PYEvent *liveEvent = [PYEvent liveObjectForSupervisableKey:clientId];
         if (liveEvent) {
@@ -393,12 +393,6 @@
     [self.attachments removeObject:attachmentToRemove];
 }
 
-+ (id)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection*)connection;
-{
-    PYEvent *generalEvent = [PYEvent _eventFromDictionary:JSON onConnection:connection];
-    return generalEvent;
-    
-}
 
 - (PYEventType *)pyType
 {

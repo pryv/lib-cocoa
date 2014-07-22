@@ -93,7 +93,7 @@
 - (id)initWithConnection:(PYConnection *) connection andClientId:(NSString *) clientId;
 
 
-+ (PYStream*) createOrRetreiveWithClientId:(NSString*) clientId;
++ (PYStream*) createOrReuseWithClientId:(NSString*) clientId;
 
 
 /**

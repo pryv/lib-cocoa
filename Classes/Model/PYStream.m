@@ -48,7 +48,7 @@
 }
 
 
-+ (PYStream*) createOrRetreiveWithClientId:(NSString*) clientId {
++ (PYStream*) createOrReuseWithClientId:(NSString*) clientId {
     if (clientId) {
         PYStream *liveStream = [PYStream liveObjectForSupervisableKey:clientId];
         if (liveStream) {

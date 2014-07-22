@@ -25,7 +25,7 @@
     if ([clientId isKindOfClass:[NSNull class]]) {
         stream = [[[self alloc] init] autorelease];
     } else {
-        stream = [PYStream createOrRetreiveWithClientId:clientId];
+        stream = [PYStream createOrReuseWithClientId:clientId];
     }
     
     id streamId = [JSON objectForKey:@"id"];

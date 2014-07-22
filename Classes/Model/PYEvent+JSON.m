@@ -16,17 +16,19 @@
 
 
 
-
-+ (id)_eventFromDictionary:(NSDictionary *)JSON
++ (PYEvent*)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
 {
-    PYEvent *event;
+    if (connection == nil) {
+        [NSException raise:@"Connection cannot be nil" format:nil];
+    }
     
+    PYEvent *event;
     // we have a clientId if event is loaded from cache
     id clientId = [JSON objectForKey:@"clientId"];
     if ([clientId isKindOfClass:[NSNull class]]) {
         event = [[[self alloc] init] autorelease];
     } else {
-        event = [PYEvent createOrRetreiveWithClientId:clientId];
+        event = [PYEvent createOrReuseWithClientId:clientId];
     }
     
     id eventId = [JSON objectForKey:@"id"];
@@ -37,17 +39,6 @@
     }
     
     [event resetFromDictionary:JSON];
-    return event;
-}
-
-
-+ (id)_eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
-{
-    if (connection == nil) {
-        [NSException raise:@"Connection cannot be nil" format:nil];
-    }
-    
-    PYEvent *event = [self _eventFromDictionary:JSON];
     event.connection = connection;
     return event;
 }

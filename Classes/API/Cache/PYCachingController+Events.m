@@ -7,7 +7,7 @@
 //
 
 #import "PYCachingController.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 #import "PYEvent.h"
 #import "PYConnection.h"
 #import "PYConnection+Events.h"
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation PYCachingController (Event)
+@implementation PYCachingController (Events)
 
 - (void)cacheEvent:(PYEvent *)event {
     [self cacheEvent:event addSaveCache:YES];

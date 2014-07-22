@@ -9,7 +9,7 @@
 #import "PYEvent+Utils.h"
 #import "PYConnection+Events.h"
 #import "PYAttachment.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 
 @implementation PYEvent (Utils)
 

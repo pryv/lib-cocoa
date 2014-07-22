@@ -23,8 +23,8 @@ NSString const *kUnsyncEventsRequestKey     = @"pryv.unsyncevents.Request";
 #import "PYCachingController.h"
 #import "PYOnlineController.h"
 #import "PYReachability.h"
-#import "PYCachingController+Event.h"
-#import "PYCachingController+Stream.h"
+#import "PYCachingController+Events.h"
+#import "PYCachingController+Streams.h"
 #import "PYOnlineController+Events.h"
 #import "PYUtils.h"
 #import "PYFilter.h"
@@ -93,7 +93,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         [self.connectionReachability startNotifier];
         
 #warning - is autorelease mandatory?
-        self.cache = [[[PYCachingController alloc] initWithCachingId:self.idCaching] autorelease];
+        self.cache = [[[PYCachingController alloc] initWithConnection:self] autorelease];
         self.online = [[[PYOnlineController alloc] initWithConnection:self] autorelease];
         
         [self pyAccessStatus:self.connectionReachability];
@@ -221,16 +221,6 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     
 }
 
-
-#pragma mark events
-
-- (NSArray*)allEvents
-{
-    NSArray *allEvents = [self.cache allEvents];
-    // set connection property on events
-    [allEvents makeObjectsPerformSelector:@selector(setConnection:) withObject:self];
-    return allEvents;
-}
 
 
 #warning - refactor

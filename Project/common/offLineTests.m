@@ -8,7 +8,7 @@
 
 #import "PYBaseConnectionTests.h"
 #import "PYTestsUtils.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 #import "PYConnection+Synchronization.h"
 #import <PYConnection.h>
 

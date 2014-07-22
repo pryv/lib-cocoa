@@ -9,6 +9,7 @@
 #import "PYEvent.h"
 
 @class PYConnection;
+@class PYEvent;
 
 @interface PYEvent (JSON)
 
@@ -17,12 +18,10 @@
  */
 - (void)resetFromDictionary:(NSDictionary *)JSON;
 
-+ (id)_eventFromDictionary:(NSDictionary *)JSON;
 
 /**
  Get PYEvent object from json dictionary representation (JSON representation can include additioanl helper properties for event). It means that this method 'read' event from disk and from server
  */
-+ (id)_eventFromDictionary:(NSDictionary *)JSON
-             onConnection:(PYConnection *)connection;
++ (PYEvent*)eventFromDictionary:(NSDictionary *)JSON onConnection:(PYConnection *)connection;
 
 @end

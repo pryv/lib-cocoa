@@ -7,19 +7,26 @@
 //
 
 #import "PYCachingController.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 #import "PYJSONUtility.h"
 #import "PYEvent.h"
 #import "PYEvent+JSON.h"
 #import "PYStream.h"
 #import "PYStream+JSON.h"
+#import "PYConnection.h"
 
 @interface PYCachingController ()
+
+// assign to avoid reference counting
+@property (nonatomic, assign) PYConnection *connection;
+
 @property (nonatomic, retain) NSString *localDataPath;
 @property (nonatomic) dispatch_queue_t queue;
 
 - (NSArray *)_getAllFilesWithPredicateFormat:(NSString *)format;
 - (void)_backgroundSaveAllEvents;
+
+- (PYEvent *)_eventWithKey:(NSString *)key;
 
 @end
 
@@ -31,16 +38,16 @@
 
 #pragma mark - id to disk manipulations
 
-- (id)initWithCachingId:(NSString *)connectionCachingId
-{
+- (id) initWithConnection:(PYConnection*) connection {
     self = [super init];
-	if (self) {
+    if (self) {
+        self.connection = connection;
         self.queue = dispatch_queue_create("com.domain.app.savequeue", 0);
 		NSError *error = nil;
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 		self.localDataPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:
                               [NSString
-                               stringWithFormat:@"cache_%@", connectionCachingId]];
+                               stringWithFormat:@"cache_%@", self.connection.idCaching]];
         
         NSLog(@"self.localDataPath %@", self.localDataPath);
 		
@@ -118,7 +125,6 @@
 
 #pragma mark - streams
 
-
 - (NSArray *)allStreams
 {
     NSDictionary *streamListDic = [PYJSONUtility getJSONObjectFromData:[self dataForKey:@"fetchedStreams"]];
@@ -139,7 +145,8 @@
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
     for (NSString *eventCachedName in self.allEventsDictionary) {
         NSDictionary *eventDic = [self.allEventsDictionary objectForKey:eventCachedName];
-        [arrayOFCachedEvents addObject:[PYEvent _eventFromDictionary:eventDic]];
+        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic
+                                                       onConnection:self.connection]];
     }
     
     return [arrayOFCachedEvents autorelease];
@@ -172,19 +179,18 @@ BOOL _eventsNeedSave = NO;
 
 
 
-- (PYEvent *)eventWithKey:(NSString *)key;
+- (PYEvent *)_eventWithKey:(NSString *)key;
 {
     NSDictionary* eventDict = [self.allEventsDictionary objectForKey:key];
     if (eventDict) {
-        return [PYEvent _eventFromDictionary:eventDict];
+        return [PYEvent eventFromDictionary:eventDict onConnection:self.connection];
     }
-    
     return nil;
 }
 
 - (PYEvent *)eventWithEventId:(NSString *)eventId;
 {
-    return [self eventWithKey:[self keyForEventId:eventId]];
+    return [self _eventWithKey:[self keyForEventId:eventId]];
 }
 
 #pragma mark - memory

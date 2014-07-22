@@ -18,6 +18,7 @@
 #import "PYEventFilter.h"
 #import "PYConnection.h"
 #import "PYConnection+Events.h"
+#import "PYCachingController+Events.h"
 #import "PYEvent.h"
 #import "PYEventFilterUtility.h"
 #import "PYkNotifications.h"
@@ -202,7 +203,7 @@
 {
     
     NSArray* toAdd = [PYEventFilterUtility
-                      filterEventsList:[self.connection allEvents] withFilter:self];
+                      filterEventsList:[self.connection.cache allEvents] withFilter:self];
     [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
     
     

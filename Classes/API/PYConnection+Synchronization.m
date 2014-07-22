@@ -9,6 +9,7 @@
 #import "PYEvent+Sync.h"
 #import "PYConnection+Synchronization.h"
 
+#import "PYCachingController+Streams.h"
 #import "PYConnection+Streams.h"
 #import "PYConnection+Events.h"
 
@@ -189,7 +190,7 @@ BOOL allreadySynchingEvents = NO;
 {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     PYEvent* event;
-    for (event in [self allEvents]) {
+    for (event in [self.cache allEvents]) {
         if ([event toBeSyncSkipCacheTest]) {
             [result addObject:event];
         }

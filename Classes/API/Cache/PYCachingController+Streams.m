@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import "PYCachingController+Stream.h"
+#import "PYCachingController+Streams.h"
 #import "PYJSONUtility.h"
 #import "PYStream.h"
 #import "PYConnection.h"
 #import "PYConnection+Streams.h"
 
-@implementation  PYCachingController (Stream)
+@implementation  PYCachingController (Streams)
 
 
 - (void)cachePYStreams:(NSArray*) streams {
