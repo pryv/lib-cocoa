@@ -107,6 +107,12 @@ BOOL allreadySynchingEvents = NO;
     dispatch_group_t group = dispatch_group_create();
     
     for (PYEvent *event in eventNotSync) {
+        // do not synch twice at a time...
+        if (event.isSyncTriedNow) {
+            NSLog(@"<NOTICE> Skipping synck of event %@, it is already @synch", event.clientId);
+            continue;
+        }
+        
         dispatch_group_enter(group);
         //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
         event.isSyncTriedNow = YES;
