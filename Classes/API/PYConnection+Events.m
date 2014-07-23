@@ -176,6 +176,9 @@
         [self.cache cacheEvent:event];
         event.isSyncTriedNow = YES;
         skipOnlineCallBack = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                            object:self
+                                                          userInfo:@{kPYNotificationKeyAdd: @[event]}];
     }
     
     [self apiRequest:kROUTE_EVENTS
