@@ -114,25 +114,21 @@ BOOL allreadySynchingEvents = NO;
         if ([event toBeDeleteOnSync]) {
             [self eventTrashOrDelete:event
                       successHandler:^{
-                          event.isSyncTriedNow = NO;
                           successCounter++;
                           dispatch_group_leave(group);
                       } errorHandler:^(NSError *error) {
-                          event.isSyncTriedNow = NO;
                           dispatch_group_leave(group);
                       }];
         } else if (event.hasTmpId) { // create
             
             [self eventCreate:event
                successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
-                   event.isSyncTriedNow = NO;
                    successCounter++;
                    dispatch_group_leave(group);
                } errorHandler:^(NSError *error) {
                    //if we arrive there, it means that the created event is invalid.
                    //it has been removed from cache!!
                    //reset flag if fail, very IMPORTANT
-                   event.isSyncTriedNow = NO;
                    NSLog(@"SYNC error: creating event failed");
                    NSLog(@"%@",error);
                    dispatch_group_leave(group);
@@ -141,11 +137,9 @@ BOOL allreadySynchingEvents = NO;
             NSLog(@"In this case event has server id");
             [self eventSaveModifications:event
                           successHandler:^(NSString *stoppedId) {
-                              event.isSyncTriedNow = NO;
                               successCounter++;
                               dispatch_group_leave(group);
                           } errorHandler:^(NSError *error) {
-                              event.isSyncTriedNow = NO;
                               dispatch_group_leave(group);
                           }];
         }

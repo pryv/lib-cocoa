@@ -124,11 +124,20 @@
 }
 
 #pragma clang diagnostic pop
+
+//POST /events
+
 //POST /events
 - (void)eventCreate:(PYEvent *)event
      successHandler:(void (^) (NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
        errorHandler:(void (^)(NSError *error))errorHandler
 {
+    [self eventCreate:event andCacheFirst:NO successHandler:successHandler errorHandler:errorHandler];
+}
+
+- (void)eventCreate:(PYEvent *)event andCacheFirst:(BOOL)cacheFirst
+     successHandler:(void (^) (NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
+       errorHandler:(void (^)(NSError *error))errorHandler {
     
     if (! event.connection) {
         event.connection = self;
@@ -147,7 +156,7 @@
     }
     
     
-    // load filedata in attachment from cache if needed
+    // load filedata in attachment from cache if needed ( when event synchronized)
     if (event.attachments) {
         for (PYAttachment* att in event.attachments) {
             if (! att.fileData || att.fileData.length == 0) {
@@ -156,7 +165,18 @@
         }
     }
     
+    // normally date is set by the server if none.. but as we cache first we handle this
+    if (event.eventDate == nil) {
+        [event setEventDate:[NSDate date]]; // now
+    }
     
+    // this should be done asynchronously .. and eventually forwarded if cache is offline
+    __block BOOL skipOnlineCallBack = NO;
+    if (cacheFirst && ! event.isSyncTriedNow) {
+        [self.cache cacheEvent:event];
+        event.isSyncTriedNow = YES;
+        skipOnlineCallBack = YES;
+    }
     
     [self apiRequest:kROUTE_EVENTS
               method:PYRequestMethodPOST
@@ -168,10 +188,6 @@
                  NSString *createdEventId = [JSON objectForKey:@"id"];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
-#warning Hack until we get server time for untimed envent
-                 if (event.eventDate == nil) {
-                     [event setEventDate:[NSDate date]]; // now
-                 }
                  
                  //--
                  [event resetFromDictionary:JSON];
@@ -186,16 +202,21 @@
                  
                  // event is synchonized.. this mean it is already known .. so we advertise a modification..
                  NSString* notificationKey = event.isSyncTriedNow ? kPYNotificationKeyModify : kPYNotificationKeyAdd;
+                 
+                 event.isSyncTriedNow = NO;
+                 
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                      object:self
                                                                    userInfo:@{notificationKey: @[event]}];
                  
-                 if (successHandler) {
+                 if (! skipOnlineCallBack && successHandler) {
                      successHandler(createdEventId, stoppedId, event);
                  }
                  
                  
              } failure:^(NSError *error) {
+                 BOOL eventWasSyncTried = event.isSyncTriedNow;
+                 event.isSyncTriedNow = NO;
                  
                  if (! [PYErrorUtility isAPIUnreachableError:error]) { // this is an API error forward it
                      event.synchError = error; // set the event with
@@ -204,26 +225,23 @@
                                                                        userInfo:@{kPYNotificationKeySynchError: @[event]}];
                      
                      // if the event is at synch (already cached) and is faulty we should remove it from cache
-                     if (event.isSyncTriedNow) [self.cache removeEvent:event];
+                     if (eventWasSyncTried) [self.cache removeEvent:event];
                      
-                     if (errorHandler) errorHandler(error);
+                     if (! skipOnlineCallBack && errorHandler) errorHandler(error);
+                     
                      return;
                  }
                  
                  // --- API Unreachable
                  
-                 if (event.isSyncTriedNow) { // already synchronizing event creation -> skip
-                     if (successHandler) successHandler (nil, @"", event);
+                 if (eventWasSyncTried) { // already synchronizing event creation -> skip
+                     if (! skipOnlineCallBack && successHandler) successHandler (nil, @"", event);
                      return ;
                  }
                  
                  
                  // --- ADD to cache
                  
-                 
-                 if (! [event eventDate]) { // set a date if none
-                     [event setEventDate:[NSDate date]]; // now
-                 }
                  
                  
                  if (event.attachments.count > 0) {
@@ -237,12 +255,14 @@
                                                                      object:self
                                                                    userInfo:@{kPYNotificationKeyAdd: @[event]}];
                  
-                 if (successHandler) {
+                 if (! skipOnlineCallBack && successHandler) {
                      successHandler (nil, @"", event);
                  }
              }
      
      ];
+    
+    if (skipOnlineCallBack && successHandler) successHandler(nil, @"", event);
 }
 
 - (void)eventTrashOrDelete:(PYEvent *)event
@@ -265,7 +285,7 @@
             postData:nil
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id responseValue) {
-                 
+                 event.isSyncTriedNow = NO;
                  if (event.trashed == YES) {
                      [self.cache removeEvent:event];
                  } else {
@@ -284,7 +304,8 @@
                  }
                  
              } failure:^(NSError *error) {
-                 
+                 BOOL eventWasSyncTried = event.isSyncTriedNow;
+                 event.isSyncTriedNow = NO;
                  // tried to remove an unkown ressource
                  if ([@"unknown-resource" isEqualToString:[error.userInfo objectForKey:@"com.pryv.sdk:JSONResponseId"] ]) {
                      NSLog(@"<WARNING> tried to remove unkown object");
@@ -308,7 +329,7 @@
                      return;
                  }
                  
-                 if (event.isSyncTriedNow) { // skip if synchro is in course
+                 if (eventWasSyncTried) { // skip if synchro is in course
                      if (errorHandler) errorHandler(error);
                      return;
                  }
@@ -347,6 +368,7 @@
             postData:[event dictionaryForUpdate]
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                 event.isSyncTriedNow = NO;
                  NSDictionary *JSON = responseDict[kPYAPIResponseEvent];
                  NSString *stoppedId = [JSON objectForKey:@"stoppedId"];
                  
@@ -369,7 +391,8 @@
                  }
                  
              } failure:^(NSError *error) {
-                 
+                 BOOL eventWasSyncTried = event.isSyncTriedNow;
+                 event.isSyncTriedNow = NO;
                  
                  if (! [PYErrorUtility isAPIUnreachableError:error]) { // this is an API error forward it
                      event.synchError = error; // set the event with
@@ -378,14 +401,14 @@
                                                                        userInfo:@{kPYNotificationKeySynchError: @[event]}];
                      
                      // if the event is at synch (already cached) and is faulty we should remove it from cache
-                     if (event.isSyncTriedNow) [self.cache removeEvent:event];
+                     if (eventWasSyncTried) [self.cache removeEvent:event];
                      
                      if (errorHandler) errorHandler(error);
                      return;
                  }
                  
                  
-                 if (event.isSyncTriedNow == NO) {
+                 if (eventWasSyncTried) {
                      //Get current event with id from cache
                      [self.cache cacheEvent:event];
                      

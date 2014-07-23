@@ -13,7 +13,14 @@
 
 @class PYAttachment;
 
-@interface PYConnection (Events) <PYEventManagerProtocol> 
+@interface PYConnection (Events) <PYEventManagerProtocol>
+
+/**
+ * @discussion temporary method until offline first is implemented
+ */
+- (void)eventCreate:(PYEvent *)event andCacheFirst:(BOOL)cacheFirst
+                  successHandler:(void (^) (NSString *newEventId, NSString *stoppedId, PYEvent *event))successHandler
+                    errorHandler:(void (^)(NSError *error))errorHandler;
 
 /** to be removed and replace by eventsGet.. **/
 - (void)eventsWithFilter:(PYFilter *)filter
