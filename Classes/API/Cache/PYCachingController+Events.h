@@ -21,7 +21,7 @@
 /**
  Cache PYEvent object on disk and tell if it should be saved
  */
-- (void)cacheEvent:(PYEvent *)event addSaveCache:(BOOL)save;
+- (void)cacheEvent:(PYEvent *)event andSaveCache:(BOOL)save;
 
 /**
  Cache PYEvent object on disk and eventually remove temporary data

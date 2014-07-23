@@ -27,11 +27,11 @@
 @implementation PYCachingController (Events)
 
 - (void)cacheEvent:(PYEvent *)event {
-    [self cacheEvent:event addSaveCache:YES];
+    [self cacheEvent:event andSaveCache:YES];
 }
 
 
-- (void)cacheEvent:(PYEvent *)event addSaveCache:(BOOL)save {
+- (void)cacheEvent:(PYEvent *)event andSaveCache:(BOOL)save {
 
     for (PYAttachment *att in event.attachments) {
         if (att.fileData && att.fileData.length > 0) [self saveDataForAttachment:att onEvent:event];

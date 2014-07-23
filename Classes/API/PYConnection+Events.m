@@ -104,7 +104,7 @@
     if (cachedEvent == nil) // cache event
     {
         PYEvent *event = [PYEvent eventFromDictionary:eventDic onConnection:self];
-        [self.cache cacheEvent:event addSaveCache:NO];
+        [self.cache cacheEvent:event andSaveCache:NO];
         // notify of event creation
         create(event);
         return;
@@ -118,7 +118,7 @@
     }
     [cachedEvent resetFromDictionary:eventDic];
     // notify of event update
-    [self.cache cacheEvent:cachedEvent addSaveCache:NO];
+    [self.cache cacheEvent:cachedEvent andSaveCache:NO];
     
     update(cachedEvent);
 }

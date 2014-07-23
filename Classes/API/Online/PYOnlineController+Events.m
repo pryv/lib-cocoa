@@ -15,6 +15,7 @@
 #import "PYClient+Utils.h"
 #import "PYEventFilterUtility.h"
 #import "PYOnlineController+Events.h"
+#import "PYCachingController+Events.h"
 
 @implementation PYOnlineController (Events)
 
@@ -67,6 +68,7 @@
                      
                      [eventsArray addObject:myEvent];
                  }
+                 [self.connection.cache saveAllEvents];
                  
                  NSLog(@"*afx2 A %f", [afx2 timeIntervalSinceNow]);
                  
