@@ -82,7 +82,7 @@
                                            kPYNotificationKeyModify: modifyArray,
                                            kPYNotificationKeyUnchanged: sameArray};
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
-                                                                     object:self
+                                                                     object:self.connection
                                                                    userInfo:@{kPYNotificationKeyAdd: addArray,
                                                                               kPYNotificationKeyModify: modifyArray,
                                                                               kPYNotificationKeyUnchanged: sameArray,
