@@ -10,6 +10,9 @@
 
 @interface PYStream (Utils)
 
+
+
+
 /**
  * fill an NSDictonary with all Streams in the tree strucure index by their streamids.
  * If a stream is already present it won't be added to the Dictionary
@@ -29,5 +32,10 @@
  * add a children
  */
 - (void)addChildren:(PYStream*)stream;
+
+/**
+ * find a stream by id
+ */
++ (PYStream*)findStreamMatchingId:(NSString*)streamId orNames:(NSArray*)namesList onList:(NSArray*)streamsList;
 
 @end

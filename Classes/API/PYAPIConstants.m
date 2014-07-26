@@ -37,8 +37,8 @@ NSString *const kPYAPIResponseHeaderApiVersion = @"api-version";
 NSString *const kPYAPIResponseMeta = @"meta";
 NSString *const kPYAPIResponseMetaServerTime = @"serverTime";
 
-
 NSString *const kPYAPIConnectionRequestStreamId = @"streamId";
+NSString *const kPYAPIConnectionRequestDefaultStreamName = @"defaultName";
 NSString *const kPYAPIConnectionRequestAllStreams = @"*";
 NSString *const kPYAPIConnectionRequestLevel = @"level";
 NSString *const kPYAPIConnectionRequestReadLevel = @"read";

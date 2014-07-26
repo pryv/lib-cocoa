@@ -36,6 +36,7 @@ NSString *const kPYAPIResponseFollowedSlices;
 NSString *const kPYAPIResponseHeaderApiVersion;
 
 FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestStreamId;
+FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestDefaultStreamName;
 FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestAllStreams;
 FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestLevel;
 FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestReadLevel;

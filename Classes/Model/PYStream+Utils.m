@@ -61,6 +61,26 @@
     }
 }
 
++ (PYStream*)findStreamMatchingId:(NSString*)streamId orNames:(NSArray*)namesList onList:(NSArray*)streamsList
+{
+    // look for id
+    for (PYStream* stream in streamsList) {
+        if ([streamId isEqualToString:stream.streamId]) {
+            return stream;
+        }
+    }
+    // look for names
+    for (NSString* name in namesList) {
+        for (PYStream* stream in streamsList) {
+            
+            if ([name isEqualToString:stream.name]) {
+                return stream;
+            }
+        }
+    }
+    return nil;
+}
+
 
 
 
