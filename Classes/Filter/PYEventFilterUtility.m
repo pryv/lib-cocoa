@@ -224,7 +224,7 @@
     
     // Perki 8.jan 2014 what's for?
     NSCompoundPredicate *testPredicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
-    NSLog(@"subpredicates %@",testPredicate.subpredicates);
+    //NSLog(@"subpredicates %@",testPredicate.subpredicates);
     [testPredicate release];
     
     NSPredicate *resultPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];

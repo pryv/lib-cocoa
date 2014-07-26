@@ -204,7 +204,7 @@
     // receivedData is an instance variable declared elsewhere.
     [_responseData appendData:data];
     
-    NSLog(@"Progress %lu / %lld", (unsigned long)data.length, _response.expectedContentLength);
+    //NSLog(@"Progress %lu / %lld", (unsigned long)data.length, _response.expectedContentLength);
     
     if (self.onProgress) {
         self.onProgress(data.length, (unsigned long) _response.expectedContentLength);

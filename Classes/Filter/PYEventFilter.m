@@ -198,10 +198,13 @@
     return [_currentEventsDic allValues];
 }
 
+- (void)update {
+    [self update:nil];
+}
 
-- (void)update
+- (void)update:(void(^)(NSError *error))done
 {
-    
+
     NSArray* toAdd = [PYEventFilterUtility
                       filterEventsList:[self.connection.cache allEvents] withFilter:self];
     [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
@@ -228,9 +231,9 @@
     // -- if filter is matching the cache.. just update the cache
     
     
-    if (! [self.connection updateCache:nil ifCacheIncludes:self]) {
-        
-        
+    if (! [self.connection updateCache:^(NSError *error) {
+        if (done) done(error);
+    } ifCacheIncludes:self]) {
         
         // -- check online
       
@@ -240,12 +243,12 @@
                                     [self synchWithList:cachedEventList];
                                     
                                 } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
-
-                                    [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
                                     
+                                    [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
+                                    if (done) done(nil);
                                 } onlineDiffWithCached:nil
                              errorHandler:^(NSError *error) {
-                                 
+                                 if (done) done(error);
                              }];
     }
     

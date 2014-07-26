@@ -41,7 +41,10 @@
  */
 - (void)update;
 
-
+/**
+ * same as update with callback;
+ */
+- (void)update:(void(^)(NSError *error))done;
 
 
 @end
