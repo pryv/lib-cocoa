@@ -389,8 +389,9 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     [self.online eventsGetWithFilter:self.cacheFilter successHandler:^(NSArray *eventList, NSNumber *serverTime, NSDictionary *details) {
         NSLog(@"Synchronized cache with %lu events", [eventList count]);
         self.cacheFilter.modifiedSince = [serverTime doubleValue];
+        if (done) done(nil);
     } errorHandler:^(NSError *error) {
-        
+        if (done) done(error);
     }];
     
     [self syncNotSynchedEventsIfAny:nil];
@@ -401,8 +402,9 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
  * @return NO is the cache.filter does not cover this filter
  */
 -(BOOL) updateCache:(void(^)(NSError *error))done ifCacheIncludes:(PYFilter*)filter {
-    if (! self.cacheFilter) return NO;
-    if (! [PYEventFilterUtility filter:filter isIncludedInFilter:self.cacheFilter]) return NO;
+    if (! self.cacheFilter) { if (done) done(nil); return NO; };
+    if (! [PYEventFilterUtility filter:filter isIncludedInFilter:self.cacheFilter]) {
+        if (done) done(nil); return NO; };
     [self updateCache:done];
     return YES;
 }
