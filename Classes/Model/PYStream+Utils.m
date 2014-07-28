@@ -72,8 +72,7 @@
     // look for names
     for (NSString* name in namesList) {
         for (PYStream* stream in streamsList) {
-            
-            if ([name isEqualToString:stream.name]) {
+            if (stream.name && NSOrderedSame == [name caseInsensitiveCompare:stream.name]) {
                 return stream;
             }
         }

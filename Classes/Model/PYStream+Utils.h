@@ -34,7 +34,8 @@
 - (void)addChildren:(PYStream*)stream;
 
 /**
- * find a stream by id
+ * find a stream by id. 
+ * The search on names is case insensitive
  */
 + (PYStream*)findStreamMatchingId:(NSString*)streamId orNames:(NSArray*)namesList onList:(NSArray*)streamsList;
 
