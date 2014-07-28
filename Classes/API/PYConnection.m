@@ -46,6 +46,9 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
 @property (nonatomic, readwrite) NSTimeInterval serverTimeInterval;
 @property (nonatomic, retain) PYFilter *cacheFilter;
 @property (nonatomic, retain) NSTimer *cacheRefreshTimer;
+
+- (void)updateCacheFromTimer: (id) sender;
+
 @end
 
 @implementation PYConnection
@@ -103,7 +106,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         
         self.cacheRefreshTimer= [NSTimer scheduledTimerWithTimeInterval:120.0
                                          target:self
-                                       selector:@selector(updateCache:)
+                                       selector:@selector(updateCacheFromTimer:)
                                        userInfo:nil
                                         repeats:YES];
         
@@ -381,6 +384,9 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
     }];
 }
 
+- (void)updateCacheFromTimer:(id)sender {
+    [self updateCache:nil];
+}
 
 /**
  Update cached data in the scope of the cache filter
