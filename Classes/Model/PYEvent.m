@@ -423,7 +423,7 @@
     self.duration = PYEvent_RUNNING;
 }
 
-- (void)setStateNoDuration {
+- (void)resetDuration {
     self.duration = 0;
 }
 

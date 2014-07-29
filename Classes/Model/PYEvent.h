@@ -147,8 +147,8 @@
 /** set the state of the event as running, sugar go event.duration = PYEvent_RUNNING **/
 - (void)setStateRunning;
 
-/** set the state of the event as running, sugar go event.duration = 0 **/
-- (void)setStateNoDuration;
+/** no duration for event, sugar go event.duration = 0 **/
+- (void)resetDuration;
 
 /**
  * date must be > eventDate otherwise will duration will be set to 0
