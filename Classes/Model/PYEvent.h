@@ -133,7 +133,12 @@
 /** (PRIVATE) get eventTime in "server-Time space" .. for internal user only **/
 - (NSTimeInterval)getEventServerTime;
 
-/** get the event endDate, return eventDate, if no endDate, or nil if running **/
+/**
+ * get the event endDate, return nil if no endDate
+ * return a NSDate with now value if running !!!
+ *
+ * if (no start Date and has a duration.. then returns nil) .. faulty state
+ **/
 - (NSDate *)eventEndDate;
 
 /** return true if event is running, same as event.duration   **/

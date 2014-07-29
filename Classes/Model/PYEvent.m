@@ -380,12 +380,7 @@
     return self.time;
 }
 
-/** 
- * get the event endDate, return nil if no endDate 
- * return a NSDate with now value if running !!!
- * 
- * if (no start Date and has a duration.. then returns nil) .. faulty state
- **/
+
 - (NSDate *)eventEndDate {
     if ([self isRunning]) return [NSDate date];
     if (self.duration == 0) return nil;
@@ -404,11 +399,7 @@
     return [self.connection localDateFromServerTime:endTime];
 }
 
-/** 
- * date must be > eventDate otherwise will duration will be set to 0
- * if date = nil, the end date will be set to 0
- * if the date has no start date this will be ignored
- **/
+
 - (void)setEventEndDate:(NSDate*)date {
     if (self.time == PYEvent_UNDEFINED_TIME) return;
     if (! date) {
@@ -423,18 +414,15 @@
     self.duration = i;
 }
 
-/** return true if event is running, same as event.duration   **/
 - (BOOL)isRunning {
     return (self.duration == PYEvent_RUNNING);
 }
 
 
-/** set the state of the event as running, sugar go event.duration = PYEvent_RUNNING **/
 - (void)setRunningState {
     self.duration = PYEvent_RUNNING;
 }
 
-/** set the state of the event as running, sugar go event.duration = 0 **/
 - (void)setNoDuration {
     self.duration = 0;
 }
