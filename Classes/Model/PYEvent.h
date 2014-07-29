@@ -12,7 +12,7 @@
 
 
 #define PYEvent_UNDEFINED_TIME -DBL_MAX
-#define PYEvent_UNDEFINED_DURATION -DBL_MAX
+#define PYEvent_RUNNING -DBL_MAX
 
 #import <Foundation/Foundation.h>
 #import "PYStream.h"
@@ -132,6 +132,25 @@
 
 /** (PRIVATE) get eventTime in "server-Time space" .. for internal user only **/
 - (NSTimeInterval)getEventServerTime;
+
+/** get the event endDate, return eventDate, if no endDate, or nil if running **/
+- (NSDate *)eventEndDate;
+
+/** return true if event is running, same as event.duration   **/
+- (BOOL)isRunning;
+
+/** set the state of the event as running, sugar go event.duration = PYEvent_RUNNING **/
+- (void)setRunningState;
+
+/** set the state of the event as running, sugar go event.duration = 0 **/
+- (void)setNoDuration;
+
+/**
+ * date must be > eventDate otherwise will duration will be set to 0
+ * if date = nil, the end date will be set to 0
+ * if the date has no start date this will be ignored
+ **/
+- (void)setEventEndDate:(NSDate*)date;
 
 # pragma mark - attachment
 

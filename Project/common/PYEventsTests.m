@@ -186,6 +186,65 @@
     
 }
 
+
+- (void)testEventDurations
+{
+    NSNumber *nearTimeStamp = [NSNumber numberWithDouble:([[NSDate date] timeIntervalSince1970] - 10)];
+    
+    // event with 2 minutes duration
+    NSDictionary* e1Dict = @{ @"time": nearTimeStamp, @"duration" : @120};
+    PYEvent* e1 = [[PYEvent alloc] init];
+    [e1 resetFromCachingDictionary:e1Dict];
+    STAssertTrue(! [e1 isRunning], @"should not be runing");
+    STAssertNotNil(e1.eventEndDate, @"should have a end date");
+    
+    // caching directory
+    NSDictionary* d1 = [e1 dictionary];
+    STAssertNotNil([d1 objectForKey:@"duration"], @"should have a duration value");
+    NSDictionary* cd1 = [e1 cachingDictionary];
+    STAssertNotNil([cd1 objectForKey:@"duration"], @"should have a duration value");
+    
+    // manipulations
+    [e1 setRunningState];
+    STAssertTrue([e1 isRunning], @"should not be runing");
+    STAssertNotNil(e1.eventEndDate, @"should have a end date");
+    
+    [e1 release];
+    
+    // event with no duration
+    NSDictionary* e2Dict = @{ @"time": nearTimeStamp};
+    PYEvent* e2 = [[PYEvent alloc] init];
+    [e2 resetFromCachingDictionary:e2Dict];
+    STAssertTrue(! [e2 isRunning], @"should not be runing");
+    STAssertNil(e2.eventEndDate, @"should have a end date");
+    // caching directory
+    NSDictionary* d2 = [e2 dictionary];
+    STAssertNotNil([d2 objectForKey:@"duration"], @"should have a duration value");
+    NSDictionary* cd2 = [e2 cachingDictionary];
+    STAssertNotNil([cd2 objectForKey:@"duration"], @"should have a duration value");
+    
+    [e2 setEventEndDate:[NSDate date]];
+    STAssertTrue(! [e2 isRunning], @"should not be runing");
+    STAssertNotNil(e2.eventEndDate, @"should have a end date");
+    STAssertTrue(e2.duration > 0, @"should not be runing");
+    [e2 release];
+    
+    // running event
+    NSDictionary* e3Dict = @{ @"time": nearTimeStamp, @"duration" : [NSNull null]};
+    PYEvent* e3 = [[PYEvent alloc] init];
+    [e3 resetFromCachingDictionary:e3Dict];
+    STAssertTrue([e3 isRunning], @"should be running");
+    STAssertNotNil(e3.eventEndDate, @"should have a end date");
+    // caching directory
+    NSDictionary* d3 = [e3 dictionary];
+    STAssertTrue([d3 objectForKey:@"duration"] == [NSNull null], @"should have a duration value");
+    NSDictionary* cd3 = [e3 cachingDictionary];
+    STAssertTrue([cd3 objectForKey:@"duration"] == [NSNull null], @"should have a duration value");
+
+    [e3 release];
+    
+}
+
 - (void)tearDown
 {
     [super tearDown];

@@ -54,10 +54,13 @@
     }
     
     [self setEventServerTime:[[JSON objectForKey:@"time"] doubleValue]];
-    if ([JSON objectForKey:@"duration"] == [NSNull null]) {
+    id _tduration = [JSON objectForKey:@"duration"];
+    if (! _tduration) {
         self.duration = 0;
-    }else{
-        self.duration = [[JSON objectForKey:@"duration"] doubleValue];
+    } else if (_tduration == [NSNull null]) {
+        self.duration = PYEvent_RUNNING;
+    } else {
+        self.duration = [_tduration doubleValue];
     }
     
     id eventType = [JSON objectForKey:@"type"];
