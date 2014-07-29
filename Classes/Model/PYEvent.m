@@ -419,11 +419,11 @@
 }
 
 
-- (void)setRunningState {
+- (void)setStateRunning {
     self.duration = PYEvent_RUNNING;
 }
 
-- (void)setNoDuration {
+- (void)setStateNoDuration {
     self.duration = 0;
 }
 

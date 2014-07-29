@@ -205,7 +205,7 @@
     STAssertNotNil([cd1 objectForKey:@"duration"], @"should have a duration value");
     
     // manipulations
-    [e1 setRunningState];
+    [e1 setStateRunning];
     STAssertTrue([e1 isRunning], @"should not be runing");
     STAssertNotNil(e1.eventEndDate, @"should have a end date");
     
