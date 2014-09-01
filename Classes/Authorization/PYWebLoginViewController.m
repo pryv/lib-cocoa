@@ -126,13 +126,13 @@ BOOL closing;
     navigationController.navigationBar.translucent = NO;
     
     if (self.barStyleType == BarStyleTypeHome) {
-        self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(reload:)] autorelease];
+        self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(reload:)] autorelease];
     } else {
         
-        self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
+        self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
         
         refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
-        self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
+        self.navigationItem.leftBarButtonItem = refreshBarButtonItem;
     }
     
     // -- loading Indicator --//
@@ -281,14 +281,14 @@ BOOL closing;
 {
     refreshBarButtonItem.enabled = NO;
     [loadingActivityIndicatorView startAnimating];
-    self.navigationItem.rightBarButtonItem = loadingActivityIndicator;
+    self.navigationItem.leftBarButtonItem = loadingActivityIndicator;
 }
 
 - (void)stopLoading
 {
     refreshBarButtonItem.enabled = YES;
     [loadingActivityIndicatorView stopAnimating];
-    self.navigationItem.rightBarButtonItem = refreshBarButtonItem;
+    self.navigationItem.leftBarButtonItem = refreshBarButtonItem;
 }
 
 #endif
