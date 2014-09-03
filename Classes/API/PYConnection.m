@@ -77,7 +77,7 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         self.cacheFilter = [[PYFilter alloc] initWithConnection:self
                                                        fromTime:PYEventFilter_UNDEFINED_FROMTIME
                                                          toTime:PYEventFilter_UNDEFINED_TOTIME
-                                                          limit:1000000000000
+                                                          limit:2147483647
                                                  onlyStreamsIDs:nil
                                                            tags:nil
                                                           types:nil];

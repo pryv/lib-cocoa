@@ -74,16 +74,20 @@
 {
     NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
     if (filter == nil) return dic;
-    if (filter.fromTime != PYEventFilter_UNDEFINED_FROMTIME) {
+    //if (filter.fromTime != PYEventFilter_UNDEFINED_FROMTIME) {
         [dic setObject:[NSString stringWithFormat:@"%f",filter.fromTime] forKey:kPYAPIEventFilterFromTime];
-    }
+    //}
     
-    if (filter.toTime != PYEventFilter_UNDEFINED_TOTIME) {
+    //if (filter.toTime != PYEventFilter_UNDEFINED_TOTIME) {
         [dic setObject:[NSString stringWithFormat:@"%f",filter.toTime] forKey:kPYAPIEventFilterToTime];
-    }
+    //}
     
-    if (filter.limit > 0) {
-        [dic setObject:[NSString stringWithFormat:@"%i",(unsigned int)filter.limit] forKey:kPYAPIEventFilterLimit];
+    long limit = filter.limit;
+    if (limit > 2147483648) {
+        limit = 2147483647;
+    }
+    if (limit > 0) {
+        [dic setObject:[NSString stringWithFormat:@"%lu",(unsigned long)limit] forKey:kPYAPIEventFilterLimit];
     }
     
     //Doesn't work when sending - error in request parameters
@@ -154,9 +158,40 @@
 + (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYFilter *)filter
 {
     
+    /**
+    NSArray* streamIds = [self streamIdsCoveredByFilter:filter];
+    
+    NSPredicate* predicate = [self predicateFromFilter:filter];
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (int i = 0; i < events.count; i++) {
+        
+        PYEvent* event = [events objectAtIndex:i];
+        if ([event.streamId isEqualToString:@"TenUl5SUjq"]) { //polo
+            NSLog(@"Picture does X match");
+        }
+        BOOL val = [predicate evaluateWithObject:event];
+        if (val) {
+            [result addObject:event];
+        } else {
+            
+            if ([streamIds indexOfObject:event.streamId] != NSNotFound) {
+              NSLog(@"Picture does  match");
+            }
+            if ([event.type isEqualToString:@"picture/attached"] &&
+                ! event.trashed && ( [streamIds indexOfObject:event.streamId] != NSNotFound)) {
+                NSLog(@"Picture does not match");
+            }
+        }
+    }**/
+    
+    
+    
     NSMutableArray *result = [[NSMutableArray alloc]
                               initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
     [PYEventFilterUtility sortNSMutableArrayOfPYEvents:result sortAscending:YES];
+    
+    
+    
     /**
     if (result.count > filter.limit)
     {
