@@ -22,14 +22,15 @@
         [NSException raise:@"Connection cannot be nil" format:nil];
     }
     
-    PYEvent *event;
+    ;
     // we have a clientId if event is loaded from cache
     id clientId = [JSON objectForKey:@"clientId"];
-    if ([clientId isKindOfClass:[NSNull class]]) {
-        event = [[[self alloc] init] autorelease];
-    } else {
-        event = [PYEvent createOrReuseWithClientId:clientId];
-    }
+    PYEvent *event = [PYEvent createOrReuseWithClientId:clientId];
+#pragma WARNING discussion
+    // perki sept 2014
+    // for some reason I had to retain and then autorelease the event
+    // otherwise it gets dealocated (sometimes) during resetFromDictionary
+    [event retain];
     
     id eventId = [JSON objectForKey:@"id"];
     if ([eventId isKindOfClass:[NSNull class]]) {
@@ -40,7 +41,7 @@
     
     [event resetFromDictionary:JSON];
     event.connection = connection;
-    return event;
+    return [event autorelease];
 }
 
 

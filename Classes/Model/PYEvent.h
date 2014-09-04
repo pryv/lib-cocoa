@@ -79,6 +79,9 @@
 
 - (id) initWithConnection:(PYConnection*) connection;
 
+/**
+ * clientId can be null.. Then a new object with a new clientId will be generated
+ */
 + (PYEvent*) createOrReuseWithClientId:(NSString*) clientId;
 
 /**
