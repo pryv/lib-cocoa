@@ -64,8 +64,8 @@
 {
     if (self = [super initWithConnection:connection fromTime:fromTime toTime:toTime
                                    limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:types]) {
-       
-            _currentEventsDic = [[NSMutableDictionary alloc] init];
+        
+        _currentEventsDic = [[NSMutableDictionary alloc] init];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionEventUpdate:)
                                                      name:kPYNotificationEvents object:connection];
@@ -188,7 +188,7 @@
      object:self
      userInfo:userInfo];
     [userInfo release];
-
+    
 }
 
 
@@ -204,62 +204,82 @@
 
 - (void)update:(void(^)(NSError *error))done
 {
-    /**
+    
+    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         //Background Thread
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            //Run UI Updates
-        });
-    });**/
-    
-    NSLog(@"*264");
-    NSArray* toAdd = [PYEventFilterUtility
-                      filterEventsList:[self.connection.cache allEvents] withFilter:self];
-    [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
-     NSLog(@"*264'");
-    
-    
-    // no need to handle the events, it will be done by the notification listner
-    //[self.connection eventsWithFilter:self fromCache:nil andOnline:nil onlineDiffWithCached:nil errorHandler:nil];
-    
-    // first of all clean up actual list of event
-    
-    NSPredicate* predicate = [PYEventFilterUtility predicateFromFilter:self];
-    NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
-    NSEnumerator *currentEventsEnumerator = [self.currentEventsSet objectEnumerator];
-    PYEvent* event;
-    while ((event = [currentEventsEnumerator nextObject]) != nil) {
-        if (! [predicate evaluateWithObject:event]) {
-            [eventsToRemove addObject:event];
-        }
-    }
-    [self notifyEventsToAdd:nil toRemove:eventsToRemove modified:nil];
-    NSLog(@"*264''");
-    
-    // -- if filter is matching the cache.. just update the cache
-    
-    
-    if (! [self.connection updateCache:^(NSError *error) {
-        NSLog(@"*265");
-        if (done) done(error);
-    } ifCacheIncludes:self]) {
-        NSLog(@"*265''");
-        // -- check online
-      
         
-        [self.connection eventsWithFilter:self
-                                fromCache:^(NSArray *cachedEventList) {
-                                    [self synchWithList:cachedEventList];
-                                    
-                                } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                    
-                                    [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
-                                    if (done) done(nil);
-                                } onlineDiffWithCached:nil
-                             errorHandler:^(NSError *error) {
-                                 if (done) done(error);
-                             }];
-    }
+        
+        NSLog(@"*264");
+        NSArray* toAdd = [PYEventFilterUtility
+                          filterEventsList:[self.connection.cache allEvents] withFilter:self];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+           [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
+        });
+        
+        NSLog(@"*264'");
+        
+        
+        // no need to handle the events, it will be done by the notification listner
+        //[self.connection eventsWithFilter:self fromCache:nil andOnline:nil onlineDiffWithCached:nil errorHandler:nil];
+        
+        // first of all clean up actual list of event
+        
+        NSPredicate* predicate = [PYEventFilterUtility predicateFromFilter:self];
+        NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
+        NSEnumerator *currentEventsEnumerator = [self.currentEventsSet objectEnumerator];
+        PYEvent* event;
+        while ((event = [currentEventsEnumerator nextObject]) != nil) {
+            if (! [predicate evaluateWithObject:event]) {
+                [eventsToRemove addObject:event];
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [self notifyEventsToAdd:nil toRemove:eventsToRemove modified:nil];
+        });
+        
+        NSLog(@"*264''");
+        
+        // -- if filter is matching the cache.. just update the cache
+        
+        
+        if (! [self.connection updateCache:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                NSLog(@"*265");
+                if (done) done(error);
+            });
+            
+        } ifCacheIncludes:self]) {
+            NSLog(@"*265''");
+            // -- check online
+            
+            
+            [self.connection eventsWithFilter:self
+                                    fromCache:^(NSArray *cachedEventList) {
+                                        dispatch_async(dispatch_get_main_queue(), ^(void){
+                                            [self synchWithList:cachedEventList];
+                                        });
+                                        
+                                        
+                                    } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                                        dispatch_async(dispatch_get_main_queue(), ^(void){
+                                            [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
+                                            if (done) done(nil);
+                                        });
+                                        
+                                    } onlineDiffWithCached:nil
+                                 errorHandler:^(NSError *error) {
+                                     dispatch_async(dispatch_get_main_queue(), ^(void){
+                                         
+                                         if (done) done(error);
+                                     });
+                                 }];
+        }
+        
+        
+    });
     
 }
 
