@@ -143,12 +143,13 @@
 - (NSArray *)allEvents
 {
     NSMutableArray *arrayOFCachedEvents = [[NSMutableArray alloc] init];
-    for (NSString *eventCachedName in self.allEventsDictionary) {
-        NSDictionary *eventDic = [self.allEventsDictionary objectForKey:eventCachedName];
-        [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic
-                                                       onConnection:self.connection]];
+    @synchronized (self) {
+        for (NSString *eventCachedName in self.allEventsDictionary) {
+            NSDictionary *eventDic = [self.allEventsDictionary objectForKey:eventCachedName];
+            [arrayOFCachedEvents addObject:[PYEvent eventFromDictionary:eventDic
+                                                           onConnection:self.connection]];
+        }
     }
-    
     return [arrayOFCachedEvents autorelease];
 }
 
@@ -181,11 +182,13 @@ BOOL _eventsNeedSave = NO;
 
 - (PYEvent *)_eventWithKey:(NSString *)key;
 {
-    NSDictionary* eventDict = [self.allEventsDictionary objectForKey:key];
-    if (eventDict) {
-        return [PYEvent eventFromDictionary:eventDict onConnection:self.connection];
+    @synchronized (self) {
+        NSDictionary* eventDict = [self.allEventsDictionary objectForKey:key];
+        if (eventDict) {
+            return [PYEvent eventFromDictionary:eventDict onConnection:self.connection];
+        }
+        return nil;
     }
-    return nil;
 }
 
 - (PYEvent *)eventWithEventId:(NSString *)eventId;

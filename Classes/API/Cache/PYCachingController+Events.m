@@ -38,8 +38,9 @@
     }
       
     NSDictionary *eventData = [event cachingDictionary];
-    [self.allEventsDictionary setObject:eventData forKey:[self keyForEvent:event]];
-    
+    @synchronized (self) {
+        [self.allEventsDictionary setObject:eventData forKey:[self keyForEvent:event]];
+    }
     if (save) {
         [self saveAllEvents];
     }
@@ -48,7 +49,9 @@
 - (void)cacheEvent:(PYEvent *)event andCleanTempData:(BOOL)cleanTemp
 {
     if (cleanTemp) {
-        [self.allEventsDictionary removeObjectForKey:[self keyForNotYetCreatedEvent:event]];
+         @synchronized (self) {
+             [self.allEventsDictionary removeObjectForKey:[self keyForNotYetCreatedEvent:event]];
+         }
         // move eventual attachments
         for (PYAttachment* att in event.attachments) {
             [self moveEntityWithKey:[self keyForAttachment:att onNotYetCreatedEvent:event]
@@ -62,7 +65,9 @@
 
 - (void)removeEvent:(PYEvent *)event
 {
-    [self.allEventsDictionary removeObjectForKey:[self keyForEvent:event]];
+    @synchronized (self) {
+         [self.allEventsDictionary removeObjectForKey:[self keyForEvent:event]];
+    }
     if (event.attachments) {
     for (PYAttachment* att in event.attachments) {
         [self removeEntityWithKey:[self keyForAttachment:att onEvent:event]];
@@ -100,7 +105,9 @@
 
 - (BOOL)eventIsKnownByCache:(PYEvent *)event
 {
-    return ([self.allEventsDictionary objectForKey:[self keyForEvent:event]] != nil);
+    @synchronized (self) {
+        return ([self.allEventsDictionary objectForKey:[self keyForEvent:event]] != nil);
+    }
 }
 
 
