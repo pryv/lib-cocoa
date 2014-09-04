@@ -204,11 +204,19 @@
 
 - (void)update:(void(^)(NSError *error))done
 {
-
+    /**
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        //Background Thread
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            //Run UI Updates
+        });
+    });**/
+    
+    NSLog(@"*264");
     NSArray* toAdd = [PYEventFilterUtility
                       filterEventsList:[self.connection.cache allEvents] withFilter:self];
     [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
-    
+     NSLog(@"*264'");
     
     
     // no need to handle the events, it will be done by the notification listner
@@ -226,15 +234,16 @@
         }
     }
     [self notifyEventsToAdd:nil toRemove:eventsToRemove modified:nil];
-    
+    NSLog(@"*264''");
     
     // -- if filter is matching the cache.. just update the cache
     
     
     if (! [self.connection updateCache:^(NSError *error) {
+        NSLog(@"*265");
         if (done) done(error);
     } ifCacheIncludes:self]) {
-        
+        NSLog(@"*265''");
         // -- check online
       
         

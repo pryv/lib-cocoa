@@ -185,11 +185,11 @@
     }**/
     
     
-    
+    NSDate *afx6 = [NSDate date];
     NSMutableArray *result = [[NSMutableArray alloc]
                               initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
     [PYEventFilterUtility sortNSMutableArrayOfPYEvents:result sortAscending:YES];
-    
+    NSLog(@"*afx6 filteringUsingPredicate %f", [afx6 timeIntervalSinceNow]);
     
     
     /**
