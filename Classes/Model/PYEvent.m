@@ -88,12 +88,12 @@
     if (self)
     {
         if (clientId) {
-            _clientId = clientId;
+            self.clientId = clientId;
         } else {
-            _clientId = [PYEvent createClientId];
+            self.clientId = [PYEvent createClientId];
         }
-        #warning fixme
-        [_clientId retain]; // should we retain?
+        //#warning fixme
+        //[_clientId retain]; // should we retain?
         
         [self superviseIn];
         

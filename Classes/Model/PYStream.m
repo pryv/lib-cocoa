@@ -71,12 +71,12 @@
     if (self)
     {
         if (clientId) {
-            _clientId = clientId;
+            self.clientId = clientId;
         } else {
-            _clientId = [PYStream createClientId];
+            self.clientId = [PYStream createClientId];
         }
 #warning fixme
-        [_clientId retain]; // should we retain?
+        //[_clientId retain]; // should we retain?
         
         [self superviseIn];
         self.connection = connection;
@@ -87,6 +87,9 @@
 #pragma mark - PYSupervisable
 
 - (NSString *)supervisableKey {
+    if (! self.clientId) {
+        [NSException raise:@"Stream client Id musn't be nil" format:@"Stream client Id musn't be nil"];
+    }
     return self.clientId;
 }
 

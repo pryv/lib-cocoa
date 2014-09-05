@@ -53,7 +53,7 @@
 
 @property (nonatomic, retain) PYConnection  *connection;
 /** client side id only.. remain the same before and after synching **/
-@property (nonatomic, readonly) NSString  *clientId;
+@property (nonatomic, retain) NSString  *clientId;
 
 # pragma mark - API Matching properties
 @property (nonatomic, copy) NSString  *eventId;
