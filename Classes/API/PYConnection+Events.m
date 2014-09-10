@@ -411,7 +411,7 @@
                  }
                  
                  
-                 if (eventWasSyncTried) {
+                 if (! eventWasSyncTried) {
                      //Get current event with id from cache
                      [self.cache cacheEvent:event];
                      
