@@ -34,8 +34,9 @@ static NSMutableDictionary *s_liveObjectDictionary;
 - (void)superviseIn {
     id<PYSupervisable> supervisableSelf = (id<PYSupervisable>)self;
     NSMutableDictionary *liveObjDict = [[self class] liveObjectDictionary];
-    [liveObjDict setObject:[NSValue valueWithNonretainedObject:self]
-                    forKey:[supervisableSelf supervisableKey]];
+    id zeroed = [NSValue valueWithNonretainedObject:self];
+    NSString* key = [supervisableSelf supervisableKey];
+    [liveObjDict setObject:zeroed forKey:key];
 }
 
 @end
