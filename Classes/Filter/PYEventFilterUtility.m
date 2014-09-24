@@ -158,38 +158,27 @@
 + (NSArray *)filterEventsList:(NSArray *)events withFilter:(PYFilter *)filter
 {
     
-    /**
-    NSArray* streamIds = [self streamIdsCoveredByFilter:filter];
     
-    NSPredicate* predicate = [self predicateFromFilter:filter];
+    NSDate *afx6 = [NSDate date];
+    
+
     NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSArray* coveredStreamIds = [PYEventFilterUtility streamIdsCoveredByFilter:filter];
     for (int i = 0; i < events.count; i++) {
         
         PYEvent* event = [events objectAtIndex:i];
-        if ([event.streamId isEqualToString:@"TenUl5SUjq"]) { //polo
-            NSLog(@"Picture does X match");
-        }
-        BOOL val = [predicate evaluateWithObject:event];
-        if (val) {
+        if ([PYEventFilterUtility event:event matchFilter:filter withCoveredStreamIdsCache:coveredStreamIds]) {
             [result addObject:event];
-        } else {
-            
-            if ([streamIds indexOfObject:event.streamId] != NSNotFound) {
-              NSLog(@"Picture does  match");
-            }
-            if ([event.type isEqualToString:@"picture/attached"] &&
-                ! event.trashed && ( [streamIds indexOfObject:event.streamId] != NSNotFound)) {
-                NSLog(@"Picture does not match");
-            }
         }
-    }**/
+    }
     
-    
-    NSDate *afx6 = [NSDate date];
+    /**
     NSMutableArray *result = [[NSMutableArray alloc]
                               initWithArray:[events filteredArrayUsingPredicate:[self predicateFromFilter:filter]]];
     [PYEventFilterUtility sortNSMutableArrayOfPYEvents:result sortAscending:YES];
-    NSLog(@"*afx6 filteringUsingPredicate %f", [afx6 timeIntervalSinceNow]);
+   **/
+    
+    NSLog(@"*afx6 filteringUsingTweak !! Not fully implemented %f", [afx6 timeIntervalSinceNow]);
     
     
     /**
@@ -308,6 +297,30 @@ NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* igno
         return NSOrderedSame;
 }
 
++ (BOOL)event:(PYEvent*)event matchFilter:(PYFilter*)filter withCoveredStreamIdsCache:(NSArray*)streamIds {
+    if ([event getEventServerTime] > filter.toTime) return NO;
+    if ([event getEventServerTime] < filter.fromTime) return NO;
+    if (filter.state != PYEventFilter_kStateAll && event.trashed) return NO;
+    
+    if (filter.onlyStreamsIDs) {
+        if (! streamIds) {
+            streamIds = [PYEventFilterUtility streamIdsCoveredByFilter:filter];
+        }
+        
+        if (streamIds) {
+            if ([streamIds indexOfObject:event.streamId] == NSNotFound) return NO;
+        }
+    }
+#warning - implements match on tags
+    if (filter.tags) {
+        NSLog(@"<WARNING> PYFilter.matchEvents does not support tags yet");
+    }
+    
+    if (filter.types != nil) {
+        //NSLog(@"<WARNING> PYFilter.matchEvents does not support types yet");
+    }
+    return YES;
+}
 
 
 @end

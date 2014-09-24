@@ -226,12 +226,15 @@
         
         // first of all clean up actual list of event
         
-        NSPredicate* predicate = [PYEventFilterUtility predicateFromFilter:self];
+        //NSPredicate* predicate = [PYEventFilterUtility predicateFromFilter:self];
+        NSArray* coveredStreamIds = [PYEventFilterUtility streamIdsCoveredByFilter:self];
         NSMutableArray *eventsToRemove = [[[NSMutableArray alloc] init] autorelease];
         NSEnumerator *currentEventsEnumerator = [self.currentEventsSet objectEnumerator];
         PYEvent* event;
         while ((event = [currentEventsEnumerator nextObject]) != nil) {
-            if (! [predicate evaluateWithObject:event]) {
+            // if (! [predicate evaluateWithObject:event]) {
+             
+            if (! [PYEventFilterUtility event:event matchFilter:self withCoveredStreamIdsCache:coveredStreamIds]) {
                 [eventsToRemove addObject:event];
             }
         }

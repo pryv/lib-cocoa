@@ -11,6 +11,7 @@
 
 @class PYConnection;
 @class PYFilter;
+@class PYEvent;
 
 @interface PYEventFilterUtility : NSObject
 
@@ -45,5 +46,11 @@
  * does not consider modified since
  */
 + (BOOL)filter:(PYFilter*)srcFilter isIncludedInFilter:(PYFilter*)destFilter;
+
+/**
+ * temporary method way faster than predicate (until we use core data)
+ */
++ (BOOL)event:(PYEvent*)event matchFilter:(PYFilter*)filter
+            withCoveredStreamIdsCache:(NSArray*)streamIds;
 
 @end
