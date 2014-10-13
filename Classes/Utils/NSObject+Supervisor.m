@@ -12,17 +12,22 @@
 @implementation NSObject (Supervisor)
 
 static NSMutableDictionary *s_liveObjectDictionary;
+static NSLock *lock;
 
 + (NSMutableDictionary *)liveObjectDictionary {
     if (! s_liveObjectDictionary) {
         s_liveObjectDictionary = [[NSMutableDictionary alloc] init];
+        lock = [[NSLock alloc] init];
     }
     return s_liveObjectDictionary;
 }
 
 + (id)liveObjectForSupervisableKey:(NSString *)supervisableKey {
     NSDictionary *liveObjDict = [self liveObjectDictionary];
-    return [(NSValue *)[liveObjDict objectForKey:supervisableKey] nonretainedObjectValue];
+    [lock lock];
+    NSValue *liveObj = [(NSValue *)[liveObjDict objectForKey:supervisableKey] nonretainedObjectValue];
+    [lock unlock];
+    return liveObj;
 }
 
 - (void)superviseOut {
@@ -36,7 +41,9 @@ static NSMutableDictionary *s_liveObjectDictionary;
     NSMutableDictionary *liveObjDict = [[self class] liveObjectDictionary];
     id zeroed = [NSValue valueWithNonretainedObject:self];
     NSString* key = [supervisableSelf supervisableKey];
+    [lock lock];
     [liveObjDict setObject:zeroed forKey:key];
+    [lock unlock];
 }
 
 @end

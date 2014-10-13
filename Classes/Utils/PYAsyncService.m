@@ -87,7 +87,7 @@
     self.onSuccess = success;
     self.onFailure = failure;
     self.onProgress = progress;
-    [self.connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    [self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     [self.connection start];
     //});
@@ -150,7 +150,10 @@
                               failure:(PYAsyncServiceFailureBlock)failure
                              progress:(PYAsyncServiceProgressBlock)progress
 {
-    dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the connection may be lost
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the request may be lost
+        
         
         PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
         [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {

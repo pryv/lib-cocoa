@@ -205,21 +205,21 @@
 - (void)update:(void(^)(NSError *error))done
 {
     
-    
-         //Background Thread
-        
+
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        //Background Thread
+
         
         NSLog(@"*264");
         NSArray* toAdd = [PYEventFilterUtility
                           filterEventsList:[self.connection.cache allEvents] withFilter:self];
         
-        //dispatch_async(dispatch_get_main_queue(), ^(void){
+        dispatch_async(dispatch_get_main_queue(), ^(void){
            [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
-        //});
+        });
         
         NSLog(@"*264'");
         
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         
         // no need to handle the events, it will be done by the notification listner
         //[self.connection eventsWithFilter:self fromCache:nil andOnline:nil onlineDiffWithCached:nil errorHandler:nil];
@@ -280,8 +280,6 @@
                                      });
                                  }];
         }
-        
-        
     });
     
 }
@@ -299,9 +297,6 @@
         NSLog(@"<NOTICE> skipping notification as I'm the sender");
         return;
     }
-    
-    
-    
     
     NSArray* toAdd = [PYEventFilterUtility
                       filterEventsList:[message objectForKey:kPYNotificationKeyAdd] withFilter:self];
