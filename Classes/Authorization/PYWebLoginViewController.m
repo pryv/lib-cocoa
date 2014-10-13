@@ -412,9 +412,9 @@ static BOOL s_requestedLoginView = NO;
             NSURL *loginPageURL = [NSURL URLWithString:loginPageUrlString];
             assert(loginPageURL);
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-            [[webView mainFrame] loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+            [[webView mainFrame] loadRequest:[NSURLRequest requestWithURL:loginPageURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0]];
 #else
-            [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
+            [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0]];
 #endif
             
         }
