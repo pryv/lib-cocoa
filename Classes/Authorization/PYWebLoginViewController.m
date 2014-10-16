@@ -373,12 +373,16 @@ static BOOL s_requestedLoginView = NO;
     
     // schedule a GET reqest in seconds amount stored in pollTimeInterval
     //__block __typeof__(self) bself = self;
-    self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
-                                                      target:self
-                                                    selector:@selector(timerBlock:)
-                                                    userInfo:nil
-                                                     repeats:NO
-                      ];
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.pollTimer = [NSTimer scheduledTimerWithTimeInterval:pollTimeInterval
+                                                          target:self
+                                                        selector:@selector(timerBlock:)
+                                                        userInfo:nil
+                                                         repeats:NO
+                          ];
+    });
 }
 
 - (void)timerBlock:(NSTimer *)timer {
@@ -414,7 +418,7 @@ static BOOL s_requestedLoginView = NO;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
             [[webView mainFrame] loadRequest:[NSURLRequest requestWithURL:loginPageURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0]];
 #else
-            [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0]];
+            [webView loadRequest:[NSURLRequest requestWithURL:loginPageURL]];
 #endif
             
         }

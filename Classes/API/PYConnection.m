@@ -104,12 +104,12 @@ NSString *const kPYConnectionOfflineUsername = @"_off";
         
         [self setupDeserializeNonSyncList];
         
-        self.cacheRefreshTimer= [NSTimer scheduledTimerWithTimeInterval:120.0
+        /*self.cacheRefreshTimer= [NSTimer scheduledTimerWithTimeInterval:120.0
                                          target:self
                                        selector:@selector(updateCacheFromTimer:)
                                        userInfo:nil
                                         repeats:YES];
-        
+        */
         self.cacheForGetAPIRequests = [[NSMutableDictionary alloc] init];
     }
     return self;

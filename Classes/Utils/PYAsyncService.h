@@ -58,6 +58,23 @@ typedef enum {
                              progress:(PYAsyncServiceProgressBlock)progress;
 
 /*!
+ @method JSONRequestServiceWithRequest:success:failure
+ @abstract The result expected is JSON formated
+ */
++ (void)JSONRequestAsyncServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure;
+
+/*!
+ @method JSONRequestServiceWithRequest:success:failure:progress
+ @abstract The result expected is JSON formated
+ */
++ (void)JSONRequestAsyncServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+                             progress:(PYAsyncServiceProgressBlock)progress;
+
+/*!
  @method RAWRequestServiceWithRequest:success:failure
  @abstract The result is returned as NSMutableData
  */

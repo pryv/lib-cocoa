@@ -88,9 +88,53 @@
     self.onFailure = failure;
     self.onProgress = progress;
     [self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+    //if (![NSThread isMainThread])
+        //[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantFuture]];
+    
     [self.connection start];
-    //});
+    
+}
+
+- (void)setCompletionBlockAsyncWithSuccess:(PYAsyncServiceSuccessBlock)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+                             progress:(PYAsyncServiceProgressBlock)progress
+{
+    self.onSuccess = success;
+    self.onFailure = failure;
+    self.onProgress = progress;
+    [self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    
+    //if (![NSThread isMainThread])
+    //[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantFuture]];
+    
+    //[self.connection start];
+    
+    [NSURLConnection
+     sendAsynchronousRequest:self.request
+     queue:[[NSOperationQueue alloc] init]
+     completionHandler:^(NSURLResponse *response,
+                         NSData *data,
+                         NSError *error)
+     {
+         
+         if ([data length] >0 && error == nil)
+         {
+             
+             success(self.request, (NSHTTPURLResponse*)response, [[data mutableCopy] autorelease]);
+             
+         }
+         else if ([data length] == 0 && error == nil)
+         {
+             NSLog(@"Nothing was downloaded.");
+         }
+         else if (error != nil){
+             NSLog(@"Error = %@", error);
+             failure(self.request, (NSHTTPURLResponse*)response, error, [data mutableCopy]);
+         }
+         
+     }];
+    
 }
 
 - (void)stop
@@ -137,6 +181,52 @@
     
 }
 
++ (void)JSONRequestAsyncServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+{
+    [self JSONRequestServiceWithRequest:request success:success failure:failure progress:nil];
+}
+
++ (void)JSONRequestAsyncServiceWithRequest:(NSURLRequest *)request
+                              success:(PYAsyncServiceSuccessBlockJSON)success
+                              failure:(PYAsyncServiceFailureBlock)failure
+                             progress:(PYAsyncServiceProgressBlock)progress
+{
+    
+    
+    //dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the request may be lost
+    
+    
+    PYAsyncService *requestOperation = [[PYAsyncService alloc] initWithRequest:request];
+    [requestOperation setCompletionBlockAsyncWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
+        
+        if (success) {
+            id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+            if (JSON == nil) { // Is not NSDictionary or NSArray
+                if ([resp statusCode] == 204) {
+                    // NOTE: special case - Deleting trashed events returns zero length content
+                    // maybe need to handle it somewhere else
+                    JSON = [[[NSDictionary alloc] init] autorelease];
+                } else {
+                    NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
+                    NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
+                    failure (req, resp, error, responseData);
+                    return;
+                }
+            }
+            success (req, resp, JSON);
+        }
+        
+    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
+        if (failure) {
+            failure (req, resp, error, responseData);
+        }
+    } progress:progress];
+    //});
+    
+}
+
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
                               success:(PYAsyncServiceSuccessBlockJSON)success
@@ -155,7 +245,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the request may be lost
         
         
-        PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
+        PYAsyncService *requestOperation = [[PYAsyncService alloc] initWithRequest:request];
         [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
             
             if (success) {

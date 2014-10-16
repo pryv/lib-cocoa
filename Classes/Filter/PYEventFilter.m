@@ -208,14 +208,14 @@
 
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         //Background Thread
-
+        
         
         NSLog(@"*264");
         NSArray* toAdd = [PYEventFilterUtility
                           filterEventsList:[self.connection.cache allEvents] withFilter:self];
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
-           [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
+            [self notifyEventsToAdd:toAdd toRemove:nil modified:nil];
         });
         
         NSLog(@"*264'");
@@ -233,7 +233,7 @@
         PYEvent* event;
         while ((event = [currentEventsEnumerator nextObject]) != nil) {
             // if (! [predicate evaluateWithObject:event]) {
-             
+            
             if (! [PYEventFilterUtility event:event matchFilter:self withCoveredStreamIdsCache:coveredStreamIds]) {
                 [eventsToRemove addObject:event];
             }
@@ -246,41 +246,38 @@
         NSLog(@"*264''");
         
         // -- if filter is matching the cache.. just update the cache
-        
-        
-        if (! [self.connection updateCache:^(NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                NSLog(@"*265");
-                if (done) done(error);
-            });
-            
-        } ifCacheIncludes:self]) {
-            NSLog(@"*265''");
-            // -- check online
-            
-            
-            [self.connection eventsWithFilter:self
-                                    fromCache:^(NSArray *cachedEventList) {
-                                        dispatch_async(dispatch_get_main_queue(), ^(void){
-                                            [self synchWithList:cachedEventList];
-                                        });
-                                        
-                                        
-                                    } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
-                                        dispatch_async(dispatch_get_main_queue(), ^(void){
-                                            [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
-                                            if (done) done(nil);
-                                        });
-                                        
-                                    } onlineDiffWithCached:nil
-                                 errorHandler:^(NSError *error) {
-                                     dispatch_async(dispatch_get_main_queue(), ^(void){
-                                         
-                                         if (done) done(error);
-                                     });
-                                 }];
-        }
     });
+    
+    if (! [self.connection updateCache:^(NSError *error) {
+            NSLog(@"*265");
+            if (done) done(error);
+    } ifCacheIncludes:self]) {
+        NSLog(@"*265''");
+        // -- check online
+        
+        
+        [self.connection eventsWithFilter:self
+                                fromCache:^(NSArray *cachedEventList) {
+                                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                                        [self synchWithList:cachedEventList];
+                                    });
+                                    
+                                    
+                                } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
+                                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                                        [self notifyWithOnlineListSinceLastUpdate:onlineEventList];
+                                        if (done) done(nil);
+                                    });
+                                    
+                                } onlineDiffWithCached:nil
+                             errorHandler:^(NSError *error) {
+                                 dispatch_async(dispatch_get_main_queue(), ^(void){
+                                     
+                                     if (done) done(error);
+                                 });
+                             }];
+    }
+    
     
 }
 
