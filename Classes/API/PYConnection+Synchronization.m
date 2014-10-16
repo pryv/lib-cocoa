@@ -95,70 +95,73 @@
 BOOL allreadySynchingEvents = NO;
 - (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done
 {
-    if (allreadySynchingEvents) return;
-    allreadySynchingEvents = YES;
-    
-    NSArray* eventNotSync = self.eventsNotSync;
-    
-    int eventCounter = (int)eventNotSync.count;
-    __block int successCounter = 0;
-    
-    
-    dispatch_group_t group = dispatch_group_create();
-    
-    for (PYEvent *event in eventNotSync) {
-        // do not synch twice at a time...
-        if (event.isSyncTriedNow) {
-            NSLog(@"<NOTICE> Skipping synck of event %@, it is already @synch", event.clientId);
-            continue;
-        }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        dispatch_group_enter(group);
-        //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
-        event.isSyncTriedNow = YES;
+        if (allreadySynchingEvents) return;
+        allreadySynchingEvents = YES;
         
-        if ([event toBeDeleteOnSync]) {
-            [self eventTrashOrDelete:event
-                      successHandler:^{
-                          successCounter++;
-                          dispatch_group_leave(group);
-                      } errorHandler:^(NSError *error) {
-                          dispatch_group_leave(group);
-                      }];
-        } else if (event.hasTmpId) { // create
+        NSArray* eventNotSync = self.eventsNotSync;
+        
+        int eventCounter = (int)eventNotSync.count;
+        __block int successCounter = 0;
+        
+        
+        dispatch_group_t group = dispatch_group_create();
+        
+        for (PYEvent *event in eventNotSync) {
+            // do not synch twice at a time...
+            if (event.isSyncTriedNow) {
+                NSLog(@"<NOTICE> Skipping synck of event %@, it is already @synch", event.clientId);
+                continue;
+            }
             
-            [self eventCreate:event
-               successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
-                   successCounter++;
-                   dispatch_group_leave(group);
-               } errorHandler:^(NSError *error) {
-                   //if we arrive there, it means that the created event is invalid.
-                   //it has been removed from cache!!
-                   //reset flag if fail, very IMPORTANT
-                   NSLog(@"SYNC error: creating event failed");
-                   NSLog(@"%@",error);
-                   dispatch_group_leave(group);
-               }];
-        } else { // update
-            NSLog(@"In this case event has server id");
-            [self eventSaveModifications:event
-                          successHandler:^(NSString *stoppedId) {
+            dispatch_group_enter(group);
+            //this is flag for situation where we failed again to sync event. When come to failure block we won't cache this event again
+            event.isSyncTriedNow = YES;
+            
+            if ([event toBeDeleteOnSync]) {
+                [self eventTrashOrDelete:event
+                          successHandler:^{
                               successCounter++;
                               dispatch_group_leave(group);
                           } errorHandler:^(NSError *error) {
                               dispatch_group_leave(group);
                           }];
+            } else if (event.hasTmpId) { // create
+                
+                [self eventCreate:event
+                   successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *createdEvent) {
+                       successCounter++;
+                       dispatch_group_leave(group);
+                   } errorHandler:^(NSError *error) {
+                       //if we arrive there, it means that the created event is invalid.
+                       //it has been removed from cache!!
+                       //reset flag if fail, very IMPORTANT
+                       NSLog(@"SYNC error: creating event failed");
+                       NSLog(@"%@",error);
+                       dispatch_group_leave(group);
+                   }];
+            } else { // update
+                NSLog(@"In this case event has server id");
+                [self eventSaveModifications:event
+                              successHandler:^(NSString *stoppedId) {
+                                  successCounter++;
+                                  dispatch_group_leave(group);
+                              } errorHandler:^(NSError *error) {
+                                  dispatch_group_leave(group);
+                              }];
+            }
         }
-    }
-    
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        allreadySynchingEvents = NO;
-        if (done) {
-            done(successCounter, eventCounter);
-            
-        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            allreadySynchingEvents = NO;
+            if (done) {
+                done(successCounter, eventCounter);
+                
+            }
+        });
+        dispatch_release(group);
     });
-    dispatch_release(group);
 }
 
 
