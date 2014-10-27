@@ -7,8 +7,9 @@
 //
 
 #import "PYConnection.h"
+#import "PYStreamManagerProtocol.h"
 
-@interface PYConnection (Streams)
+@interface PYConnection (Streams) <PYStreamManagerProtocol>
 
 
 

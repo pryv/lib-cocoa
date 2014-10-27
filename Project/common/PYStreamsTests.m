@@ -210,6 +210,70 @@
     WAIT_FOR_DONE(streamOnlineWithId);
 }
 
+
+- (void)testChangeStreamProperties
+{
+    
+    PYStream *newStream = [[PYStream alloc] initWithConnection:self.connection];
+    newStream.streamId = @"pystreamstestchangeproperty";
+    newStream.name = @"PYStreamsTests333";
+    
+   
+    
+    [self deleteStream:newStream];
+    
+    //STAssertTrue(newStream.connection, @"");
+    
+    NOT_DONE(done1);
+    [self.connection streamCreate:newStream successHandler:^(NSString *createdStreamId) {
+        DONE(done1);
+    } errorHandler:^(NSError *error) {
+        STFail(@"could not create stream");
+        DONE(done1);
+    }];
+    
+    WAIT_FOR_DONE(done1);
+
+    
+    
+    
+    NOT_DONE(changeStreamProperties);
+   
+
+    newStream.clientData = @{@"test" : @{ @"value" : @"testValue" }};
+    
+    [self.connection streamSaveModifications:newStream successHandler:^(PYStream *stream) {
+        STAssertTrue(stream == newStream, @"should very same stream");
+        STAssertNotNil(stream, @"should return single stream ");
+        DONE(changeStreamProperties);
+    } errorHandler:^(NSError *error) {
+        STFail(@"Unexpected Error: %@", error);
+        DONE(changeStreamProperties);
+
+    }];
+    
+    WAIT_FOR_DONE(changeStreamProperties);
+    
+    
+    NOT_DONE(streamOnlineWithId);
+    [self.connection streamOnlineWithId:newStream.streamId
+                         successHandler:^(PYStream *stream) {
+                             STAssertNotNil(stream, @"should return single stream requested by id from the server");
+                             STAssertNotNil(stream.clientData, @"should have client Data");
+                             
+                             STAssertNotNil([stream.clientData objectForKey:@"test"], @"should have property test");
+                             
+                             DONE(streamOnlineWithId);
+                         } errorHandler:^(NSError *error) {
+                             STFail(@"Unexpected Error: %@", error);
+                             DONE(streamOnlineWithId);
+                         }];
+    WAIT_FOR_DONE(streamOnlineWithId);
+
+}
+
+
+
 - (void)deleteStream:(PYStream *)testStream
 {
     NOT_DONE(streamTrashOrDelete);
