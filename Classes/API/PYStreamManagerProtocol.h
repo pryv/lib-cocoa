@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class PYStream;
+
 @protocol PYStreamManagerProtocol <NSObject>
+
+- (void)streamSaveModifications:(PYStream *)streamObject
+                successHandler:(void (^)(PYStream *stream))successHandler
+                  errorHandler:(void (^)(NSError *error))errorHandler;
 
 @end

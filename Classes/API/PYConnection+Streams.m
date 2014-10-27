@@ -255,6 +255,14 @@
              }];
 }
 
+- (void)streamSaveModifications:(PYStream *)streamObject
+                 successHandler:(void (^)(PYStream *stream))successHandler
+                   errorHandler:(void (^)(NSError *error))errorHandler {
+    [self streamSaveModifiedAttributeFor:streamObject forStreamId:streamObject.streamId successHandler:^{
+        if (successHandler) { successHandler(streamObject); }
+    } errorHandler:errorHandler];
+}
+
 - (void)streamSaveModifiedAttributeFor:(PYStream *)stream
                            forStreamId:(NSString *)streamId
                         successHandler:(void (^)())successHandler

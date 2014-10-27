@@ -12,7 +12,7 @@
 #import <PryvApiKit/PryvApiKit.h>
 #import "PYTestsUtils.h"
 #import "PYCachingController.h"
-#import "PYCachingController+Event.h"
+#import "PYCachingController+Events.h"
 
 @interface PYEAppTests ()
 
