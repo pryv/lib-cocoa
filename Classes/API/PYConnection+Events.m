@@ -277,7 +277,10 @@
     if (! event.eventId) {
         [self.cache removeEvent:event];
         if (successHandler) successHandler();
-        return; 
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
+                                                            object:self
+                                                          userInfo:@{kPYNotificationKeyDelete: @[event]}];
+        return;
     }
     
     
