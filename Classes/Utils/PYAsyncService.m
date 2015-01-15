@@ -144,6 +144,7 @@
                               failure:(PYAsyncServiceFailureBlock)failure
                              progress:(PYAsyncServiceProgressBlock)progress
 {
+    DLog(@"*87 Starting JSONRequestServiceWithRequest: %p, isMainThread: %@", request, [NSThread isMainThread] ? @"YES": @"NO");
     dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the request may be lost
                 
         PYAsyncService *requestOperation = [[PYAsyncService alloc] initWithRequest:request];
@@ -151,26 +152,26 @@
             
             if (success) {
                 
-                dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                 
-                id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
-                if (JSON == nil) { // Is not NSDictionary or NSArray
-                    if ([resp statusCode] == 204) {
-                        // NOTE: special case - Deleting trashed events returns zero length content
-                        // maybe need to handle it somewhere else
-                        JSON = [[[NSDictionary alloc] init] autorelease];
-                    } else {
-                        NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
-                        NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
-                        failure (req, resp, error, responseData);
-                        return;
+                    id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
+                    if (JSON == nil) { // Is not NSDictionary or NSArray
+                        if ([resp statusCode] == 204) {
+                            // NOTE: special case - Deleting trashed events returns zero length content
+                            // maybe need to handle it somewhere else
+                            JSON = [[[NSDictionary alloc] init] autorelease];
+                        } else {
+                            NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
+                            NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
+                            failure (req, resp, error, responseData);
+                            return;
+                        }
                     }
-                }
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        
+                    dispatch_async(dispatch_get_main_queue(), ^(void) {
+                        DLog(@"*87 Stopping JSONRequestServiceWithRequest: %p", request);
                         success (req, resp, JSON);
                     });
-                    
                     
                 });
             }
@@ -217,9 +218,9 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     // release the connection, and the data object
-    [connection release];
+    connection = nil, [connection release];
     // receivedData is declared as a method instance elsewhere
-    [_responseData release];
+    _responseData = nil, [_responseData release];
     
     self.request = nil;
     
@@ -253,8 +254,8 @@
             self.onFailure(self.request, self.response, e, self.responseData);
         }
         // release the connection, and the data object
-        [connection release];
-        [_responseData release];
+        connection = nil, [connection release];
+        _responseData = nil, [_responseData release];
         
         return;
 	}
@@ -265,10 +266,8 @@
     }
     
     // release the connection, and the data object
-    connection = nil;
-    [connection release];
-    _responseData = nil;
-    [_responseData release];
+    connection = nil, [connection release];
+    _responseData = nil, [_responseData release];
 }
 
 

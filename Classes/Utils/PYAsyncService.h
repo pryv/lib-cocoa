@@ -31,7 +31,6 @@ typedef enum {
 @private
     NSURLConnection *_connection;
     NSURLRequest *_request;
-    NSHTTPURLResponse *_response;
     NSMutableData *_responseData;
     PYRequestResultType _requestResultType;
     

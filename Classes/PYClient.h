@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef DEBUG
+#define DLog(fmt, ...) NSLog((fmt), ##__VA_ARGS__);
+#else
+#define DLog(...) do {} while (0)
+#endif
+
 
 NSString *const kLanguageCodeDefault;
 

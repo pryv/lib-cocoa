@@ -207,10 +207,9 @@ static NSString *s_myLanguageCodePrefered;
             failure:(PYClientFailureBlock)failureHandler
 {
 
-    //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
+    DLog(@"*86 started JSON request with url: %@", [[request URL] absoluteString]);
     [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
         if (! [self ifNoAPIVersionInResponse:resp failWith:failureHandler]) return;
-        
         
         if (successHandler) {
             NSAssert([JSON isKindOfClass:[NSDictionary class]], @"result is not NSDictionary");
@@ -218,7 +217,6 @@ static NSString *s_myLanguageCodePrefered;
         }
     } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
          if (! [self ifNoAPIVersionInResponse:resp failWith:failureHandler]) return;
-        
         
         if (failureHandler) {
             NSDictionary *JSON = [PYJSONUtility getJSONObjectFromData:responseData];
@@ -241,6 +239,7 @@ static NSString *s_myLanguageCodePrefered;
                failure:(PYClientFailureBlock)failureHandler
 {
     //NSLog(@"started RAW request with url: %@",[[request URL] absoluteString]);
+    
     [PYAsyncService RAWRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSMutableData *result) {
         if (successHandler) {
             successHandler(req,resp,result);
