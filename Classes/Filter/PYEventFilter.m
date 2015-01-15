@@ -33,6 +33,7 @@
 
 @synthesize currentEventsDic = _currentEventsDic;
 
+NSLock *currentEventsDicLock;
 
 - (void)dealloc
 {
@@ -64,7 +65,7 @@
 {
     if (self = [super initWithConnection:connection fromTime:fromTime toTime:toTime
                                    limit:limit onlyStreamsIDs:onlyStreamsIDs tags:tags types:types]) {
-        
+        currentEventsDicLock = [[NSLock alloc] init];
         _currentEventsDic = [[NSMutableDictionary alloc] init];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionEventUpdate:)
@@ -85,9 +86,12 @@
     ///
     ///  Missing: just add what's not present .. and remove that need to removed
     
+    [currentEventsDicLock lock];
+    
     NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
     PYEvent* event;
     if (srcAdd != nil) {
+        
         NSEnumerator *toAddEnumerator = [srcAdd objectEnumerator];
         while ((event = [toAddEnumerator nextObject]) != nil) {
             if ([self.currentEventsDic objectForKey:event.clientId] == nil) {
@@ -95,6 +99,7 @@
                 [resultAdd addObject:event];
             }
         }
+        
         [userInfo setObject:resultAdd forKey:kPYNotificationKeyAdd];
     }
     if (srcRemove != nil) {
@@ -116,6 +121,8 @@
         }
         [userInfo setObject:resultModify forKey:kPYNotificationKeyModify];
     }
+    
+    [currentEventsDicLock unlock];
     
     if ((resultAdd.count + resultRemove.count + resultModify.count) == 0 ) {
         NSLog(@"*42 void Filter notification.. no changes detected ");
@@ -161,10 +168,15 @@
     ///
     ///  Missing: just add what's not present .. and remove that need to removed
     
+    
+    
     NSMutableDictionary* userInfo = [[NSMutableDictionary alloc] init];
     PYEvent* event;
     if (eventList != nil) {
         NSEnumerator *toAddEnumerator = [eventList objectEnumerator];
+        
+        [currentEventsDicLock lock];
+        
         while ((event = [toAddEnumerator nextObject]) != nil) {
             if ([self.currentEventsDic objectForKey:event.clientId] == nil) {
                 [self.currentEventsDic setValue:event forKey:event.clientId];
@@ -173,6 +185,9 @@
                 [resultModify addObject:event];
             }
         }
+        
+        [currentEventsDicLock unlock];
+        
         [userInfo setObject:resultAdd forKey:kPYNotificationKeyAdd];
         [userInfo setObject:resultModify forKey:kPYNotificationKeyAdd];
     }
@@ -195,7 +210,10 @@
 - (NSArray*)currentEventsSet
 {
     // TODO check order
-    return [_currentEventsDic allValues];
+    [currentEventsDicLock lock];
+    NSArray* result = [_currentEventsDic allValues];
+    [currentEventsDicLock unlock];
+    return result;
 }
 
 - (void)update {
@@ -246,7 +264,7 @@
         NSLog(@"*264''");
         
         // -- if filter is matching the cache.. just update the cache
-    });
+    
     
     if (! [self.connection updateCache:^(NSError *error) {
             NSLog(@"*265");
@@ -276,9 +294,9 @@
                                      if (done) done(error);
                                  });
                              }];
+        
     }
-    
-    
+    });    
 }
 
 
