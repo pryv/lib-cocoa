@@ -208,7 +208,7 @@ static NSString *s_myLanguageCodePrefered;
 {
 
     //NSLog(@"started JSON request with url: %@",[[request URL] absoluteString]);
-    [PYAsyncService JSONRequestAsyncServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
+    [PYAsyncService JSONRequestServiceWithRequest:request success:^(NSURLRequest *req, NSHTTPURLResponse *resp, id JSON) {
         if (! [self ifNoAPIVersionInResponse:resp failWith:failureHandler]) return;
         
         

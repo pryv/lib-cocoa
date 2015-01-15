@@ -181,52 +181,6 @@
     
 }
 
-+ (void)JSONRequestAsyncServiceWithRequest:(NSURLRequest *)request
-                              success:(PYAsyncServiceSuccessBlockJSON)success
-                              failure:(PYAsyncServiceFailureBlock)failure
-{
-    [self JSONRequestServiceWithRequest:request success:success failure:failure progress:nil];
-}
-
-+ (void)JSONRequestAsyncServiceWithRequest:(NSURLRequest *)request
-                              success:(PYAsyncServiceSuccessBlockJSON)success
-                              failure:(PYAsyncServiceFailureBlock)failure
-                             progress:(PYAsyncServiceProgressBlock)progress
-{
-    
-    
-    //dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the request may be lost
-    
-    
-    PYAsyncService *requestOperation = [[PYAsyncService alloc] initWithRequest:request];
-    [requestOperation setCompletionBlockAsyncWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
-        
-        if (success) {
-            id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
-            if (JSON == nil) { // Is not NSDictionary or NSArray
-                if ([resp statusCode] == 204) {
-                    // NOTE: special case - Deleting trashed events returns zero length content
-                    // maybe need to handle it somewhere else
-                    JSON = [[[NSDictionary alloc] init] autorelease];
-                } else {
-                    NSDictionary *errorInfoDic = @{ @"message" : @"Data is not JSON"};
-                    NSError *error =  [NSError errorWithDomain:PryvErrorJSONResponseIsNotJSON code:PYErrorUnknown userInfo:errorInfoDic];
-                    failure (req, resp, error, responseData);
-                    return;
-                }
-            }
-            success (req, resp, JSON);
-        }
-        
-    } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {
-        if (failure) {
-            failure (req, resp, error, responseData);
-        }
-    } progress:progress];
-    //});
-    
-}
-
 
 + (void)JSONRequestServiceWithRequest:(NSURLRequest *)request
                               success:(PYAsyncServiceSuccessBlockJSON)success
