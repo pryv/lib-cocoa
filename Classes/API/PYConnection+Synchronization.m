@@ -95,13 +95,16 @@
 BOOL allreadySynchingEvents = NO;
 - (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+   
         
         if (allreadySynchingEvents) return;
         allreadySynchingEvents = YES;
-        
+    
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    
         NSArray* eventNotSync = self.eventsNotSync;
-        
+    
+    
         int eventCounter = (int)eventNotSync.count;
         __block int successCounter = 0;
         
@@ -191,13 +194,21 @@ BOOL allreadySynchingEvents = NO;
 
 - (NSArray*)eventsNotSync
 {
+     NSDate *afx19 = [NSDate date];
     NSMutableArray* result = [[NSMutableArray alloc] init];
+    NSArray* allEvents = [self.cache allEvents];
+     NSLog(@"*afx19 A %f", [afx19 timeIntervalSinceNow]);
+    #warning - check that retain ... without it was crashing in following loops (events get deallocated)
+    //[allEvents retain];
+    
     PYEvent* event;
-    for (event in [self.cache allEvents]) {
+    for (event in allEvents) {
         if ([event toBeSyncSkipCacheTest]) {
             [result addObject:event];
         }
     }
+    allEvents = nil;
+     NSLog(@"*afx19 B %f", [afx19 timeIntervalSinceNow]);
     return [result autorelease];
 }
 
