@@ -249,6 +249,9 @@
         [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
             
             if (success) {
+                
+                dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                
                 id JSON = [PYJSONUtility getJSONObjectFromData:responseData];
                 if (JSON == nil) { // Is not NSDictionary or NSArray
                     if ([resp statusCode] == 204) {
@@ -262,7 +265,13 @@
                         return;
                     }
                 }
-                success (req, resp, JSON);
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        success (req, resp, JSON);
+                    });
+                    
+                    
+                });
             }
             
         } failure:^(NSURLRequest *req, NSHTTPURLResponse *resp, NSError *error, NSMutableData *responseData) {

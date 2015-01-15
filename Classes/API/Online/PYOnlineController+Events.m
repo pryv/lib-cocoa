@@ -41,6 +41,8 @@
          attachments:nil
              success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
                  
+                 dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                 
                  NSDate* afx2 = [NSDate date];
                  
                  NSArray *JSON = responseDict[kPYAPIResponseEvents];
@@ -81,6 +83,10 @@
                  NSDictionary* details = @{kPYNotificationKeyAdd: addArray,
                                            kPYNotificationKeyModify: modifyArray,
                                            kPYNotificationKeyUnchanged: sameArray};
+                     
+                     
+                     dispatch_async(dispatch_get_main_queue(), ^(void){
+                     
                  [[NSNotificationCenter defaultCenter] postNotificationName:kPYNotificationEvents
                                                                      object:self.connection
                                                                    userInfo:@{kPYNotificationKeyAdd: addArray,
@@ -94,7 +100,8 @@
                      
                  }
                  NSLog(@"*afx2 B %f", [afx2 timeIntervalSinceNow]);
-                 
+                     });
+                 });
              } failure:^(NSError *error) {
                  if (errorHandler) {
                      errorHandler (error);
