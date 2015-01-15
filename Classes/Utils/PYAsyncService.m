@@ -36,7 +36,6 @@
 @synthesize responseData = _responseData;
 @synthesize connection = _connection;
 @synthesize request = _request;
-@synthesize response = _response;
 @synthesize running = _running;
 @synthesize onFailure = _onFailure;
 @synthesize onSuccess = _onSuccess;
@@ -46,14 +45,12 @@
 {
     [_request release];
     _request = nil;
-    [_response release];
-    _response = nil;
+    _connection = nil;
+    _responseData = nil;
     
     [_onSuccess release];
     [_onFailure release];
-    [_connection release];
-    _responseData = nil;
-    //[_responseData release];
+    [_onProgress release];
     
     [super dealloc];
 }
@@ -64,8 +61,8 @@
     if (self) {
         // create the connection with the request
         // and start loading the data asynchronously
-        self.request = request;
-        self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+        _request = request;
+        _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
         if (_connection) {
             // Create the NSMutableData to hold the received data.
             // receivedData is an instance variable declared elsewhere.
@@ -74,7 +71,6 @@
         } else {
             NSLog(@"<ERROR> PYAsyncService.initWithRequest failed to create an NSURLConnection");
         }
-        
     }
     return self;
 }
@@ -88,9 +84,7 @@
     self.onFailure = failure;
     self.onProgress = progress;
     [self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    //dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     [self.connection start];
-    //});
 }
 
 - (void)stop
@@ -150,10 +144,7 @@
                               failure:(PYAsyncServiceFailureBlock)failure
                              progress:(PYAsyncServiceProgressBlock)progress
 {
-    
-    
     dispatch_async(dispatch_get_main_queue(), ^{ // needed otherwise the request may be lost
-        
         
         PYAsyncService *requestOperation = [[[self alloc] initWithRequest:request] autorelease];
         [requestOperation setCompletionBlockWithSuccess:^(NSURLRequest *req, NSHTTPURLResponse *resp,  NSMutableData *responseData) {
@@ -189,7 +180,6 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    
     // This method is called when the server has determined that it
     // has enough information to create the NSURLResponse.
     
@@ -266,7 +256,9 @@
     }
     
     // release the connection, and the data object
+    connection = nil;
     [connection release];
+    _responseData = nil;
     [_responseData release];
 }
 
