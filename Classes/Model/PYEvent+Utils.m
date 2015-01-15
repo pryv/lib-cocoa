@@ -16,6 +16,16 @@
 
 BOOL toto = NO;
 
+
+- (UIImage* )previewFromCache {
+    if (! self.connection) {
+        return nil;
+    }
+    return [self imageFromData:[[self.connection cache] previewForEvent:self]];
+}
+
+
+
 - (void)preview:(void (^) (PYImage *img))previewImage failure:(void(^) (NSError *error))failure {
     if (! self.connection) {
         if (failure) failure([NSError errorWithDomain:@"No connection" code:1000 userInfo:nil]);

@@ -21,6 +21,10 @@
 
 @interface PYEvent (Utils)
 
+/** get preview From cache exclusively **/
+- (UIImage* )previewFromCache;
+
+
 /** get a preview image (if available) **/
 - (void)preview:(void (^) (PYImage *img))previewImage failure:(void(^) (NSError *error))failure;
 
