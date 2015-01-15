@@ -14,36 +14,34 @@
 static NSMutableDictionary *s_liveObjectDictionary;
 static NSLock *lock;
 
-+ (NSMutableDictionary *)liveObjectDictionary {
++ (void)setup {
     if (! s_liveObjectDictionary) {
         s_liveObjectDictionary = [[NSMutableDictionary alloc] init];
         lock = [[NSLock alloc] init];
     }
-    return s_liveObjectDictionary;
 }
 
 + (id)liveObjectForSupervisableKey:(NSString *)supervisableKey {
-    NSDictionary *liveObjDict = [self liveObjectDictionary];
+    [self setup];
     [lock lock];
-    NSValue *liveObj = [(NSValue *)[liveObjDict objectForKey:supervisableKey] nonretainedObjectValue];
+    NSValue *liveObj = [(NSValue *)[s_liveObjectDictionary objectForKey:supervisableKey] nonretainedObjectValue];
     [lock unlock];
     return liveObj;
 }
 
 - (void)superviseOut {
-    id<PYSupervisable> supervisableSelf = (id<PYSupervisable>)self;
-    NSMutableDictionary *liveObjDict = [[self class] liveObjectDictionary];
-    [liveObjDict removeObjectForKey:[supervisableSelf supervisableKey]];
+     [[self class] setup];
+    [s_liveObjectDictionary removeObjectForKey:[(id<PYSupervisable>)self supervisableKey]];
 }
 
 - (void)superviseIn {
-    id<PYSupervisable> supervisableSelf = (id<PYSupervisable>)self;
-    NSMutableDictionary *liveObjDict = [[self class] liveObjectDictionary];
+    [[self class] setup];
+    [self retain];
     id zeroed = [NSValue valueWithNonretainedObject:self];
-    NSString* key = [supervisableSelf supervisableKey];
     [lock lock];
-    [liveObjDict setObject:zeroed forKey:key];
+    [s_liveObjectDictionary setObject:zeroed forKey:[(id<PYSupervisable>)self supervisableKey]];
     [lock unlock];
+    [self release];
 }
 
 @end
