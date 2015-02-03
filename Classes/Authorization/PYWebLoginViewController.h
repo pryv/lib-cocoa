@@ -47,6 +47,7 @@ typedef enum {
     NSArray *permissions;
     NSString *appID;
     NSTimer *pollTimer;
+    NSTimer *statusUrlTimer;
     NSString *pollURL;
     BarStyleType barStyleType;
     id  delegate;
@@ -76,5 +77,7 @@ typedef enum {
     ;
     
 - (void)timerBlock:(NSTimer*)timer;
-
+- (void)checkStatusInURL:(NSTimer*)timer;
+    
+    
 @end

@@ -30,6 +30,7 @@
 @property (nonatomic, retain) NSArray *permissions;
 @property (nonatomic, copy) NSString *appID;
 @property (nonatomic, retain) NSTimer *pollTimer;
+@property (nonatomic, retain) NSTimer *statusUrlTimer;
 @property (nonatomic, copy) NSString *pollURL;
 @property (nonatomic) BarStyleType barStyleType;
 @property (nonatomic, assign) id  delegate;
@@ -51,6 +52,7 @@
 @synthesize closeReliesOnDelegate;
 @synthesize delegate;
 @synthesize pollTimer;
+@synthesize statusUrlTimer;
 @synthesize pollURL;
 @synthesize appID;
 @synthesize permissions;
@@ -170,6 +172,7 @@ BOOL closing;
     if (closing) return;
     closing = YES;
     [self.pollTimer invalidate];
+    [self.statusUrlTimer invalidate];
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 #else
     if (! self.closeReliesOnDelegate) {
@@ -183,6 +186,8 @@ BOOL closing;
     self.delegate = nil;
     [pollTimer invalidate];
     [pollTimer release];
+    [statusUrlTimer invalidate];
+    [statusUrlTimer release];
     [pollURL release];
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -260,6 +265,7 @@ BOOL closing;
     [super viewWillDisappear:animated];
     // kill the timer if one existed
     [self.pollTimer invalidate];
+    [self.statusUrlTimer invalidate];
 }
 
 #pragma mark - Target Actions
@@ -320,17 +326,18 @@ static BOOL s_requestedLoginView = NO;
     
     //block typeof trick doesn't work on Mac OS X, but using self does not create memory leak
     //__block __typeof__(self) bself = self;
-   
+    
     [PYWebLoginViewController registrationRequest:fullPathString
-                  method:PYRequestMethodPOST
-                postData:postData
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
-                     if (!self) return;
-                     [self handlePollSuccess:responseDict];
-                 } failure:^(NSError *error) {
-                     if (!self) return;
-                     [self handleFailure:error];
-                 }];
+                                           method:PYRequestMethodPOST
+                                         postData:postData
+                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, NSDictionary *responseDict) {
+                                              if (!self) return;
+                                              [self handlePollSuccess:responseDict];
+                                              [self checkStatusInURL:nil];
+                                          } failure:^(NSError *error) {
+                                              if (!self) return;
+                                              [self handleFailure:error];
+                                          }];
     
 }
 
@@ -353,6 +360,7 @@ static BOOL s_requestedLoginView = NO;
 
 - (void)pollURL:(NSString *)pollURLString withTimeInterval:(NSTimeInterval)pollTimeInterval
 {
+    
     //NSLog(@"create a poll request to %@ with interval: %f", pollURL, pollTimeInterval);
     NSLog(@"create a poll request with interval: %f", pollTimeInterval);
     
@@ -383,19 +391,80 @@ static BOOL s_requestedLoginView = NO;
                                                          repeats:NO
                           ];
     });
+    
 }
 
+
+- (void)checkStatusInURL:(NSTimer *)timer
+{
+    NSString* currentUrl = nil;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    currentUrl = [[webView mainFrame] stringByEvaluatingJavaScriptFromString:@"window.location.href"];
+#else
+    currentUrl = [webView stringByEvaluatingJavaScriptFromString:@"window.location.href"];
+#endif
+    
+    
+    NSLog(@"Current URL: %@",currentUrl);
+    
+    if (currentUrl) {
+        
+        NSArray* foo = [currentUrl componentsSeparatedByString: @"#"];
+        if (foo.count > 1) {
+            NSString* status = [foo lastObject];
+            
+            NSMutableDictionary *queryStringDictionary = [[NSMutableDictionary alloc] init];
+            NSArray *urlComponents = [status componentsSeparatedByString:@"&"];
+            
+            
+            for (NSString *keyValuePair in urlComponents)
+            {
+                NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
+                NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
+                NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
+                
+                [queryStringDictionary setObject:value forKey:key];
+            }
+            if ([queryStringDictionary objectForKey:@"status"]) {
+                return [self handlePollSuccess:queryStringDictionary];
+            }
+        }
+        
+    }
+    
+    // reset previous timer if one existed
+    [self.statusUrlTimer invalidate];
+    
+    // schedule a GET reqest in seconds amount stored in pollTimeInterval
+    //__block __typeof__(self) bself = self;
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.statusUrlTimer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                               target:self
+                                                             selector:@selector(checkStatusInURL:)
+                                                             userInfo:nil
+                                                              repeats:NO
+                               ];
+    });
+    
+    
+}
+
+
+
 - (void)timerBlock:(NSTimer *)timer {
+    
     [PYWebLoginViewController registrationRequest:pollURL
-                  method:PYRequestMethodGET
-                postData:nil
-                 success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                     if (!self) return;
-                     [self handlePollSuccess:JSON];
-                 } failure:^(NSError *error) {
-                     if (!self) return;
-                     [self handleFailure:error];
-                 }];
+                                           method:PYRequestMethodGET
+                                         postData:nil
+                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                              if (!self) return;
+                                              [self handlePollSuccess:JSON];
+                                          } failure:^(NSError *error) {
+                                              if (!self) return;
+                                              [self handleFailure:error];
+                                          }];
 }
 
 
@@ -549,21 +618,21 @@ static BOOL s_requestedLoginView = NO;
          
          if (failureHandler) failureHandler(error);
      }];
-     return request;
-     }
-     
-     
+    return request;
+}
+
+
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 #else
-     - (void)didReceiveMemoryWarning
-    {
-        [super didReceiveMemoryWarning];
-        // Dispose of any resources that can be recreated.
-    }
-     
-     - (void)viewDidUnload {
-         
-         [super viewDidUnload];
-     }
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidUnload {
+    
+    [super viewDidUnload];
+}
 #endif
-     @end
+@end
