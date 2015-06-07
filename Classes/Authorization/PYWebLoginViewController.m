@@ -399,7 +399,8 @@ static BOOL s_requestedLoginView = NO;
 {
     NSString* currentUrl = nil;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-    currentUrl = [[webView mainFrame] stringByEvaluatingJavaScriptFromString:@"window.location.href"];
+    // Not working
+   // currentUrl = [[webView mainFrame] stringByEvaluatingJavaScriptFromString:@"window.location.href"];
 #else
     currentUrl = [webView stringByEvaluatingJavaScriptFromString:@"window.location.href"];
 #endif

@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pryv. All rights reserved.
 //
 
+
 #import "PYEvent+Utils.h"
 #import "PYConnection+Events.h"
 #import "PYAttachment.h"
@@ -17,7 +18,7 @@
 BOOL toto = NO;
 
 
-- (UIImage* )previewFromCache {
+- (PYImage* )previewFromCache {
     if (! self.connection) {
         return nil;
     }

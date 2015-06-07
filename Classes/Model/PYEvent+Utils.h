@@ -22,7 +22,7 @@
 @interface PYEvent (Utils)
 
 /** get preview From cache exclusively **/
-- (UIImage* )previewFromCache;
+- (PYImage* )previewFromCache;
 
 
 /** get a preview image (if available) **/
