@@ -56,14 +56,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05052CBE1EAE3C47DAD171C0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		229784B4DC274BB7947EF0E8 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4602F0D58F054E1BBA13E3E7 /* Pods-PrYv-iOS-ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-iOS-ExampleTests.xcconfig"; path = "Pods/Pods-PrYv-iOS-ExampleTests.xcconfig"; sourceTree = "<group>"; };
+		29A3F3F63AE0F7EF98EAA708 /* Pods-PrYv-iOS-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-iOS-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-iOS-ExampleTests/Pods-PrYv-iOS-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		2A53F654F9FF8F6611C753FF /* Pods-PrYv-iOS-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-iOS-ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-iOS-ExampleTests/Pods-PrYv-iOS-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4E0054191910052100C6B64C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4E242C96194F2A09006C6FD2 /* PYAccessesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYAccessesTests.m; path = ../common/PYAccessesTests.m; sourceTree = "<group>"; };
 		4E4D79C11951EBF500346849 /* PYFollowedSlicesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYFollowedSlicesTests.m; path = ../common/PYFollowedSlicesTests.m; sourceTree = "<group>"; };
 		4E5FF67319598BC400835D0C /* PYProfileAndInfosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYProfileAndInfosTests.m; path = ../common/PYProfileAndInfosTests.m; sourceTree = "<group>"; };
 		A90F67BA884C4DF1A82D608F /* libPods-PrYv-iOS-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-iOS-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D326D046B84C40949AE762EA /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		D52BC5BCF0A418BCE0A1E608 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		FB1CEF3918C4B1AB002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
 		FB1CEF3B18C4B416002584F7 /* PYBaseConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYBaseConnectionTests.m; path = ../common/PYBaseConnectionTests.m; sourceTree = "<group>"; };
 		FB1CEF3D18C4B461002584F7 /* PYBaseConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYBaseConnectionTests.h; path = ../common/PYBaseConnectionTests.h; sourceTree = "<group>"; };
@@ -131,6 +133,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E9AAA9621AAD96A75C1000C3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D52BC5BCF0A418BCE0A1E608 /* Pods.debug.xcconfig */,
+				05052CBE1EAE3C47DAD171C0 /* Pods.release.xcconfig */,
+				2A53F654F9FF8F6611C753FF /* Pods-PrYv-iOS-ExampleTests.debug.xcconfig */,
+				29A3F3F63AE0F7EF98EAA708 /* Pods-PrYv-iOS-ExampleTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		FB1CEF4718C4F22F002584F7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,8 +162,7 @@
 				FB51395E18B21679000F9BED /* PrYv-iOS-ExampleTests */,
 				FB51393E18B21678000F9BED /* Frameworks */,
 				FB51393D18B21678000F9BED /* Products */,
-				D326D046B84C40949AE762EA /* Pods.xcconfig */,
-				4602F0D58F054E1BBA13E3E7 /* Pods-PrYv-iOS-ExampleTests.xcconfig */,
+				E9AAA9621AAD96A75C1000C3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -310,6 +322,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = PrYv;
 				TargetAttributes = {
+					FB51393B18B21678000F9BED = {
+						DevelopmentTeam = GNL8PH5553;
+					};
 					FB51395618B21679000F9BED = {
 						TestTargetID = FB51393B18B21678000F9BED;
 					};
@@ -370,7 +385,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1F1284E428E14BF293F069D1 /* Check Pods Manifest.lock */ = {
@@ -415,7 +430,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-PrYv-iOS-ExampleTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrYv-iOS-ExampleTests/Pods-PrYv-iOS-ExampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -503,7 +518,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pierre-Mikael Legris (G2M273GC54)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -542,7 +557,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pierre-Mikael Legris (G2M273GC54)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -560,37 +575,43 @@
 		};
 		FB51396918B21679000F9BED /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D326D046B84C40949AE762EA /* Pods.xcconfig */;
+			baseConfigurationReference = D52BC5BCF0A418BCE0A1E608 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-iOS-Example/PrYv-iOS-Example-Prefix.pch";
 				INFOPLIST_FILE = "PrYv-iOS-Example/PrYv-iOS-Example-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		FB51396A18B21679000F9BED /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D326D046B84C40949AE762EA /* Pods.xcconfig */;
+			baseConfigurationReference = 05052CBE1EAE3C47DAD171C0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-iOS-Example/PrYv-iOS-Example-Prefix.pch";
 				INFOPLIST_FILE = "PrYv-iOS-Example/PrYv-iOS-Example-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		FB51396C18B21679000F9BED /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4602F0D58F054E1BBA13E3E7 /* Pods-PrYv-iOS-ExampleTests.xcconfig */;
+			baseConfigurationReference = 2A53F654F9FF8F6611C753FF /* Pods-PrYv-iOS-ExampleTests.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-iOS-Example.app/PrYv-iOS-Example";
@@ -615,7 +636,7 @@
 		};
 		FB51396D18B21679000F9BED /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4602F0D58F054E1BBA13E3E7 /* Pods-PrYv-iOS-ExampleTests.xcconfig */;
+			baseConfigurationReference = 29A3F3F63AE0F7EF98EAA708 /* Pods-PrYv-iOS-ExampleTests.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-iOS-Example.app/PrYv-iOS-Example";

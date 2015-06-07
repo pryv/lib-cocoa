@@ -57,13 +57,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09DDA1301638376415891EA1 /* Pods-PrYv-OSX-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		0C095FA918C4CE23009A820F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		4E0F0C22CAF54046A17382CB /* Pods-PrYv-OSX-ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.xcconfig"; path = "Pods/Pods-PrYv-OSX-ExampleTests.xcconfig"; sourceTree = "<group>"; };
+		25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4E91D583196C439B006E70F7 /* PYAccessesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYAccessesTests.m; path = ../common/PYAccessesTests.m; sourceTree = "<group>"; };
 		4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYFollowedSlicesTests.m; path = ../common/PYFollowedSlicesTests.m; sourceTree = "<group>"; };
 		4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYProfileAndInfosTests.m; path = ../common/PYProfileAndInfosTests.m; sourceTree = "<group>"; };
-		89AEA2EA23974EB299548FC2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		50E6BDDDA8B06537541B028E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8E2F2D28C27B492D82FAB4BB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A19AACDDE3F05C64F814995E /* Pods-PrYv-OSX-ExampleTests.coverage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.coverage.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.coverage.xcconfig"; sourceTree = "<group>"; };
+		B213A55E65896E43CBB596B9 /* Pods-PrYv-OSX-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B8B9F0A2C2B2D8EEE25CBF25 /* Pods.coverage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.coverage.xcconfig; path = "Pods/Target Support Files/Pods/Pods.coverage.xcconfig"; sourceTree = "<group>"; };
 		E47ECFEDCCA24CC79C5B337B /* libPods-PrYv-OSX-ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-OSX-ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1CEF3E18C4BC9F002584F7 /* PYBaseConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYBaseConnectionTests.h; path = ../common/PYBaseConnectionTests.h; sourceTree = "<group>"; };
 		FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYBaseConnectionTests.m; path = ../common/PYBaseConnectionTests.m; sourceTree = "<group>"; };
@@ -136,6 +140,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47AEBB5813F14E1DD6FDCE44 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				50E6BDDDA8B06537541B028E /* Pods.debug.xcconfig */,
+				B8B9F0A2C2B2D8EEE25CBF25 /* Pods.coverage.xcconfig */,
+				25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */,
+				B213A55E65896E43CBB596B9 /* Pods-PrYv-OSX-ExampleTests.debug.xcconfig */,
+				A19AACDDE3F05C64F814995E /* Pods-PrYv-OSX-ExampleTests.coverage.xcconfig */,
+				09DDA1301638376415891EA1 /* Pods-PrYv-OSX-ExampleTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		FB31950118D206E8004564C6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,8 +169,7 @@
 				FBE2E8FE18B225150059691E /* PrYv-OSX-ExampleTests */,
 				FBE2E8D918B225150059691E /* Frameworks */,
 				FBE2E8D818B225150059691E /* Products */,
-				89AEA2EA23974EB299548FC2 /* Pods.xcconfig */,
-				4E0F0C22CAF54046A17382CB /* Pods-PrYv-OSX-ExampleTests.xcconfig */,
+				47AEBB5813F14E1DD6FDCE44 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -445,7 +461,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-PrYv-OSX-ExampleTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C7F1E042FA0E443E9B48C0FB /* Copy Pods Resources */ = {
@@ -460,7 +476,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -587,7 +603,7 @@
 		};
 		FBB2D37E18DF09BE006B063C /* Coverage */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89AEA2EA23974EB299548FC2 /* Pods.xcconfig */;
+			baseConfigurationReference = B8B9F0A2C2B2D8EEE25CBF25 /* Pods.coverage.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -601,7 +617,7 @@
 		};
 		FBB2D37F18DF09BE006B063C /* Coverage */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E0F0C22CAF54046A17382CB /* Pods-PrYv-OSX-ExampleTests.xcconfig */;
+			baseConfigurationReference = A19AACDDE3F05C64F814995E /* Pods-PrYv-OSX-ExampleTests.coverage.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-OSX-Example.app/Contents/MacOS/PrYv-OSX-Example";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -696,7 +712,7 @@
 		};
 		FBE2E90918B225150059691E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89AEA2EA23974EB299548FC2 /* Pods.xcconfig */;
+			baseConfigurationReference = 50E6BDDDA8B06537541B028E /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -710,7 +726,7 @@
 		};
 		FBE2E90A18B225150059691E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89AEA2EA23974EB299548FC2 /* Pods.xcconfig */;
+			baseConfigurationReference = 25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -724,7 +740,7 @@
 		};
 		FBE2E90C18B225150059691E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E0F0C22CAF54046A17382CB /* Pods-PrYv-OSX-ExampleTests.xcconfig */;
+			baseConfigurationReference = B213A55E65896E43CBB596B9 /* Pods-PrYv-OSX-ExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-OSX-Example.app/Contents/MacOS/PrYv-OSX-Example";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -748,7 +764,7 @@
 		};
 		FBE2E90D18B225150059691E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E0F0C22CAF54046A17382CB /* Pods-PrYv-OSX-ExampleTests.xcconfig */;
+			baseConfigurationReference = 09DDA1301638376415891EA1 /* Pods-PrYv-OSX-ExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PrYv-OSX-Example.app/Contents/MacOS/PrYv-OSX-Example";
 				COMBINE_HIDPI_IMAGES = YES;
