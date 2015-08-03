@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name         = 'PryvApiKit'
   s.version      = '0.0.3'
-  s.homepage     = 'https://github.com/pryv/sdk-objectivec-apple'
+  s.homepage     = 'https://github.com/pryv/lib-cocoa'
   s.summary      = 'PrYv SDK'
   s.authors      = { 'Pryv SA (Switzerland)' => 'http://pryv.com' }
-  s.source       = { :git => 'https://github.com/pryv/sdk-objectivec-apple.git', :commit => '9d8f3d3c488ab25ba99903770ebb0807537ffc17' }
+  s.source       = { :git => 'https://github.com/pryv/lib-cocoa.git', :commit => '9d8f3d3c488ab25ba99903770ebb0807537ffc17' }
   s.license      = { :type => 'Revised BSD license', :file => 'LICENSE' }
 
   s.xcconfig     = { 'OTHER_LDFLAGS' => '-all_load' }
