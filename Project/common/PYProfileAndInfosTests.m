@@ -27,15 +27,15 @@
 
 - (void)testAccessInfos
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     NOT_DONE(done);
     
     [self.connection accessInfosWithSuccessHandler:^(NSDate *cachedAt, NSDictionary *infos) {
-         if (! infos) STFail(@"Error occured when geting access is nil ");
+         if (! infos) XCTFail(@"Error occured when geting access is nil ");
          DONE(done);
     } refreshCacheIfOlderThan:0 failureHandler:^(NSError *error) {
-        STFail(@"Error occured when geting access. %@", error);
+        XCTFail(@"Error occured when geting access. %@", error);
         DONE(done);
     }];
     
@@ -47,15 +47,15 @@
 
 - (void)testProfilePublic
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     NOT_DONE(done);
     
     [self.connection profilePublicWithSuccessHandler:^(NSDate *cachedAt, NSDictionary *profile) {
-        if (! profile) STFail(@"Error occured when geting profilePublic is nil ");
+        if (! profile) XCTFail(@"Error occured when geting profilePublic is nil ");
         DONE(done);
     } refreshCacheIfOlderThan:0 failureHandler:^(NSError *error) {
-        STFail(@"Error occured when geting profilePublic. %@", error);
+        XCTFail(@"Error occured when geting profilePublic. %@", error);
         DONE(done);
     }];
     
@@ -68,15 +68,15 @@
 
 - (void)testProfileApp
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     NOT_DONE(done);
     
     [self.connection profileAppWithSuccessHandler:^(NSDate *cachedAt, NSDictionary *profile) {
-        if (! profile) STFail(@"Error occured when geting profileApp is nil ");
+        if (! profile) XCTFail(@"Error occured when geting profileApp is nil ");
         DONE(done);
     } refreshCacheIfOlderThan:0 failureHandler:^(NSError *error) {
-        STFail(@"Error occured when geting profileApp. %@", error);
+        XCTFail(@"Error occured when geting profileApp. %@", error);
         DONE(done);
     }];
     

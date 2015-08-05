@@ -39,10 +39,10 @@
 
 - (void)testConnection
 {
-    STAssertTrue([self.connection.idURL
+    XCTAssertTrue([self.connection.idURL
                   isEqualToString:@"https://perkikiki.pryv.in:443/?auth=Ve-U8SCASM"],
                  @"connection URL is not valid, %@", self.connection.idURL);
-    STAssertTrue([self.connection.idCaching
+    XCTAssertTrue([self.connection.idCaching
                   isEqualToString:@"05c3ee6670ecbd28744c71ec723f0b05_perkikiki.pryv.in__Ve-U8SCASM"],
                  @"id caching is unexpected, %@", self.connection.idCaching);
 }
@@ -54,12 +54,12 @@
         NSLog(@"ServerTime Delta (s) %f", serverTimeInteval);
         finished = YES;
     } errorHandler:^(NSError *error) {
-        STFail(@"Cannot get ServerTime %@", error);
+        XCTFail(@"Cannot get ServerTime %@", error);
         finished = YES;
     }];
     
     [PYTestsUtils execute:^{
-        STFail(@"Cannot get ServerTime within 10 seconds");
+        XCTFail(@"Cannot get ServerTime within 10 seconds");
     } ifNotTrue:&finished afterSeconds:10];
     
 }
@@ -72,7 +72,7 @@
     
     NOT_DONE(setUpWithOptions);
     [self.connection setUpWithOptions:options andCallBack:^(NSError *error) {
-        if (error) STFail(@"Unexpected Error %@", error);
+        if (error) XCTFail(@"Unexpected Error %@", error);
         DONE(setUpWithOptions);
     }];
     WAIT_FOR_DONE(setUpWithOptions);
@@ -90,11 +90,11 @@
         [connection setOnlineModeWithUsername:kPYAPITestAccount andAccessToken:kPYAPITestAccessToken2];
     }
     @catch (NSException * e) {
-        STAssertTrue([[e name] isEqualToString:@"Unimplemented"], @"Should have Unimplemented Error");
+        XCTAssertTrue([[e name] isEqualToString:@"Unimplemented"], @"Should have Unimplemented Error");
         gotError = TRUE;
         NSLog(@"Exception: %@", e);
     }
-    STAssertTrue(gotError, @"SHOULD HAVE ERROR");
+    XCTAssertTrue(gotError, @"SHOULD HAVE ERROR");
     
     
 }

@@ -20,7 +20,7 @@
     [PYClient setDefaultDomainStaging];
     self.connection = [PYClient createConnectionWithUsername:kPYAPITestAccount
                                               andAccessToken:kPYAPITestAccessToken];
-    STAssertNotNil(self.connection, @"Connection not created.");
+    XCTAssertNotNil(self.connection, @"Connection not created.");
 }
 
 

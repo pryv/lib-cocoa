@@ -8,7 +8,7 @@
 
 
 #import <PryvApiKit/PryvApiKit.h>
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 
 #define NOT_DONE(done) __block BOOL done = NO;
@@ -27,7 +27,7 @@
                     }
 
 
-@interface PYBaseConnectionTests : SenTestCase
+@interface PYBaseConnectionTests : XCTestCase
 
 @property (nonatomic, retain) PYConnection *connection;
 

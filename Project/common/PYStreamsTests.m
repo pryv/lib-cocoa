@@ -12,6 +12,7 @@
 #import "PYStream.h"
 #import "PYCachingController+Streams.h"
 #import "PYTestsUtils.h"
+#import "PYTestConstants.h"
 
 @interface PYStreamsTests : PYBaseConnectionTests
 @property (nonatomic, strong) PYStream *stream;
@@ -43,15 +44,15 @@
                                      
                                  } andOnline:^(NSArray *onlineStreamList) {
                                      
-                                     STAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
+                                     XCTAssertTrue(onlineStreamList.count > 0, @"Something is wrong with method because we need to have some online streams.");
                                      
                                      finished1 = YES;
                                  } errorHandler:^(NSError *error) {
-                                     STFail(@"error fetching streams %@", error);
+                                     XCTFail(@"error fetching streams %@", error);
                                      finished1 = YES;
                                  }];
     [PYTestsUtils execute:^{
-        STFail(@"Cannot get streams within 10 seconds");
+        XCTFail(@"Cannot get streams within 10 seconds");
     } ifNotTrue:&finished1 afterSeconds:10];
     
 }
@@ -62,24 +63,24 @@
     __block BOOL finished1 = NO;
     [self.connection streamsEnsureFetched:^(NSError *error) {
         if (error) {
-            STFail(@"should have no error");
+            XCTFail(@"should have no error");
         }
         
         __block PYEvent *event = [[PYEvent alloc] initWithConnection:self.connection];
-        event.streamId = @"TVKoK036of";
+        event.streamId = kPYAPITestStreamId;
         event.eventContent = [NSString stringWithFormat:@"Test %@", [NSDate date]];
         event.type = @"note/txt";
         
         PYStream* stream = [event stream];
-        STAssertNotNil(stream, @"stream shouldn't be nil");
-        STAssertNotNil(self.connection.fetchedStreamsRoots, @"fetchedStreamsRoots shouldn't be nil");
-        STAssertTrue(self.connection.fetchedStreamsRoots.count > 0, @"fetchedStreamsRoots shouldn't be empty");
+        XCTAssertNotNil(stream, @"stream shouldn't be nil");
+        XCTAssertNotNil(self.connection.fetchedStreamsRoots, @"fetchedStreamsRoots shouldn't be nil");
+        XCTAssertTrue(self.connection.fetchedStreamsRoots.count > 0, @"fetchedStreamsRoots shouldn't be empty");
         finished1 = YES;
      }];
     
     
     [PYTestsUtils execute:^{
-        STFail(@"Cannot get streams within 10 seconds");
+        XCTFail(@"Cannot get streams within 10 seconds");
     } ifNotTrue:&finished1 afterSeconds:10];
     
 }
@@ -90,12 +91,12 @@
              andParent:(PYStream *)parentStream
 {
     NSString *streamInfo = [NSString stringWithFormat:@"streamID: %@", stream.streamId];
-    STAssertEqualObjects(stream.connection, connection,
+    XCTAssertEqualObjects(stream.connection, connection,
                          @"connection should match %@", streamInfo);
-    STAssertNotNil(stream.clientId, @"Client Id shouldn't be nil %@", streamInfo);
+    XCTAssertNotNil(stream.clientId, @"Client Id shouldn't be nil %@", streamInfo);
     
     if (parentStream != nil) {
-       STAssertTrue([parentStream.streamId isEqualToString:stream.parentId],
+       XCTAssertTrue([parentStream.streamId isEqualToString:stream.parentId],
                    @"parent Ids don't match %@", streamInfo);
     }
     
@@ -125,19 +126,19 @@
     [self.connection streamCreate:newStream successHandler:^(NSString *createdStreamId) {
         DONE(done1);
     } errorHandler:^(NSError *error) {
-        STFail(@"could not create stream");
+        XCTFail(@"could not create stream");
         DONE(done1);
     }];
     
     WAIT_FOR_DONE(done1);
     
-    STAssertTrue(newStream.connection == self.connection, @"connection is not set and not equal to original connection");
+    XCTAssertTrue(newStream.connection == self.connection, @"connection is not set and not equal to original connection");
 }
 
 
 - (void)testStreamCreation
 {
-    STAssertNotNil(self.connection, @"Access isn't created");
+    XCTAssertNotNil(self.connection, @"Access isn't created");
     
     [self deleteStream:self.stream];
     
@@ -158,12 +159,12 @@
     [self.connection streamCreate:self.stream
     successHandler:^(NSString *createdStreamId) {
                        
-        STAssertNotNil(createdStreamId, @"Stream couldn't be created.");
+        XCTAssertNotNil(createdStreamId, @"Stream couldn't be created.");
         createdStreamIdFromServer = [[NSString stringWithString:createdStreamId] retain];
         DONE(streamCreate);
     } errorHandler:^(NSError *error) {
         
-        STFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
+        XCTFail(@"Change stream name or stream id to run this test correctly see error from server : %@", error);
         DONE(streamCreate);
     }];
     
@@ -177,7 +178,7 @@
     [self.connection streamsFromCache:^(NSArray *cachedStreamsList) {
         
     } andOnline:^(NSArray *onlineStreamList) {
-        STAssertTrue(onlineStreamList.count > 0, @"Didn't retrieve any stream online.");
+        XCTAssertTrue(onlineStreamList.count > 0, @"Didn't retrieve any stream online.");
         
         //TODO test stream structure
         
@@ -190,7 +191,7 @@
         DONE(streamsFromCache);
         
     } errorHandler:^(NSError *error) {
-        STFail(@"Unexpected Error: %@", error);
+        XCTFail(@"Unexpected Error: %@", error);
         DONE(streamsFromCache);
     }];
      
@@ -200,11 +201,11 @@
     NOT_DONE(streamOnlineWithId);
     [self.connection streamOnlineWithId:createdStreamIdFromServer
                             successHandler:^(PYStream *stream) {
-                                     STAssertNotNil(stream, @"should return single stream requested by id from the server");
+                                     XCTAssertNotNil(stream, @"should return single stream requested by id from the server");
                                      DONE(streamOnlineWithId);
                                      
                          } errorHandler:^(NSError *error) {
-                                     STFail(@"Unexpected Error: %@", error);
+                                     XCTFail(@"Unexpected Error: %@", error);
                                      DONE(streamOnlineWithId);
                          }];
     WAIT_FOR_DONE(streamOnlineWithId);
@@ -228,7 +229,7 @@
     [self.connection streamCreate:newStream successHandler:^(NSString *createdStreamId) {
         DONE(done1);
     } errorHandler:^(NSError *error) {
-        STFail(@"could not create stream");
+        XCTFail(@"could not create stream");
         DONE(done1);
     }];
     
@@ -243,11 +244,11 @@
     newStream.clientData = @{@"test" : @{ @"value" : @"testValue" }};
     
     [self.connection streamSaveModifications:newStream successHandler:^(PYStream *stream) {
-        STAssertTrue(stream == newStream, @"should very same stream");
-        STAssertNotNil(stream, @"should return single stream ");
+        XCTAssertTrue(stream == newStream, @"should very same stream");
+        XCTAssertNotNil(stream, @"should return single stream ");
         DONE(changeStreamProperties);
     } errorHandler:^(NSError *error) {
-        STFail(@"Unexpected Error: %@", error);
+        XCTFail(@"Unexpected Error: %@", error);
         DONE(changeStreamProperties);
 
     }];
@@ -258,14 +259,14 @@
     NOT_DONE(streamOnlineWithId);
     [self.connection streamOnlineWithId:newStream.streamId
                          successHandler:^(PYStream *stream) {
-                             STAssertNotNil(stream, @"should return single stream requested by id from the server");
-                             STAssertNotNil(stream.clientData, @"should have client Data");
+                             XCTAssertNotNil(stream, @"should return single stream requested by id from the server");
+                             XCTAssertNotNil(stream.clientData, @"should have client Data");
                              
-                             STAssertNotNil([stream.clientData objectForKey:@"test"], @"should have property test");
+                             XCTAssertNotNil([stream.clientData objectForKey:@"test"], @"should have property test");
                              
                              DONE(streamOnlineWithId);
                          } errorHandler:^(NSError *error) {
-                             STFail(@"Unexpected Error: %@", error);
+                             XCTFail(@"Unexpected Error: %@", error);
                              DONE(streamOnlineWithId);
                          }];
     WAIT_FOR_DONE(streamOnlineWithId);
@@ -281,11 +282,11 @@
         [self.connection streamTrashOrDelete:testStream mergeEventsWithParent:YES successHandler:^{
             DONE(streamTrashOrDelete);
         } errorHandler:^(NSError *error) {
-            STFail(@"Failed while deleting stream : %@",error);
+            XCTFail(@"Failed while deleting stream : %@",error);
             DONE(streamTrashOrDelete);
         }];
     } errorHandler:^(NSError *error) {
-        STFail(@"Failed while trashing stream : %@",error);
+        XCTFail(@"Failed while trashing stream : %@",error);
         DONE(streamTrashOrDelete);
     }];
     

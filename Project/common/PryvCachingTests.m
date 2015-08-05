@@ -41,10 +41,10 @@
 - (void)testUpdatingCache
 {
 
-        STAssertNotNil(self.connection, @"Connection isn't created");
+        XCTAssertNotNil(self.connection, @"Connection isn't created");
 
         [self.connection updateCache:^(NSError *error) {
-            STAssertNil(error, @"No error expected");
+            XCTAssertNil(error, @"No error expected");
         }];
 
 }
@@ -52,11 +52,11 @@
 - (void)testCachingOnDisk
 {
     
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     NSString *key = @"ImageDataKey";
     [self.connection.cache cacheData:self.imageData withKey:key];
-    STAssertTrue([self.connection.cache isDataCachedForKey:@"ImageDataKey"], @"Data isn't cached for key %@",key);
+    XCTAssertTrue([self.connection.cache isDataCachedForKey:@"ImageDataKey"], @"Data isn't cached for key %@",key);
     
     
 }
@@ -76,24 +76,24 @@
                             fromCache:NULL
                             andOnline:^(NSArray *onlineEventList, NSNumber *serverTime)
      {
-         STAssertTrue(onlineEventList.count > 0, @"Should get at least one event");
+         XCTAssertTrue(onlineEventList.count > 0, @"Should get at least one event");
          PYEvent* event = [onlineEventList firstObject];
          NSDictionary* initialState = [event cachingDictionary];
          NSTimeInterval previousDate = [[event eventDate] timeIntervalSince1970];
          [event setEventDate:nil];
-         STAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
+         XCTAssertFalse(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be different");
          [event resetFromCachingDictionary:initialState];
-         STAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
+         XCTAssertTrue(([[event eventDate] timeIntervalSince1970] == previousDate), @"time must be equals");
          DONE(eventsWithFilter);
      } onlineDiffWithCached:^(NSArray *eventsToAdd, NSArray *eventsToRemove, NSArray *eventModified) {
 
      } errorHandler:^(NSError *error) {
-         STFail(@"Failed fetching event.");
+         XCTFail(@"Failed fetching event.");
          DONE(eventsWithFilter);
      }];
     
     WAIT_FOR_DONE_WITH_TIMEOUT(eventsWithFilter, 20);
-    if (!eventsWithFilter) STFail(@"Timeout eventsWithFilter");
+    if (!eventsWithFilter) XCTFail(@"Timeout eventsWithFilter");
 
 }
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pryv. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import <PryvApiKit/PYEventTypes.h>
 #import "PYEventType.h"
 #import "PYEventClass.h"
@@ -19,7 +19,7 @@
 #import "PYBaseConnectionTests.h"
 
 
-@interface PYEventTypesTests : SenTestCase
+@interface PYEventTypesTests : XCTestCase
 @end
 
 
@@ -36,13 +36,13 @@
 {
     NSDictionary* hierarchical = [[PYEventTypes sharedInstance] hierarchical];
     if (! [hierarchical objectForKey:@"classes"]) {
-        STFail(@"Cannot find classes in dictionary");
+        XCTFail(@"Cannot find classes in dictionary");
         
     }
     
     NSDictionary* extras = [[PYEventTypes sharedInstance] extras];
     if (! [extras objectForKey:@"extras"]) {
-        STFail(@"Cannot find extras in dictionary");
+        XCTFail(@"Cannot find extras in dictionary");
         
     }
 }
@@ -59,7 +59,7 @@
     
     NSDictionary* hierarchical = [[PYEventTypes sharedInstance] hierarchical];
     if (! [hierarchical objectForKey:@"classes"]) {
-        STFail(@"Cannot find classes in dictionary");
+        XCTFail(@"Cannot find classes in dictionary");
         
     }
     
@@ -67,7 +67,7 @@
     
     NSDictionary* extras = [[PYEventTypes sharedInstance] extras];
     if (! [extras objectForKey:@"extras"]) {
-        STFail(@"Cannot find extras in dictionary");
+        XCTFail(@"Cannot find extras in dictionary");
         
     }
 }
@@ -83,7 +83,7 @@
     PYEventType *eventType = [eventNoteTxt pyType];
     
     if (! [@"string" isEqualToString:[eventType type]]) {
-        STFail(@"Cannot find classes in dictionary, or note/txt is not of type 'string'");
+        XCTFail(@"Cannot find classes in dictionary, or note/txt is not of type 'string'");
     }
     
 }
@@ -97,7 +97,7 @@
     PYEventType *eventType = [eventNoteTxt pyType];
     
     if (! [@"note" isEqualToString:[eventType classKey]]) {
-        STFail(@"Cannot find classes in dictionary, or note/txt is not of class 'note'");
+        XCTFail(@"Cannot find classes in dictionary, or note/txt is not of class 'note'");
     }
     
 }
@@ -108,7 +108,7 @@
     eventMassKg.type = @"mass/kg";
     
     if (! [eventMassKg.pyType isNumerical]) {
-        STFail(@"Failed testing if mass/kg event is numerical");
+        XCTFail(@"Failed testing if mass/kg event is numerical");
     }
 }
 
@@ -119,7 +119,7 @@
     moneyUSD.type = @"money/usd";
     
     if (! [@"$" isEqualToString:[moneyUSD.pyType symbol]]) {
-        STFail(@"Failed testing if mass/kg event symbol as '$'");
+        XCTFail(@"Failed testing if mass/kg event symbol as '$'");
     }
     
     
@@ -127,7 +127,7 @@
     pryvActivity.type = @"activity/pryv";
     
     if ([pryvActivity.pyType symbol] != nil) {
-        STFail(@"Failed testing if activity/pryv event symbol as nil value");
+        XCTFail(@"Failed testing if activity/pryv event symbol as nil value");
     }
 }
 
@@ -140,36 +140,36 @@
     [PYClient setLanguageCodePrefered:@"en"];
     
     if (! [@"Kilometers" isEqualToString:lengthM.pyType.localizedName]) {
-        STFail(@"Failed testing if length/km event localizedName in english is Kilometer : %@",
+        XCTFail(@"Failed testing if length/km event localizedName in english is Kilometer : %@",
                lengthM.pyType.localizedName);
     }
     
     if (! [@"Length" isEqualToString:lengthM.pyType.klass.localizedName]) {
-        STFail(@"Failed testing if length/km event class localizedName in english is Length : %@",
+        XCTFail(@"Failed testing if length/km event class localizedName in english is Length : %@",
                lengthM.pyType.klass.localizedName);
     }
     
     [PYClient setLanguageCodePrefered:@"fr"];
     
     if (! [@"Kilomètres" isEqualToString:[lengthM.pyType localizedName]]) {
-        STFail(@"Failed testing if length/km event localizedName in french is Kilomètre: %@",
+        XCTFail(@"Failed testing if length/km event localizedName in french is Kilomètre: %@",
                [lengthM.pyType localizedName]);
     }
     
     if (! [@"Longueur" isEqualToString:lengthM.pyType.klass.localizedName]) {
-        STFail(@"Failed testing if length/km event class localizedName in french is Longueur : %@",
+        XCTFail(@"Failed testing if length/km event class localizedName in french is Longueur : %@",
                lengthM.pyType.klass.localizedName);
     }
     
     PYEvent *activity = [[PYEvent alloc] init];
     activity.type = @"activity/plain";
     if (! [activity.pyType.formatKey isEqualToString:activity.pyType.localizedName]) {
-        STFail(@"Failed testing if activity/pryv event localizedName is : %@",
+        XCTFail(@"Failed testing if activity/pryv event localizedName is : %@",
                activity.pyType.localizedName);
     }
     
     if (! [@"activity" isEqualToString:activity.pyType.klass.localizedName]) {
-        STFail(@"Failed testing if activity/pryv event class localizedName in english is activity : %@",
+        XCTFail(@"Failed testing if activity/pryv event class localizedName in english is activity : %@",
                activity.pyType.klass.localizedName);
     }
 }
@@ -189,7 +189,7 @@
     }
     
     if (! testSet) {
-      STFail(@"measurementSets cannot find set with key %@ ", testSetKey);
+      XCTFail(@"measurementSets cannot find set with key %@ ", testSetKey);
     }
     
     
@@ -199,7 +199,7 @@
     [PYClient setLanguageCodePrefered:@"fr"];
     
     if (! [@"Toutes les mesures" isEqualToString:testSet.localizedName]) {
-        STFail(@"Failed testing if 'all-measure' measurementSets  event localizedName in french is 'Toutes les mesures': %@",
+        XCTFail(@"Failed testing if 'all-measure' measurementSets  event localizedName in french is 'Toutes les mesures': %@",
                testSet.localizedName);
     }
     
@@ -211,11 +211,11 @@
     PYMeasurementTypesGroup* testGroup = nil;
     for (int i = 0; i < groups.count; i++) {
         PYMeasurementTypesGroup* group = (PYMeasurementTypesGroup*)[groups objectAtIndex:i];
-        STAssertNotNil(group.localizedName, @"should have a name");
+        XCTAssertNotNil(group.localizedName, @"should have a name");
         
         for (int j = 0; j < group.formatKeyList.count; j++) {
             PYEventType* eType = [group pyTypeAtIndex:j];
-            STAssertTrue([eType.formatKey isEqualToString:(NSString *)[group.formatKeyList objectAtIndex:j]],
+            XCTAssertTrue([eType.formatKey isEqualToString:(NSString *)[group.formatKeyList objectAtIndex:j]],
                           @"each eType should have the right formatKey"
                           );
         }
@@ -231,7 +231,7 @@
     
     
     if (! testGroup) {
-        STFail(@"measurementSets cannot find group %@ in set with key %@ ", testGroupKey, testSetKey);
+        XCTFail(@"measurementSets cannot find group %@ in set with key %@ ", testGroupKey, testSetKey);
     }
     
 }

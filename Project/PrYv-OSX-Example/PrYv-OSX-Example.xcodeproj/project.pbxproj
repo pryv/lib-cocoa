@@ -26,7 +26,6 @@
 		FBE2E8FB18B225150059691E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE2E8DA18B225150059691E /* Cocoa.framework */; };
 		FBE2E90318B225150059691E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FBE2E90118B225150059691E /* InfoPlist.strings */; };
 		FBE2E90518B225150059691E /* PrYv_OSX_ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E90418B225150059691E /* PrYv_OSX_ExampleTests.m */; };
-		FBE2E90F18B225520059691E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE2E90E18B225520059691E /* SenTestingKit.framework */; };
 		FBE2E93418B227E20059691E /* offLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91418B227C10059691E /* offLineTests.m */; };
 		FBE2E93518B227E20059691E /* PryvCachingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91618B227C10059691E /* PryvCachingTests.m */; };
 		FBE2E93618B227E20059691E /* PYConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE2E91818B227C10059691E /* PYConnectionTests.m */; };
@@ -86,11 +85,10 @@
 		FBE2E8EC18B225150059691E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FBE2E8ED18B225150059691E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		FBE2E8F218B225150059691E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		FBE2E8F818B225150059691E /* PrYv-OSX-ExampleTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PrYv-OSX-ExampleTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBE2E8F818B225150059691E /* PrYv-OSX-ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PrYv-OSX-ExampleTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE2E90018B225150059691E /* PrYv-OSX-ExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PrYv-OSX-ExampleTests-Info.plist"; sourceTree = "<group>"; };
 		FBE2E90218B225150059691E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FBE2E90418B225150059691E /* PrYv_OSX_ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrYv_OSX_ExampleTests.m; sourceTree = "<group>"; };
-		FBE2E90E18B225520059691E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		FBE2E91418B227C10059691E /* offLineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = offLineTests.m; path = ../common/offLineTests.m; sourceTree = "<group>"; };
 		FBE2E91618B227C10059691E /* PryvCachingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PryvCachingTests.m; path = ../common/PryvCachingTests.m; sourceTree = "<group>"; };
 		FBE2E91818B227C10059691E /* PYConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYConnectionTests.m; path = ../common/PYConnectionTests.m; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBE2E90F18B225520059691E /* SenTestingKit.framework in Frameworks */,
 				FBE2E8FB18B225150059691E /* Cocoa.framework in Frameworks */,
 				10EA2E43C717413482574C84 /* libPods-PrYv-OSX-ExampleTests.a in Frameworks */,
 			);
@@ -177,7 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				FBE2E8D718B225150059691E /* PrYv-OSX-Example.app */,
-				FBE2E8F818B225150059691E /* PrYv-OSX-ExampleTests.octest */,
+				FBE2E8F818B225150059691E /* PrYv-OSX-ExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,7 +183,6 @@
 			isa = PBXGroup;
 			children = (
 				0C095FA918C4CE23009A820F /* WebKit.framework */,
-				FBE2E90E18B225520059691E /* SenTestingKit.framework */,
 				FBE2E8DA18B225150059691E /* Cocoa.framework */,
 				FBE2E8DC18B225150059691E /* Other Frameworks */,
 				8E2F2D28C27B492D82FAB4BB /* libPods.a */,
@@ -355,7 +351,7 @@
 			);
 			name = "PrYv-OSX-ExampleTests";
 			productName = "PrYv-OSX-ExampleTests";
-			productReference = FBE2E8F818B225150059691E /* PrYv-OSX-ExampleTests.octest */;
+			productReference = FBE2E8F818B225150059691E /* PrYv-OSX-ExampleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -635,7 +631,6 @@
 				INFOPLIST_FILE = "PrYv-OSX-ExampleTests/PrYv-OSX-ExampleTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Coverage;
 		};
@@ -758,7 +753,6 @@
 				INFOPLIST_FILE = "PrYv-OSX-ExampleTests/PrYv-OSX-ExampleTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -778,7 +772,6 @@
 				INFOPLIST_FILE = "PrYv-OSX-ExampleTests/PrYv-OSX-ExampleTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

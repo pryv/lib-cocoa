@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FBE2E8F718B225150059691E"
-               BuildableName = "PrYv-OSX-ExampleTests.octest"
+               BuildableName = "PrYv-OSX-ExampleTests.xctest"
                BlueprintName = "PrYv-OSX-ExampleTests"
                ReferencedContainer = "container:PrYv-OSX-Example.xcodeproj">
             </BuildableReference>
@@ -58,7 +58,8 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FBE2E8D618B225150059691E"
@@ -76,7 +77,8 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FBE2E8D618B225150059691E"

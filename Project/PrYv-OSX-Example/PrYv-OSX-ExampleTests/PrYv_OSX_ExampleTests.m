@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 PrYv. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface PrYv_OSX_ExampleTests : SenTestCase
+@interface PrYv_OSX_ExampleTests : XCTestCase
 
 @end
 

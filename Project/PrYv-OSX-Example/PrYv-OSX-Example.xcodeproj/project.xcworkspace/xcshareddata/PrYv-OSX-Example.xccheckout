@@ -10,31 +10,31 @@
 	<string>PrYv-OSX-Example</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>ACA979E6-1D5B-4AFE-9E57-E8A9C7361F42</key>
-		<string>ssh://github.com/dkonst/sdk-objectivec-apple.git</string>
+		<key>2DA009F13F584093BAF553333DFBE22F9093480D</key>
+		<string>github.com:pryv/lib-cocoa.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Project/PrYv-OSX-Example/PrYv-OSX-Example.xcodeproj/project.xcworkspace</string>
+	<string>Project/PrYv-OSX-Example/PrYv-OSX-Example.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>ACA979E6-1D5B-4AFE-9E57-E8A9C7361F42</key>
+		<key>2DA009F13F584093BAF553333DFBE22F9093480D</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/dkonst/sdk-objectivec-apple.git</string>
+	<string>github.com:pryv/lib-cocoa.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>ACA979E6-1D5B-4AFE-9E57-E8A9C7361F42</string>
+	<string>2DA009F13F584093BAF553333DFBE22F9093480D</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>ACA979E6-1D5B-4AFE-9E57-E8A9C7361F42</string>
+			<string>2DA009F13F584093BAF553333DFBE22F9093480D</string>
 			<key>IDESourceControlWCCName</key>
-			<string>sdk-objectivec-apple</string>
+			<string>lib-cocoa</string>
 		</dict>
 	</array>
 </dict>

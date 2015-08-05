@@ -27,7 +27,7 @@
     [super setUp];
     self.connectionTrusted = [PYClient createConnectionWithUsername:kPYAPITestAccount
                                                      andAccessToken:kPYAPITestAccessTrustedToken];
-    STAssertNotNil(self.connectionTrusted, @"Connection not created.");
+    XCTAssertNotNil(self.connectionTrusted, @"Connection not created.");
     
     
     
@@ -35,14 +35,14 @@
 
 - (void)testFollowedSlices
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     NOT_DONE(done);
     
     [self.connectionTrusted followedSlicesWithSuccessHandler:^(NSDate *cachedAt, NSArray *slicesList) {
         DONE(done);
     } refreshCacheIfOlderThan:0 failure:^(NSError *error) {
-        STFail(@"Error occured when getting followedSlices. %@", error);
+        XCTFail(@"Error occured when getting followedSlices. %@", error);
         DONE(done);
     }];
  

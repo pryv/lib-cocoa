@@ -11,6 +11,7 @@
 #import "PYCachingController+Events.h"
 #import "PYConnection+Synchronization.h"
 #import <PYConnection.h>
+#import "PYTestConstants.h"
 
 @implementation PYConnection (Testing)
 @end
@@ -51,29 +52,29 @@
     PYCachingController *cache = self.connection.cache;
     
     __block PYEvent *event = [[PYEvent alloc] init];
-    event.streamId = @"TVKoK036of";
+    event.streamId = kPYAPITestStreamId;
     event.eventContent = [NSString stringWithFormat:@"Test Offline %@", [NSDate date]];
     event.type = @"note/txt";
     
-    STAssertNil(event.connection, @"Event.connection is not nil.");
-    STAssertTrue(event.hasTmpId, @"event must have a temp id");
-    STAssertFalse([cache eventIsKnownByCache:event], @"event should not be known by cache");
+    XCTAssertNil(event.connection, @"Event.connection is not nil.");
+    XCTAssertTrue(event.hasTmpId, @"event must have a temp id");
+    XCTAssertFalse([cache eventIsKnownByCache:event], @"event should not be known by cache");
     
-    STAssertEquals(event.synchedAt, PYEvent_UNDEFINED_TIME, @"event should not have synched time");
+    XCTAssertEqual(event.synchedAt, PYEvent_UNDEFINED_TIME, @"event should not have synched time");
     
     //--####### Create event
     __block BOOL step_1_CreateEvent = NO;
     __block NSString *unsyncEventCacheKey ;
     [self.connection eventCreate:event
                   successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent* event) {
-                      STAssertNil(newEventId, @"We shouldn't get a new id");
-                      STAssertTrue(event.hasTmpId, @"event must have a temp id");
-                      STAssertTrue(event.toBeSync, @"event should be known as to be synched");
-                      STAssertEquals(event.synchedAt, PYEvent_UNDEFINED_TIME, @"event should not have synched time");
+                      XCTAssertNil(newEventId, @"We shouldn't get a new id");
+                      XCTAssertTrue(event.hasTmpId, @"event must have a temp id");
+                      XCTAssertTrue(event.toBeSync, @"event should be known as to be synched");
+                      XCTAssertEqual(event.synchedAt, PYEvent_UNDEFINED_TIME, @"event should not have synched time");
                       
                       
                       //-- cache test
-                      STAssertTrue([cache eventIsKnownByCache:event],
+                      XCTAssertTrue([cache eventIsKnownByCache:event],
                                    @"event should be known by cache");
                       unsyncEventCacheKey = [[cache keyForEvent:event] copy];
                       
@@ -82,13 +83,13 @@
                       step_1_CreateEvent = YES;
                   }
                     errorHandler:^(NSError *error) {
-                        STFail(@"Error occured when creating event: %@", error);
+                        XCTFail(@"Error occured when creating event: %@", error);
                     }];
     
 
     [PYTestsUtils waitForBOOL:&step_1_CreateEvent forSeconds:10];
     if (!step_1_CreateEvent) {
-        STFail(@"Timeout creating event.");
+        XCTFail(@"Timeout creating event.");
         return;
     }
     
@@ -99,11 +100,11 @@
     //--####### Launch synch
     __block BOOL step_2_SynchEvents = NO;
     [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
-        STAssertEquals(overEventCount, successCount, @"All events should have been synchronized");
-        STAssertFalse([cache isDataCachedForKey:unsyncEventCacheKey], @"Event temporary caching data must be removed");
-        STAssertTrue([cache eventIsKnownByCache:event], @"event should be known by cache");
-        STAssertTrue(event.synchedAt > startingSynchAt, @"event should have a synchedAtDate after startingSync date");
-        STAssertTrue(event.synchedAt < [[NSDate date] timeIntervalSince1970],
+        XCTAssertEqual(overEventCount, successCount, @"All events should have been synchronized");
+        XCTAssertFalse([cache isDataCachedForKey:unsyncEventCacheKey], @"Event temporary caching data must be removed");
+        XCTAssertTrue([cache eventIsKnownByCache:event], @"event should be known by cache");
+        XCTAssertTrue(event.synchedAt > startingSynchAt, @"event should have a synchedAtDate after startingSync date");
+        XCTAssertTrue(event.synchedAt < [[NSDate date] timeIntervalSince1970],
                      @"event should have a synchedAtDate before now");
         step_2_SynchEvents = YES;
     }];
@@ -111,7 +112,7 @@
     // wait for timeout times number of unsynced events secods
     [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:(int)(61 * [[self.connection eventsNotSync] count])];
     if (!step_2_SynchEvents) {
-        STFail(@"Timeout synching events.");
+        XCTFail(@"Timeout synching events.");
         return;
     }
     

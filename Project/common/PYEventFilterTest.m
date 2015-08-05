@@ -33,7 +33,7 @@
 // FIXME this test should create the events necessary for the filter
 - (void)testEventFilter
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     PYEventFilter* pyFilter = [[PYEventFilter alloc] initWithConnection:self.connection
                                                                fromTime:PYEventFilter_UNDEFINED_FROMTIME
@@ -41,7 +41,7 @@
                                                                   limit:20
                                                          onlyStreamsIDs:nil
                                                                    tags:nil];
-    STAssertNotNil(pyFilter, @"PYEventFilter isn't created");
+    XCTAssertNotNil(pyFilter, @"PYEventFilter isn't created");
     
     
     __block BOOL finished1 = NO;
@@ -57,12 +57,12 @@
          NSLog(@"*162 ADD %@", @(toAdd.count));
          
          if (! finished1) {
-             STAssertTrue(toAdd.count > 0, @"Got wrong number of events");
+             XCTAssertTrue(toAdd.count > 0, @"Got wrong number of events");
              pyFilter.limit = 30;
              finished1 = YES;
              [pyFilter update];
          } else {
-             STAssertEquals((NSUInteger)10, (NSUInteger)toAdd.count, @"Got wrong number of events");
+             XCTAssertEqual((NSUInteger)10, (NSUInteger)toAdd.count, @"Got wrong number of events");
          }
          
          NSArray* toRemove = [message objectForKey:kPYNotificationKeyDelete];
@@ -86,7 +86,7 @@
     
     
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 10 seconds");
+        XCTFail(@"Failed after waiting 10 seconds");
     } ifNotTrue:&finished2 afterSeconds:10];
     
     
@@ -94,7 +94,7 @@
 
 - (void) testFilterOnType
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     NSString* typeFilter = @"note/txt";
     
@@ -105,7 +105,7 @@
                                                          onlyStreamsIDs:nil
                                                                    tags:nil
                                                                   types:@[typeFilter]];
-    STAssertNotNil(pyFilter, @"PYEventFilter isn't created");
+    XCTAssertNotNil(pyFilter, @"PYEventFilter isn't created");
     
     
     __block BOOL fromCache = NO;
@@ -114,7 +114,7 @@
                             fromCache:^(NSArray *cachedEventList) {
                                 if (cachedEventList) {
                                     for (int i = 0; i < cachedEventList.count; i++) {
-                                        STAssertTrue([[(PYEvent*)cachedEventList[i] type] isEqualToString:typeFilter],
+                                        XCTAssertTrue([[(PYEvent*)cachedEventList[i] type] isEqualToString:typeFilter],
                                                      @"type is not note/txt");
                                     }
                                 }
@@ -123,7 +123,7 @@
                             } andOnline:^(NSArray *onlineEventList, NSNumber *serverTime) {
                                 if (onlineEventList) {
                                     for (int i = 0; i < onlineEventList.count; i++) {
-                                        STAssertTrue([[(PYEvent*)onlineEventList[i] type] isEqualToString:typeFilter],
+                                        XCTAssertTrue([[(PYEvent*)onlineEventList[i] type] isEqualToString:typeFilter],
                                                      @"type is not note/txt");
                                     }
                                 }
@@ -137,10 +137,10 @@
     
     
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 50 seconds");
+        XCTFail(@"Failed after waiting 50 seconds");
     } ifNotTrue:&fromCache afterSeconds:50];
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 50 seconds");
+        XCTFail(@"Failed after waiting 50 seconds");
     } ifNotTrue:&fromOnline afterSeconds:50];
     
     
@@ -149,17 +149,17 @@
 
 - (void) testFilterOnStreamId
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
     
     
     //-- prefetch streams
      __block BOOL streamFetched = NO;
     [self.connection streamsEnsureFetched:^(NSError *error) {
-        STAssertTrue(error == nil, @"failed fectching streams");
+        XCTAssertTrue(error == nil, @"failed fectching streams");
         streamFetched  =YES;
     }];
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 50 seconds");
+        XCTFail(@"Failed after waiting 50 seconds");
     } ifNotTrue:&streamFetched afterSeconds:50];
     
     
@@ -175,7 +175,7 @@
                                                          onlyStreamsIDs:@[stream.streamId]
                                                                    tags:nil
                                                                   types:nil];
-    STAssertNotNil(pyFilter, @"PYEventFilter isn't created");
+    XCTAssertNotNil(pyFilter, @"PYEventFilter isn't created");
     
     
     __block BOOL fromCache = NO;
@@ -186,7 +186,7 @@
                                     for (int i = 0; i < cachedEventList.count; i++) {
                                         NSString* eventStreamId = [(PYEvent*)cachedEventList[i] stream].streamId;
                                         //NSLog(@".. %lu %@", [matchingStreamsIds indexOfObject:eventStreamId], eventStreamId);
-                                        STAssertTrue([matchingStreamsIds indexOfObject:eventStreamId] != NSNotFound,
+                                        XCTAssertTrue([matchingStreamsIds indexOfObject:eventStreamId] != NSNotFound,
                                                      @"Got an event out of filter with streamId: %@", eventStreamId);
                                     }
                                     
@@ -197,7 +197,7 @@
                                 if (onlineEventList) {
                                     for (int i = 0; i < onlineEventList.count; i++) {
                                         NSString* eventStreamId = [(PYEvent*)onlineEventList[i] stream].streamId;
-                                        STAssertTrue([matchingStreamsIds indexOfObject:eventStreamId] != NSNotFound,
+                                        XCTAssertTrue([matchingStreamsIds indexOfObject:eventStreamId] != NSNotFound,
                                                      @"Got an event out of filter with streamId: %@", eventStreamId);
                                     }
                                 }
@@ -210,10 +210,10 @@
     
     
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 50 seconds");
+        XCTFail(@"Failed after waiting 50 seconds");
     } ifNotTrue:&fromCache afterSeconds:50];
     [PYTestsUtils execute:^{
-        STFail(@"Failed after waiting 50 seconds");
+        XCTFail(@"Failed after waiting 50 seconds");
     } ifNotTrue:&fromOnline afterSeconds:50];
     
     
@@ -232,15 +232,15 @@
     NSMutableArray* events = [[NSMutableArray alloc] initWithObjects:event2,event1,event3,nil];
     
     [PYEventFilterUtility sortNSMutableArrayOfPYEvents:events sortAscending:NO];
-    STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
-    STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
-    STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
+    XCTAssertEqual(30.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
+    XCTAssertEqual(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
+    XCTAssertEqual(10.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
     
     
     [PYEventFilterUtility sortNSMutableArrayOfPYEvents:events sortAscending:YES];
-    STAssertEquals(10.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
-    STAssertEquals(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
-    STAssertEquals(30.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
+    XCTAssertEqual(10.0,[(PYEvent*)[events objectAtIndex:0] getEventServerTime],@"wrong postion of event");
+    XCTAssertEqual(20.0,[(PYEvent*)[events objectAtIndex:1] getEventServerTime],@"wrong postion of event");
+    XCTAssertEqual(30.0,[(PYEvent*)[events objectAtIndex:2] getEventServerTime],@"wrong postion of event");
     
     
 }

@@ -27,7 +27,7 @@
     [super setUp];
     self.connectionTrusted = [PYClient createConnectionWithUsername:kPYAPITestAccount
                                               andAccessToken:kPYAPITestAccessTrustedToken];
-    STAssertNotNil(self.connectionTrusted, @"Connection not created.");
+    XCTAssertNotNil(self.connectionTrusted, @"Connection not created.");
 
     
     
@@ -35,14 +35,14 @@
 
 - (void)testAccesses
 {
-    STAssertNotNil(self.connection, @"Connection isn't created");
+    XCTAssertNotNil(self.connection, @"Connection isn't created");
 
     NOT_DONE(done);
     
     [self.connectionTrusted accessesWithSuccessHandler:^(NSDate *cachedAt, NSArray *accessesList) {
         DONE(done);
     } refreshCacheIfOlderThan:0 failureHandler:^(NSError *error) {
-        STFail(@"Error occured when geting access. %@", error);
+        XCTFail(@"Error occured when geting access. %@", error);
         DONE(done);
     }];
      
