@@ -317,7 +317,7 @@ NSComparisonResult _compareEventByTimeDesc( PYEvent* e1, PYEvent* e2, void* igno
     }
     
     if (filter.types != nil) {
-        //NSLog(@"<WARNING> PYFilter.matchEvents does not support types yet");
+        if (! [filter.types containsObject: event.type]) return NO;
     }
     return YES;
 }
