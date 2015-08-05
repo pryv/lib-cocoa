@@ -1,4 +1,4 @@
-# Pryv iOS/OSX Cocoa SDK [![Build Status](https://travis-ci.org/pryv/sdk-objectivec-apple.svg?branch=master)](https://travis-ci.org/pryv/sdk-objectivec-apple)  [![Coverage Status](https://coveralls.io/repos/pryv/sdk-objectivec-apple/badge.png?branch=master)](https://coveralls.io/r/pryv/sdk-objectivec-apple?branch=master)
+# Pryv iOS/OSX Cocoa SDK [![Build Status](https://travis-ci.org/pryv/lib-cocoa.svg?branch=master)](https://travis-ci.org/pryv/lib-cocoa)  [![Coverage Status](https://coveralls.io/repos/pryv/sdk-objectivec-apple/badge.png?branch=master)](https://coveralls.io/r/pryv/sdk-objectivec-apple?branch=master)
 
 
 **PryvApiKit is an OS X framework and an iOS static library. It handles all networking and interactions with Pryv API for your Objective-C based applications.**
