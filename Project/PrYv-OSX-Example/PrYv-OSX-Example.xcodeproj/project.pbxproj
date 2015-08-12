@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0C095FAA18C4CE23009A820F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C095FA918C4CE23009A820F /* WebKit.framework */; };
 		10EA2E43C717413482574C84 /* libPods-PrYv-OSX-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E47ECFEDCCA24CC79C5B337B /* libPods-PrYv-OSX-ExampleTests.a */; };
+		4E3C80161B7B8F2100DB83C6 /* PYWebLoginViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3C80151B7B8C7700DB83C6 /* PYWebLoginViewControllerTests.m */; };
+		4E3C80171B7B91D600DB83C6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C095FA918C4CE23009A820F /* WebKit.framework */; };
 		4E91D586196C439B006E70F7 /* PYAccessesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E91D583196C439B006E70F7 /* PYAccessesTests.m */; };
 		4E91D587196C439B006E70F7 /* PYFollowedSlicesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */; };
 		4E91D588196C439B006E70F7 /* PYProfileAndInfosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */; };
@@ -59,6 +61,7 @@
 		09DDA1301638376415891EA1 /* Pods-PrYv-OSX-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		0C095FA918C4CE23009A820F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		4E3C80151B7B8C7700DB83C6 /* PYWebLoginViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYWebLoginViewControllerTests.m; path = ../common/PYWebLoginViewControllerTests.m; sourceTree = "<group>"; };
 		4E91D583196C439B006E70F7 /* PYAccessesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYAccessesTests.m; path = ../common/PYAccessesTests.m; sourceTree = "<group>"; };
 		4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYFollowedSlicesTests.m; path = ../common/PYFollowedSlicesTests.m; sourceTree = "<group>"; };
 		4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYProfileAndInfosTests.m; path = ../common/PYProfileAndInfosTests.m; sourceTree = "<group>"; };
@@ -129,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E3C80171B7B91D600DB83C6 /* WebKit.framework in Frameworks */,
 				FBE2E8FB18B225150059691E /* Cocoa.framework in Frameworks */,
 				10EA2E43C717413482574C84 /* libPods-PrYv-OSX-ExampleTests.a in Frameworks */,
 			);
@@ -248,10 +252,13 @@
 		FBE2E91018B2279D0059691E /* PrYv-Common */ = {
 			isa = PBXGroup;
 			children = (
+				FBE2E92318B227C10059691E /* PYTestConstants.h */,
+				FBE2E92418B227C10059691E /* PYTestConstants.m */,
 				FBE2E91418B227C10059691E /* offLineTests.m */,
+				FBE2E91618B227C10059691E /* PryvCachingTests.m */,
 				FB1CEF3E18C4BC9F002584F7 /* PYBaseConnectionTests.h */,
 				FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */,
-				FBE2E91618B227C10059691E /* PryvCachingTests.m */,
+				4E3C80151B7B8C7700DB83C6 /* PYWebLoginViewControllerTests.m */,
 				FBE2E91818B227C10059691E /* PYConnectionTests.m */,
 				FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */,
 				FBE2E91A18B227C10059691E /* PYEventFilterTest.m */,
@@ -259,8 +266,6 @@
 				FBE2E91E18B227C10059691E /* PYSupervisorTest.m */,
 				FBE2E92018B227C10059691E /* PYEventTypesTests.m */,
 				FBE2E92218B227C10059691E /* PYStreamsTests.m */,
-				FBE2E92318B227C10059691E /* PYTestConstants.h */,
-				FBE2E92418B227C10059691E /* PYTestConstants.m */,
 				4E91D583196C439B006E70F7 /* PYAccessesTests.m */,
 				4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */,
 				4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */,
@@ -509,6 +514,7 @@
 				FBE2E93418B227E20059691E /* offLineTests.m in Sources */,
 				4E91D587196C439B006E70F7 /* PYFollowedSlicesTests.m in Sources */,
 				FBE2E93B18B227E20059691E /* PYStreamsTests.m in Sources */,
+				4E3C80161B7B8F2100DB83C6 /* PYWebLoginViewControllerTests.m in Sources */,
 				FBE2E93D18B227E20059691E /* PYTestsUtils.m in Sources */,
 				FBE2E93918B227E20059691E /* PYSupervisorTest.m in Sources */,
 			);
