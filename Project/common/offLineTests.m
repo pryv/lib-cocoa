@@ -37,6 +37,7 @@
 
 - (void)tearDown
 {
+    self.connection.apiPort = originalApiPort;
     [super tearDown];
 }
 
@@ -100,17 +101,20 @@
     //--####### Launch synch
     __block BOOL step_2_SynchEvents = NO;
     [self.connection syncNotSynchedEventsIfAny:^(int successCount, int overEventCount) {
-        XCTAssertEqual(overEventCount, successCount, @"All events should have been synchronized");
-        XCTAssertFalse([cache isDataCachedForKey:unsyncEventCacheKey], @"Event temporary caching data must be removed");
-        XCTAssertTrue([cache eventIsKnownByCache:event], @"event should be known by cache");
-        XCTAssertTrue(event.synchedAt > startingSynchAt, @"event should have a synchedAtDate after startingSync date");
-        XCTAssertTrue(event.synchedAt < [[NSDate date] timeIntervalSince1970],
-                     @"event should have a synchedAtDate before now");
+        if (overEventCount > 0) { // was not already in synch process
+            XCTAssertEqual(overEventCount, successCount, @"All events should have been synchronized");
+            XCTAssertFalse([cache isDataCachedForKey:unsyncEventCacheKey], @"Event temporary caching data must be removed");
+            XCTAssertTrue([cache eventIsKnownByCache:event], @"event should be known by cache");
+            XCTAssertTrue(event.synchedAt > startingSynchAt, @"event should have a synchedAtDate after startingSync date");
+            XCTAssertTrue(event.synchedAt < [[NSDate date] timeIntervalSince1970],
+                          @"event should have a synchedAtDate before now");
+        }
+   
         step_2_SynchEvents = YES;
     }];
     
     // wait for timeout times number of unsynced events secods
-    [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:(int)(61 * [[self.connection eventsNotSync] count])];
+    [PYTestsUtils waitForBOOL:&step_2_SynchEvents forSeconds:10];
     if (!step_2_SynchEvents) {
         XCTFail(@"Timeout synching events.");
         return;

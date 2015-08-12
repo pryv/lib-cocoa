@@ -95,16 +95,20 @@
 BOOL allreadySynchingEvents = NO;
 - (void)syncNotSynchedEventsIfAny:(void(^)(int successCount, int overEventCount))done
 {
-   
+    
+    
+    if (allreadySynchingEvents)  {
+        if (done) {done(0, 0);
+            return;
+        }
+    }
+    allreadySynchingEvents = YES;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        if (allreadySynchingEvents) return;
-        allreadySynchingEvents = YES;
-    
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    
         NSArray* eventNotSync = self.eventsNotSync;
-    
-    
+        
+        
         int eventCounter = (int)eventNotSync.count;
         __block int successCounter = 0;
         

@@ -635,6 +635,15 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "PrYv-OSX-ExampleTests/PrYv-OSX-ExampleTests-Info.plist";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/PryvApiKit\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -757,6 +766,15 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "PrYv-OSX-ExampleTests/PrYv-OSX-ExampleTests-Info.plist";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/PryvApiKit\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -776,6 +794,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-OSX-Example/PrYv-OSX-Example-Prefix.pch";
 				INFOPLIST_FILE = "PrYv-OSX-ExampleTests/PrYv-OSX-ExampleTests-Info.plist";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/OCMock\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/PryvApiKit\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};

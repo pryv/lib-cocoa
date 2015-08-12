@@ -60,6 +60,9 @@
                                                  withWebView:&webView];
     
     
+    [webLoginController handlePollSuccess:@{@"status" : @"ACCEPTED", @"username": kPYAPITestAccount , @"token": kPYAPITestAccessToken}];
+    
+    
 }
 
 

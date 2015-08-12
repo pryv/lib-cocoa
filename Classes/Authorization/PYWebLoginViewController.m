@@ -360,6 +360,7 @@ static BOOL s_requestedLoginView = NO;
 
 - (void)pollURL:(NSString *)pollURLString withTimeInterval:(NSTimeInterval)pollTimeInterval
 {
+   
     
     //NSLog(@"create a poll request to %@ with interval: %f", pollURL, pollTimeInterval);
     NSLog(@"create a poll request with interval: %f", pollTimeInterval);
@@ -375,6 +376,8 @@ static BOOL s_requestedLoginView = NO;
     
     // reset previous timer if one existed
     [self.pollTimer invalidate];
+    
+    if (closing) return;
     
     //update url to poll
     self.pollURL = pollURLString;
@@ -435,6 +438,8 @@ static BOOL s_requestedLoginView = NO;
     
     // reset previous timer if one existed
     [self.statusUrlTimer invalidate];
+    
+    if (closing) return;
     
     // schedule a GET reqest in seconds amount stored in pollTimeInterval
     //__block __typeof__(self) bself = self;
