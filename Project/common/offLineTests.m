@@ -37,7 +37,7 @@
 
 - (void)tearDown
 {
-    self.connection.apiPort = originalApiPort;
+    //self.connection.apiPort = originalApiPort;
     [super tearDown];
 }
 
