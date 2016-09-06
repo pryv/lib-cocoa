@@ -17,7 +17,6 @@
 - (void)setUp
 {
     [super setUp];
-    [PYClient setDefaultDomainStaging];
     self.connection = [PYClient createConnectionWithUsername:kPYAPITestAccount
                                               andAccessToken:kPYAPITestAccessToken];
     XCTAssertNotNil(self.connection, @"Connection not created.");

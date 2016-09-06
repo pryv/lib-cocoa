@@ -23,8 +23,8 @@
 
 @implementation PYEAppTests
 
-NSString *const kPYAPITestAccount = @"perkikiki";
-NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
+NSString *const kPYAPITestAccount = @"ios-test";
+NSString *const kPYAPITestAccessToken = @"cisryqf19c4bd35yql9u8z8p2";
 
 @synthesize connection;
 
@@ -55,7 +55,7 @@ NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
 
     self.connection.apiPort = 0; // set conn offline
     PYEvent *event = [[PYEvent alloc] init];
-    event.streamId = @"TVKoK036of";
+    event.streamId = @"diary";
     event.eventContent = @"Test Offline";
     event.type = @"note/txt";
     

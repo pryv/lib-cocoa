@@ -10,47 +10,46 @@
 
 #pragma mark - API
 
-FOUNDATION_EXPORT NSString *const kPYAPIScheme;
-FOUNDATION_EXPORT NSString *const kPYAPIDomain;
-FOUNDATION_EXPORT NSString *const kPYAPIDomainStaging;
+extern NSString *const kPYAPIScheme;
+extern NSString *const kPYAPIDomain;
 
-FOUNDATION_EXPORT NSString *const kROUTE_EVENTS;
-FOUNDATION_EXPORT NSString *const kROUTE_STREAMS;
-FOUNDATION_EXPORT NSString *const kROUTE_ACCESSES;
-FOUNDATION_EXPORT NSString *const kROUTE_ACCESSINFOS;
-FOUNDATION_EXPORT NSString *const kROUTE_PROFILEPUBLIC;
-FOUNDATION_EXPORT NSString *const kROUTE_PROFILEAPP;
-FOUNDATION_EXPORT NSString *const kROUTE_FOLLOWEDSLICES;
-
-
-NSString *const kPYAPIResponseEvents;
-NSString *const kPYAPIResponseEvent;
-NSString *const kPYAPIResponseStreams;
-NSString *const kPYAPIResponseStream;
-NSString *const kPYAPIResponseProfile;
-NSString *const kPYAPIResponseMeta;
-NSString *const kPYAPIResponseMetaServerTime;
-NSString *const kPYAPIResponseAccesses;
-NSString *const kPYAPIResponseFollowedSlices;
-
-NSString *const kPYAPIResponseHeaderApiVersion;
-
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestStreamId;
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestDefaultStreamName;
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestAllStreams;
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestLevel;
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestReadLevel;
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestManageLevel;
-FOUNDATION_EXPORT NSString *const kPYAPIConnectionRequestContributeLevel;
+extern NSString *const kROUTE_EVENTS;
+extern NSString *const kROUTE_STREAMS;
+extern NSString *const kROUTE_ACCESSES;
+extern NSString *const kROUTE_ACCESSINFOS;
+extern NSString *const kROUTE_PROFILEPUBLIC;
+extern NSString *const kROUTE_PROFILEAPP;
+extern NSString *const kROUTE_FOLLOWEDSLICES;
 
 
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterLimit;
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterOnlyStreams;
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterFromTime;
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterToTime;
-FOUNDATION_EXPORT NSString *const kPYAPIEventModifiedSinceTime;
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTags;
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterTypes;
-FOUNDATION_EXPORT NSString *const kPYAPIEventFilterState;
+extern NSString *const kPYAPIResponseEvents;
+extern NSString *const kPYAPIResponseEvent;
+extern NSString *const kPYAPIResponseStreams;
+extern NSString *const kPYAPIResponseStream;
+extern NSString *const kPYAPIResponseProfile;
+extern NSString *const kPYAPIResponseMeta;
+extern NSString *const kPYAPIResponseMetaServerTime;
+extern NSString *const kPYAPIResponseAccesses;
+extern NSString *const kPYAPIResponseFollowedSlices;
+
+extern NSString *const kPYAPIResponseHeaderApiVersion;
+
+extern NSString *const kPYAPIConnectionRequestStreamId;
+extern NSString *const kPYAPIConnectionRequestDefaultStreamName;
+extern NSString *const kPYAPIConnectionRequestAllStreams;
+extern NSString *const kPYAPIConnectionRequestLevel;
+extern NSString *const kPYAPIConnectionRequestReadLevel;
+extern NSString *const kPYAPIConnectionRequestManageLevel;
+extern NSString *const kPYAPIConnectionRequestContributeLevel;
+
+
+extern NSString *const kPYAPIEventFilterLimit;
+extern NSString *const kPYAPIEventFilterOnlyStreams;
+extern NSString *const kPYAPIEventFilterFromTime;
+extern NSString *const kPYAPIEventFilterToTime;
+extern NSString *const kPYAPIEventModifiedSinceTime;
+extern NSString *const kPYAPIEventFilterTags;
+extern NSString *const kPYAPIEventFilterTypes;
+extern NSString *const kPYAPIEventFilterState;
 
 

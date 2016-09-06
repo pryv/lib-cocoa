@@ -55,7 +55,7 @@ static NSString *s_myLanguageCodePrefered;
 }
 
 + (void)setDefaultDomainStaging {
-    [PYClient setDefaultDomain:kPYAPIDomainStaging];
+    NSLog(@"setDefaultDomainStaging Deprectated");
 }
 
 + (PYConnection *)createConnectionWithUsername:(NSString *)username andAccessToken:(NSString *)token;

@@ -45,7 +45,7 @@
     NSArray *permissions = [NSArray arrayWithObject:[NSDictionary dictionaryWithObjects:objects
                                                                                 forKeys:keys]];
     
-    [PYClient setDefaultDomainStaging];
+   
     
     __unused
     PYWebLoginViewController *webLoginController =

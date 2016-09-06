@@ -8,8 +8,8 @@
 
 #import "PYTestConstants.h"
 
-NSString *const kPYAPITestAccount = @"perkikiki";
-NSString *const kPYAPITestAccessToken = @"Ve-U8SCASM";
+NSString *const kPYAPITestAccount = @"ios-test";
+NSString *const kPYAPITestAccessToken = @"cisryqf19c4bd35yql9u8z8p2"; // manage all
 NSString *const kPYAPITestAccessToken2 = @"chxdeycw400291cwk7uewy2eo";
-NSString *const kPYAPITestAccessTrustedToken = @"cicynfocu00041ot5brdyjhbh"; // This might expire;
+NSString *const kPYAPITestAccessTrustedToken = @"cisrz2009c4c935yq2z8r9typ"; // This might expire;
 NSString *const kPYAPITestStreamId = @"diary";

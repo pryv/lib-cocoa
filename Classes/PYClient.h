@@ -16,7 +16,7 @@
 #endif
 
 
-NSString *const kLanguageCodeDefault;
+extern NSString *const kLanguageCodeDefault;
 
 typedef enum {
 	PYRequestMethodGET = 1,
@@ -52,6 +52,7 @@ typedef void(^PYClientFailureBlock)(NSError *error);
 + (void)setDefaultDomain:(NSString*) domain;
 /**
  * use Pryv's staging domain for connection
+ * @deprecated
  */
 + (void)setDefaultDomainStaging;
 /**

@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 PrYv. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
 
-@interface PrYv_iOS_ExampleTests : SenTestCase
+@interface PrYv_iOS_ExampleTests 
 
 @end
 

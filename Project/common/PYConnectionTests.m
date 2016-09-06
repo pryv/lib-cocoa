@@ -20,12 +20,7 @@
 @end
 @implementation NSURLRequest (IgnoreSSL)
 + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host {
-    // ignore certificate errors only for this domain
-    if ([host hasSuffix:@".pryv.in"]) {
         return YES;
-    } else {
-        return NO;
-    }
 }
 @end
 #endif
@@ -40,10 +35,10 @@
 - (void)testConnection
 {
     XCTAssertTrue([self.connection.idURL
-                  isEqualToString:@"https://perkikiki.pryv.in:443/?auth=Ve-U8SCASM"],
+                  isEqualToString:@"https://ios-test.pryv.me:443/?auth=cisryqf19c4bd35yql9u8z8p2"],
                  @"connection URL is not valid, %@", self.connection.idURL);
     XCTAssertTrue([self.connection.idCaching
-                  isEqualToString:@"05c3ee6670ecbd28744c71ec723f0b05_perkikiki.pryv.in__Ve-U8SCASM"],
+                  isEqualToString:@"df338bdc8c4cc483c4ceec0ea5ed6ef1_ios-test.pryv.me__cisryqf19c4bd35yql9u8z8p2"],
                  @"id caching is unexpected, %@", self.connection.idCaching);
 }
 

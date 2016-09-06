@@ -8,13 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		0C095FAA18C4CE23009A820F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C095FA918C4CE23009A820F /* WebKit.framework */; };
-		10EA2E43C717413482574C84 /* libPods-PrYv-OSX-ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E47ECFEDCCA24CC79C5B337B /* libPods-PrYv-OSX-ExampleTests.a */; };
 		4E3C80161B7B8F2100DB83C6 /* PYWebLoginViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3C80151B7B8C7700DB83C6 /* PYWebLoginViewControllerTests.m */; };
 		4E3C80171B7B91D600DB83C6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C095FA918C4CE23009A820F /* WebKit.framework */; };
+		4E79DC6D1D7F5DF2003A356D /* libPryvApiKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E79DC6C1D7F5DF2003A356D /* libPryvApiKit.a */; };
 		4E91D586196C439B006E70F7 /* PYAccessesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E91D583196C439B006E70F7 /* PYAccessesTests.m */; };
 		4E91D587196C439B006E70F7 /* PYFollowedSlicesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */; };
 		4E91D588196C439B006E70F7 /* PYProfileAndInfosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */; };
-		ED92786559A14D09A71E2B68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2F2D28C27B492D82FAB4BB /* libPods.a */; };
 		FB1CEF4018C4BC9F002584F7 /* PYBaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */; };
 		FB1CEF4218C4BCC2002584F7 /* PYEventAttachmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */; };
 		FB31950318D206E8004564C6 /* 350x150.png in Resources */ = {isa = PBXBuildFile; fileRef = FB31950218D206E8004564C6 /* 350x150.png */; };
@@ -60,17 +59,13 @@
 /* Begin PBXFileReference section */
 		09DDA1301638376415891EA1 /* Pods-PrYv-OSX-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		0C095FA918C4CE23009A820F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4E3C80151B7B8C7700DB83C6 /* PYWebLoginViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYWebLoginViewControllerTests.m; path = ../common/PYWebLoginViewControllerTests.m; sourceTree = "<group>"; };
+		4E79DC6C1D7F5DF2003A356D /* libPryvApiKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPryvApiKit.a; path = Pods/../build/Debug/PryvApiKit/libPryvApiKit.a; sourceTree = "<group>"; };
 		4E91D583196C439B006E70F7 /* PYAccessesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYAccessesTests.m; path = ../common/PYAccessesTests.m; sourceTree = "<group>"; };
 		4E91D584196C439B006E70F7 /* PYFollowedSlicesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYFollowedSlicesTests.m; path = ../common/PYFollowedSlicesTests.m; sourceTree = "<group>"; };
 		4E91D585196C439B006E70F7 /* PYProfileAndInfosTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYProfileAndInfosTests.m; path = ../common/PYProfileAndInfosTests.m; sourceTree = "<group>"; };
-		50E6BDDDA8B06537541B028E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		8E2F2D28C27B492D82FAB4BB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19AACDDE3F05C64F814995E /* Pods-PrYv-OSX-ExampleTests.coverage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.coverage.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.coverage.xcconfig"; sourceTree = "<group>"; };
 		B213A55E65896E43CBB596B9 /* Pods-PrYv-OSX-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrYv-OSX-ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B8B9F0A2C2B2D8EEE25CBF25 /* Pods.coverage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.coverage.xcconfig; path = "Pods/Target Support Files/Pods/Pods.coverage.xcconfig"; sourceTree = "<group>"; };
-		E47ECFEDCCA24CC79C5B337B /* libPods-PrYv-OSX-ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PrYv-OSX-ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB1CEF3E18C4BC9F002584F7 /* PYBaseConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PYBaseConnectionTests.h; path = ../common/PYBaseConnectionTests.h; sourceTree = "<group>"; };
 		FB1CEF3F18C4BC9F002584F7 /* PYBaseConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYBaseConnectionTests.m; path = ../common/PYBaseConnectionTests.m; sourceTree = "<group>"; };
 		FB1CEF4118C4BCC2002584F7 /* PYEventAttachmentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PYEventAttachmentTests.m; path = ../common/PYEventAttachmentTests.m; sourceTree = "<group>"; };
@@ -122,9 +117,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E79DC6D1D7F5DF2003A356D /* libPryvApiKit.a in Frameworks */,
 				0C095FAA18C4CE23009A820F /* WebKit.framework in Frameworks */,
 				FBE2E8DB18B225150059691E /* Cocoa.framework in Frameworks */,
-				ED92786559A14D09A71E2B68 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +129,6 @@
 			files = (
 				4E3C80171B7B91D600DB83C6 /* WebKit.framework in Frameworks */,
 				FBE2E8FB18B225150059691E /* Cocoa.framework in Frameworks */,
-				10EA2E43C717413482574C84 /* libPods-PrYv-OSX-ExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,9 +138,6 @@
 		47AEBB5813F14E1DD6FDCE44 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				50E6BDDDA8B06537541B028E /* Pods.debug.xcconfig */,
-				B8B9F0A2C2B2D8EEE25CBF25 /* Pods.coverage.xcconfig */,
-				25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */,
 				B213A55E65896E43CBB596B9 /* Pods-PrYv-OSX-ExampleTests.debug.xcconfig */,
 				A19AACDDE3F05C64F814995E /* Pods-PrYv-OSX-ExampleTests.coverage.xcconfig */,
 				09DDA1301638376415891EA1 /* Pods-PrYv-OSX-ExampleTests.release.xcconfig */,
@@ -186,11 +177,10 @@
 		FBE2E8D918B225150059691E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4E79DC6C1D7F5DF2003A356D /* libPryvApiKit.a */,
 				0C095FA918C4CE23009A820F /* WebKit.framework */,
 				FBE2E8DA18B225150059691E /* Cocoa.framework */,
 				FBE2E8DC18B225150059691E /* Other Frameworks */,
-				8E2F2D28C27B492D82FAB4BB /* libPods.a */,
-				E47ECFEDCCA24CC79C5B337B /* libPods-PrYv-OSX-ExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -324,11 +314,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FBE2E90818B225150059691E /* Build configuration list for PBXNativeTarget "PrYv-OSX-Example" */;
 			buildPhases = (
-				A1BE303E0B074D85B34DA179 /* Check Pods Manifest.lock */,
 				FBE2E8D318B225150059691E /* Sources */,
 				FBE2E8D418B225150059691E /* Frameworks */,
 				FBE2E8D518B225150059691E /* Resources */,
-				C7F1E042FA0E443E9B48C0FB /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -343,11 +331,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FBE2E90B18B225150059691E /* Build configuration list for PBXNativeTarget "PrYv-OSX-ExampleTests" */;
 			buildPhases = (
-				7F4D6E2AB3094491BDA07078 /* Check Pods Manifest.lock */,
+				7F4D6E2AB3094491BDA07078 /* [CP] Check Pods Manifest.lock */,
 				FBE2E8F418B225150059691E /* Sources */,
 				FBE2E8F518B225150059691E /* Frameworks */,
 				FBE2E8F618B225150059691E /* Resources */,
-				A9D142C996654A4EB8F60724 /* Copy Pods Resources */,
+				A9D142C996654A4EB8F60724 /* [CP] Copy Pods Resources */,
+				110E35A2EB94EFAA64255E59 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -366,7 +355,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = PrYv;
 				TargetAttributes = {
 					FBE2E8F718B225150059691E = {
@@ -420,64 +409,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7F4D6E2AB3094491BDA07078 /* Check Pods Manifest.lock */ = {
+		110E35A2EB94EFAA64255E59 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A1BE303E0B074D85B34DA179 /* Check Pods Manifest.lock */ = {
+		7F4D6E2AB3094491BDA07078 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		A9D142C996654A4EB8F60724 /* Copy Pods Resources */ = {
+		A9D142C996654A4EB8F60724 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PrYv-OSX-ExampleTests/Pods-PrYv-OSX-ExampleTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C7F1E042FA0E443E9B48C0FB /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -605,13 +579,17 @@
 		};
 		FBB2D37E18DF09BE006B063C /* Coverage */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8B9F0A2C2B2D8EEE25CBF25 /* Pods.coverage.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-OSX-Example/PrYv-OSX-Example-Prefix.pch";
 				INFOPLIST_FILE = "PrYv-OSX-Example/PrYv-OSX-Example-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug/PryvApiKit",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -644,6 +622,7 @@
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/PryvApiKit\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -665,6 +644,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
@@ -722,13 +702,17 @@
 		};
 		FBE2E90918B225150059691E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 50E6BDDDA8B06537541B028E /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-OSX-Example/PrYv-OSX-Example-Prefix.pch";
 				INFOPLIST_FILE = "PrYv-OSX-Example/PrYv-OSX-Example-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug/PryvApiKit",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -736,13 +720,17 @@
 		};
 		FBE2E90A18B225150059691E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 25E9000A8DB6BB51C3F47E59 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PrYv-OSX-Example/PrYv-OSX-Example-Prefix.pch";
 				INFOPLIST_FILE = "PrYv-OSX-Example/PrYv-OSX-Example-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug/PryvApiKit",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -775,6 +763,7 @@
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/PryvApiKit\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -803,6 +792,7 @@
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/PryvApiKit\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};

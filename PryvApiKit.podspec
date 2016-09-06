@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/*.{h,m}'
   #s.exclude_files = 
 
-  s.ios.deployment_target = "5.1"
+  s.ios.deployment_target = "7.1"
   s.osx.deployment_target = "10.6"
   
   s.requires_arc = false
