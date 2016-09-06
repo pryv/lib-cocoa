@@ -1,13 +1,15 @@
 platform :osx, "10.6"
 
-pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
+#pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
 
-target 'PrYv-OSX-ExampleTests', :exclusive => true do
+target 'PrYv-OSX-ExampleTests' do
+  inherit! :search_paths
+  pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
   pod 'OCMock'
 end
 
 post_install do |installer|
-    installer.project.targets.each do |target|
+    installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
             config.build_settings['GCC_GENERATE_TEST_COVERAGE_FILES'] = 'YES'
             config.build_settings['GCC_INSTRUMENT_PROGRAM_FLOW_ARCS'] = 'YES'

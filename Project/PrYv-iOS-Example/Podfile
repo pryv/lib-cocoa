@@ -1,15 +1,16 @@
-platform :ios, "5.1"
+platform :ios, "7.0"
 
 #link_with ['PrYv-iOS-Example', 'PrYv-iOS-ExampleTests']
 
-pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
+#pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
 
-# target 'PrYv-iOS-Example' do
-#     pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
-# end
+target 'PrYv-iOS-Example' do
+     pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
+end
 
-target 'PrYv-iOS-ExampleTests', :exclusive => true do
-  #pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
+target 'PrYv-iOS-ExampleTests' do
+  inherit! :search_paths
+#  pod 'PryvApiKit', :path => '../../PryvApiKit.podspec'
   pod 'OCMock'
   #pod 'Mocktail'
 end

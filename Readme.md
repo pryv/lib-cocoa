@@ -3,8 +3,17 @@
 
 **PryvApiKit is an OS X framework and an iOS static library. It handles all networking and interactions with Pryv API for your Objective-C based applications.**
 
+## Install with cocoapds
 
-**Note PYRequestType Sync / Async will be removed and all request will be made using Async method **
+New to coapods? Go to : [https://guides.cocoapods.org](https://guides.cocoapods.org)
+
+Add into your podfile
+
+`pod 'PryvApiKit', :git => 'https://github.com/pryv/lib-cocoa.git', :tag => '0.0.3'`
+
+## Example of implemetation
+
+You will find a sample iOs app at [https://github.com/pryv/app-ios-example](https://github.com/pryv/app-ios-example)
 
 ## PryvApiKit.framework
 
