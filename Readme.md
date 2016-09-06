@@ -9,7 +9,7 @@ New to coapods? Go to : [https://guides.cocoapods.org](https://guides.cocoapods.
 
 Add into your podfile
 
-`pod 'PryvApiKit', :git => 'https://github.com/pryv/lib-cocoa.git', :tag => '0.0.3'`
+`pod 'PryvApiKit', :git => 'https://github.com/pryv/lib-cocoa.git', :tag => '0.0.4'`
 
 ## Example of implemetation
 

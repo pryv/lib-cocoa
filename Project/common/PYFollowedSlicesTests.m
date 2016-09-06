@@ -20,7 +20,7 @@
 
 
 @implementation PYFollowedSlicesTests
-
+/**
 
 - (void)setUp
 {
@@ -51,6 +51,6 @@
     
     
 }
-
+**/
 
 @end
