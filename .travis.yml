@@ -1,12 +1,15 @@
-rvm: 1.9.3
+rvm: 2.2.2
 
 language: objective-c
 
-before_install: export LANG=en_US.UTF-8
+before_install: 
+   - export LANG=en_US.UTF-8
+   - gem uninstall cocoapods -a -x
+   - gem install cocoapods --pre
 
 before_script:
+   - gem update cocoapods --pre --no-ri --no-rdoc
    - pod --version
-   - gem update cocoapods --no-ri --no-rdoc
    - sudo easy_install cpp-coveralls
 
 script:
