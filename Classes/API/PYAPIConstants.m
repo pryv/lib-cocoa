@@ -13,7 +13,7 @@
 #pragma mark - API
 
 NSString *const kPYAPIScheme = @"https";
-NSString *const kPYAPIDomain = @".pryv.me";
+NSString *const kPYAPIDomain = @".pryv.io";
 
 NSString *const kROUTE_EVENTS = @"events";
 NSString *const kROUTE_STREAMS = @"streams";

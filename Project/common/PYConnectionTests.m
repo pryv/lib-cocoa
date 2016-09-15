@@ -35,10 +35,10 @@
 - (void)testConnection
 {
     XCTAssertTrue([self.connection.idURL
-                  isEqualToString:@"https://ios-test.pryv.me:443/?auth=cisryqf19c4bd35yql9u8z8p2"],
+                  isEqualToString:@"https://ios-test.pryv.io:443/?auth=cisryqf19c4bd35yql9u8z8p2"],
                  @"connection URL is not valid, %@", self.connection.idURL);
     XCTAssertTrue([self.connection.idCaching
-                  isEqualToString:@"df338bdc8c4cc483c4ceec0ea5ed6ef1_ios-test.pryv.me__cisryqf19c4bd35yql9u8z8p2"],
+                  isEqualToString:@"eb1a9bf256a1a8e986987fbbf58edec6_ios-test.pryv.io__cisryqf19c4bd35yql9u8z8p2"],
                  @"id caching is unexpected, %@", self.connection.idCaching);
 }
 
