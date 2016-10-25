@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'PryvApiKit'
-  s.version      = '0.0.3'
+  s.version      = '0.0.4'
   s.homepage     = 'https://github.com/pryv/lib-cocoa'
   s.summary      = 'PrYv SDK'
   s.authors      = { 'Pryv SA (Switzerland)' => 'http://pryv.com' }
