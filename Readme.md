@@ -390,7 +390,9 @@ assign to a user with
 [access setOnlineModeWithUsername:@"username" andAccessToken:@"token"];
 ```
 
+## Support and warranty
 
+Pryv provides this software for educational and demonstration purposes with no support or warranty.
 
 # License
 
