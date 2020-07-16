@@ -1,3 +1,7 @@
+# Deprecated
+
+This library is deprecated, please use the new version at [https://github.com/pryv/lib-swift](https://github.com/pryv/lib-swift)
+
 # Pryv iOS/OSX Cocoa SDK [![Build Status](https://travis-ci.org/pryv/lib-cocoa.svg?branch=master)](https://travis-ci.org/pryv/lib-cocoa)  [![Coverage Status](https://coveralls.io/repos/pryv/lib-cocoa/badge.svg?branch=master&service=github)](https://coveralls.io/github/pryv/lib-cocoa?branch=master)
 
 
